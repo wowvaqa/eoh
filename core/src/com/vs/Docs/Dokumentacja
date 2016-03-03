@@ -1,0 +1,204 @@
+ZLOTO:
+
+zmienna prachowująca: Gracz.gold
+wymagana w: 
+    1. MapScreen (do wyświetlania ilosci złota zgromadzoengo przez gracza)
+        lblGold (wyświetlany na stage02 w MapScreen)        
+        status lbl Gold aktualizowany w MapScreen.Show()
+
+ZAMEK:
+    Klasa: Castle.java
+    Obiekty zamków definiowane są w obiekcie klasy MapScreen.generujPlansze() 
+    Sprawdzenie czy któryś gracz nie nadepnął na zamke następuje w:
+        Bohater.checkCastle();       
+    Zdrowie zamku odnawia się co turę ogólną w metodzie:
+        MapScreen.SprawdzCzyKoniecTuryOgolnej.OdnowZdrowieZamkow()
+
+SRZYNIA ZE SKARBEM:
+    Klasa: TresureBox.java
+
+    Skrzynie generowane są w MapScreen().generujPlansze().
+    Zawartosć skrzyc generowana jest losowo na pdst. predefiniowanych 
+    statycznych ArrayList utworzonych w obiekcie klasy GameStatus.
+    Z ww. ArrayList losowo wybiera sie Item i dodaje do zawartosci skrzyni.
+    Losowanie następuje poprzez podanie odpowiednich danych do konstruktora
+    klasy TresureBox.
+
+
+MAPA:
+    Na chwilę obecną następuje wczytanie z pliku uprzednio wygeneroweanej mapy w 
+    MapEditorze.
+    Metoda GameStatus().wczytajMape()
+    W metodzie MapScreen.generujPlansze() następuje sprawdzenie każdego z pól
+    mapy i w przypadku natrafienia na TypTerenu.Gory takiemu polu nadaje się
+    status pola po którym nie można się poruszać.
+TODOPodczas Ruchu polas z bool Movable.equals(false) pomijane są.
+    
+
+BOHATER:
+        Sprawdzenie czy bohater może walczyć z zamkiem lub innym bohaterem następuje
+    w Bohater.definiujPrzyciski()
+        Generowanie bohaterów odbywa się w klasie NewGame wg. ustawień z gracza
+    dokonanych w NewGameScreen
+        Referencje obiektów utworzonych Bohaterow zapisane zostają w ArrayList
+    Gracze.Bohaterowie<>
+    Dodanie referencji ww Bohaterow następuje w obiekcie klasy 
+    MapScreen.generujGraczy()
+
+DOSWIADCZNIE BOHATERA
+        Doświadczenie zwiększa się po zabiciu moba lub bohatera.
+    Zwiększenie doświadczenia bohatera następuje:
+    1. w metodzie Fight.getObrazenia(...)
+
+
+KONIEC GRY:
+    Sprawdzenie czy nastąpił koniec gry dla Gracza następuje w:
+    MapScreen.KoniecTuryClick();
+    Kolejno sprawdzane są:
+        - Czy gracz posiada zamek
+        - jeśli nie - zaczyna się odliczanie 5 tur
+        - po 5 turach następuje nadanie graczowi statusu (Gracz.java) GameOver
+        - Następuje wyrzucenie wszystkich bohaterów gracza z planszy.
+        - Gracz pomijany jest przy kolejnych turach.
+
+SCHMAT RUCHU:
+    Zarządzaniem ruchu i ataku bohatera zajmuje się obiekt klasy RUCH.
+    DZIAŁANIE:
+        1. Po kliknięciu na ikonę bohatera utworzony zostaje nowy obiket klasy
+            RUCH.
+        2. Obiekt RUCH przeszukuje lokacje wokół bohatera i tworzy odpowiednie
+            obikety przycisków wg. zdefiniowanych klas.
+            Obiekty przycisków dodane zostają do stage.
+        3. Po kliknięciu w przycisk wykonana zostaje odpowiednia procedura
+            Ataku/Ruchu, po czym przyciski zostają usunięte.
+.
+
+PASEK ENERGII BOHATERA
+    Kod odpowiedzialny za aktualizacja paska jest w Bohater.aktualizujTeksture().
+    Metoda ta wywoływana jest w Bohater.draw() tylko raz (podczas tworzenia
+    bohatera) oraz w Fight.getObrazenia() za każdym razem gdy następuje atak
+    bohatera.        
+    
+GRACZ
+    Ikona gracza który ma aktualnie turę: 
+    Definicja i pierwsze wywołanie następuje w konstruktorze MapScreen
+    Aktualizacja kolory (zmiana aktualnego gracza) następuje w 
+    MapScreen.KoniecTury
+    Tekstura pobierana jest z Gracz.GetTeksturaIkonaGracza()
+
+ZAMEK
+    Tworzenie zamku:
+        Tworzenie zamków i dodanie ich do planszy następuje w:
+    MapScreen.generujPlansze() poprzez wywołanie metody
+    MapScreen.generujZamki().
+    W ww metodzie następuje utworzenie obiektu klasy zamek, po czym referencja
+    do obiektu dodana zostaje do odpowiedniego obiektu pole w obikecie klasy 
+    Mapa. Obiket zamku dodany zostaje także do stage01 w MapScreen.
+
+    Ikona zamku:
+        Utworzenie ikony zamku następuje w Konstruktorze klasy Castle(); poprzez
+    wywołanie metody Castle.rysujIkoneZamku();
+        Zmiana ikony zamku (zamek zmienia właściciela) następuje poprzez 
+    wywołanie metody Castle.aktualizujIkoneZamku().
+    Metoda ta wywołana zostaje w Bohater.CheckCastle()
+
+NOWY BOHATER
+        Dodanie i wygenerowanie nowego bohatera następuje w metodach obiektu
+    klasy NewBohaterScreen().
+    Metody ww. obiektu korzystają z metod udostepnionych w klasie statycznej
+    NewGame().
+
+MOB
+        Obiekt moba reprezentuje klasa Mob().
+    Tymczasowe obiekty mobów tworzone są w moetodzie MapScreen.generujPlansze()
+
+    ATAK MOBA:
+        Po zaatakowaniu moba przez bohatera, zmienna BOOL czyZaatakowany 
+        przyjmuje wartość TRUE.
+        W metodzie ACT() obiketu klasy Mob() następuje wywołanie (po uprzednim
+        spełnieniu warunków) metody ataku Moba na agresora.
+
+    ŚMIERĆ MOBA
+        Po śmierci moba na jego miejscu zostaje wygenerowana TRESUREBOX.
+        Metoda: MapScreen().utworzTresureBoxPoSmierciMoba()
+        Metoda ta wywołana jest w MapScreen().Render() po spełnieniu warunku.
+        Warunek kożysta z 2 zmiennych statycznych, które modyfikuje metoda:
+        GameStatus().UsunMartweMoby().
+
+MIKSTURA
+    Mikstura leczenia zdefiniowana jest jako typ: mikstura
+    W obiekcie klasy ItemCreator() podaczas tworzenia nowej mikstury leczenia
+    zdefiniowana zostajae ArrayLista z dostępnymi dla itema działaniami.
+    Dla mikstury leczenia zostaje dodane nowy obiekt klasy DzialanieItema() do
+    ArrayListy.
+
+    W Screenie Bohatera po kliknięciu przycisku załóż przy itemie miktury 
+    leczenia w metodzie podmianaItemkow() następuje sprawdzenie czy zadany
+    item nie ma typu 'mikstury'.
+    Jeżeli warunek okaże się prawdziwy wtedy wywołane zostaną każde kolejne
+    dziłania z ArrayListy dla itemka.
+
+    Dla mikstur których czas działania efektu jest liczony w kilku turach,
+    efekt działania dodawany jest do ArrayListy klasy DzialanieItema w obiekcie
+    bohatera.
+    Po kliknieciu przycisku koniec tury dla każdego bohatera sprawdzane są
+    efekty, które na nich oddziaływują.
+
+AWANS BOHATERA.
+    Uruchomienie ekranu awansu bohatera następuje poprzez naciśnięcie przycisku
+    awans na MapScreen.
+    Ww przycisk włącza się (setVisible(true)) wtedy gdy ilość punktów dośw.
+    bohatera >= ilość punktów potrzebnych do następnego levelu bohatera.
+    Warunek ten sprawdzany jest w metodzie MapScreen().render().
+    
+    Za awans bohatera odpowiada klasa AwansScreen() i podklasa Awans().
+    
+PANEL BOCZNY BOHATERA
+    Znajduje się w MapScreen.Stage02. Skłąda się z przycisków i labeli 
+    deklarowanch w klasie MapScreen. Obiekty inicjowane są w metodzie 
+    MapScreen.utworzPanelBohatera()
+    Aktualizacja panelu odbywa się poprzez metodę MapScreen.AktualizujPan..().
+    Metoda ta wywoływana jest w MapScreen.Render() jesżeli zostanie wypełniony
+    zawarty tam warunek.
+  
+CZARY
+    Spelle wyświetlane są na MapScreen.Stage03
+    Obsługa wyglądu Spelli: klasa SpellActor.
+    Zarządzanie interfejsem rzucania czarów: SpellCaster
+    Dostępne efekty czarów: Enum SPELLS.
+    Zarządzanie działaniem efektów czarów klasa SpellEffects na pdst. 
+    ENUM SPELLS.
+
+    Lista czarów dostępnych dla danej klasy bohaterów: bohater.listOfSpells
+    Lista generowana jest w: NewGame.podepnijCzary().
+    Na pdst. listy każdorazowo generowane są czary dla bohatera.
+
+    Spelle tworzone są w MapScreen().utworzPanelBohatera() na pdst. 
+    bohater.listOfSpells.
+    Nowe obiekty czarów tworzone są za każdym razem gdy po kliknięciu w przycisk
+    SPELL BOOK w Menu i dodawane do ArrayListy z czarami bohatera.
+    Usuwanie czarów z ww. ArrayListy następuje każdorazow po rzuceniu czaru
+    i wywołaniu jego efektu: SpellEffect.dzialanie() oraz po naciśnięciu 
+    przycisku EXIT w panelu z czarami.
+
+    Efekty czaru:
+    Każdy czar posiada ArrayList z dostępnymi dla siebie efektami.
+    Do ww tablicy efektów dodaje się określony dla czaru efekt. 
+    
+    Efekt natychmiastowy czaru:
+        SpellEffect.dzialanie() posiada parametry niezbędne do wywołania 
+    natychmiastowego działania czaru.
+
+    Efekt długotrwały
+        Efekt czaru, który ma działać => turę dodany zostaje do ArrayList
+    SpellEffect bohatera.
+    Sprawdzenie działania efektu następuje w metodzie MapScreen.koniecTury()
+   
+    Efekty czaru podczas walki    
+        Efekty te definiuje ENUM FightEffects.
+    Efekt podczas walki sprawdzany jest w Fight.GetObrazenia, od każdego z
+    bohaterów/mobów wywołana zostaje tablica efektów, i sprawdzony warunek
+    fightEffect. Jeżeli warunek jest prawdziwy wtedy następuje wywołanie 
+    metody SpellEffects.dzialanie(FightEffects, Object, Object).
+    
+    

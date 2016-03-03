@@ -1,0 +1,274 @@
+
+
+version 0.0044 28022016
+DONE    1. Przeniesienie kodu do Android Studio
+DONE    2. Przpisanie procedur zapisu mapy. Poprzednie nie działały na Androidzie.
+DONE    3. Dodanie Scrrolowania mapy poprzez dotyk.
+
+version 0.0043 26022016
+DONE    1. Dodanie obrazków z dostępnymi awansami w Awans Screen
+
+version 0.0043 03032016
+DONE    1. Przeniesienie repozytorium
+DONE    2. Dodanie testowych funkcji sieciowych.
+
+version 0.0042 25022016
+DONE    1. Dodanie do edytora map opcji umożliwiających modyfikacje położenia
+        skrzyń oraz mobów.
+DONE    2. Dodanie skrzyni z przedmiotami poziomu 2
+DONE    3. Dodanie czarów: Furia, Sąd Ostateczny.
+DONE    4. Poprawiono działanie przycisków w oknie Tresure Box
+
+version 0.0041 20022016
+DONE    1. Dodano łączenie się terenu góry.
+
+version 0.0040 15022016
+DONE    1. Dodano Nowy Teren: Rzekę.
+DONE    2. Dodano łączenie się terenu rzeki.
+DONE    3. DOdano łączenie się terenu las.
+
+version 0.0039 10022016
+DONE    1. Poprawki w klasie FIGHT.
+DONE    2. Usprawnienia w MapEditora.
+DONE    3. Dodano możliwość edycji lokacji początkowych graczy.         
+
+version 0.0038 09022016
+DONE    1. Poprawiono błąd z niepoprawnym wyświetlaniem się atrybutów 
+        podczas awansu.
+DONE    2. Dodanie efektów czarów dla Mobów.
+DONE    3. Dodanie czaru CHARGE dla wojownika.
+DONE    4. Usprawnienia w Map Editorze.
+
+version 0.0037 08022016
+DONE    1. Poprawiono błąd z czarami w Screenie Awansu
+DONE    2. Dodano animacje czarów działających pozytywnie na bohatera.
+DONE    3. Dodano czar Zniechęcenie dla Mściciela.
+DONE    4. Dodanie efektów czarów podczas walki
+DONE    5. Dodanie animacji czarów działających negatywanie na bohatera.
+
+version 0.0036 07022016
+DONE    1. Dodanie czaru Pieśń Chwały dla wojownika.
+
+version 0.0035 07022016
+DONE    1. Dla broni dodano 2 nowe współczynniki: obrażenia, atak.
+DONE    2. Uaktualnienie systemu walki o 2 ww. dodane parametry.
+DONE    3. Dodano listę czarów dostępnych dla każdego z bohaterów. Tworzenie
+        czarów dla bohatera dobywa się na pdst. listy.
+DONE    5. Dodanie czaru przyspieszenia dla Łowcy.
+DONE    6. Dodanie czaru leczenia dla Twierdzy.
+DONE    7. Dodanie drzewka rozwoju dla wojownika.
+
+version 0.0034 02022016
+DONE    1. Poprawiono błąd w którym ikony efektów czarów wyświetlały się 
+        niepoprawnie w panlu bohatera.
+DONE    2. Dodano informacje w Screenie awansu na który poziom awansuje bohater.
+DONE    3. Poprawiono błąd wyświetlający niepoprawny poziom bohatera w Screenie
+        bohatera.
+DONE    4. Dodano szkic lewego panelu w Screenie awansu.
+
+version 0.0033 01022016
+DONE    1. Dodanie do Screenu awansu atrybutów: wiedza, moc.
+DONE    2. Dodanie animacji FireBalla i animacji cięcia mieczem.
+
+version 0.0032 30012016
+DONE    1. Dodać moc i więdze. Moc do określania mocy czarów i wiedzę do 
+        określania poziomu pnkt. many oraz poziomów poznania czarów.
+DONE    2. Dodać info o mocy i wiedzy do Screenu Bohatera.
+DONE    3. Do naliczania many przy tworzeniu nowego bohatera użyć pnkt. wiedzy.
+DONE    4. Zaimplementowanie testowego działania czaru FIREBALL
+DONE    5. Zaimplementowanie testowego działania czaru FROZEN
+DONE    6. Zaimplementowanie testowego działabia czaru RAGE
+
+version 0.0031 28012016 DONE
+DONE    1. Usprawnienia w czarach.
+
+version 0.0030 21012016 DONE
+DONE    1. Dodanie interfejsu rzucania czarów.        
+
+version 0.0029 20012016 DONE
+DONE    1. Dodanie prototypu panelu czarów.
+DONE    2. Dodanie prototypów czarów.
+
+version 0.0028 18012016 DONE
+DONE    1. Dodano Ekran awansu bohatera.
+DONE    2. Poprawiono błąd z brakiem reakcji przycisku Załóż w BohaterScreen
+DONE    3. Poprawiono błąd z nieprawidłowym liczeniem szybkości jeżeli
+        bohater posiadał item zwiększający szybkość.
+DONE    5. Poprawiono błąd z niepoprawnym losowaniem itemków dla TresureBoxa.
+DONE    6. Dodanie panelu z info dot. bohatera.
+
+version 0.0027 17012016 DONE
+DONE    1. Dodanie mikstur działających długotrawale.
+DONE    2. Dodanie ikon informujących o działających efektach na bohatera.
+DONE    3. Itemy w TresureBox losują się z zadanego przedziału poziomu itemów.
+DONE    4. Po naciśnięciu przycisku Exit TresureBoxa obiekt zostaje usunięty.
+DONE    5. Dodano generowanie TresureBoxa po zabiciu Moba
+DONE    6. Typ Terenu z statusem Movable = false uniemożliwia ruch.
+DONE    7. Po każdej turze ogólnej bohater leczy się o 1 punkt.
+
+version 0.0026 13012016 DONE
+DONE    1. Dodanie prototypu itema który po użyciu wykonuje działanie ( mikstura
+        lecząca).
+
+version 0.0025 07012016 DONE
+DONE    1. Dodanie opcji zaznaczenia innego Bohatera podczas gdy jeden z 
+        bohaterów gracza jest zaznaczony.
+DONE    2. Poprawiono błąd z dekatywacją zaznaczonych bohaterów po zakończeniu
+        tury.
+
+version 0.0024 06012016 DONE
+DONE    1. Dodano funkcje ataku Moba, który został zaatakowany przez bohatera.
+DONE    2. Mapa wczytuje się z uprzednio wcześniej przygotowanego pliku.
+DONE    3. Dodano możliwość użycia broni dystansowej.
+DONE    4. Dodano pole w BohaterScreen z info. dot klasy postaci bohatera.
+DONE    5. Dodano okno informacyjne ze statystykami Moba.
+DONE    6. Dodano nową klasę bohatera - Czarodzieja.
+DONE    7. Dodano nowy atrybut dla każdej kalsy bohatera: MANA.
+
+version 0.0023
+DONE    1. Przeprojektowanie tworzenia w grze mapy(Wykorzystanie mapy z pliku).
+
+version 0.0022 04012016 DONE
+DONE    1. Dodanie pdst. edytora map. 
+DONE    2. DOdanie zapisu wygenerowanej mapy do pliku.
+
+version 0.0021 02012016 DONE
+DONE    1. Usunięcie starych metod ruchu/ataku bohatera.
+
+version 0.0020 02012016 DONE
+DONE    1. Przeprojektowanie ruchu/ataku bohatera.
+
+version 0.0019 01012016 DONE
+DONE    1. Po zmianie tury kamera przesuwa się nad bohatera następnego gracza.
+
+version 0.0018 30122015 DONE
+DONE    1. Naprawić błąd z brakiem widocznosci przycisków ruchu/ataku
+        po kupnie nowego bohatera.
+DONE    2. Usunięcie klas nieużywanych: Player, BohaterOld
+DONE    3. Refraktoryzacja klas MapScreen, OptionScreen
+DONE    4. Dodano klasę Mob reprezentującą Moba wraz z tymczasową implementacją
+        w grze.
+
+version 0.0017 DONE 29122015
+DONE    1. Dodanie chorągwii do zamków graczy z kolorem odpowiadającym 
+        właścielowi zamku.
+DONE    2. Naprawa błędu z opóźnionym wyświetlaniem ilości złota gracza.
+DONE    3. Dodano Screen kupna nowego bohatera. Nowy bohater jest postacią
+        grywalną.
+
+version 0.0016 DONE 28122015
+DONE    1. Dodano ikone informującą kolorem, który gracz ma aktualnie turę.
+
+version 0.0015 DONE 21122015
+DONE    1. Dodano pasek energii do bohatera zaznaczonego.
+DONE    2. Dodano kolor gracza przy bohaterze.
+
+version 0.0014 DONE 20122015
+DONE    1. Dodano pasek ze stanem energii bohatera
+DONE    2. Naprawiono błąd z wyświetlanie i użyciem zdrowia bohatera.
+
+version 0.0013 DONE 19122015
+DONE    Zmieniono obsługę Screenów gry. Poprawiono błąd, w którym po zmianie 
+        wielkości okna UI nie reagował.
+
+version 0.0012 DONE 15122015
+DONE    3. Poprawić błąd powodujący niepoprawne wyswietlanie się lablki z 
+        ilością obrażeń podczas ataku bohatera.
+
+version 0.0011 DONE 13122015
+DONE    1. Po naciśnięciu przez gracza przycisku koniec tury jeżeli którykolwiek
+        z bohaterów gracza jest zaznaczony - odznaczyć bohatera.
+DONE    2. Po zdobyciu zamku Bohater gracza ma 5 tur na podbicie innego zamku
+        w przeciwnym wypadku kończy się dla niego gra.
+
+version 0.0010 DONE 13122015
+DONE    1. Zaprojektować klasę zamku
+            opis: Zamek nie może atakować ale ma określoną siłę obrony oraz HP
+            Gracz może atakować zamek i jeżeli jego HP spadnie do 0 zamek 
+            może zostać przejęty przez bohatera.                
+DONE    2. Ustawić system zmiany tury. Każdy z graczy wyknouje swoją rundę.
+        Po zakończeniu każdej z rund gracza następuje następna tura.
+DONE    3. Zdrowie zamku musi się odnawiać +1 co jedną turę
+
+
+version 0.0009 DONE 10122015
+
+DONE    1. Dodać label wyświetlający ilość złota.                        
+DONE    2. Zaprojektować item złota.
+DONE    3. Dodać item do skrzyni ze skarbem. 
+DONE    4. Umożliwić zabranie złota bohaterowi.
+DONE    5. Poprawić wyświetlanie statystyk w MapScreen
+
+version 0.0008 DONE 10122015
+
+DONE    1. Usunąć buga który powoduje biały ekran podczas kliku na parzycisk
+        Bohater kiedy żaden z bohaterów nie jest zaznaczony.
+DONE    2. Zaimplementować odjęcie punktu ruchu za każdy atak bohatera.
+DONE    3. Uniemożliwić ruch bohatera w wypadku otwarcia skrzyni.
+
+version 0.0007 DONE 08122015
+
+DONE    Zaprojektować na nowo plansze nowej gry
+DONE    1. Użyć tabeli
+DONE    2. Zaimplementować graczy 1 - 4 w zależności od wyboru
+            a) na planszy ma pojawić się taka ilość graczy jaka została wybrana
+DONE    3. Zaimplementować 4 rodzaje postaci do wyboru przez graczy:
+            a)  postać z bonusem do Ataku
+            b)  postać z bonusem do Obrony
+            c)  postać z bonusem do Szybkosci
+            d)  postać z bonusem do HP
+DONE    4. Zaimplementować ustawinia z nowej gry na mapie
+            
+
+version 0.0006 DONE 05122015
+
+DONE    1. Zaimplementować sprita wyświetlającego ilość obrażeń podczas ataku
+        bohatera.
+
+version 0.0005 DONE 24112015
+        
+DONE    1. Zaprojektować obiekt klasy ArrayList, która będzie przechowywać itemki gracza.        
+DONE    2. Dodać do klasy BohaterScreen implementacje ekwipunku tj. możliwość 
+        podmiany ekwipunku, wyrzucania itp.
+DONE    3. Dodać możliwość dodania do ekwipunku itemków znalezionych Tresure BOX.
+DONE    4. Dodać klasę Window do wyswietlania statystyk i zawartości Tresure Box
+
+version 0.0004 18112015
+
+DONE    Zaprojektować klasę tresureBox, którj zadaniem będzie przechowywać
+        losowe itemki. Obiekt tej klasy będzie widoczny na mapie po 'nadepnieciu'
+        przez bohatera. Otworzy się okno Tresure i bohater mógł będzie zabrać
+        itemy z skrzyni do swojego ekwipunku.
+
+version 0.0003 18112015
+
+DONE    Zaprojektować klasę ekwipunku, która przechowywać będzie itemki w
+        arrayList. Obikety klasy Equip inicjowany będzie razem z stworzeniem 
+        bohatera w obiekcie klasy Bohater.
+
+version 0.0002 15112015
+
+DONE    Zaprotjektować okno które wyświetli opis itemka i modyfikatory itemka 
+        do statystyk w ekwipunku bohatera po najechniu kursorem myszy na obrazek
+        itema.
+
+1. Skrzynia ze skarbem:
+    
+    - Zawiera item / itemki
+    - Gracz może wybrać które itemki ze skrzyni chce zabrać.
+    - Po zabraniu itemków, dołączane są one do ekwipunku bohatera.
+    - Skrzynia po otworzeniu i zamknieciu znika
+
+1.1 Skrzynia jest klasą która zawiera arrayList itemków.
+    Wyświetlanie zawartosci skrzyni odbywać się będzie poprzez wyswietlenie 
+    obiektu klasy Window z pakietu Stage2D.
+
+    Każdy itemek ze skrzynie w oknie będzie wyswietlany jako:
+    Nazwa / obrazek / button weź
+
+    Po najechaniu na obrazek wyswietli się okienko z informacją o właściwościach
+    itemka.
+
+
+
+    
