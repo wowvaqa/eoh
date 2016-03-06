@@ -285,7 +285,18 @@ public class BohaterScreen implements Screen {
             if (!"Gola Glowa".equals(tmpItem.getNazwa())) {
                 sprawdzBohatera().getEquipment().add(tmpItem);
             }
-        } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.nogi)) {
+        }
+
+        else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.korpus)) {
+            tmpItem = sprawdzBohatera().getItemKorpus();
+            sprawdzBohatera().setItemKorpus(sprawdzBohatera().getEquipment().get(i));
+            sprawdzBohatera().getEquipment().remove(i);
+            if (!"Gola Glowa".equals(tmpItem.getNazwa())) {
+                sprawdzBohatera().getEquipment().add(tmpItem);
+            }
+        }
+
+        else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.nogi)) {
             tmpItem = sprawdzBohatera().getItemNogi();
             sprawdzBohatera().setItemNogi(sprawdzBohatera().getEquipment().get(i));
             sprawdzBohatera().getEquipment().remove(i);

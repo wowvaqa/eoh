@@ -48,6 +48,8 @@ public class Assets {
     // tekstury mobów
     public Texture texSzkieletMob;
     public Texture texWilkMob;
+    public Texture texSpiderMob;
+    public Texture texZombieMob;
 
     public Texture texWarrior0;
     public Texture texWarrior1;
@@ -62,10 +64,12 @@ public class Assets {
     public Texture texLinenTousers;
     public Texture texLinenShoes;
     public Texture texLeatherShoes;
+    public Texture texHardLeatherShoes;
     public Texture texLinenShirt;
     public Texture texLinenCap;
     public Texture texLeatherCap;
     public Texture texLeatherTousers;
+    public Texture texLeatherShirt;
     public Texture texLinenGloves;
     public Texture texFist;
     public Texture texStick;
@@ -73,6 +77,7 @@ public class Assets {
     public Texture texSword;
     public Texture texShield;
     public Texture texBow;
+    public Texture texLongBow;
     public Texture texGold;
 
     // Spell Textures
@@ -459,7 +464,9 @@ public class Assets {
         texLinenTousers = new Texture("items/texLinenTrousers.png");
         texLeatherCap = new Texture("items/texLeatherCap.png");
         texLeatherTousers = new Texture("items/texLeatherTrousers.png");
+        texLeatherShirt = new Texture("items/texLeatherArmor.png");
         texLeatherShoes = new Texture("items/texLeatherShoes.png");
+        texHardLeatherShoes = new Texture("items/texHardLeatherShoes.png");
         texFist = new Texture("items/texFist.png");
         texStick = new Texture("items/texStick.png");
         texLegs = new Texture("items/texLegs.png");
@@ -467,6 +474,7 @@ public class Assets {
         texShield = new Texture("items/texShield.png");
         texGold = new Texture("items/texGold.png");
         texBow = new Texture("items/texBow.png");
+        texLongBow = new Texture("items/texLongBow.png");
         texHelthPotion = new Texture("items/texHealthPotion.png");
         texSpeedPotion = new Texture("items/texSpeedPotion.png");
         texAttackPotion = new Texture("items/texAttackPotion.png");
@@ -541,5 +549,7 @@ public class Assets {
 
         this.texWilkMob = new Texture("moby/mobWolfTex.png");
         this.texSzkieletMob = new Texture("moby/mobSzkieletfTex.png");
+        this.texSpiderMob = new Texture("moby/mobSpiderTex.png");
+        this.texZombieMob = new Texture("moby/mobZombieTex.png");
     }
 }

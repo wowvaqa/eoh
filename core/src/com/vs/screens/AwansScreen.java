@@ -119,11 +119,11 @@ public class AwansScreen implements Screen {
         Image imgPoziom4B = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("3B")));
 
         Label lblPoziom1 = new Label("1", a.skin);
-        Label lblPoziom2 = new Label("2", a.skin);
-        Label lblPoziom3A = new Label("3A", a.skin);
-        Label lblPoziom3B = new Label("3B", a.skin);
-        Label lblPoziom4A = new Label("4A", a.skin);
-        Label lblPoziom4B = new Label("4B", a.skin);
+        final Label lblPoziom2 = new Label("2", a.skin);
+        final Label lblPoziom3A = new Label("3A", a.skin);
+        final Label lblPoziom3B = new Label("3B", a.skin);
+        final Label lblPoziom4A = new Label("4A", a.skin);
+        final Label lblPoziom4B = new Label("4B", a.skin);
 
         definiujNazwy(lblPoziom1, lblPoziom2, lblPoziom3A, lblPoziom3B, lblPoziom4A, lblPoziom4B);
 
@@ -142,6 +142,8 @@ public class AwansScreen implements Screen {
                 gs.getBohaterZaznaczony().setImage(imgPoziom2);
                 gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/1.png"));
                 gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/1z.png"));
+                awans.classOfHero = lblPoziom2.getText().toString();
+                Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
             }
         });
@@ -155,6 +157,8 @@ public class AwansScreen implements Screen {
                 gs.getBohaterZaznaczony().setG2B(false);
                 gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/2A.png"));
                 gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/2Az.png"));
+                awans.classOfHero = lblPoziom3A.getText().toString();
+                Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
             }
         });
@@ -168,6 +172,8 @@ public class AwansScreen implements Screen {
                 gs.getBohaterZaznaczony().setG2A(false);
                 gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/2B.png"));
                 gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/2Bz.png"));
+                awans.classOfHero = lblPoziom3B.getText().toString();
+                Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
             }
         });
@@ -181,6 +187,8 @@ public class AwansScreen implements Screen {
                 gs.getBohaterZaznaczony().setG3A(true);
                 gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/3A.png"));
                 gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/3Az.png"));
+                awans.classOfHero = lblPoziom4A.getText().toString();
+                Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
             }
         });
@@ -194,27 +202,43 @@ public class AwansScreen implements Screen {
                 gs.getBohaterZaznaczony().setG3A(false);
                 gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/3B.png"));
                 gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/3Bz.png"));
+                awans.classOfHero = lblPoziom4B.getText().toString();
+                Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
             }
         });
 
-        switch (gs.getBohaterZaznaczony().getLevelOfExp()) {
-            case 1:
-                btnPoziom3A.setVisible(false);
-                btnPoziom3B.setVisible(false);
-                btnPoziom4A.setVisible(false);
-                btnPoziom4B.setVisible(false);
-                break;
-            case 2:
-                btnPoziom2.setVisible(false);
-                btnPoziom4A.setVisible(false);
-                btnPoziom4B.setVisible(false);
-                break;
-            case 3:
-                btnPoziom2.setVisible(false);
-                btnPoziom3A.setVisible(false);
-                btnPoziom3B.setVisible(false);
-                break;
+        if (gs.getBohaterZaznaczony().getLevelOfExp() < 4) {
+            switch (gs.getBohaterZaznaczony().getLevelOfExp()) {
+                case 1:
+                    btnPoziom3A.setVisible(false);
+                    btnPoziom3B.setVisible(false);
+                    btnPoziom4A.setVisible(false);
+                    btnPoziom4B.setVisible(false);
+                    break;
+                case 2:
+                    btnPoziom2.setVisible(false);
+                    btnPoziom4A.setVisible(false);
+                    btnPoziom4B.setVisible(false);
+                    break;
+                case 3:
+                    btnPoziom2.setVisible(false);
+                    btnPoziom3A.setVisible(false);
+                    btnPoziom3B.setVisible(false);
+                    if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Arcypaladyn")){
+                        btnPoziom4B.setVisible(false);
+                    } else if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Msciciel")){
+                        btnPoziom4A.setVisible(false);
+                    }
+                    break;
+            }
+        }
+        else {
+            btnPoziom2.setVisible(false);
+            btnPoziom3A.setVisible(false);
+            btnPoziom3B.setVisible(false);
+            btnPoziom4A.setVisible(false);
+            btnPoziom4B.setVisible(false);
         }
 
         leftTable.add(imgPoziom1).colspan(2);
@@ -569,6 +593,8 @@ public class AwansScreen implements Screen {
 
     public class Awans {
 
+        public String classOfHero;
+
         public int tmpAtak = 0;
         public int tmpObrona = 0;
         public int tmpSzybkosc = 0;
@@ -714,9 +740,11 @@ public class AwansScreen implements Screen {
 
             b.setLevelOfExp(b.getLevelOfExp() + 1);
 
+            b.setActualHeroClass(this.classOfHero);
+
             // Oryginalne ustawienie osiągnięcia następnego poziomu. NIE KASOWAĆ
-            //b.setExpToNextLevel(b.getExp() + 2 * b.getExp());
-            b.setExpToNextLevel(b.getExp() + 100);
+            b.setExpToNextLevel(b.getExp() + 2 * b.getExp());
+            //b.setExpToNextLevel(b.getExp() + 100);
 
             for (Spells listaCzarow1 : awans.listaCzarow) {
                 gs.getBohaterZaznaczony().getListOfSpells().add(listaCzarow1);

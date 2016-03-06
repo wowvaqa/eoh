@@ -262,7 +262,7 @@ public class Ruch {
             Assets.netStatus.pozXboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozXnaMapie();
             Assets.netStatus.pozYboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozYnaMapie();
 
-            Assets.client.sendTCP(Assets.netStatus);
+            //Assets.client.sendTCP(Assets.netStatus);
 
             gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
 

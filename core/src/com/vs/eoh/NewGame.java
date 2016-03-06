@@ -263,9 +263,9 @@ public class NewGame {
     }
 
     /**
-     *
-     * @param kP
-     * @return
+     * Zwraca ilość mocy dla danej kalsy postaci
+     * @param kP KlasaPostaci
+     * @return int Ilość mocy
      */
     static public int pobierzMoc(KlasyPostaci kP) {
         switch (kP) {
@@ -389,36 +389,6 @@ public class NewGame {
     }
 
     /**
-     * Ustawia pozycje bohatera na mapie
-     *
-     * @param gs GameStatus
-     * @param i
-     */
-//    private static void ustawPozycjeNaMapie(GameStatus gs, int i) {
-//        switch (i) {
-//            case 0:
-//                gs.getMapa().pola[0][0].setBohater(gs.gracze.get(0).getBohaterowie().get(0));
-//                gs.getMapa().pola[0][0].getBohater().setPozXnaMapie(0);
-//                gs.getMapa().pola[0][0].getBohater().setPozYnaMapie(0);
-//                break;
-//            case 1:
-//                gs.getMapa().pola[9][9].setBohater(gs.gracze.get(1).getBohaterowie().get(0));
-//                gs.getMapa().pola[9][9].getBohater().setPozXnaMapie(9);
-//                gs.getMapa().pola[9][9].getBohater().setPozYnaMapie(9);
-//                break;
-//            case 2:
-//                gs.getMapa().pola[0][9].setBohater(gs.gracze.get(2).getBohaterowie().get(0));
-//                gs.getMapa().pola[0][9].getBohater().setPozXnaMapie(0);
-//                gs.getMapa().pola[0][9].getBohater().setPozYnaMapie(9);
-//                break;
-//            case 3:
-//                gs.getMapa().pola[9][0].setBohater(gs.gracze.get(3).getBohaterowie().get(0));
-//                gs.getMapa().pola[9][0].getBohater().setPozXnaMapie(9);
-//                gs.getMapa().pola[9][0].getBohater().setPozYnaMapie(0);
-//                break;
-//        }
-//    }
-    /**
      * W zależnosci od klasy bohatera pdopina odpowiednie czary.
      */
     private static void podepnijCzary(KlasyPostaci kP, Bohater bohater) {
@@ -426,10 +396,10 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 bohater.getListOfSpells().add(Spells.Rage);
-                bohater.getListOfSpells().add(Spells.Charge);
-                bohater.getListOfSpells().add(Spells.Discouragement);
-                bohater.getListOfSpells().add(Spells.Fury);
-                bohater.getListOfSpells().add(Spells.FinalJudgment);
+                //bohater.getListOfSpells().add(Spells.Charge);
+                //bohater.getListOfSpells().add(Spells.Discouragement);
+                //bohater.getListOfSpells().add(Spells.Fury);
+                //bohater.getListOfSpells().add(Spells.FinalJudgment);
                 break;
             case Giermek:
                 break;

@@ -3,18 +3,24 @@ package com.vs.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.GameStatus;
@@ -94,6 +100,7 @@ public class NewGameScreen implements Screen {
         tabela01.setDebug(true);
 
         tabela01.add(new Label("Nowa Gra", a.skin)).align(Align.center).align(Align.top).expandX().colspan(tabela01.getColumns());
+        tabela01.add(getBtnWybierzMape()).size(200, 50).spaceRight(5);
         tabela01.row();
 
         tabela01.add(tabelaIlosciGraczy).colspan(4);
@@ -128,21 +135,37 @@ public class NewGameScreen implements Screen {
         });
         tabela01.add(btnAnuluj).align(Align.left);
 
-        
+
         // Przycisk Zakończ
         TextButton btnExit = new TextButton("ZAKONCZ", a.skin);
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("EXIT");
-                try {
-                    NewGame.zakonczGenerowanieNowejGry(g, gs, a);
-                } catch (IOException ex) {
-                    Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
+                if (!GameStatus.nazwaMapy.equals("brak")) {
+                    try {
+                        NewGame.zakonczGenerowanieNowejGry(g, gs, a);
+                    } catch (IOException ex) {
+                        Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    g.setScreen(Assets.mapScreen);
+                } else {
+                    new Dialog("Nie wybrano mapy", a.skin) {
+                        {
+                            button("Zamknij", "zamknij");
+                        }
+
+                        @Override
+                        protected void result(Object object) {
+                            if (object.equals("zamknij")) {
+                                this.remove();
+                            }
+                        }
+                    }.show(stage01);
                 }
-                g.setScreen(Assets.mapScreen);
+
             }
         });
         //tabela01.add(btnExit).align(Align.right).colspan(tabela01.getColumns()).pad(10);
@@ -410,6 +433,69 @@ public class NewGameScreen implements Screen {
         tabelaGracz04.row();
         tabelaGracz04.add(new Label("Kolor: ", a.skin));
         tabelaGracz04.add(new DefaultActor(new Texture(NewGame.pixmapGreen), 0, 0)).colspan(tabelaGracz04.getColumns());
+    }
+
+    /**
+     * Zwraca Okno wyboru mapy
+     *
+     * @return Window
+     */
+    private Window getLoadMapWindow() {
+        final Window window = new Window("Wybierz Mape", a.skin);
+        window.setSize(800, 600);
+        window.align(Align.center);
+
+        final List listOfMap = new List(a.skin);
+
+        FileHandle[] files = Gdx.files.local("").list();
+        for (FileHandle file : files) {
+            if (file.extension().equals("dat")) {
+                listOfMap.getItems().add(file);
+            }
+        }
+
+        TextButton btnExitWindow = new TextButton("EXIT", a.skin);
+        btnExitWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                window.remove();
+            }
+        });
+
+        TextButton btnWybierzWindow = new TextButton("Wybieram", a.skin);
+        btnWybierzWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                FileHandle file = (FileHandle) listOfMap.getSelected();
+                Gdx.app.log("Nazwa Pliku", file.name());
+                GameStatus.nazwaMapy = file.name();
+                window.remove();
+            }
+        });
+
+
+        window.add(listOfMap).size(300, 400);
+        window.row();
+        window.add(btnExitWindow).size(100, 50).spaceRight(5);
+        window.add(btnWybierzWindow).size(100, 50);
+
+        return window;
+    }
+
+    /**
+     * Zwraca przycisk wyjscia z okna
+     *
+     * @return Przycisk
+     */
+    private TextButton getBtnWybierzMape() {
+        TextButton btnWybierzMape = new TextButton("Wybierz Mape", a.skin);
+        btnWybierzMape.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage01.addActor(getLoadMapWindow());
+            }
+        });
+        return btnWybierzMape;
     }
 
     @Override

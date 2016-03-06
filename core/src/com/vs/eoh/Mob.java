@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.vs.enums.DostepneMoby;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -51,21 +52,20 @@ public class Mob extends Actor {
     private ArrayList<SpellEffects> spellEffects;
 
     /**
-     *
-     * @param g Referenca do boiektu Game
-     * @param gs Referencja do obiketu Game Status
-     * @param a Referencja do obiektu Assets
+     * @param g                   Referenca do boiektu Game
+     * @param gs                  Referencja do obiketu Game Status
+     * @param a                   Referencja do obiektu Assets
      * @param lokaczjaPoczatkowaX Lokacja początkowa X w Stage
      * @param lokaczjaPoczatkowaY Lokacja początkowa Y w Stage
-     * @param mobLevel Poziom moba.
+     * @param mobLevel            Poziom moba.
      * @param typMoba
      */
     public Mob(/**
-             * Texture textureIcon, *
-             */
-            Game g, GameStatus gs, Assets a,
-            int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
-            DostepneMoby typMoba) {
+                * Texture textureIcon, *
+                */
+               Game g, GameStatus gs, Assets a,
+               int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
+               DostepneMoby typMoba) {
         this.spellEffects = new ArrayList<SpellEffects>();
         this.gs = gs;
         this.a = a;
@@ -93,6 +93,10 @@ public class Mob extends Actor {
                 return a.texSzkieletMob;
             case Wilk:
                 return a.texWilkMob;
+            case Pajak:
+                return a.texSpiderMob;
+            case Zombie:
+                return a.texZombieMob;
         }
         return a.btnAttackTex;
     }
@@ -230,15 +234,35 @@ public class Mob extends Actor {
         switch (levelMoba) {
             case 1:
                 int indeks = rnd.nextInt(2);
-                //System.out.println("!!!!!!!!!!!!!!!!!: " + indeks);
                 if (indeks == 0) {
                     return DostepneMoby.Szkielet;
                 } else {
                     return DostepneMoby.Wilk;
                 }
+            case 2:
+                int indeks2 = rnd.nextInt(2);
+                if (indeks2 == 0) {
+                    return DostepneMoby.Pajak;
+                } else {
+                    return DostepneMoby.Zombie;
+                }
 
         }
         return DostepneMoby.Szkielet;
+    }
+
+    /**
+     * Generuje Tresure Box po pokonoaniu Moba
+     * @param pozXTB Pozycja X na mapie
+     * @param pozYTB Pozycja Y na mapie
+     * @param mobLevel Level pokonanego Moba
+     */
+    public void generujTresureBoxPoSmierciMoba(int pozXTB, int pozYTB, int mobLevel){
+        System.out.println("Dodaje skrzynie po zabiciu  przeciwnika");
+        TresureBox tb = new TresureBox(mobLevel, 1, this.a, this.gs, this.g, pozXTB * 100, pozYTB * 100);;
+        gs.getMapa().getPola()[pozXTB][pozYTB].setTresureBox(tb);
+
+        Assets.stage01MapScreen.addActor(gs.getMapa().getPola()[pozXTB][pozYTB].getTresureBox());
     }
 
     @Override
@@ -254,12 +278,7 @@ public class Mob extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        if (this.getAktualneHp() < 1) {
-            System.out.println("Dodaje skrzynie po zabiciu  przeciwnika");
-            TresureBox tb = new TresureBox(1, 1, this.a, this.gs, this.g, this.pozX, this.pozY);
-            gs.getMapa().getPola()[this.pozX / 100][this.pozY / 100].setTresureBox(tb);
-            Assets.stage01MapScreen.addActor(gs.getMapa().getPola()[this.pozX / 100][this.pozY / 100].getTresureBox());
-        }
+
 
     }
 

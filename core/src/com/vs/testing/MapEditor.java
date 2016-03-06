@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -24,9 +26,7 @@ import com.vs.eoh.Mapa;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -46,16 +46,13 @@ public class MapEditor implements Screen {
     private final Assets a;
 
     private final Stage stage01 = new Stage();
-    private TextButton btnExit;
-
     private final Table tabela = new Table();
     private final Table tabela01 = new Table();
-
     // Przechowuje dostępne typy terenów
     private final Array array = new Array();
     // Przechowuje typy terenu
     private final ArrayList listaPol = new ArrayList();
-
+    private TextButton btnExit;
     private int iloscPolX = 10;
     private int iloscPolY = 10;
 
@@ -87,6 +84,37 @@ public class MapEditor implements Screen {
         this.makeButtons();
         this.formatujTeabele02();
         this.formatujTabele();
+    }
+
+    public static void zapiszMape2(Mapa map) throws IOException {
+        FileHandle file = Gdx.files.local("mapa.dat");
+        Mapa saveMapa = null;
+        OutputStream out = null;
+        try {
+            file.writeBytes(serialize(map), false);
+        } catch (Exception ex) {
+            Gdx.app.log("Save Map Error", "Nie mogę zapisać do pliku.");
+        }
+    }
+
+    public static Mapa readMap(String nazwaMapy) throws IOException, ClassNotFoundException {
+        Mapa map = null;
+        FileHandle file = Gdx.files.local(nazwaMapy);
+        map = (Mapa) deserialize(file.readBytes());
+        return map;
+    }
+
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        ObjectOutputStream o = new ObjectOutputStream(b);
+        o.writeObject(obj);
+        return b.toByteArray();
+    }
+
+    public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream b = new ByteArrayInputStream(bytes);
+        ObjectInputStream o = new ObjectInputStream(b);
+        return o.readObject();
     }
 
     private void formatujTypyTerenu() {
@@ -250,44 +278,58 @@ public class MapEditor implements Screen {
                 mapa.getPola()[i][j].setTresureBox2Location(mapaPolEdycyjncyh[i][j].tresureBox2Location);
 
                 mapa.getPola()[i][j].setMob1Location(mapaPolEdycyjncyh[i][j].mob1Location);
+                mapa.getPola()[i][j].setMob2Location(mapaPolEdycyjncyh[i][j].mob2Location);
             }
         }
+
+        stage01.addActor(getWindowOfSaveMap());
 
         System.out.println("Zapisuje mape");
         //ObjectOutputStream wy = new ObjectOutputStream(new FileOutputStream("mapa.dat"));
         //wy.writeObject(this.mapa);
-        zapiszMape2(mapa);
+        //zapiszMape2(mapa);
     }
 
-    public static void zapiszMape2(Mapa map) throws IOException {
-        FileHandle file = Gdx.files.local("mapa.dat");
-        Mapa saveMapa = null;
-        OutputStream out = null;
-        try {
-            file.writeBytes(serialize(map), false);
-        } catch (Exception ex) {
-            Gdx.app.log("Save Map Error", "Nie mogę zapisać do pliku.");
-        }
-    }
+    /**
+     * Zwraca Okno z zapisem mapy
+     *
+     * @return Window
+     */
+    private Window getWindowOfSaveMap() {
+        final Window window = new Window("Zapisz Mape", a.skin);
+        final TextField txtFldNazwaMapy = new TextField("nazwa", a.skin);
 
-    public static Mapa readMap() throws IOException, ClassNotFoundException {
-        Mapa map = null;
-        FileHandle file = Gdx.files.local("mapa.dat");
-        map = (Mapa) deserialize(file.readBytes());
-        return map;
-    }
+        TextButton btnExitWindow = new TextButton("EXIT", a.skin);
+        btnExitWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                window.remove();
+            }
+        });
 
-    public static byte[] serialize(Object obj) throws IOException {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        ObjectOutputStream o = new ObjectOutputStream(b);
-        o.writeObject(obj);
-        return b.toByteArray();
-    }
+        TextButton btnSaveWindow = new TextButton("SAVE", a.skin);
+        btnSaveWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                FileHandle file = Gdx.files.local(txtFldNazwaMapy.getText() + ".dat");
+                Mapa saveMapa = null;
+                OutputStream out = null;
+                try {
+                    file.writeBytes(serialize(mapa), false);
+                } catch (Exception ex) {
+                    Gdx.app.log("Save Map Error", "Nie mogę zapisać do pliku.");
+                }
+            }
+        });
 
-    public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream b = new ByteArrayInputStream(bytes);
-        ObjectInputStream o = new ObjectInputStream(b);
-        return o.readObject();
+
+        window.setSize(640, 480);
+        window.add(txtFldNazwaMapy).align(Align.center).spaceBottom(5).colspan(2);
+        window.row();
+        window.add(btnSaveWindow).size(100, 50).align(Align.bottom).spaceRight(5);
+        window.add(btnExitWindow).size(100, 50).align(Align.bottom);
+
+        return window;
     }
 
     /**
@@ -367,6 +409,7 @@ public class MapEditor implements Screen {
 
         // Lokacje startowe mobów
         public boolean mob1Location = false;
+        public boolean mob2Location = false;
 
         /**
          * @param tekstura Tekstura pola
@@ -480,7 +523,7 @@ public class MapEditor implements Screen {
                                 new Dialog("Lokacja Startowa mobów", a.skin) {
                                     {
                                         button("Lvl 1", "1");
-                                        //button("Lvl 2", "2");
+                                        button("Lvl 2", "2");
                                         //button("Lvl 3", "3");
                                         //button("Lvl 4", "4");
                                         button("anuluj", "anuluj");
@@ -492,14 +535,18 @@ public class MapEditor implements Screen {
                                             mob1Location = true;
                                             getSprite().setTexture(a.texSzkieletMob);
                                             this.remove();
-//                                        } else if (object.equals("2")) {
-//                                            this.remove();
+                                        } else if (object.equals("2")) {
+                                            mob2Location = true;
+                                            getSprite().setTexture(a.texSpiderMob);
+                                            this.remove();
+
 //                                        } else if (object.equals("3")) {
 //                                            this.remove();
 //                                        } else if (object.equals("4")) {
 //                                            this.remove();
                                         } else if (object.equals("anuluj")) {
                                             mob1Location = false;
+                                            mob2Location = false;
                                             getSprite().setTexture(a.trawaTex);
                                             this.remove();
                                         }

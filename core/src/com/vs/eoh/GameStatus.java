@@ -13,6 +13,9 @@ import com.vs.testing.TestingScreen;
 
 public class GameStatus {
 
+    // Status gry 0 - standAlone, 1 - Server, 2 - Client
+    private int gameStatus = 0;
+
     private int actualScreen = 0;                                               // zapamiętuje aktualną scenę która jest wyświetlana    
     private int lastScreen = 0;                                                 // Ostatnia scena która była wyświetlana
     private int predkoscScrollowaniaKamery = 10;                                // współczynnik prędkości dla scrollingu mapy w obiekcie klasy MapScreen
@@ -45,11 +48,7 @@ public class GameStatus {
     // public Mapa mapa = new Mapa();
     public Mapa mapa;
 
-    /**
-     * Określa wspóżędne TresureBoxa po zabiciu Moba
-     */
-    public static int wspolzedneXtresureBox = 999;
-    public static int wspolzedneYtresureBox = 999;
+    public static String nazwaMapy = "brak";
 
     // Listy zawierają wszystkie dostępne itemy danych poziomów.
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
@@ -70,7 +69,7 @@ public class GameStatus {
         //ObjectInputStream we = new ObjectInputStream(new FileInputStream("mapa.dat"));
         //mapa = (Mapa) we.readObject();
 
-        mapa = MapEditor.readMap();
+        mapa = MapEditor.readMap(nazwaMapy);
 
         System.out.println("odczyt obiektu");
     }
@@ -108,10 +107,11 @@ public class GameStatus {
             for (int j = 0; j < this.getMapa().getIloscPolY(); j++) {
                 if (this.getMapa().pola[i][j].getMob() != null) {
                     if (this.getMapa().pola[i][j].getMob().getAktualneHp() <= 0) {
-                        this.getMapa().pola[i][j].setMob(null);
 
-                        wspolzedneXtresureBox = i;
-                        wspolzedneYtresureBox = j;
+                        this.getMapa().pola[i][j].getMob().generujTresureBoxPoSmierciMoba(i, j
+                                , this.getMapa().pola[i][j].getMob().getMobLevel());
+
+                        this.getMapa().pola[i][j].setMob(null);
                     }
                 }
             }
@@ -151,8 +151,11 @@ public class GameStatus {
 
         //Poziom 2
         itemyPoziom2.add(DostepneItemki.SkorzanaCzapka);
+        itemyPoziom2.add(DostepneItemki.DlugiLuk);
         itemyPoziom2.add(DostepneItemki.Miecz);
         itemyPoziom2.add(DostepneItemki.SkorzaneSpodnie);
+        itemyPoziom2.add(DostepneItemki.SkorzanyNapiersnik);
+        itemyPoziom2.add(DostepneItemki.WzmocnioneSkorzaneButy);
     }
 
     // GETTER AND SETTERS
@@ -255,4 +258,19 @@ public class GameStatus {
         this.turaGry = turaGry;
     }
 
+    /**
+     * Zwraca status gry
+     * @return 0 = StandAlone, 1 = Server, 2 = Client
+     */
+    public int getGameStatus() {
+        return gameStatus;
+    }
+
+    /**
+     * Ustala Status gry
+     * @param gameStatus 0 = StandAlone, 1 = Server, 2 = Client
+     */
+    public void setGameStatus(int gameStatus) {
+        this.gameStatus = gameStatus;
+    }
 }

@@ -11,6 +11,7 @@ public enum DostepneItemki {
     SkorzanaCzapka,
     // Korpus
     LnianaKoszula,
+    SkorzanyNapiersnik,
     // Ręce
     Piesci,
     Kij,
@@ -18,6 +19,7 @@ public enum DostepneItemki {
     Tarcza,
     LnianeRekawice,
     Luk,
+    DlugiLuk,
     // Nogi
     Nogi,
     LnianeSpodnie,
@@ -25,6 +27,7 @@ public enum DostepneItemki {
     // Stopy
     LnianeButy,  
     SkorzaneButy,
+    WzmocnioneSkorzaneButy,
     // Inne
     Gold,
     // Mikstury

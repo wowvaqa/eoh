@@ -76,9 +76,21 @@ public class ItemCreator {
                 item.setObrona(0);
                 item.setSzybkosc(0);
                 item.setHp(0);
-                item.setArmor(1);
-                item.setCzescCiala(CzesciCiala.praweRamie);
+                item.setArmor(0);
+                item.setCzescCiala(CzesciCiala.korpus);
                 item.getSprite().setTexture(a.texLinenShirt);
+                item.setTypItemu(TypItemu.Pancerz);
+                break;
+            case SkorzanyNapiersnik:
+                item.setNazwa("Skorzany Napiersnik");
+                item.setLevel(2);
+                item.setAtak(0);
+                item.setObrona(1);
+                item.setSzybkosc(0);
+                item.setHp(0);
+                item.setArmor(2);
+                item.setCzescCiala(CzesciCiala.korpus);
+                item.getSprite().setTexture(a.texLeatherShirt);
                 item.setTypItemu(TypItemu.Pancerz);
                 break;
 // BROŃ RĘCE ===================================================================
@@ -142,6 +154,19 @@ public class ItemCreator {
                 item.getSprite().setTexture(a.texBow);
                 item.setTypItemu(TypItemu.Bron);
                 break;
+            case DlugiLuk:
+                item.setNazwa("Dlugi Luk");
+                item.setLevel(2);
+                item.setAtak(1);
+                item.setObrona(0);
+                item.setSzybkosc(0);
+                item.setHp(0);
+                item.setDmg(1);
+                item.setZasieg(1);
+                item.setCzescCiala(CzesciCiala.rece);
+                item.getSprite().setTexture(a.texLongBow);
+                item.setTypItemu(TypItemu.Bron);
+                break;
 // NOGI ========================================================================
             case Nogi:
                 item.setNazwa("Gole Nogi");
@@ -199,6 +224,18 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.stopy);
                 item.getSprite().setTexture(a.texLeatherShoes);
+                item.setTypItemu(TypItemu.Pancerz);
+                break;
+            case WzmocnioneSkorzaneButy:
+                item.setNazwa("Wzmocnione Skorzane Buty");
+                item.setLevel(2);
+                item.setAtak(0);
+                item.setObrona(1);
+                item.setSzybkosc(1);
+                item.setHp(0);
+                item.setArmor(1);
+                item.setCzescCiala(CzesciCiala.stopy);
+                item.getSprite().setTexture(a.texHardLeatherShoes);
                 item.setTypItemu(TypItemu.Pancerz);
                 break;
 // INNE ========================================================================     

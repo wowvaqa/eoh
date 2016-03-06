@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,10 +23,14 @@ import com.esotericsoftware.kryonet.Server;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.Mapa;
+import com.vs.eoh.Pole;
+import com.vs.testing.MapEditor;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import sun.nio.ch.Net;
+import static com.vs.eoh.Assets.*;
 
 /**
  * Created by v on 2016-03-01.
@@ -40,11 +45,25 @@ public class MultiplayerScreen implements Screen {
     private Stage mainStage;
     private Tables tables;
 
+    // czy gra jest serverem
+    private boolean statusServer = false;
+    // czy gra jest klientem
+    private boolean statusClient = false;
+
+    // ilość graczy podłączonych do serwera.
+    private int amountOfPlayers;
+    // arraylist z nazwami graczy
+    private ArrayList<String> palyersNames = new ArrayList<String>();
+    // nazwa gracza.
+    private String playerName;
+
     private Server server = new Server();
     private Client client = new Client();
 
     private Kryo kryoServer;
     private Kryo kryoClient;
+
+    public Mapa mapa = new Mapa();
 
     private NetStatus mainNetStatus = new NetStatus();
 
@@ -75,9 +94,9 @@ public class MultiplayerScreen implements Screen {
                     NetStatus netStatus = (NetStatus) object;
                     Gdx.app.log("wykryto NETSTATUS", "");
                     Gdx.app.log("Pozycja bohatera 1 na kliencie", Integer.toString(netStatus.pozXboh1)
-                            + " " +Integer.toString(netStatus.pozYboh1));
+                            + " " + Integer.toString(netStatus.pozYboh1));
                     Gdx.app.log("Pozycja bohatera 2 na kliencie", Integer.toString(netStatus.pozXboh2)
-                            + " " +Integer.toString(netStatus.pozYboh2));
+                            + " " + Integer.toString(netStatus.pozYboh2));
                     mainNetStatus.pozXboh1 = netStatus.pozXboh1;
                     mainNetStatus.pozYboh1 = netStatus.pozYboh1;
                     mainNetStatus.pozXboh2 = netStatus.pozXboh2;
@@ -106,9 +125,9 @@ public class MultiplayerScreen implements Screen {
                     NetStatus netStatus = (NetStatus) object;
                     Gdx.app.log("wykryto NETSTATUS", "");
                     Gdx.app.log("Pozycja bohatera 1 na kliencie", Integer.toString(netStatus.pozXboh1)
-                            + " " +Integer.toString(netStatus.pozYboh1));
+                            + " " + Integer.toString(netStatus.pozYboh1));
                     Gdx.app.log("Pozycja bohatera 2 na kliencie", Integer.toString(netStatus.pozXboh2)
-                            + " " +Integer.toString(netStatus.pozYboh2));
+                            + " " + Integer.toString(netStatus.pozYboh2));
                     mainNetStatus.pozXboh1 = netStatus.pozXboh1;
                     mainNetStatus.pozYboh1 = netStatus.pozYboh1;
                     mainNetStatus.pozXboh2 = netStatus.pozXboh2;
@@ -125,36 +144,81 @@ public class MultiplayerScreen implements Screen {
         kryoClient.register(SomeRequest.class);
         kryoClient.register(SomeResponse.class);
         kryoClient.register(NetStatus.class);
+        kryoServer.register(Mapa.class);
+        kryoClient.register(Mapa.class);
+        kryoServer.register(Pole.class);
+        kryoClient.register(Pole.class);
     }
 
     private void formatujTabele() {
-        tables.leftTable.clear();
-        tables.righTable.clear();
-        tables.mainTable.clear();
+        formatTable01();
+        formatTable02();
 
-        tables.leftTable.add(getBtnServerStart()).size(200, 40).align(Align.topLeft).space(5);
-        tables.leftTable.row();
-        tables.leftTable.add(getBtnServerStop()).size(200, 40).align(Align.topLeft).space(5);
-        tables.leftTable.row();
-        tables.leftTable.add(getBtnClientStart()).size(200, 40).align(Align.topLeft).space(5);
-        tables.leftTable.row();
-        tables.leftTable.add(getBtnClientStop()).size(200, 40).align(Align.topLeft).space(5);
-        tables.leftTable.row();
-        tables.leftTable.add(getBtnGetConnections()).size(200, 40).align(Align.topLeft).space(5);
-        tables.leftTable.row();
-        tables.leftTable.add(getBtnExit()).size(200, 50).align(Align.bottomLeft).expand().padTop(20);
+        tables.tableMain.clear();
 
-        tables.righTable.add(getLabelGetConnections()).align(Align.topLeft).expand();
+        tables.tableMain.add(tables.table01).align(Align.left);
+        tables.tableMain.add(tables.table02).expand();
 
-        tables.mainTable.add(tables.leftTable).align(Align.left);
-        tables.mainTable.add(tables.righTable).expand();
-
-        mainStage.addActor(tables.mainTable);
+        mainStage.addActor(tables.tableMain);
     }
 
-    private Label getLabelGetConnections() {
+    private void formatTable01() {
+        tables.table01.clear();
+
+        tables.table01.add(getLblGameStuts()).align(Align.topLeft).space(5);
+        tables.table01.row();
+        tables.table01.add(getBtnServerStart()).size(200, 40).align(Align.topLeft).space(5);
+        tables.table01.row();
+        tables.table01.add(getBtnServerStop()).size(200, 40).align(Align.topLeft).space(5);
+        tables.table01.row();
+        tables.table01.add(getBtnClientStart()).size(200, 40).align(Align.topLeft).space(5);
+        tables.table01.row();
+        tables.table01.add(getBtnClientStop()).size(200, 40).align(Align.topLeft).space(5);
+        tables.table01.row();
+        tables.table01.add(getBtnGetConnections()).size(200, 40).align(Align.topLeft).space(5);
+        tables.table01.row();
+        tables.table01.add(getBtnExit()).size(200, 50).align(Align.bottomLeft).expand().padTop(20);
+    }
+
+    private void formatTable02() {
+        tables.table02.clear();
+
+        if (statusServer) {
+            tables.table02.add(getBtnSendMap()).size(100, 50).space(5);
+            tables.table02.add(getLblGetConnections()).align(Align.topLeft).expand();
+        }
+
+        if (statusClient){
+            tables.table02.add(getTxtFldPlayerName());
+            tables.table02.add(getBtnClientEnd()).size(100, 50).space(5);
+        }
+    }
+
+    private Label getLblGetConnections() {
         Label lblGetConnections = new Label("Aktywne polaczenia: " + server.getConnections().length, a.skin);
         return lblGetConnections;
+    }
+
+    /**
+     * Zwraca labelkę ze statusem gry (klient/serwer)
+     *
+     * @return
+     */
+    private Label getLblGameStuts() {
+        if (statusServer) {
+            Label lblGameStatus = new Label("SERWER", a.skin);
+            return lblGameStatus;
+        } else if (statusClient) {
+            Label lblGameStatus = new Label("KLIENT", a.skin);
+            return lblGameStatus;
+        }
+        Label lblGameStatus = new Label("Brak statusu", a.skin);
+        return lblGameStatus;
+    }
+
+    private TextField getTxtFldPlayerName(){
+        TextField txtFldPlayerName = new TextField("Nazwa Gracza: ", a.skin);
+        return txtFldPlayerName;
     }
 
     /**
@@ -192,11 +256,15 @@ public class MultiplayerScreen implements Screen {
                     someRequest.text = "witaj serwerze";
                     client.sendTCP(someRequest);
                     Assets.client = client;
+                    statusClient = true;
+                    gs.setGameStatus(2);
+                    formatujTabele();
                 } catch (IOException ex) {
                     Gdx.app.log("Nie mogę uruchomić klienta", ex.toString());
                 }
             }
         });
+        statusClient = true;
         return btnClientStart;
     }
 
@@ -212,6 +280,9 @@ public class MultiplayerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Button Pressed: ", "Client STOP");
                 client.stop();
+                statusClient = false;
+                gs.setGameStatus(0);
+                formatujTabele();
             }
         });
         return btnClientStop;
@@ -229,6 +300,9 @@ public class MultiplayerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Button Pressed: ", "Server STOP");
                 server.stop();
+                statusServer = false;
+                gs.setGameStatus(0);
+                formatujTabele();
             }
         });
         return btnServerStop;
@@ -249,6 +323,14 @@ public class MultiplayerScreen implements Screen {
                 try {
                     server.bind(54556, 54777);
                     Assets.server = server;
+                    statusServer = true;
+                    gs.setGameStatus(1);
+                    formatujTabele();
+                    try {
+                        Assets.netStatus.mapa = MapEditor.readMap(gs.nazwaMapy);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 } catch (IOException ex) {
                     Gdx.app.log("Nie udało sie uruchomić servera", ex.toString());
                 }
@@ -271,6 +353,28 @@ public class MultiplayerScreen implements Screen {
             }
         });
         return btnExit;
+    }
+
+    private TextButton getBtnSendMap() {
+        TextButton btnSendMap = new TextButton("Wyslij Mape", a.skin);
+        btnSendMap.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                server.sendToAllTCP(Assets.netStatus);
+            }
+        });
+        return btnSendMap;
+    }
+
+
+    /**
+     * Zwraca przycisk odpowiedzialny za zakończenie klienta.
+     * @return
+     */
+    private TextButton getBtnClientEnd(){
+        TextButton btnClientEnd = new TextButton("START", a.skin);
+
+        return btnClientEnd;
     }
 
     @Override
@@ -331,25 +435,6 @@ public class MultiplayerScreen implements Screen {
         this.kryoServer = kryoServer;
     }
 
-    public class Tables {
-        public Table mainTable;
-        public Table leftTable;
-        public Table righTable;
-
-        public Tables() {
-            mainTable = new Table();
-            leftTable = new Table();
-            righTable = new Table();
-
-            mainTable.setFillParent(true);
-            mainTable.pad(5);
-            mainTable.setDebug(true);
-
-            leftTable.setDebug(true);
-            righTable.setDebug(true);
-        }
-    }
-
     public static class SomeRequest {
         public String text;
     }
@@ -357,7 +442,6 @@ public class MultiplayerScreen implements Screen {
     public static class SomeResponse {
         public String text;
         NetStatus netStatus = new NetStatus();
-
     }
 
     public static class NetStatus {
@@ -366,5 +450,28 @@ public class MultiplayerScreen implements Screen {
 
         public int pozXboh2;
         public int pozYboh2;
+
+        public Mapa mapa;
+
+        public String playerName;
+    }
+
+    public class Tables {
+        public Table tableMain;
+        public Table table01;
+        public Table table02;
+
+        public Tables() {
+            tableMain = new Table();
+            table01 = new Table();
+            table02 = new Table();
+
+            tableMain.setFillParent(true);
+            tableMain.pad(5);
+            tableMain.setDebug(true);
+
+            table01.setDebug(true);
+            table02.setDebug(true);
+        }
     }
 }

@@ -1,3 +1,4 @@
+
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
@@ -95,6 +96,7 @@ public class Bohater extends Actor {
     private int levelOfExp = 1;
     // klasa bohatera
     public KlasyPostaci klasyPostaci;
+    private String actualHeroClass;
 
     private int przynaleznoscDoGracza;
 
@@ -1011,5 +1013,21 @@ public class Bohater extends Actor {
 
     public void setImage(Image image) {
         this.image = image;
-    }  
+    }
+
+    /**
+     * Zwraca aktualną klasę postaci
+     * @return KlasyPostaci
+     */
+    public String getActualHeroClass() {
+        return actualHeroClass;
+    }
+
+    /**
+     * Ustala aktualną klasę postaci
+     * @param actualHeroClass KlasyPostaci
+     */
+    public void setActualHeroClass(String actualHeroClass) {
+        this.actualHeroClass = actualHeroClass;
+    }
 }

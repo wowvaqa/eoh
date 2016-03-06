@@ -403,38 +403,39 @@ public class MapScreen implements Screen {
         pbBtnSpellBook.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage03.addActor(a.getSpellPanel());
-                gs.isSpellPanelActive = true;
-                //Gdx.input.setInputProcessor(stage03);
+                if (!gs.isSpellPanelActive) {
+                    stage03.addActor(a.getSpellPanel());
+                    gs.isSpellPanelActive = true;
 
-                TextButton btnSpellPanelExit = new TextButton("EXIT", a.skin);
-                btnSpellPanelExit.setPosition(695, 54);
-                btnSpellPanelExit.setSize(50, 50);
+                    TextButton btnSpellPanelExit = new TextButton("EXIT", a.skin);
+                    btnSpellPanelExit.setPosition(695, 54);
+                    btnSpellPanelExit.setSize(50, 50);
 
-                btnSpellPanelExit.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        stage03.clear();
-                        gs.isSpellPanelActive = false;
-                        //Gdx.input.setInputProcessor(stage01);
-                        gs.getBohaterZaznaczony().getSpells().clear();
+                    btnSpellPanelExit.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            stage03.clear();
+                            gs.isSpellPanelActive = false;
+                            //Gdx.input.setInputProcessor(stage01);
+                            gs.getBohaterZaznaczony().getSpells().clear();
+                        }
+                    });
+                    stage03.addActor(btnSpellPanelExit);
+
+                    int spellXpos = 254;
+                    int spellYpos = 54;
+
+                    SpellCreator spellCreator = new SpellCreator(a, gs);
+
+                    for (Spells spl : gs.getBohaterZaznaczony().getListOfSpells()) {
+                        gs.getBohaterZaznaczony().getSpells().add(spellCreator.utworzSpell(spl, gs.getBohaterZaznaczony()));
                     }
-                });
-                stage03.addActor(btnSpellPanelExit);
 
-                int spellXpos = 254;
-                int spellYpos = 54;
-
-                SpellCreator spellCreator = new SpellCreator(a, gs);
-
-                for (Spells spl : gs.getBohaterZaznaczony().getListOfSpells()) {
-                    gs.getBohaterZaznaczony().getSpells().add(spellCreator.utworzSpell(spl, gs.getBohaterZaznaczony()));
-                }
-
-                for (SpellActor sA : gs.getBohaterZaznaczony().getSpells()) {
-                    sA.setPosition(spellXpos, spellYpos);
-                    stage03.addActor(sA);
-                    spellXpos += 52;
+                    for (SpellActor sA : gs.getBohaterZaznaczony().getSpells()) {
+                        sA.setPosition(spellXpos, spellYpos);
+                        stage03.addActor(sA);
+                        spellXpos += 52;
+                    }
                 }
             }
         });
@@ -531,14 +532,14 @@ public class MapScreen implements Screen {
 //        stage02.addActor(pbBtnAwansujBohatera);
 //        stage02.addActor(pbBtnSpellBook);
 
-        tables.tabLeftBar.add(pbLblHp).size(100,25).pad(5);
-        tables.tabLeftBar.add(pbLblMove).size(100,25).pad(5);
+        tables.tabLeftBar.add(pbLblHp).size(100, 25).pad(5);
+        tables.tabLeftBar.add(pbLblMove).size(100, 25).pad(5);
         tables.tabLeftBar.row();
-        tables.tabLeftBar.add(pbLblMana).size(100,25).pad(5);
-        tables.tabLeftBar.add(pbLblExp).size(100,25).pad(5);
+        tables.tabLeftBar.add(pbLblMana).size(100, 25).pad(5);
+        tables.tabLeftBar.add(pbLblExp).size(100, 25).pad(5);
         tables.tabLeftBar.row();
-        tables.tabLeftBar.add(pbBtnBohaterScreen).bottom().size(100,50).pad(5);
-        tables.tabLeftBar.add(pbBtnSpellBook).bottom().size(100,50).pad(5);
+        tables.tabLeftBar.add(pbBtnBohaterScreen).bottom().size(100, 50).pad(5);
+        tables.tabLeftBar.add(pbBtnSpellBook).bottom().size(100, 50).pad(5);
         tables.tabLeftBar.row();
         tables.tabLeftBar.add(pbBtnAwansujBohatera).size(210, 50).pad(5).colspan(2);
         tables.tabLeftBar.row();
@@ -646,6 +647,11 @@ public class MapScreen implements Screen {
                     Mob mob = new Mob(g, gs, a, i * 100, j * 100, 1, Mob.losujMoba(1));
                     gs.getMapa().getPola()[i][j].setMob(mob);
                     stage01.addActor(gs.getMapa().getPola()[i][j].getMob());
+                } else if (gs.getMapa().getPola()[i][j].isMob2Location()) {
+
+                    Mob mob = new Mob(g, gs, a, i * 100, j * 100, 2, Mob.losujMoba(2));
+                    gs.getMapa().getPola()[i][j].setMob(mob);
+                    stage01.addActor(gs.getMapa().getPola()[i][j].getMob());
                 }
             }
         }
@@ -721,10 +727,7 @@ public class MapScreen implements Screen {
             pbBtnSpellBook.setVisible(false);
         }
 
-        if (GameStatus.wspolzedneXtresureBox != 999) {
-            this.utworzTresureBoxPoSmierciMoba();
-            sortujZindex();
-        }
+        sortujZindex();
 
         //sprawdzPolozenieKursora();
         ruchKamery();
@@ -742,17 +745,6 @@ public class MapScreen implements Screen {
 
         stage03.act();
         stage03.draw();
-    }
-
-    /**
-     * Tworzy tresure box po smierci Moba
-     */
-    private void utworzTresureBoxPoSmierciMoba() {
-        TresureBox tb = new TresureBox(1, 2, this.a, this.gs, this.g, GameStatus.wspolzedneXtresureBox * 100, GameStatus.wspolzedneYtresureBox * 100);
-        gs.getMapa().getPola()[GameStatus.wspolzedneXtresureBox][GameStatus.wspolzedneYtresureBox].setTresureBox(tb);
-        stage01.addActor(gs.getMapa().getPola()[GameStatus.wspolzedneXtresureBox][GameStatus.wspolzedneYtresureBox].getTresureBox());
-        GameStatus.wspolzedneXtresureBox = 999;
-        GameStatus.wspolzedneYtresureBox = 999;
     }
 
     // Sprawdza położenie kursora 
@@ -909,11 +901,11 @@ public class MapScreen implements Screen {
     /**
      * Listener przechwytujacy scroll
      */
-    public class MyGestureListener implements GestureListener{
+    public class MyGestureListener implements GestureListener {
 
         private Stage stage;
 
-        public  MyGestureListener(Stage stage){
+        public MyGestureListener(Stage stage) {
             this.stage = stage;
         }
 
@@ -939,7 +931,7 @@ public class MapScreen implements Screen {
 
         @Override
         public boolean pan(float x, float y, float deltaX, float deltaY) {
-            stage.getCamera().translate(-deltaX,deltaY, 0);
+            stage.getCamera().translate(-deltaX, deltaY, 0);
             stage.getCamera().update();
             return false;
         }
@@ -972,9 +964,10 @@ public class MapScreen implements Screen {
 
         /**
          * Tworzy tabele interfejsu
+         *
          * @return Referencje do tabeli.
          */
-        public Table getTabInterface(){
+        public Table getTabInterface() {
             this.tempSettings();
 
             tabInterface.setFillParent(true);
@@ -988,7 +981,7 @@ public class MapScreen implements Screen {
             return tabInterface;
         }
 
-        public Table getUpBarTable(){
+        public Table getUpBarTable() {
             tabUpBar.setFillParent(true);
             tabUpBar.setDebug(true);
             tabUpBar.setSize(100, 100);
@@ -999,7 +992,7 @@ public class MapScreen implements Screen {
             return tabUpBar;
         }
 
-        public void tempSettings(){
+        public void tempSettings() {
             //tabUpBar.add(new Label("testowy labal UP BAR -----------------", a.skin));
 
             tabLeftBar.setBackground(img.getDrawable());
