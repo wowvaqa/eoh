@@ -1,10 +1,24 @@
+version 0.0050 09042016
+DONE    1. Przebudowa Screenu bohatera.
+
+version 0.0049 07042016
+DONE    1. Dodano ikony w screenie itema.
+DONE    3. Poprawiono błąd z nie znikającymi przyciskami ataku w przypadku jeżeli przeciwników
+        jest > 2.
+
+version 0.0048 06042016
+DONE    1. Dodano ikony współczynników w screenie awansu, nowego bohatera, bohatera.
+
+version 0.0047 08032016
+DONE    1. Poprawiono błąd z nie znikającymi przyciskami ataku.
+
 version 0.0046 06032016
 DONE    1. Dodanie nowych mobków: pająka i zombie.
 DONE    2. Dodanie itemków: długi łuk, wzmocnione skórzane buty, skórzany pancerz.
 DONE    2. Poprawa błędu generowania skrzynek po zabiciu moba.
 DONE    3. Naprawa błedu powodującego możliwość dwukrotnego włączenia księgi zaklęć.
 DONE    4. Naprawa wyświetlania przycisków awansujacych postać w AwansScreen.
-DONE    5. Dodanie wyboru mapy.
+DONE    5. Dodanie okna wyboru mapy przy tworzeniu nowej gry.
 
 version 0.0045 03032016
 DONE    1. Implementacja podstawowej funkcjonalności sieciowej

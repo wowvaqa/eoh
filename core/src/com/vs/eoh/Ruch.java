@@ -112,51 +112,60 @@ public class Ruch {
      * Wyłącza przycisku Ruchu, Ataku, Cancel na Stage01
      */
     public static void wylaczPrzyciski() {
-        int rozmiar = Assets.stage01MapScreen.getActors().size;
+        int rozmiar;// = Assets.stage01MapScreen.getActors().size;
         // Infromuje czy wśród aktorów stage 01 są jeszcze przyciski
-        boolean czySaPrzyciski;
+        boolean czySaPrzyciskiRuchu;
+        boolean czySaPrzyciskiAtaku;
+        boolean czySaPrzyciskiCancel;
 
-        do {
-            czySaPrzyciski = false;
-            for (int i = 0; i < rozmiar; i++) {
-                if (Assets.stage01MapScreen.getActors().get(i).getClass() == PrzyciskRuchu.class) {
-                    Assets.stage01MapScreen.getActors().removeIndex(i);
-                    rozmiar = Assets.stage01MapScreen.getActors().size;
+        // pętla usuwająca przyciski musi być powtórzona 10x, w przeciwnym wypadku nie znikają
+        // wszystkie przyciski ataku.
+        for (int x = 0; x < 10; x ++) {
+            do {
+                rozmiar = Assets.stage01MapScreen.getActors().size;
+                czySaPrzyciskiRuchu = false;
+                for (int i = 0; i < rozmiar; i++) {
+                    if (Assets.stage01MapScreen.getActors().get(i).getClass() == PrzyciskRuchu.class) {
+                        Assets.stage01MapScreen.getActors().removeIndex(i);
+                        rozmiar = Assets.stage01MapScreen.getActors().size;
+                    }
                 }
-            }
-            for (int i = 0; i < Assets.stage01MapScreen.getActors().size; i++) {
-                //czySaPrzyciski = Assets.stage01MapScreen.getActors().get(i).getClass() == PrzyciskRuchu.class;
-                if (Assets.stage01MapScreen.getActors().get(i).getClass() == PrzyciskRuchu.class) {
-                    czySaPrzyciski = true;
+                for (int i = 0; i < Assets.stage01MapScreen.getActors().size; i++) {
+                    //czySaPrzyciski = Assets.stage01MapScreen.getActors().get(i).getClass() == PrzyciskRuchu.class;
+                    if (Assets.stage01MapScreen.getActors().get(i).getClass() == PrzyciskRuchu.class) {
+                        czySaPrzyciskiRuchu = true;
+                    }
                 }
-            }
-        } while (czySaPrzyciski);
+            } while (czySaPrzyciskiRuchu);
 
-        do {
-            czySaPrzyciski = false;
-            for (int i = 0; i < rozmiar; i++) {
-                if (Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskCancel.class) {
-                    Assets.stage01MapScreen.getActors().removeIndex(i);
-                    rozmiar = Assets.stage01MapScreen.getActors().size;
+            do {
+                rozmiar = Assets.stage01MapScreen.getActors().size;
+                czySaPrzyciskiCancel = false;
+                for (int i = 0; i < rozmiar; i++) {
+                    if (Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskCancel.class) {
+                        Assets.stage01MapScreen.getActors().removeIndex(i);
+                        rozmiar = Assets.stage01MapScreen.getActors().size;
+                    }
                 }
-            }
-            for (int i = 0; i < rozmiar; i++) {
-                czySaPrzyciski = Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskCancel.class;
-            }
-        } while (czySaPrzyciski);
+                for (int i = 0; i < rozmiar; i++) {
+                    czySaPrzyciskiCancel = Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskCancel.class;
+                }
+            } while (czySaPrzyciskiCancel);
 
-        do {
-            czySaPrzyciski = false;
-            for (int i = 0; i < rozmiar; i++) {
-                if (Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskAtaku.class) {
-                    Assets.stage01MapScreen.getActors().removeIndex(i);
-                    rozmiar = Assets.stage01MapScreen.getActors().size;
+            do {
+                rozmiar = Assets.stage01MapScreen.getActors().size;
+                czySaPrzyciskiAtaku = false;
+                for (int i = 0; i < rozmiar; i++) {
+                    if (Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskAtaku.class) {
+                        Assets.stage01MapScreen.getActors().removeIndex(i);
+                        rozmiar = Assets.stage01MapScreen.getActors().size;
+                    }
                 }
-            }
-            for (int i = 0; i < rozmiar; i++) {
-                czySaPrzyciski = Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskAtaku.class;
-            }
-        } while (czySaPrzyciski);
+                for (int i = 0; i < rozmiar; i++) {
+                    czySaPrzyciskiAtaku = Assets.stage01MapScreen.getActors().get(i).getClass() == przyciskAtaku.class;
+                }
+            } while (czySaPrzyciskiAtaku);
+        }
     }
 
     /**

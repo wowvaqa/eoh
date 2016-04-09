@@ -139,7 +139,8 @@ public class Mob extends Actor {
                             this.remove();
                         }
                     }
-                }.show(Assets.stage01MapScreen);
+                }.show(Assets.stage03MapScreen);
+                //}.show(Assets.stage01MapScreen);
             }
         });
     }

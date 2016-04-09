@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -103,6 +104,14 @@ public class Assets {
     public Texture cancelIcon;
     public Texture attackIcon;
     public Texture spellIcon;
+    public Texture texAtcIcon;
+    public Texture texDefIcon;
+    public Texture texHpIcon;
+    public Texture texSpdIcon;
+    public Texture texPwrIcon;
+    public Texture texWsdIcon;
+    public Texture texDmgIcon;
+    public Texture texArmIcon;
 
     public AssetManager am;
 
@@ -179,6 +188,14 @@ public class Assets {
         cancelIcon = new Texture("interface/texCancelIcon.png");
         attackIcon = new Texture("interface/texAtakIcon.png");
         spellIcon = new Texture("interface/texSpellIcon.png");
+        texAtcIcon = new Texture("interface/texAtcIcon.png");
+        texDefIcon = new Texture("interface/texDefIcon.png");
+        texHpIcon = new Texture("interface/texHpIcon.png");
+        texSpdIcon = new Texture("interface/texSpdIcon.png");
+        texPwrIcon = new Texture("interface/texPwrIcon.png");
+        texWsdIcon = new Texture("interface/texWsdIcon.png");
+        texDmgIcon = new Texture("interface/texDmgIcon.png");
+        texArmIcon = new Texture("interface/texArmIcon.png");
 
         makeItems();
         makeSpellTextures();
@@ -357,6 +374,7 @@ public class Assets {
 
         for (int i = 0; i < tresureBox.getDostepneItemy().size(); i++) {
             infoWindow.add(tresureBox.getDostepneItemy().get(i).getNazwa());
+            infoWindow.add(new Image(tresureBox.getDostepneItemy().get(i).getSprite().getTexture())).size(50, 50).pad(2);
             tmpButtons.add(new TextButton("TAKE IT", skin));
             tmpButtons.get(i).addListener(new ClickListener() {
 

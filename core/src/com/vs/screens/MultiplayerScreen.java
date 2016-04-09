@@ -3,15 +3,18 @@ package com.vs.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -20,14 +23,20 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
+import com.vs.eoh.Castle;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Mapa;
 import com.vs.eoh.Pole;
+import com.vs.eoh.TresureBox;
+import com.vs.network.RunClient;
+import com.vs.network.RunServer;
 import com.vs.testing.MapEditor;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.vs.eoh.Assets.*;
@@ -42,29 +51,19 @@ public class MultiplayerScreen implements Screen {
     private final GameStatus gs;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
+    public Mapa mapa = new Mapa();
     private Stage mainStage;
     private Tables tables;
-
-    // czy gra jest serverem
-    private boolean statusServer = false;
-    // czy gra jest klientem
-    private boolean statusClient = false;
-
     // ilość graczy podłączonych do serwera.
     private int amountOfPlayers;
     // arraylist z nazwami graczy
     private ArrayList<String> palyersNames = new ArrayList<String>();
     // nazwa gracza.
     private String playerName;
-
-    private Server server = new Server();
-    private Client client = new Client();
-
+    //private Server server = new Server();
+    //private Client client = new Client();
     private Kryo kryoServer;
     private Kryo kryoClient;
-
-    public Mapa mapa = new Mapa();
-
     private NetStatus mainNetStatus = new NetStatus();
 
     public MultiplayerScreen(Game g, Assets a, final GameStatus gs) {
@@ -80,74 +79,130 @@ public class MultiplayerScreen implements Screen {
         c = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), c);
 
-        server.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof SomeRequest) {
-                    SomeRequest request = (SomeRequest) object;
-                    Gdx.app.log("Request text", request.text);
+//        server.addListener(new Listener() {
+//            @Override
+//            public void received(Connection connection, Object object) {
+//                if (object instanceof SomeRequest) {
+//                    SomeRequest request = (SomeRequest) object;
+//                    Gdx.app.log("Request text", request.text);
+//
+//                    SomeResponse response = new SomeResponse();
+//                    response.text = "dzieki";
+//                    connection.sendTCP(response);
+//                } else if (object instanceof NetStatus) {
+//                    NetStatus netStatus = (NetStatus) object;
+//                    Gdx.app.log("wykryto NETSTATUS", "");
+//                    Gdx.app.log("Pozycja bohatera 1 na kliencie", Integer.toString(netStatus.pozXboh1)
+//                            + " " + Integer.toString(netStatus.pozYboh1));
+//                    Gdx.app.log("Pozycja bohatera 2 na kliencie", Integer.toString(netStatus.pozXboh2)
+//                            + " " + Integer.toString(netStatus.pozYboh2));
+//                    mainNetStatus.pozXboh1 = netStatus.pozXboh1;
+//                    mainNetStatus.pozYboh1 = netStatus.pozYboh1;
+//                    mainNetStatus.pozXboh2 = netStatus.pozXboh2;
+//                    mainNetStatus.pozYboh2 = netStatus.pozYboh2;
+//
+//                    Bohater bohater = gs.getGracze().get(0).getBohaterowie().get(0);
+//
+//                    int ruchX = mainNetStatus.pozXboh1 - bohater.getPozXnaMapie();
+//                    int ruchY = mainNetStatus.pozYboh1 - bohater.getPozYnaMapie();
+//
+//                    bohater.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));
+//                    bohater.setPozXnaMapie(bohater.getPozXnaMapie() + (int) ruchX);
+//                    bohater.setPozYnaMapie(bohater.getPozYnaMapie() + (int) ruchY);
+//
+//                    if (netStatus.cntReciveMap){
+//                        Gdx.app.log("Klient otrzymal mape", "");
+//                        gs.setMapa(netStatus.mapa);
+//                        netStatus.srvSendMap = false;
+//                        netStatus.cntReciveMap = false;
+//                    }
+//                }
+//            }
+//        });
 
-                    SomeResponse response = new SomeResponse();
-                    response.text = "dzieki";
-                    connection.sendTCP(response);
-                } else if (object instanceof NetStatus) {
-                    NetStatus netStatus = (NetStatus) object;
-                    Gdx.app.log("wykryto NETSTATUS", "");
-                    Gdx.app.log("Pozycja bohatera 1 na kliencie", Integer.toString(netStatus.pozXboh1)
-                            + " " + Integer.toString(netStatus.pozYboh1));
-                    Gdx.app.log("Pozycja bohatera 2 na kliencie", Integer.toString(netStatus.pozXboh2)
-                            + " " + Integer.toString(netStatus.pozYboh2));
-                    mainNetStatus.pozXboh1 = netStatus.pozXboh1;
-                    mainNetStatus.pozYboh1 = netStatus.pozYboh1;
-                    mainNetStatus.pozXboh2 = netStatus.pozXboh2;
-                    mainNetStatus.pozYboh2 = netStatus.pozYboh2;
+//        client.addListener(new Listener() {
+//            @Override
+//            public void received(Connection connection, Object object) {
+//                if (object instanceof SomeResponse) {
+//                    SomeResponse response = (SomeResponse) object;
+//                    Gdx.app.log("Server text", response.text);
+//                } else if (object instanceof NetStatus) {
+//                    Gdx.app.log("wykryto NETSTATUS", "");
+//                    NetStatus netStatus = (NetStatus) object;
+//                    Gdx.app.log("wykryto NETSTATUS", "");
+//                    Gdx.app.log("Pozycja bohatera 1 na kliencie", Integer.toString(netStatus.pozXboh1)
+//                            + " " + Integer.toString(netStatus.pozYboh1));
+//                    Gdx.app.log("Pozycja bohatera 2 na kliencie", Integer.toString(netStatus.pozXboh2)
+//                            + " " + Integer.toString(netStatus.pozYboh2));
+//                    mainNetStatus.pozXboh1 = netStatus.pozXboh1;
+//                    mainNetStatus.pozYboh1 = netStatus.pozYboh1;
+//                    mainNetStatus.pozXboh2 = netStatus.pozXboh2;
+//                    mainNetStatus.pozYboh2 = netStatus.pozYboh2;
+//
+//                    if (netStatus.srvSendMap){
+//                        Gdx.app.log("SERWER WYSYLAL MAPE","");
+//                        Gdx.app.log("Ilosc pol X", " " + netStatus.networkMap.amountX);
+//                        Gdx.app.log("Ilosc pol Y", " " + netStatus.networkMap.amountY);
+//                        netStatus.cntReciveMap = true;
+//
+//                        gs.setMapa(netStatus.mapa);
+//                        GameStatus.nazwaMapy = "mapa z serwera";
+//                        netStatus.srvSendMap = false;
+//                        netStatus.cntReciveMap = false;
+//
+//                        client.sendTCP(netStatus);
+//                    }
+//                }
+//            }
+//        });
 
-                    Bohater bohater = gs.getGracze().get(0).getBohaterowie().get(0);
+//        kryoServer = server.getKryo();
+//        kryoClient = client.getKryo();
 
-                    int ruchX = mainNetStatus.pozXboh1 - bohater.getPozXnaMapie();
-                    int ruchY = mainNetStatus.pozYboh1 - bohater.getPozYnaMapie();
+//        kryoServer.register(SomeRequest.class);
+//        kryoClient.register(SomeRequest.class);
+//
+//        kryoServer.register(SomeResponse.class);
+//        kryoClient.register(SomeResponse.class);
 
-                    bohater.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));
-                    bohater.setPozXnaMapie(bohater.getPozXnaMapie() + (int) ruchX);
-                    bohater.setPozYnaMapie(bohater.getPozYnaMapie() + (int) ruchY);
-                }
-            }
-        });
-
-        client.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof SomeResponse) {
-                    SomeResponse response = (SomeResponse) object;
-                    Gdx.app.log("Server text", response.text);
-                } else if (object instanceof NetStatus) {
-                    Gdx.app.log("wykryto NETSTATUS", "");
-                    NetStatus netStatus = (NetStatus) object;
-                    Gdx.app.log("wykryto NETSTATUS", "");
-                    Gdx.app.log("Pozycja bohatera 1 na kliencie", Integer.toString(netStatus.pozXboh1)
-                            + " " + Integer.toString(netStatus.pozYboh1));
-                    Gdx.app.log("Pozycja bohatera 2 na kliencie", Integer.toString(netStatus.pozXboh2)
-                            + " " + Integer.toString(netStatus.pozYboh2));
-                    mainNetStatus.pozXboh1 = netStatus.pozXboh1;
-                    mainNetStatus.pozYboh1 = netStatus.pozYboh1;
-                    mainNetStatus.pozXboh2 = netStatus.pozXboh2;
-                    mainNetStatus.pozYboh2 = netStatus.pozYboh2;
-                }
-            }
-        });
-
-        kryoServer = server.getKryo();
-        kryoServer.register(SomeRequest.class);
-        kryoServer.register(SomeResponse.class);
-        kryoServer.register(NetStatus.class);
-        kryoClient = client.getKryo();
-        kryoClient.register(SomeRequest.class);
-        kryoClient.register(SomeResponse.class);
-        kryoClient.register(NetStatus.class);
-        kryoServer.register(Mapa.class);
-        kryoClient.register(Mapa.class);
-        kryoServer.register(Pole.class);
-        kryoClient.register(Pole.class);
+//        kryoServer.register(NetworkMap.class);
+//        kryoClient.register(NetworkMap.class);
+//
+//        kryoServer.register(NetworkPole.class);
+//        kryoClient.register(NetworkPole.class);
+//
+//        kryoServer.register(NetworkPole[].class);
+//        kryoClient.register(NetworkPole[].class);
+//
+//        kryoServer.register(NetworkPole[][].class);
+//        kryoClient.register(NetworkPole[][].class);
+//
+//        kryoServer.register(NetStatus.class);
+//        kryoClient.register(NetStatus.class);
+//
+//        kryoServer.register(Mapa.class);
+//        kryoClient.register(Mapa.class);
+//
+//        kryoServer.register(Pole[][].class);
+//        kryoClient.register(Pole[][].class);
+//
+//        kryoServer.register(Pole[].class);
+//        kryoClient.register(Pole[].class);
+//
+//        kryoServer.register(Pole.class);
+//        kryoClient.register(Pole.class);
+//
+//        kryoServer.register(TypyTerenu.class);
+//        kryoClient.register(TypyTerenu.class);
+//
+//        kryoServer.register(Castle.class);
+//        kryoClient.register(Castle.class);
+//
+//        kryoServer.register(Bohater.class);
+//        kryoClient.register(Bohater.class);
+//
+//        kryoServer.register(TresureBox.class);
+//        kryoClient.register(TresureBox.class);
     }
 
     private void formatujTabele() {
@@ -183,19 +238,25 @@ public class MultiplayerScreen implements Screen {
     private void formatTable02() {
         tables.table02.clear();
 
-        if (statusServer) {
+        Gdx.app.debug("Network Status", "" + gs.getNetworkStatus());
+
+        if (gs.getNetworkStatus() == 1) {
+            Gdx.app.debug("Network Status", "" + gs.getNetworkStatus());
             tables.table02.add(getBtnSendMap()).size(100, 50).space(5);
             tables.table02.add(getLblGetConnections()).align(Align.topLeft).expand();
         }
 
-        if (statusClient){
+        if (gs.getNetworkStatus() == 2) {
+            Gdx.app.debug("Network Status", "" + gs.getNetworkStatus());
             tables.table02.add(getTxtFldPlayerName());
             tables.table02.add(getBtnClientEnd()).size(100, 50).space(5);
         }
+
+        tables.table02.add(getBtnWybierzMape()).size(100,50).space(5);
     }
 
     private Label getLblGetConnections() {
-        Label lblGetConnections = new Label("Aktywne polaczenia: " + server.getConnections().length, a.skin);
+        Label lblGetConnections = new Label("Aktywne polaczenia: " + gs.server.getSrv().getConnections(), a.skin);
         return lblGetConnections;
     }
 
@@ -205,18 +266,18 @@ public class MultiplayerScreen implements Screen {
      * @return
      */
     private Label getLblGameStuts() {
-        if (statusServer) {
+        if (gs.getNetworkStatus() == 1) {
             Label lblGameStatus = new Label("SERWER", a.skin);
             return lblGameStatus;
-        } else if (statusClient) {
+        } else if (gs.getNetworkStatus() == 2) {
             Label lblGameStatus = new Label("KLIENT", a.skin);
             return lblGameStatus;
         }
-        Label lblGameStatus = new Label("Brak statusu", a.skin);
+        Label lblGameStatus = new Label("Stand Alone", a.skin);
         return lblGameStatus;
     }
 
-    private TextField getTxtFldPlayerName(){
+    private TextField getTxtFldPlayerName() {
         TextField txtFldPlayerName = new TextField("Nazwa Gracza: ", a.skin);
         return txtFldPlayerName;
     }
@@ -231,7 +292,7 @@ public class MultiplayerScreen implements Screen {
         btnClientStart.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("Button Pressed: ", "getConnections");
+                Gdx.app.log("Button Pressed: ", "Get Connections");
                 formatujTabele();
             }
         });
@@ -249,22 +310,25 @@ public class MultiplayerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Button Pressed: ", "Client Start");
-                client.start();
-                try {
-                    client.connect(5000, "192.168.1.100", 54556, 54777);
-                    SomeRequest someRequest = new SomeRequest();
-                    someRequest.text = "witaj serwerze";
-                    client.sendTCP(someRequest);
-                    Assets.client = client;
-                    statusClient = true;
-                    gs.setGameStatus(2);
-                    formatujTabele();
-                } catch (IOException ex) {
-                    Gdx.app.log("Nie mogę uruchomić klienta", ex.toString());
-                }
+                RunClient rc = new RunClient("wowvaqa", "192.168.2.3", 54556, 54777);
+                rc.startClient();
+                gs.setNetworkStatus(2);
+                formatujTabele();
+//                client.start();
+//                try {
+//                    client.connect(5000, "192.168.1.100", 54556, 54777);
+//                    //SomeRequest someRequest = new SomeRequest();
+//                    //someRequest.text = "witaj serwerze";
+//                    //client.sendTCP(someRequest);
+//                    Assets.client = client;
+//                    statusClient = true;
+//                    gs.setGameStatus(2);
+//                    formatujTabele();
+//                } catch (IOException ex) {
+//                    Gdx.app.log("Nie mogę uruchomić klienta", ex.toString());
+//                }
             }
         });
-        statusClient = true;
         return btnClientStart;
     }
 
@@ -280,8 +344,8 @@ public class MultiplayerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Button Pressed: ", "Client STOP");
                 client.stop();
-                statusClient = false;
-                gs.setGameStatus(0);
+                gs.client.stopClient();
+                gs.setNetworkStatus(0);
                 formatujTabele();
             }
         });
@@ -299,9 +363,8 @@ public class MultiplayerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Button Pressed: ", "Server STOP");
-                server.stop();
-                statusServer = false;
-                gs.setGameStatus(0);
+                gs.server.serverStop();
+                gs.setNetworkStatus(0);
                 formatujTabele();
             }
         });
@@ -319,21 +382,20 @@ public class MultiplayerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Button Pressed: ", "Server START");
-                server.start();
-                try {
-                    server.bind(54556, 54777);
-                    Assets.server = server;
-                    statusServer = true;
-                    gs.setGameStatus(1);
-                    formatujTabele();
-                    try {
-                        Assets.netStatus.mapa = MapEditor.readMap(gs.nazwaMapy);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException ex) {
-                    Gdx.app.log("Nie udało sie uruchomić servera", ex.toString());
-                }
+                RunServer rs = new RunServer(54556, 54777);
+                gs.server.startServer();
+                gs.setNetworkStatus(1);
+                formatujTabele();
+//                server.start();
+//                try {
+//                    server.bind(54556, 54777);
+//                    Assets.server = server;
+//                    statusServer = true;
+//                    gs.setGameStatus(1);
+//                    formatujTabele();
+//                } catch (IOException ex) {
+//                    Gdx.app.log("Nie udało sie uruchomić servera", ex.toString());
+//                }
             }
         });
         return btnServerStart;
@@ -360,18 +422,98 @@ public class MultiplayerScreen implements Screen {
         btnSendMap.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                Assets.netStatus.srvSendMap = true;
+
+                Mapa mapaToSend;
+
+                try {
+                    mapaToSend = MapEditor.readMap(gs.nazwaMapy);
+                    Assets.netStatus.mapa = mapaToSend;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Assets.netStatus.networkMap = new NetworkMap(mapa.getIloscPolX(), mapa.getIloscPolY());
+
                 server.sendToAllTCP(Assets.netStatus);
             }
         });
         return btnSendMap;
     }
 
+    /**
+     * Zwraca przycisk wyjscia z okna
+     *
+     * @return Przycisk
+     */
+    private TextButton getBtnWybierzMape() {
+        TextButton btnWybierzMape = new TextButton("Wybierz Mape", a.skin);
+        btnWybierzMape.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mainStage.addActor(getLoadMapWindow());
+            }
+        });
+        return btnWybierzMape;
+    }
+
+    /**
+     * Zwraca Okno wyboru mapy
+     *
+     * @return Window
+     */
+    private Window getLoadMapWindow() {
+        final Window window = new Window("Wybierz Mape", a.skin);
+        window.setSize(800, 600);
+        window.align(Align.center);
+
+        final List listOfMap = new List(a.skin);
+
+        FileHandle[] files = Gdx.files.local("").list();
+        for (FileHandle file : files) {
+            if (file.extension().equals("dat")) {
+                listOfMap.getItems().add(file);
+            }
+        }
+
+        TextButton btnExitWindow = new TextButton("EXIT", a.skin);
+        btnExitWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                window.remove();
+            }
+        });
+
+        TextButton btnWybierzWindow = new TextButton("Wybieram", a.skin);
+        btnWybierzWindow.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                FileHandle file = (FileHandle) listOfMap.getSelected();
+                Gdx.app.log("Nazwa Pliku", file.name());
+                GameStatus.nazwaMapy = file.name();
+                window.remove();
+            }
+        });
+
+
+        window.add(listOfMap).size(300, 400);
+        window.row();
+        window.add(btnExitWindow).size(100, 50).spaceRight(5);
+        window.add(btnWybierzWindow).size(100, 50);
+
+        return window;
+    }
+
 
     /**
      * Zwraca przycisk odpowiedzialny za zakończenie klienta.
+     *
      * @return
      */
-    private TextButton getBtnClientEnd(){
+    private TextButton getBtnClientEnd() {
         TextButton btnClientEnd = new TextButton("START", a.skin);
 
         return btnClientEnd;
@@ -445,15 +587,70 @@ public class MultiplayerScreen implements Screen {
     }
 
     public static class NetStatus {
+
+        /*
+        FLAGI odczytu i odbioru
+         */
+        public boolean srvSendMap = false;
+        public boolean cntReciveMap = false;
+
         public int pozXboh1;
         public int pozYboh1;
 
         public int pozXboh2;
         public int pozYboh2;
 
-        public Mapa mapa;
+        public NetworkMap networkMap;
 
-        public String playerName;
+        public Mapa mapa;
+    }
+
+    /**
+     * Klasa definiuje Mape do przesyłu przez sieć.
+     */
+    public static class NetworkMap {
+        public int amountX;
+        public int amountY;
+        public String nazwa = "NoName";
+        public NetworkPole networkPole[][];
+
+        public NetworkMap(int amountOfX, int amountOfY) {
+            networkPole = new NetworkPole[amountOfX][amountOfY];
+            this.amountX = amountOfX;
+            this.amountY = amountOfY;
+        }
+
+        public NetworkMap(){
+            networkPole = new NetworkPole[0][0];
+        }
+
+        public void convertMap(){
+
+        }
+    }
+
+    /**
+     * Klasa definiuje Pole do przesyłu przez sieć
+     */
+    public static class NetworkPole implements Serializable {
+        public boolean isPlayer1Start = false;
+        public boolean isPlayer2Start = false;
+        public boolean isPlayer3Start = false;
+        public boolean isPlayer4Start = false;
+
+        public boolean isMobLevel1 = false;
+        public boolean isMobLevel2 = false;
+
+        public boolean isTresureBoxLevel1 = false;
+        public boolean isTresureBoxLevel2 = false;
+
+        /*
+        1 - TRAWA, 2 - GÓRY, 3 - DRZEWO, 4 - RZEKA
+         */
+        public boolean isTerrainType1 = false;
+        public boolean isTerrainType2 = false;
+        public boolean isTerrainType3 = false;
+        public boolean isTerrainType4 = false;
     }
 
     public class Tables {

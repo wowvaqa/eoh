@@ -8,13 +8,15 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.vs.enums.DostepneItemki;
+import com.vs.network.RunClient;
+import com.vs.network.RunServer;
 import com.vs.testing.MapEditor;
 import com.vs.testing.TestingScreen;
 
 public class GameStatus {
 
     // Status gry 0 - standAlone, 1 - Server, 2 - Client
-    private int gameStatus = 0;
+    private int networkStatus = 0;
 
     private int actualScreen = 0;                                               // zapamiętuje aktualną scenę która jest wyświetlana    
     private int lastScreen = 0;                                                 // Ostatnia scena która była wyświetlana
@@ -50,6 +52,10 @@ public class GameStatus {
 
     public static String nazwaMapy = "brak";
 
+    // Pola statyczne dla serwera i klienta.
+    public static RunServer server;
+    public static RunClient client;
+
     // Listy zawierają wszystkie dostępne itemy danych poziomów.
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
     public static ArrayList<DostepneItemki> itemyPoziom2 = new ArrayList<DostepneItemki>();
@@ -69,7 +75,9 @@ public class GameStatus {
         //ObjectInputStream we = new ObjectInputStream(new FileInputStream("mapa.dat"));
         //mapa = (Mapa) we.readObject();
 
-        mapa = MapEditor.readMap(nazwaMapy);
+        if (!nazwaMapy.equals("mapa z serwera")) {
+            mapa = MapEditor.readMap(nazwaMapy);
+        }
 
         System.out.println("odczyt obiektu");
     }
@@ -262,15 +270,23 @@ public class GameStatus {
      * Zwraca status gry
      * @return 0 = StandAlone, 1 = Server, 2 = Client
      */
-    public int getGameStatus() {
-        return gameStatus;
+    public int getNetworkStatus() {
+        return networkStatus;
     }
 
     /**
      * Ustala Status gry
-     * @param gameStatus 0 = StandAlone, 1 = Server, 2 = Client
+     * @param networkStatus 0 = StandAlone, 1 = Server, 2 = Client
      */
-    public void setGameStatus(int gameStatus) {
-        this.gameStatus = gameStatus;
+    public void setNetworkStatus(int networkStatus) {
+        this.networkStatus = networkStatus;
+    }
+
+    /**
+     * Ustala mapę
+     * @param mapa Obiekt klasy Mapa
+     */
+    public void setMapa(Mapa mapa) {
+        this.mapa = mapa;
     }
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -142,7 +143,7 @@ public class NewGameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("EXIT");
-                if (!GameStatus.nazwaMapy.equals("brak")) {
+                if (!GameStatus.nazwaMapy.equals("brak") || !GameStatus.nazwaMapy.equals("mapa z serwera")) {
                     try {
                         NewGame.zakonczGenerowanieNowejGry(g, gs, a);
                     } catch (IOException ex) {
@@ -253,16 +254,22 @@ public class NewGameScreen implements Screen {
         tabelaGracz01.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz01)).align(Align.center).colspan(tabelaGracz01.getColumns());
 
         tabelaGracz01.row();
+        tabelaGracz01.add(new Image(a.texAtcIcon)).size(25, 25);
         tabelaGracz01.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns());
         tabelaGracz01.row();
+        tabelaGracz01.add(new Image(a.texDefIcon)).size(25, 25);
         tabelaGracz01.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns());
         tabelaGracz01.row();
+        tabelaGracz01.add(new Image(a.texHpIcon)).size(25, 25);
         tabelaGracz01.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns());
         tabelaGracz01.row();
+        tabelaGracz01.add(new Image(a.texSpdIcon)).size(25, 25);
         tabelaGracz01.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns());
         tabelaGracz01.row();
+        tabelaGracz01.add(new Image(a.texPwrIcon)).size(25, 25);
         tabelaGracz01.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns());
         tabelaGracz01.row();
+        tabelaGracz01.add(new Image(a.texWsdIcon)).size(25, 25);
         tabelaGracz01.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns());
         tabelaGracz01.row();
         tabelaGracz01.add(new Label("Kolor: ", a.skin));
@@ -308,16 +315,22 @@ public class NewGameScreen implements Screen {
         tabelaGracz02.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz02)).align(Align.center).colspan(tabelaGracz02.getColumns());
 
         tabelaGracz02.row();
+        tabelaGracz02.add(new Image(a.texAtcIcon)).size(25, 25);
         tabelaGracz02.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns());
         tabelaGracz02.row();
+        tabelaGracz02.add(new Image(a.texDefIcon)).size(25, 25);
         tabelaGracz02.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns());
         tabelaGracz02.row();
+        tabelaGracz02.add(new Image(a.texHpIcon)).size(25, 25);
         tabelaGracz02.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns());
         tabelaGracz02.row();
+        tabelaGracz02.add(new Image(a.texSpdIcon)).size(25, 25);
         tabelaGracz02.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns());
         tabelaGracz02.row();
+        tabelaGracz02.add(new Image(a.texPwrIcon)).size(25, 25);
         tabelaGracz02.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns());
         tabelaGracz02.row();
+        tabelaGracz02.add(new Image(a.texWsdIcon)).size(25, 25);
         tabelaGracz02.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns());
         tabelaGracz02.row();
         tabelaGracz02.add(new Label("Kolor: ", a.skin));
@@ -363,16 +376,22 @@ public class NewGameScreen implements Screen {
         tabelaGracz03.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz03)).align(Align.center).colspan(tabelaGracz03.getColumns());
 
         tabelaGracz03.row();
+        tabelaGracz03.add(new Image(a.texAtcIcon)).size(25, 25);
         tabelaGracz03.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
+        tabelaGracz03.add(new Image(a.texDefIcon)).size(25, 25);
         tabelaGracz03.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
+        tabelaGracz03.add(new Image(a.texHpIcon)).size(25, 25);
         tabelaGracz03.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
+        tabelaGracz03.add(new Image(a.texSpdIcon)).size(25, 25);
         tabelaGracz03.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
+        tabelaGracz03.add(new Image(a.texPwrIcon)).size(25, 25);
         tabelaGracz03.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
+        tabelaGracz03.add(new Image(a.texWsdIcon)).size(25, 25);
         tabelaGracz03.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
 
@@ -419,16 +438,22 @@ public class NewGameScreen implements Screen {
         tabelaGracz04.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz04)).align(Align.center).colspan(tabelaGracz04.getColumns());
 
         tabelaGracz04.row();
+        tabelaGracz04.add(new Image(a.texAtcIcon)).size(25, 25);
         tabelaGracz04.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
+        tabelaGracz04.add(new Image(a.texDefIcon)).size(25, 25);
         tabelaGracz04.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
+        tabelaGracz04.add(new Image(a.texHpIcon)).size(25, 25);
         tabelaGracz04.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
+        tabelaGracz04.add(new Image(a.texSpdIcon)).size(25, 25);
         tabelaGracz04.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
+        tabelaGracz04.add(new Image(a.texPwrIcon)).size(25, 25);
         tabelaGracz04.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
+        tabelaGracz04.add(new Image(a.texWsdIcon)).size(25, 25);
         tabelaGracz04.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
         tabelaGracz04.add(new Label("Kolor: ", a.skin));

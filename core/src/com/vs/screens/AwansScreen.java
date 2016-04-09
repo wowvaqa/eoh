@@ -8,15 +8,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
+import com.vs.eoh.ButtonActor;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.GameStatus;
 
@@ -282,12 +285,18 @@ public class AwansScreen implements Screen {
         Label lbl01 = new Label("Wybierz atrybut: ", this.a.skin);
         rightTable.add(lbl01).colspan(10).align(Align.center);
         rightTable.row();
-        TextButton btn01 = new TextButton("A", a.skin);
-        TextButton btn02 = new TextButton("O", a.skin);
-        TextButton btn03 = new TextButton("S", a.skin);
-        TextButton btn04 = new TextButton("HP", a.skin);
-        TextButton btn05 = new TextButton("M", a.skin);
-        TextButton btn06 = new TextButton("W", a.skin);
+        //TextButton btn01 = new TextButton("A", a.skin);
+        ButtonActor btn01 = new ButtonActor(a.texAtcIcon, 0, 0);
+        ButtonActor btn02 = new ButtonActor(a.texDefIcon, 0, 0);
+        ButtonActor btn03 = new ButtonActor(a.texSpdIcon, 0, 0);
+        ButtonActor btn04 = new ButtonActor(a.texHpIcon, 0, 0);
+        ButtonActor btn05 = new ButtonActor(a.texPwrIcon, 0, 0);
+        ButtonActor btn06 = new ButtonActor(a.texWsdIcon, 0, 0);
+//        TextButton btn02 = new TextButton("O", a.skin);
+//        TextButton btn03 = new TextButton("S", a.skin);
+//        TextButton btn04 = new TextButton("HP", a.skin);
+//        TextButton btn05 = new TextButton("M", a.skin);
+//        TextButton btn06 = new TextButton("W", a.skin);
 
         btn01.addListener(new ClickListener() {
             @Override
