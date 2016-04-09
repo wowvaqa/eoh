@@ -54,6 +54,7 @@ public class MultiplayerScreen implements Screen {
     public Mapa mapa = new Mapa();
     private Stage mainStage;
     private Tables tables;
+    private Interface interfce;
     // ilość graczy podłączonych do serwera.
     private int amountOfPlayers;
     // arraylist z nazwami graczy
@@ -72,9 +73,11 @@ public class MultiplayerScreen implements Screen {
         this.gs = gs;
         Assets.netStatus = this.mainNetStatus;
 
+        interfce = new Interface();
         mainStage = new Stage();
-
         tables = new Tables();
+
+        mainStage.addActor(tables.tableMain);
 
         c = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), c);
@@ -206,7 +209,7 @@ public class MultiplayerScreen implements Screen {
     }
 
     private void formatujTabele() {
-        formatTable01();
+//        formatTable01();
         formatTable02();
 
         tables.tableMain.clear();
@@ -217,23 +220,23 @@ public class MultiplayerScreen implements Screen {
         mainStage.addActor(tables.tableMain);
     }
 
-    private void formatTable01() {
-        tables.table01.clear();
-
-        tables.table01.add(getLblGameStuts()).align(Align.topLeft).space(5);
-        tables.table01.row();
-        tables.table01.add(getBtnServerStart()).size(200, 40).align(Align.topLeft).space(5);
-        tables.table01.row();
-        tables.table01.add(getBtnServerStop()).size(200, 40).align(Align.topLeft).space(5);
-        tables.table01.row();
-        tables.table01.add(getBtnClientStart()).size(200, 40).align(Align.topLeft).space(5);
-        tables.table01.row();
-        tables.table01.add(getBtnClientStop()).size(200, 40).align(Align.topLeft).space(5);
-        tables.table01.row();
-        tables.table01.add(getBtnGetConnections()).size(200, 40).align(Align.topLeft).space(5);
-        tables.table01.row();
-        tables.table01.add(getBtnExit()).size(200, 50).align(Align.bottomLeft).expand().padTop(20);
-    }
+//    private void formatTable01() {
+//        tables.table01.clear();
+//
+////        tables.table01.add(getLblGameStuts()).align(Align.topLeft).space(5);
+////        tables.table01.row();
+////        tables.table01.add(getBtnServerStart()).size(200, 40).align(Align.topLeft).space(5);
+////        tables.table01.row();
+////        tables.table01.add(getBtnServerStop()).size(200, 40).align(Align.topLeft).space(5);
+////        tables.table01.row();
+//        //tables.table01.add(getBtnClientStart()).size(200, 40).align(Align.topLeft).space(5);
+////        tables.table01.row();
+////        tables.table01.add(getBtnClientStop()).size(200, 40).align(Align.topLeft).space(5);
+////        tables.table01.row();
+////        tables.table01.add(getBtnGetConnections()).size(200, 40).align(Align.topLeft).space(5);
+////        tables.table01.row();
+////        tables.table01.add(getBtnExit()).size(200, 50).align(Align.bottomLeft).expand().padTop(20);
+//    }
 
     private void formatTable02() {
         tables.table02.clear();
@@ -265,17 +268,17 @@ public class MultiplayerScreen implements Screen {
      *
      * @return
      */
-    private Label getLblGameStuts() {
-        if (gs.getNetworkStatus() == 1) {
-            Label lblGameStatus = new Label("SERWER", a.skin);
-            return lblGameStatus;
-        } else if (gs.getNetworkStatus() == 2) {
-            Label lblGameStatus = new Label("KLIENT", a.skin);
-            return lblGameStatus;
-        }
-        Label lblGameStatus = new Label("Stand Alone", a.skin);
-        return lblGameStatus;
-    }
+//    private Label getLblGameStuts() {
+//        if (gs.getNetworkStatus() == 1) {
+//            Label lblGameStatus = new Label("SERWER", a.skin);
+//            return lblGameStatus;
+//        } else if (gs.getNetworkStatus() == 2) {
+//            Label lblGameStatus = new Label("KLIENT", a.skin);
+//            return lblGameStatus;
+//        }
+//        Label lblGameStatus = new Label("Stand Alone", a.skin);
+//        return lblGameStatus;
+//    }
 
     private TextField getTxtFldPlayerName() {
         TextField txtFldPlayerName = new TextField("Nazwa Gracza: ", a.skin);
@@ -304,118 +307,118 @@ public class MultiplayerScreen implements Screen {
      *
      * @return Zwraca referencje do przycisku Startu Klienta
      */
-    private TextButton getBtnClientStart() {
-        TextButton btnClientStart = new TextButton("Client START", a.skin);
-        btnClientStart.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("Button Pressed: ", "Client Start");
-                RunClient rc = new RunClient("wowvaqa", "192.168.2.3", 54556, 54777);
-                rc.startClient();
-                gs.setNetworkStatus(2);
-                formatujTabele();
-//                client.start();
-//                try {
-//                    client.connect(5000, "192.168.1.100", 54556, 54777);
-//                    //SomeRequest someRequest = new SomeRequest();
-//                    //someRequest.text = "witaj serwerze";
-//                    //client.sendTCP(someRequest);
-//                    Assets.client = client;
-//                    statusClient = true;
-//                    gs.setGameStatus(2);
-//                    formatujTabele();
-//                } catch (IOException ex) {
-//                    Gdx.app.log("Nie mogę uruchomić klienta", ex.toString());
-//                }
-            }
-        });
-        return btnClientStart;
-    }
+//    private TextButton getBtnClientStart() {
+//        TextButton btnClientStart = new TextButton("Client START", a.skin);
+//        btnClientStart.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Gdx.app.log("Button Pressed: ", "Client Start");
+//                RunClient rc = new RunClient("wowvaqa", "192.168.2.3", 54556, 54777);
+//                rc.startClient();
+//                gs.setNetworkStatus(2);
+//                formatujTabele();
+////                client.start();
+////                try {
+////                    client.connect(5000, "192.168.1.100", 54556, 54777);
+////                    //SomeRequest someRequest = new SomeRequest();
+////                    //someRequest.text = "witaj serwerze";
+////                    //client.sendTCP(someRequest);
+////                    Assets.client = client;
+////                    statusClient = true;
+////                    gs.setGameStatus(2);
+////                    formatujTabele();
+////                } catch (IOException ex) {
+////                    Gdx.app.log("Nie mogę uruchomić klienta", ex.toString());
+////                }
+//            }
+//        });
+//        return btnClientStart;
+//    }
 
     /**
      * Zwraca przycisk Client Stop
      *
      * @return Zwraca referencje do przycisku Stopu Klienta
      */
-    private TextButton getBtnClientStop() {
-        TextButton btnClientStop = new TextButton("Client Stop", a.skin);
-        btnClientStop.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("Button Pressed: ", "Client STOP");
-                client.stop();
-                gs.client.stopClient();
-                gs.setNetworkStatus(0);
-                formatujTabele();
-            }
-        });
-        return btnClientStop;
-    }
+//    private TextButton getBtnClientStop() {
+//        TextButton btnClientStop = new TextButton("Client Stop", a.skin);
+//        btnClientStop.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Gdx.app.log("Button Pressed: ", "Client STOP");
+//                client.stop();
+//                gs.client.stopClient();
+//                gs.setNetworkStatus(0);
+//                formatujTabele();
+//            }
+//        });
+//        return btnClientStop;
+//    }
 
     /**
      * Zwraca przycisk Server Stop
      *
      * @return Zwraca referencje do przycisku Stopu Serwera
      */
-    private TextButton getBtnServerStop() {
-        TextButton btnServerStop = new TextButton("Server Stop", a.skin);
-        btnServerStop.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("Button Pressed: ", "Server STOP");
-                gs.server.serverStop();
-                gs.setNetworkStatus(0);
-                formatujTabele();
-            }
-        });
-        return btnServerStop;
-    }
+//    private TextButton getBtnServerStop() {
+//        TextButton btnServerStop = new TextButton("Server Stop", a.skin);
+//        btnServerStop.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Gdx.app.log("Button Pressed: ", "Server STOP");
+//                gs.server.serverStop();
+//                gs.setNetworkStatus(0);
+//                formatujTabele();
+//            }
+//        });
+//        return btnServerStop;
+//    }
 
     /**
      * Zwraca przycisk Server Start
      *
      * @return Zwraca referencje do przycisku Startu Serwera
      */
-    private TextButton getBtnServerStart() {
-        TextButton btnServerStart = new TextButton("Server Start", a.skin);
-        btnServerStart.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("Button Pressed: ", "Server START");
-                RunServer rs = new RunServer(54556, 54777);
-                gs.server.startServer();
-                gs.setNetworkStatus(1);
-                formatujTabele();
-//                server.start();
-//                try {
-//                    server.bind(54556, 54777);
-//                    Assets.server = server;
-//                    statusServer = true;
-//                    gs.setGameStatus(1);
-//                    formatujTabele();
-//                } catch (IOException ex) {
-//                    Gdx.app.log("Nie udało sie uruchomić servera", ex.toString());
-//                }
-            }
-        });
-        return btnServerStart;
-    }
+//    private TextButton getBtnServerStart() {
+//        TextButton btnServerStart = new TextButton("Server Start", a.skin);
+//        btnServerStart.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Gdx.app.log("Button Pressed: ", "Server START");
+//                RunServer rs = new RunServer(54556, 54777);
+//                gs.server.startServer();
+//                gs.setNetworkStatus(1);
+//                formatujTabele();
+////                server.start();
+////                try {
+////                    server.bind(54556, 54777);
+////                    Assets.server = server;
+////                    statusServer = true;
+////                    gs.setGameStatus(1);
+////                    formatujTabele();
+////                } catch (IOException ex) {
+////                    Gdx.app.log("Nie udało sie uruchomić servera", ex.toString());
+////                }
+//            }
+//        });
+//        return btnServerStart;
+//    }
 
     /**
      * Zwraca przycisk Exit
      *
      * @return Zwraca referencje do przycisku wyjścia ze Screenu
      */
-    private TextButton getBtnExit() {
-        TextButton btnExit = new TextButton("EXIT", a.skin);
-        btnExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                g.setScreen(Assets.mainMenuScreen);
-            }
-        });
-        return btnExit;
-    }
+//    private TextButton getBtnExit() {
+//        TextButton btnExit = new TextButton("EXIT", a.skin);
+//        btnExit.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                g.setScreen(Assets.mainMenuScreen);
+//            }
+//        });
+//        return btnExit;
+//    }
 
     private TextButton getBtnSendMap() {
         TextButton btnSendMap = new TextButton("Wyslij Mape", a.skin);
@@ -521,8 +524,9 @@ public class MultiplayerScreen implements Screen {
 
     @Override
     public void show() {
-        formatujTabele();
+        //formatujTabele();
         Gdx.input.setInputProcessor(mainStage);
+        tables.formatMainTable();
     }
 
     @Override
@@ -653,22 +657,208 @@ public class MultiplayerScreen implements Screen {
         public boolean isTerrainType4 = false;
     }
 
+    /**
+     * Klasa obsługuje tabele
+     */
     public class Tables {
-        public Table tableMain;
-        public Table table01;
-        public Table table02;
+        public Table tableMain = new Table();
+        public Table tableLog = new Table();
+        public Table table01 = new Table();
+        public Table table02 = new Table();
 
         public Tables() {
-            tableMain = new Table();
-            table01 = new Table();
-            table02 = new Table();
-
-            tableMain.setFillParent(true);
-            tableMain.pad(5);
-            tableMain.setDebug(true);
-
             table01.setDebug(true);
             table02.setDebug(true);
+        }
+
+        /**
+         * Formatuje główną tabelę
+         */
+        public void formatMainTable() {
+            tableMain.clear();
+            tableMain.setFillParent(true);
+            tableMain.setDebug(true);
+
+            formatLogTable();
+            formatTable01();
+            formatTable02();
+
+            tableMain.add(table01);
+            tableMain.add(tableLog);
+            tableMain.row();
+            tableMain.add(interfce.btnExit).size(100, 50).pad(5);
+        }
+
+        /**
+         * Formatuje tabelę logów.
+         */
+        public void formatLogTable() {
+            tableLog.clear();
+            tableLog.setDebug(true);
+
+            tableLog.add(interfce.lblnetworkStatus);
+            tableLog.row();
+            tableLog.add(interfce.lblServerConnections).pad(5);
+            tableLog.row();
+            tableLog.add(interfce.lblLog01).pad(5);
+            tableLog.row();
+            tableLog.add(interfce.lblLog02).pad(5);
+            tableLog.row();
+            tableLog.add(interfce.lblLog03).pad(5);
+        }
+
+        /**
+         * Formatuję tabele 01
+         */
+        public void formatTable01() {
+            table01.clear();
+            table01.setDebug(true);
+
+            table01.add(interfce.btnServerStart).size(100, 25).pad(5);
+            table01.row();
+            table01.add(interfce.btnServerStop).size(100, 25).pad(5);
+            table01.row();
+            table01.add(interfce.btnClientStart).size(100, 25).pad(5);
+            table01.row();
+            table01.add(interfce.btnClientStop).size(100, 25).pad(5);
+            table01.row();
+            table01.add(interfce.btnGetConnections).size(100, 25).pad(5);
+        }
+
+        /**
+         * Formatuje tabelę 02
+         */
+        public void formatTable02() {
+
+        }
+    }
+
+    /**
+     * Klasa odpowiada za obsługę elementów interfejsu tj. przycisków, etykiet itp.
+     */
+    public class Interface {
+
+        // Etykieta wyświetla ilość połączeń do serwera.
+        public Label lblServerConnections = new Label("Ilosc polaczen: 0", a.skin);
+
+        // Etykieta wyświetla status gry (STAND ALONE, SERWER, KLIENT)
+        public Label lblnetworkStatus = new Label("STAND ALONE", a.skin);
+
+        public TextButton btnServerStart = new TextButton("Server START", a.skin);
+        public TextButton btnServerStop = new TextButton("Server STOP", a.skin);
+        public TextButton btnClientStart = new TextButton("Client START", a.skin);
+        public TextButton btnClientStop = new TextButton("Client STOP", a.skin);
+
+        public TextButton btnGetConnections = new TextButton("Polaczenia", a.skin);
+
+        public TextButton btnExit = new TextButton("EXIT", a.skin);
+
+        public Label lblLog01 = new Label("log 1", a.skin);
+        public Label lblLog02 = new Label("log 2", a.skin);
+        public Label lblLog03 = new Label("log 3", a.skin);
+
+        public Interface() {
+            addListeners();
+        }
+
+        /**
+         * Uaktalnia etykietę wyświetlającą ilość połączeń do serwera.
+         */
+        public void updateLabelConnection() {
+            lblServerConnections.setText("Ilosc polaczen: " + gs.server.getSrv().getConnections().length);
+        }
+
+        /**
+         * Uaktualnia etykietę statusu sieciowego gry.
+         */
+        public void updateLabelNetworkStatus() {
+            if (gs.getNetworkStatus() == 0) {
+                lblnetworkStatus.setText("STAND ALONE");
+            } else if (gs.getNetworkStatus() == 1) {
+                lblnetworkStatus.setText("SERWER");
+            } else if (gs.getNetworkStatus() == 2) {
+                lblnetworkStatus.setText("KLIENT");
+            }
+        }
+
+        /**
+         * Uaktualnia etykiety logów w tabeli logów.
+         *
+         * @param log String z treścią loga.
+         */
+        public void updateLogs(String log) {
+            lblLog03.setText(lblLog02.getText());
+            lblLog02.setText(lblLog01.getText());
+            lblLog01.setText(log);
+        }
+
+        /**
+         * Dodaje odpowiednie listnery do przycisków
+         */
+        public void addListeners() {
+            btnExit.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    g.setScreen(Assets.mainMenuScreen);
+                }
+            });
+
+            btnServerStart.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    updateLogs("Uruchamianie serwera.");
+
+                    try {
+                        new RunServer(54556, 54777);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    gs.server.startServer();
+                    gs.setNetworkStatus(1);
+                    updateLabelNetworkStatus();
+                }
+            });
+
+            btnServerStop.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    updateLogs("Zatrzymanie serwera.");
+                    gs.server.serverStop();
+                    gs.setNetworkStatus(0);
+                    updateLabelNetworkStatus();
+                }
+            });
+
+            btnClientStart.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Button Pressed: ", "Client Start");
+                    RunClient rc = new RunClient("wowvaqa", "192.168.2.3", 54556, 54777);
+                    rc.startClient();
+                    gs.setNetworkStatus(2);
+                    updateLabelNetworkStatus();
+                }
+            });
+
+            btnClientStop.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Button Pressed: ", "Client STOP");
+                    gs.client.stopClient();
+                    gs.setNetworkStatus(0);
+                    updateLabelNetworkStatus();
+                }
+            });
+
+            btnGetConnections.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Button Pressed: ", "Poloczenia");
+                    updateLabelConnection();
+                    if (gs.server.getSrv().getConnections().length > 0) {
+                    }
+                }
+            });
         }
     }
 }

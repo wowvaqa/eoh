@@ -41,26 +41,10 @@ public class BohaterScreen implements Screen {
 
     private final OrthographicCamera c;
     private final FitViewport viewPort;
-    // Referencje do obiektu assetów, statusu gry, bohatera który jest kliknięty
     private final Assets a;
     private final GameStatus gs;
     private final Game g;
-    // Plansza
     private final Stage stage01 = new Stage();
-    // Tabela
-    private final Table tabela = new Table();
-    private final Table tabela2 = new Table();
-    private final Table tabela3 = new Table();
-    // Informuje czy tabela jest zaktualizowana
-    private boolean tabelaZaktualizowana = false;
-    // Przyciski
-    private TextButton btnExit;
-    // Labele
-    private Label lblBohater;
-    private Label lblAtak, lblObrona, lblHp, lblSzybkosc, lblMana, lblKlasaPostaci;
-    private Label lblMoc, lblWiedza;
-    private Label lblExp, lblExpToNextLevel, lblLevel;
-    private Label lblStopy, lblNogi, lblLewaReka, lblPrawaReka, lblKorpus, lblGlowa;
     private Tables tables;
     private Interface interfce;
 
@@ -69,213 +53,16 @@ public class BohaterScreen implements Screen {
         this.gs = gs;
         this.g = g;
 
-        tables = new Tables();
-        interfce = new Interface();
-
-        utworzPrzyciski();
-        utworzLabele();
-        dodajDoStage01();
-
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
+        tables = new Tables();
+        interfce = new Interface();
+
+        dodajDoStage01();
+
         c = new OrthographicCamera(w, h);
         viewPort = new FitViewport(w, h, c);
-    }
-
-    // Formatuje tabele dodaje do niej elementy
-    private void formatujTabele() {
-
-        tabela.setFillParent(true);
-        tabela.pad(5);
-        tabela.setDebug(true);
-
-        tabela.add(lblBohater).align(Align.top).expandX().colspan(tabela.getColumns());
-        tabela.row();
-
-        tabela.add(new Image(a.texAtcIcon)).size(50, 50);
-        tabela.add(new Image(a.texDefIcon)).size(50, 50);
-        tabela.add(new Image(a.texHpIcon)).size(50, 50);
-        tabela.row();
-
-        tabela.add(lblAtak).align(Align.center);
-        tabela.add(lblObrona).align(Align.center);
-        tabela.add(lblHp).align(Align.center);
-        tabela.row();
-
-        tabela.add(new Image(a.texSpdIcon)).size(50, 50);
-        tabela.add(new Image(a.texPwrIcon)).size(50, 50);
-        tabela.add(new Image(a.texWsdIcon)).size(50, 50);
-        tabela.row();
-
-        tabela.add(lblSzybkosc).align(Align.center);
-        tabela.add(lblMoc).align(Align.center);
-        tabela.add(lblWiedza).align(Align.center);
-        tabela.row();
-
-        tabela.add(lblMana).align(Align.topLeft);
-        tabela.row();
-
-        tabela.add(lblLevel).align(Align.left);
-        tabela.add(lblExp).align(Align.left);
-        tabela.add(lblExpToNextLevel).align(Align.left);
-        tabela.add(lblKlasaPostaci).align(Align.topLeft);
-        tabela.row();
-
-        tabela.add(lblLewaReka).align(Align.left);
-        tabela.add(sprawdzBohatera().getItemLewaReka()).size(50, 50);
-
-        tabela.add(lblGlowa).align(Align.left);
-        tabela.add(sprawdzBohatera().getItemGlowa()).size(50, 50);
-        tabela.row();
-
-        tabela.add(lblPrawaReka).align(Align.left);
-        tabela.add(sprawdzBohatera().getItemPrawaReka()).size(50, 50);
-
-        tabela.add(lblKorpus).align(Align.left);
-        tabela.add(sprawdzBohatera().getItemKorpus()).size(50, 50);
-        tabela.row();
-
-        tabela.add(lblNogi).align(Align.left);
-        tabela.add(sprawdzBohatera().getItemNogi()).size(50, 50);
-
-        tabela.add(lblStopy).align(Align.left);
-        tabela.add(sprawdzBohatera().getItemStopy()).size(50, 50);
-        tabela.row();
-
-        tabela.add(tabela2).align(Align.topLeft).expand().colspan(tabela.getColumns());
-
-        tabela.row();
-
-        tabela.add(tabela3).align(Align.topLeft).expand().colspan(tabela.getColumns());
-
-        tabela.row();
-
-        tabela.add(btnExit).expand().align(Align.bottom).width(100).height(50).colspan(tabela.getColumns());
-    }
-
-    /**
-     * Formatuje tabele ekwipunku
-     */
-    private void formatujTabele2() {
-        int iloscPozycjiwWierszu = 0;
-        tabela2.pad(2);
-        tabela2.setDebug(false);
-
-        tabela2.add(new Label("Ekwipunek:", a.skin)).align(Align.topLeft);
-        tabela2.row();
-
-        final ArrayList<TextButton> tmpButtonsUsun = new ArrayList<TextButton>();
-        final ArrayList<TextButton> tmpButtonsZaloz = new ArrayList<TextButton>();
-
-        for (int i = 0; i < sprawdzBohatera().getEquipment().size(); i++) {
-            //tabela2.add(new Label(sprawdzBohatera().getEquipment().get(i).getNazwa(), a.skin)).align(Align.left).pad(2);
-            tabela2.add(sprawdzBohatera().getEquipment().get(i)).size(50);
-            tmpButtonsUsun.add(new TextButton("Usun" + i, a.skin));
-            tmpButtonsZaloz.add(new TextButton("Zaloz" + i, a.skin));
-
-            tmpButtonsUsun.get(i).addListener(new ClickListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println("przycisk Unus klikniety");
-                    for (int i = 0; i < tmpButtonsUsun.size(); i++) {
-                        if (tmpButtonsUsun.get(i).isPressed()) {
-
-                            // usuwa przycisk z tabeli
-                            tmpButtonsUsun.get(i).remove();
-                            tmpButtonsZaloz.get(i).remove();
-                            // usuwa itemka z equipmentu
-                            sprawdzBohatera().getEquipment().remove(i);
-                            // resetuje tabele
-                            tabela2.reset();
-                            formatujTabele2();
-                            break;
-                        }
-                    }
-                    return false;
-                }
-            });
-
-            tmpButtonsZaloz.get(i).addListener(new ClickListener() {
-
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println("przycisk zaloz klikniety");
-                    for (int i = 0; i < tmpButtonsZaloz.size(); i++) {
-                        if (tmpButtonsZaloz.get(i).isPressed()) {
-                            int tmpI = i;
-
-                            // usuwa przycisk z tabeli
-                            tmpButtonsUsun.get(i).remove();
-                            //tmpButtonsZaloz.get(i).remove();
-                            tmpButtonsZaloz.remove(i);
-                            // usuwa itemka z equipmentu
-                            tabelaZaktualizowana = false;
-
-                            podmianaItemkow(i);
-                            System.out.println("przycisk: " + tmpI);
-
-                            // resetuje tabele
-                            tabela.clear();
-                            tabela2.clear();
-                            tabela3.clear();
-                            aktualizujTabele();
-                            tmpButtonsZaloz.clear();
-                        }
-                    }
-                    return false;
-                }
-            });
-
-            tabela2.add(tmpButtonsUsun.get(i)).pad(2);
-            tabela2.add(tmpButtonsZaloz.get(i)).pad(2);
-            iloscPozycjiwWierszu += 1;
-            if (iloscPozycjiwWierszu > 3) {
-                tabela2.row();
-                iloscPozycjiwWierszu = 0;
-            }
-        }
-    }
-
-    private void formatujTabela3() {
-        tabela3.pad(2);
-        tabela3.setDebug(false);
-
-        tabela3.add(new Label("Czary:", a.skin)).align(Align.topLeft);
-        tabela3.row();
-
-        for (int i = 0; i < gs.getBohaterZaznaczony().getListOfSpells().size(); i++) {
-            final SpellCreator sC = new SpellCreator(a, gs);
-            DefaultActor dA = new DefaultActor(sC.getSpellTexture(
-                    gs.getBohaterZaznaczony().getListOfSpells().get(i)), i, i);
-
-            final int tempI = i;
-
-            dA.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    new Dialog("Lokacja Startowa", a.skin) {
-                        {
-                            text(sC.getSpellDescription(gs.getBohaterZaznaczony().getListOfSpells().get(tempI)));
-                            button("anuluj", "anuluj");
-                        }
-
-                        @Override
-                        protected void result(Object object) {
-                            if (object.equals("anuluj")) {
-                                this.remove();
-                            }
-                        }
-                    }.show(stage01);
-
-                }
-            });
-
-            tabela3.add(dA).pad(2);
-        }
-
-//        System.out.println("Ilość czarów getSpells(): " + gs.getBohaterZaznaczony().getSpells().size());
-        //tabela3.add(new ImageButton(gs.getBohaterZaznaczony().getSpells().get(0).getSprite().getTexture().getTextureData()))
     }
 
     /**
@@ -339,12 +126,7 @@ public class BohaterScreen implements Screen {
                         if (!"Gole Piesci".equals(tmpItem2.getNazwa())) {
                             sprawdzBohatera().getEquipment().add(tmpItem2);
                         }
-//                        tabela.clear();
-//                        tabela2.clear();
-//                        tabela3.clear();
-//                        tabelaZaktualizowana = false;
-//                        aktualizujTabele();
-                            tables.formatMainTable();
+                        tables.formatMainTable();
 
                     } else if (object.equals("prawa")) {
                         System.out.println("Wcisnieto Prawa");
@@ -354,61 +136,11 @@ public class BohaterScreen implements Screen {
                         if (!"Gole Piesci".equals(tmpItem2.getNazwa())) {
                             sprawdzBohatera().getEquipment().add(tmpItem2);
                         }
-//                        tabela.clear();
-//                        tabela2.clear();
-//                        tabela3.clear();
-
-                        //tabelaZaktualizowana = false;
-                        //aktualizujTabele();
                         tables.formatMainTable();
                     }
                 }
             }.show(stage01);
         }
-    }
-
-    /**
-     * Tworzy labele
-     */
-    private void utworzLabele() {
-        lblBohater = new Label("BOHATER", a.skin);
-        lblAtak = new Label("Atak: ", a.skin);
-        lblObrona = new Label("Obrona: ", a.skin);
-        lblHp = new Label("HP: ", a.skin);
-        lblSzybkosc = new Label("Szybkosc: ", a.skin);
-        lblMana = new Label("Mana: ", a.skin);
-        lblMoc = new Label("Moc:", a.skin);
-        lblWiedza = new Label("Wiedza", a.skin);
-        lblLevel = new Label("Poziom: ", a.skin);
-        lblExp = new Label("Doswiadczenie: ", a.skin);
-        lblExpToNextLevel = new Label("Pozostalo nast. poz.: ", a.skin);
-        lblNogi = new Label("Nogi: ", a.skin);
-        lblLewaReka = new Label("L. Reka: ", a.skin);
-        lblPrawaReka = new Label("", a.skin);
-        lblKorpus = new Label("", a.skin);
-        lblGlowa = new Label("", a.skin);
-        lblStopy = new Label("", a.skin);
-        lblKlasaPostaci = new Label("", a.skin);
-
-    }
-
-    /**
-     * Tworzy przyciski
-     */
-    private void utworzPrzyciski() {
-        btnExit = new TextButton("EXIT", a.skin);
-        btnExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //gs.setActualScreen(1);
-                g.setScreen(Assets.mapScreen);
-                tabela.clear();
-                tabela2.clear();
-                tabela3.clear();
-                tabelaZaktualizowana = false;
-                System.out.println("Exit klikniety");
-            }
-        });
     }
 
     /**
@@ -420,8 +152,12 @@ public class BohaterScreen implements Screen {
         this.stage01.addActor(a.getInfoWindow());
     }
 
-    // Przeszukuje wszystkich bohaterów sprawdzając czy ktoryś nie jest zaznaczony
-    // Jeżeli true zwraca referencje do zaznaczonego bohatera.
+    /**
+     * Przeszukuje wszystkich bohaterów sprawdzając czy ktoryś nie jest zaznaczony,
+     * jeżeli true zwraca referencje do zaznaczonego bohatera.
+     *
+     * @return referencje do obiektu bohatera
+     */
     private Bohater sprawdzBohatera() {
         Bohater bohater = null;
         for (Gracz gracz : gs.getGracze()) {
@@ -431,53 +167,7 @@ public class BohaterScreen implements Screen {
                 }
             }
         }
-        return bohater;
-    }
-
-    // Aktualizuje labele o dane klikniętego bohatera
-    private void aktualizujTabele() {
-
-        formatujTabele();
-        formatujTabele2();
-        formatujTabela3();
-
-        lblAtak.setText("Atak: " + sprawdzBohatera().getAtak()
-                        + " (" + Fight.getAtakEkwipunkuBohaterAtakujacego(gs.getBohaterZaznaczony()) + ")"
-                        + " (" + sprawdzBohatera().getAtakEfekt() + ")"
-        );
-
-        lblObrona.setText("Obrona: " + sprawdzBohatera().getObrona()
-                + " (" + Fight.getObronaEkwipunkuBohaterBroniacego(gs.getBohaterZaznaczony()) + ")"
-                + " (" + sprawdzBohatera().getObronaEfekt() + ")");
-
-        lblHp.setText("HP: " + sprawdzBohatera().getActualHp()
-                        + " (" + sprawdzBohatera().getHp() + ")"
-        );
-        lblSzybkosc.setText("Szybkosc: " + sprawdzBohatera().getSzybkosc()
-                + " (" + Fight.getSzybkoscEkwipunkuBohatera(gs.getBohaterZaznaczony()) + ")");
-
-        lblMana.setText("Mana: " + sprawdzBohatera().getActualMana()
-                + " (" + sprawdzBohatera().getMana() + ")");
-
-        lblMoc.setText("Moc: " + sprawdzBohatera().getMoc());
-
-        lblWiedza.setText("Wiedza: " + sprawdzBohatera().getWiedza());
-
-        lblKlasaPostaci.setText(gs.getBohaterZaznaczony().getKlasyPostaci().toString());
-
-        lblLevel.setText("Poziom: " + sprawdzBohatera().getLevelOfExp());
-        lblExp.setText("Punkty doswiadczenia: " + sprawdzBohatera().getExp());
-        lblExpToNextLevel.setText("Punkty do nst. poz.: " + sprawdzBohatera().getExpToNextLevel());
-
-        lblKorpus.setText("Korpus: " /*+ sprawdzBohatera().getItemKorpus().getNazwa()*/);
-        lblGlowa.setText("Glowa: " /*+ sprawdzBohatera().getItemGlowa().getNazwa()*/);
-
-        lblLewaReka.setText("L. Reka: " /*+ sprawdzBohatera().getItemLewaReka().getNazwa()*/);
-        lblPrawaReka.setText("P. Reka: "/* + sprawdzBohatera().getItemPrawaReka().getNazwa()*/);
-        lblNogi.setText("Nogi: " /*+ sprawdzBohatera().getItemNogi().getNazwa()*/);
-        lblStopy.setText("Stopy: " /*+ sprawdzBohatera().getItemStopy().getNazwa()*/);
-
-        tabelaZaktualizowana = true;
+        return null;
     }
 
     @Override
@@ -486,13 +176,6 @@ public class BohaterScreen implements Screen {
 
         interfce.updateLabels();
         tables.formatMainTable();
-
-        if (gs.isCzyZaznaczonoBohatera()) {
-            if (!tabelaZaktualizowana) {
-                tables.formatMainTable();
-                //aktualizujTabele();
-            }
-        }
     }
 
     @Override
@@ -576,7 +259,7 @@ public class BohaterScreen implements Screen {
         /**
          * Formatuje tabelę bohatera
          */
-        public void formatHeroTable(){
+        public void formatHeroTable() {
             tableHero.clear();
             tableHero.setDebug(true);
 
@@ -652,6 +335,9 @@ public class BohaterScreen implements Screen {
             tableEquip.add(sprawdzBohatera().getItemStopy()).size(50, 50).colspan(3).pad(5);
         }
 
+        /**
+         * Formatuje tabelę plecaka
+         */
         public void formatBackPackTable() {
 
             int amountInRow = 0;
@@ -700,12 +386,8 @@ public class BohaterScreen implements Screen {
                             if (tmpButtonSetUp.get(i).isPressed()) {
                                 int tmpI = i;
 
-                                // usuwa przycisk z tabeli
                                 tmpButtonRemove.get(i).remove();
-                                //tmpButtonsZaloz.get(i).remove();
                                 tmpButtonSetUp.remove(i);
-                                // usuwa itemka z equipmentu
-                                tabelaZaktualizowana = false;
 
                                 podmianaItemkow(i);
                                 System.out.println("przycisk: " + tmpI);
@@ -722,21 +404,24 @@ public class BohaterScreen implements Screen {
                 tableBackPack.add(tmpButtonRemove.get(i)).pad(2);
                 tableBackPack.add(tmpButtonSetUp.get(i)).pad(2);
                 amountInRow += 1;
-                if (amountInRow > 4){
+                if (amountInRow > 4) {
                     tableBackPack.row();
                     amountInRow = 0;
                 }
             }
         }
 
-        public void formatSpellsTable(){
+        /**
+         * Formatuje tabelę czarów.
+         */
+        public void formatSpellsTable() {
             tableSpells.clear();
             tableSpells.setDebug(true);
 
             tableSpells.add(new Label("Czary", a.skin)).pad(5).colspan(10);
             tableSpells.row();
 
-            for (int i = 0; i < sprawdzBohatera().getListOfSpells().size(); i ++){
+            for (int i = 0; i < sprawdzBohatera().getListOfSpells().size(); i++) {
                 final SpellCreator sC = new SpellCreator(a, gs);
                 DefaultActor dA = new DefaultActor(sC.getSpellTexture(
                         gs.getBohaterZaznaczony().getListOfSpells().get(i)), i, i);
@@ -820,21 +505,27 @@ public class BohaterScreen implements Screen {
             addListeners();
         }
 
-        public void addListeners() {
+        /**
+         * Dodaje listnery do obiektów.
+         */
+        private void addListeners() {
             btnExit.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     //gs.setActualScreen(1);
                     g.setScreen(Assets.mapScreen);
-                    tables.tableMain.clear();;
+                    tables.tableMain.clear();
+                    ;
                     tables.tableStats.clear();
                     tables.tableBackPack.clear();
-                    tabelaZaktualizowana = false;
                     System.out.println("Exit klikniety");
                 }
             });
         }
 
+        /**
+         * Aktualizuje etykiety.
+         */
         public void updateLabels() {
 
             /**
@@ -858,7 +549,7 @@ public class BohaterScreen implements Screen {
             lblActualHp.setText("Hit Points: " + sprawdzBohatera().getActualHp());
             lblExp.setText("Punkty doswiadczenia: " + sprawdzBohatera().getExp() + " / " + sprawdzBohatera().getExpToNextLevel());
             lblLevel.setText("Poziom: " + sprawdzBohatera().getLevelOfExp());
-            lblKlasaPostaci.setText(sprawdzBohatera().getKlasyPostaci().toString());
+            lblHeroClass.setText(sprawdzBohatera().getKlasyPostaci().toString());
 
             /**
              * Update ekwipunku

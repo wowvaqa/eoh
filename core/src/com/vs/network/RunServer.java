@@ -1,6 +1,7 @@
 package com.vs.network;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.vs.eoh.GameStatus;
 
@@ -20,12 +21,18 @@ public class RunServer {
      * @param portTCP Numer portu TCP
      * @param portUDP Numer portu UDP
      */
-    public RunServer(int portTCP, int portUDP){
+    public RunServer(int portTCP, int portUDP) throws IOException {
         this.portTCP = portTCP;
         this.portUDP = portUDP;
 
-        srv = new Server();
+        srv = new Server() {
+            protected Connection newConnection() {
+                return new ChatConnection();
+            }
+        };
         GameStatus.server = this;
+
+        Network.register(srv);
     }
 
     /**
@@ -65,4 +72,9 @@ public class RunServer {
     public void setSrv(Server srv) {
         this.srv = srv;
     }
+
+    public static class ChatConnection extends Connection {
+        public String name;
+    }
+
 }
