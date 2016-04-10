@@ -10,55 +10,46 @@ import com.badlogic.gdx.files.FileHandle;
 import com.vs.enums.DostepneItemki;
 import com.vs.network.RunClient;
 import com.vs.network.RunServer;
+import com.vs.screens.MultiplayerScreen;
 import com.vs.testing.MapEditor;
 import com.vs.testing.TestingScreen;
 
 public class GameStatus {
 
-    // Status gry 0 - standAlone, 1 - Server, 2 - Client
-    private int networkStatus = 0;
-
-    private int actualScreen = 0;                                               // zapamiętuje aktualną scenę która jest wyświetlana    
-    private int lastScreen = 0;                                                 // Ostatnia scena która była wyświetlana
-    private int predkoscScrollowaniaKamery = 10;                                // współczynnik prędkości dla scrollingu mapy w obiekcie klasy MapScreen
-    private int predkoscZoomKamery = 10;                                        // współczynnik prędkości dla zoomu mapy w obiekcie klasy MapScreen
-    public float xDlaInterfejsuRuchu = 0;
-    public float yDlaInterfejsuRuchu = 0;
-    public int iloscGraczy = 6;                                                 // ilosć graczy
-    public int maxIloscBohaterow = 1;                                           // maksymalna ilość bohaterów   
-    // informuje czy jakikolwiek z bohaterów został zaznaczony
-    private boolean czyZaznaczonoBohatera = false;
-    //private boolean wymaganePrzerysowanieTeksturyBohatera = true;
-
-    // Zwraca nr gracza z tablicy graczy który posiada swoją turę
-    private int turaGracza = 0;
-
-    // Określa czy panel rzucania czarów jest aktywny.
-    public boolean isSpellPanelActive = false;
-    
-    // Określa ogólną turę gry.
-    private int turaGry = 0;
-
-    // Do uniemożliweinia ruchu podczas penetrowania skrzyni ze skarbem    
-    private Item item;
-
-    public boolean czyUtworzonoMape = false;                                    // informuje jeżeli TRUE że możliwe jest utworzenie obiektu klasy MapScreen 
-
-    public ArrayList<Gracz> gracze = new ArrayList<Gracz>();                    // przechowuje graczy     
-
-    // Przechowuje mape z obiektami graczy w celu wychwycenia kolizji
-    // public Mapa mapa = new Mapa();
-    public Mapa mapa;
-
     public static String nazwaMapy = "brak";
-
     // Pola statyczne dla serwera i klienta.
     public static RunServer server;
     public static RunClient client;
-
+    public static MultiplayerScreen mS;
     // Listy zawierają wszystkie dostępne itemy danych poziomów.
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
     public static ArrayList<DostepneItemki> itemyPoziom2 = new ArrayList<DostepneItemki>();
+    public float xDlaInterfejsuRuchu = 0;
+    public float yDlaInterfejsuRuchu = 0;
+    public int iloscGraczy = 6;                                                 // ilosć graczy
+    public int maxIloscBohaterow = 1;                                           // maksymalna ilość bohaterów
+    //private boolean wymaganePrzerysowanieTeksturyBohatera = true;
+    // Określa czy panel rzucania czarów jest aktywny.
+    public boolean isSpellPanelActive = false;
+    public boolean czyUtworzonoMape = false;                                    // informuje jeżeli TRUE że możliwe jest utworzenie obiektu klasy MapScreen
+    public ArrayList<Gracz> gracze = new ArrayList<Gracz>();                    // przechowuje graczy
+    // Przechowuje mape z obiektami graczy w celu wychwycenia kolizji
+    // public Mapa mapa = new Mapa();
+    public Mapa mapa;
+    // Status gry 0 - standAlone, 1 - Server, 2 - Client
+    private int networkStatus = 0;
+    private int actualScreen = 0;                                               // zapamiętuje aktualną scenę która jest wyświetlana
+    private int lastScreen = 0;                                                 // Ostatnia scena która była wyświetlana
+    private int predkoscScrollowaniaKamery = 10;                                // współczynnik prędkości dla scrollingu mapy w obiekcie klasy MapScreen
+    private int predkoscZoomKamery = 10;                                        // współczynnik prędkości dla zoomu mapy w obiekcie klasy MapScreen
+    // informuje czy jakikolwiek z bohaterów został zaznaczony
+    private boolean czyZaznaczonoBohatera = false;
+    // Zwraca nr gracza z tablicy graczy który posiada swoją turę
+    private int turaGracza = 0;
+    // Określa ogólną turę gry.
+    private int turaGry = 0;
+    // Do uniemożliweinia ruchu podczas penetrowania skrzyni ze skarbem
+    private Item item;
 
     public GameStatus() {
         wczytajItemy();
@@ -84,6 +75,10 @@ public class GameStatus {
 
     public int getIloscGraczy() {
         return iloscGraczy;
+    }
+
+    public void setIloscGraczy(int iloscGraczy) {
+        this.iloscGraczy = iloscGraczy;
     }
 
     /**
@@ -144,6 +139,8 @@ public class GameStatus {
         }
     }
 
+    // GETTER AND SETTERS
+
     private void wczytajItemy() {
         //Poziom 1
         itemyPoziom1.add(DostepneItemki.Kij);
@@ -166,7 +163,6 @@ public class GameStatus {
         itemyPoziom2.add(DostepneItemki.WzmocnioneSkorzaneButy);
     }
 
-    // GETTER AND SETTERS
     /**
      * Zwraca ilość złota gracza który aktualnie ma turę
      *
@@ -188,8 +184,13 @@ public class GameStatus {
         return mapa;
     }
 
-    public void setIloscGraczy(int iloscGraczy) {
-        this.iloscGraczy = iloscGraczy;
+    /**
+     * Ustala mapę
+     *
+     * @param mapa Obiekt klasy Mapa
+     */
+    public void setMapa(Mapa mapa) {
+        this.mapa = mapa;
     }
 
     public int getActualScreen() {
@@ -280,13 +281,5 @@ public class GameStatus {
      */
     public void setNetworkStatus(int networkStatus) {
         this.networkStatus = networkStatus;
-    }
-
-    /**
-     * Ustala mapę
-     * @param mapa Obiekt klasy Mapa
-     */
-    public void setMapa(Mapa mapa) {
-        this.mapa = mapa;
     }
 }

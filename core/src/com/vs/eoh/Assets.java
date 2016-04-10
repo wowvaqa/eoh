@@ -26,12 +26,27 @@ import java.util.ArrayList;
 
 public class Assets {
 
+    public static Stage stage01MapScreen;
+    public static Stage stage02MapScreen;
+    public static Stage stage03MapScreen;
+    public static Screen testScreen;
+    public static Screen mainMenuScreen;
+    public static Screen newGameScreen;
+    public static Screen mapScreen;
+    public static Screen bohaterScreen;
+    public static Screen itemScreen;
+    public static Screen lastScreen;
+    public static Screen newBohaterScreen;
+    public static Screen mapEditor;
+    public static Screen awansScreen;
+    public static Screen multiplayerScreen;
+    public static Server server;
+    public static Client client;
     // Tekstury terenu
     public Texture trawaDrzewoTex;
     public Texture trawaTex;
     public Texture trawaGoraTex;
     public Texture trawaZamekTex;
-
     public Texture btnGoTex, btnAttackTex;
     public Texture btnPlus, btnMinus, btnOK, btnRight, btnLeft;
     public Texture mobElfTex, mobElfTexZaznaczony;
@@ -41,25 +56,19 @@ public class Assets {
     public Texture mobWizardTex, mobWizardTexZaznaczony;
     public Texture cancelTex;
     public Skin skin;
-
-
     // obiekty na mapie
     public Texture texTresureBox;
-
     // tekstury mobów
     public Texture texSzkieletMob;
     public Texture texWilkMob;
     public Texture texSpiderMob;
     public Texture texZombieMob;
-
     public Texture texWarrior0;
     public Texture texWarrior1;
-
     // Texture Atlas
     public TextureAtlas tAtals;
     public TextureAtlas tAtlasWarrior;
     public AssetManager aM;
-
     // tekstury itemków
     public Texture texHead;
     public Texture texLinenTousers;
@@ -80,7 +89,6 @@ public class Assets {
     public Texture texBow;
     public Texture texLongBow;
     public Texture texGold;
-
     // Spell Textures
     public Texture texSpellFireBall;
     public Texture texSpellFreez;
@@ -92,13 +100,11 @@ public class Assets {
     public Texture texSpellFury;
     public Texture texSpellCharge;
     public Texture texSpellFinalJudgment;
-
     // Potions
     public Texture texHelthPotion;
     public Texture texSpeedPotion;
     public Texture texAttackPotion;
     public Texture texDefencePotion;
-
     // interfejs
     public Texture moveIcon;
     public Texture cancelIcon;
@@ -112,35 +118,11 @@ public class Assets {
     public Texture texWsdIcon;
     public Texture texDmgIcon;
     public Texture texArmIcon;
-
     public AssetManager am;
-
     public Label lblDmg;
-
+    public int[] mapa = new int[100];
     // predefiniowane okno ifnoramcyjne
     private Window infoWindow;
-
-    public int[] mapa = new int[100];
-
-    public static Stage stage01MapScreen;
-    public static Stage stage02MapScreen;
-    public static Stage stage03MapScreen;
-
-    public static Screen testScreen;
-    public static Screen mainMenuScreen;
-    public static Screen newGameScreen;
-    public static Screen mapScreen;
-    public static Screen bohaterScreen;
-    public static Screen itemScreen;
-    public static Screen lastScreen;
-    public static Screen newBohaterScreen;
-    public static Screen mapEditor;
-    public static Screen awansScreen;
-    public static Screen multiplayerScreen;
-
-    public static Server server;
-    public static Client client;
-    public static MultiplayerScreen.NetStatus netStatus;
 
     public Assets() {
 

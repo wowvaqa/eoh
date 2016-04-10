@@ -2,6 +2,8 @@ package com.vs.network;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.vs.eoh.GameStatus;
 
 import java.io.IOException;
@@ -11,11 +13,11 @@ import java.io.IOException;
  */
 public class RunClient {
 
+    private final int portTCP;
+    private final int portUDP;
     private Client cnt;
     private String name;
     private String adresIP;
-    private final int portTCP;
-    private final int portUDP;
 
 
     /**
@@ -51,6 +53,46 @@ public class RunClient {
                 }
             }
         }.start();
+
+        Network.register(cnt);
+
+        cnt.addListener(new Listener() {
+            public void connected(Connection connection) {
+                Network.RegisterName registerName = new Network.RegisterName();
+                registerName.name = name;
+                cnt.sendTCP(registerName);
+            }
+
+            public void received(Connection connection, Object object) {
+                if (object instanceof Network.ChatMessage) {
+                    Network.ChatMessage chatMessage = (Network.ChatMessage) object;
+                    Gdx.app.log("Client Listener", "Chat Message: " + chatMessage.text);
+                    GameStatus.mS.interfce.lstChatList.getItems().add(chatMessage.text);
+                    GameStatus.mS.interfce.checkChatList();
+                    return;
+                }
+
+                if (object instanceof Network.UpdateNames) {
+                    Network.UpdateNames updateNames = (Network.UpdateNames) object;
+                    Gdx.app.log("Client Listener", "Update Names: ");
+                    GameStatus.mS.interfce.lstChatPlayers.clearItems();
+                    for (String name : updateNames.names) {
+                        Gdx.app.log("Ilosc nazw: ", "" + updateNames.names.length);
+                        GameStatus.mS.interfce.lstChatPlayers.getItems().add(name);
+                    }
+                    return;
+                }
+            }
+        });
+    }
+
+    /**
+     * Wysyła wiadomość do wszystkich klientów.
+     */
+    public void sendChatMessage() {
+        Network.ChatMessage chatMessage = new Network.ChatMessage();
+        chatMessage.text = GameStatus.mS.interfce.tfChatMessage.getText();
+        cnt.sendTCP(chatMessage);
     }
 
     public void stopClient(){

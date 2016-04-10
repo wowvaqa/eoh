@@ -84,31 +84,6 @@ public class Ruch {
     }
 
     /**
-     * Zwraca True jeżeli w zadanej lokalizacji znajduje się obiekt kalsy Mob,
-     * Bohater lub Castle
-     *
-     * @param x Pozycja X obiektu do sprawdzenia na mapie
-     * @param y Pozycja Y obiektu do sprawdzenia na mapie
-     * @return
-     */
-    private boolean sprawdzPrzeciwnika(int x, int y) {
-        if (gs.getMapa().getPola()[x][y].getBohater() != null
-                && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() != gs.getTuraGracza()) {
-            return true;
-        }
-        /**
-         * Zwraca true jeżeli napotkany zamek nie należy do gracza i jego poziom
-         * HP > 0
-         */
-        if (gs.getMapa().getPola()[x][y].getCastle() != null
-                && gs.getMapa().getPola()[x][y].getCastle().getPrzynaleznoscDoGracza() != gs.getTuraGracza()
-                && gs.getMapa().getPola()[x][y].getCastle().getActualHp() > 0) {
-            return true;
-        }
-        return gs.getMapa().getPola()[x][y].getMob() != null;
-    }
-
-    /**
      * Wyłącza przycisku Ruchu, Ataku, Cancel na Stage01
      */
     public static void wylaczPrzyciski() {
@@ -184,6 +159,31 @@ public class Ruch {
                 Ruch.wylaczIkonyEfektow();
             }
         }
+    }
+
+    /**
+     * Zwraca True jeżeli w zadanej lokalizacji znajduje się obiekt kalsy Mob,
+     * Bohater lub Castle
+     *
+     * @param x Pozycja X obiektu do sprawdzenia na mapie
+     * @param y Pozycja Y obiektu do sprawdzenia na mapie
+     * @return
+     */
+    private boolean sprawdzPrzeciwnika(int x, int y) {
+        if (gs.getMapa().getPola()[x][y].getBohater() != null
+                && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() != gs.getTuraGracza()) {
+            return true;
+        }
+        /**
+         * Zwraca true jeżeli napotkany zamek nie należy do gracza i jego poziom
+         * HP > 0
+         */
+        if (gs.getMapa().getPola()[x][y].getCastle() != null
+                && gs.getMapa().getPola()[x][y].getCastle().getPrzynaleznoscDoGracza() != gs.getTuraGracza()
+                && gs.getMapa().getPola()[x][y].getCastle().getActualHp() > 0) {
+            return true;
+        }
+        return gs.getMapa().getPola()[x][y].getMob() != null;
     }
 
     /**
@@ -265,11 +265,11 @@ public class Ruch {
             bohater.setPozXnaMapie(bohater.getPozXnaMapie() + (int) ruchX);
             bohater.setPozYnaMapie(bohater.getPozYnaMapie() + (int) ruchY);
 
-            Assets.netStatus.pozXboh1 = gs.getGracze().get(0).getBohaterowie().get(0).getPozXnaMapie();
-            Assets.netStatus.pozYboh1 = gs.getGracze().get(0).getBohaterowie().get(0).getPozYnaMapie();
-
-            Assets.netStatus.pozXboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozXnaMapie();
-            Assets.netStatus.pozYboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozYnaMapie();
+//            Assets.netStatus.pozXboh1 = gs.getGracze().get(0).getBohaterowie().get(0).getPozXnaMapie();
+//            Assets.netStatus.pozYboh1 = gs.getGracze().get(0).getBohaterowie().get(0).getPozYnaMapie();
+//
+//            Assets.netStatus.pozXboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozXnaMapie();
+//            Assets.netStatus.pozYboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozYnaMapie();
 
             //Assets.client.sendTCP(Assets.netStatus);
 
