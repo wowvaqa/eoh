@@ -3,45 +3,26 @@ package com.vs.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
-import com.vs.eoh.Bohater;
-import com.vs.eoh.Castle;
 import com.vs.eoh.GameStatus;
-import com.vs.eoh.Mapa;
-import com.vs.eoh.Pole;
-import com.vs.eoh.TresureBox;
 import com.vs.network.RunClient;
 import com.vs.network.RunServer;
-import com.vs.testing.MapEditor;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
 
-import static com.vs.eoh.Assets.*;
+import static com.vs.eoh.Assets.client;
+import static com.vs.eoh.Assets.server;
 
 /**
  * Created by v on 2016-03-01.
@@ -139,14 +120,14 @@ public class MultiplayerScreen implements Screen {
             tableMain.setFillParent(true);
             tableMain.setDebug(true);
 
-            //formatLogTable();
+            formatLogTable();
             formatChatTable();
             formatTable01();
             formatTable02();
 
             tableMain.add(table01);
             if (gs.getNetworkStatus() == 1 || gs.getNetworkStatus() == 2) {
-                //tableMain.add(tableLog);
+                tableMain.add(tableLog);
                 tableMain.add(tableChat);
             }
             tableMain.row();
@@ -164,11 +145,9 @@ public class MultiplayerScreen implements Screen {
             tableLog.row();
             tableLog.add(interfce.lblServerConnections).pad(5);
             tableLog.row();
-            tableLog.add(interfce.lblLog01).pad(5);
+            tableLog.add(interfce.lstLogList).size(400, 200).pad(5);
             tableLog.row();
-            tableLog.add(interfce.lblLog02).pad(5);
-            tableLog.row();
-            tableLog.add(interfce.lblLog03).pad(5);
+            tableLog.add(interfce.btnDiagnoseConnection);
         }
 
         /**
@@ -240,20 +219,19 @@ public class MultiplayerScreen implements Screen {
         public TextButton btnGetConnections = new TextButton("Polaczenia", a.skin);
         public TextButton btnSendMessage = new TextButton("Send", a.skin);
 
+        public TextButton btnDiagnoseConnection = new TextButton("DC", a.skin);
+
         public TextField tfIpAdress = new TextField("192.168.2.3", a.skin);
         public TextField tfTcpPort = new TextField("54556", a.skin);
         public TextField tfUdpPort = new TextField("54777", a.skin);
-        public TextField tfPlayerName = new TextField("Nazwa: ", a.skin);
+        public TextField tfPlayerName = new TextField("", a.skin);
         public TextField tfChatMessage = new TextField("", a.skin);
 
         public List lstChatList = new List(a.skin);
         public List lstChatPlayers = new List(a.skin);
+        public List lstLogList = new List(a.skin);
 
         public TextButton btnExit = new TextButton("EXIT", a.skin);
-
-        public Label lblLog01 = new Label("log 1", a.skin);
-        public Label lblLog02 = new Label("log 2", a.skin);
-        public Label lblLog03 = new Label("log 3", a.skin);
 
         public Interface() {
             Listeners listeners = new Listeners();
@@ -295,9 +273,7 @@ public class MultiplayerScreen implements Screen {
          * @param log String z treścią loga.
          */
         public void updateLogs(String log) {
-            lblLog03.setText(lblLog02.getText());
-            lblLog02.setText(lblLog01.getText());
-            lblLog01.setText(log);
+
         }
 
         /**
@@ -318,6 +294,7 @@ public class MultiplayerScreen implements Screen {
                 addListenerBtnServerStart();
                 addListenerBtnServerStop();
                 addListenerBtnExit();
+                addListenerBtnDiagnoseConnection();
             }
 
             /**
@@ -394,7 +371,6 @@ public class MultiplayerScreen implements Screen {
                 btnServerStop.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        updateLogs("Zatrzymanie serwera.");
                         gs.server.serverStop();
                         gs.setNetworkStatus(0);
                         updateLabelNetworkStatus();
@@ -410,8 +386,6 @@ public class MultiplayerScreen implements Screen {
                 btnServerStart.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        updateLogs("Uruchamianie serwera.");
-
                         try {
                             new RunServer(Integer.parseInt(tfTcpPort.getText()),
                                     Integer.parseInt(tfUdpPort.getText()), GameStatus.mS);
@@ -422,6 +396,19 @@ public class MultiplayerScreen implements Screen {
                         }
                         gs.server.startServer();
                         updateLabelNetworkStatus();
+                    }
+                });
+            }
+
+            /**
+             *
+             */
+            private void addListenerBtnDiagnoseConnection() {
+                btnServerStart.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        //if (GameStatus.server.getSrv().getConnections().length > 0)
+                        //lstLogList.getItems().add(GameStatus.server.getSrv().getConnections()[0].getID());
                     }
                 });
             }

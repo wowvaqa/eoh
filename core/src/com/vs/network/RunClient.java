@@ -90,9 +90,25 @@ public class RunClient {
      * Wysyła wiadomość do wszystkich klientów.
      */
     public void sendChatMessage() {
-        Network.ChatMessage chatMessage = new Network.ChatMessage();
-        chatMessage.text = GameStatus.mS.interfce.tfChatMessage.getText();
-        cnt.sendTCP(chatMessage);
+
+        boolean privMessage = false;
+
+        if (GameStatus.mS.interfce.lstChatPlayers.getSelected() != null) {
+            privMessage = true;
+        }
+
+        if (privMessage) {
+            Network.ChatMessagePrivate chatMessagePrivate = new Network.ChatMessagePrivate();
+            chatMessagePrivate.text = GameStatus.mS.interfce.tfChatMessage.getText();
+            chatMessagePrivate.name = (String) GameStatus.mS.interfce.lstChatPlayers.getSelected();
+            cnt.sendTCP(chatMessagePrivate);
+            Gdx.app.log("sendChatMessage", "Wysłanie prywatnej wiadomości przez klienta.");
+            Gdx.app.log("sendChatMessage", "name: " + chatMessagePrivate.name);
+        } else {
+            Network.ChatMessage chatMessage = new Network.ChatMessage();
+            chatMessage.text = GameStatus.mS.interfce.tfChatMessage.getText();
+            cnt.sendTCP(chatMessage);
+        }
     }
 
     public void stopClient(){
