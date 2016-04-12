@@ -1,5 +1,6 @@
 package com.vs.eoh;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.vs.network.Network;
 import com.vs.screens.MultiplayerScreen;
 
 /**
@@ -162,6 +164,22 @@ public class Ruch {
     }
 
     /**
+     * Wykonuje ruch otrzymany z sieci
+     *
+     * @param b  Referencja do obiektu bohatera
+     * @param gs Referencja do obiektu Game Status
+     */
+    public static void makeNetworkMove(Bohater b, GameStatus gs, int ruchX, int ruchY) {
+        gs.getMapa().pola[b.getPozXnaMapie()][b.getPozYnaMapie()].setBohater(null);
+
+        b.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));
+        b.setPozXnaMapie(b.getPozXnaMapie() + ruchX);
+        b.setPozYnaMapie(b.getPozYnaMapie() + ruchY);
+
+        gs.getMapa().pola[b.getPozXnaMapie()][b.getPozYnaMapie()].setBohater(b);
+    }
+
+    /**
      * Zwraca True jeżeli w zadanej lokalizacji znajduje się obiekt kalsy Mob,
      * Bohater lub Castle
      *
@@ -259,6 +277,20 @@ public class Ruch {
          * Wykonuje ruch na mapie bohatera
          */
         private void wykonajRuch() {
+
+            // polecenia wykonają się tylko jeżeli gra jest klientem
+            if (gs.getNetworkStatus() == 2) {
+                Network.Move networkMove = new Network.Move();
+                networkMove.ruchX = (int) ruchX;
+                networkMove.ruchY = (int) ruchY;
+                networkMove.player = bohater.getPrzynaleznoscDoGracza();
+                networkMove.hero = Bohater.getHeroNumberInArrayList(bohater, gs.getGracze().get(
+                        bohater.getPrzynaleznoscDoGracza()
+                ));
+                GameStatus.client.getCnt().sendTCP(networkMove);
+                Gdx.app.log("wykonajRuch", "wysyłam networkMove");
+            }
+
             gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(null);
 
             bohater.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));

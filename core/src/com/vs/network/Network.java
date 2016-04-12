@@ -15,6 +15,8 @@ public class Network {
         kryo.register(UpdateNames.class);
         kryo.register(ChatMessage.class);
         kryo.register(ChatMessagePrivate.class);
+        kryo.register(Move.class);
+        kryo.register(HeroAttackHero.class);
     }
 
     static public class RegisterName {
@@ -34,4 +36,20 @@ public class Network {
         public String name;
     }
 
+    /**
+     * Klasa odpowiada za ruch bohatera przez sieć.
+     */
+    static public class Move {
+        public int ruchX;
+        public int ruchY;
+        public int player;
+        public int hero;
+    }
+
+    /**
+     * Klasa odpowiada za atak bohatera na bohatera przez sieć.
+     */
+    static public class HeroAttackHero {
+
+    }
 }

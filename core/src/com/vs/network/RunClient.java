@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.vs.eoh.Assets;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.Ruch;
 
 import java.io.IOException;
 
@@ -15,6 +17,8 @@ public class RunClient {
 
     private final int portTCP;
     private final int portUDP;
+    private GameStatus gs;
+    private Assets a;
     private Client cnt;
     private String name;
     private String adresIP;
@@ -26,7 +30,9 @@ public class RunClient {
      * @param portTCP Port TCP serwera
      * @param portUDP Port UTP serwerea
      */
-    public RunClient(String name, String adresIP, int portTCP, int portUDP) {
+    public RunClient(String name, String adresIP, int portTCP, int portUDP, GameStatus gs, Assets a) {
+        this.a = a;
+        this.gs = gs;
         this.name = name;
         this.adresIP = adresIP;
         this.portTCP = portTCP;
@@ -80,6 +86,19 @@ public class RunClient {
                         Gdx.app.log("Ilosc nazw: ", "" + updateNames.names.length);
                         GameStatus.mS.interfce.lstChatPlayers.getItems().add(name);
                     }
+                    return;
+                }
+
+                if (object instanceof Network.Move) {
+                    Gdx.app.log("NetworkMove", "Klient odebrał ruch od serwera");
+                    Network.Move move = (Network.Move) object;
+                    Gdx.app.log("RuchX", "" + move.ruchX);
+                    Gdx.app.log("RuchY", "" + move.ruchY);
+                    Gdx.app.log("Indeks Gracza  ", "" + move.player);
+                    Gdx.app.log("Indeks Bohatera", "" + move.hero);
+
+                    Ruch.makeNetworkMove(gs.getGracze().get(move.player).getBohaterowie().get(move.hero)
+                            , gs, move.ruchX, move.ruchY);
                     return;
                 }
             }

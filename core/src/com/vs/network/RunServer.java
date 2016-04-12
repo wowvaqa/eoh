@@ -105,6 +105,16 @@ public class RunServer {
                     }
                     return;
                 }
+
+                if (object instanceof Network.Move) {
+                    Gdx.app.log("NetworkMove", "Serwer odebrał ruch od klienta");
+                    Network.Move move = (Network.Move) object;
+                    Gdx.app.log("RuchX", "" + move.ruchX);
+                    Gdx.app.log("RuchY", "" + move.ruchY);
+                    Gdx.app.log("Indeks Gracza  ", "" + move.player);
+                    Gdx.app.log("Indeks Bohatera", "" + move.hero);
+                    srv.sendToAllExceptTCP(connection.getID(), move);
+                }
             }
 
             public void disconnected(Connection c) {

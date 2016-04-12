@@ -26,16 +26,21 @@ import java.util.ArrayList;
  */
 public class Bohater extends Actor {
 
+    private final Assets a;
+    private final GameStatus gs;
+    private final Game g;
+    // Statystyki
+    private final String imie = null;
+    // klasa bohatera
+    public KlasyPostaci klasyPostaci;
     private Sprite sprite;    // wygląd
     private Image image;
     private Texture bohaterTex;
     private Texture bohaterCheckTex;
     private Pixmap pixMap;
     private boolean teksturaZaktualizowana = false;
-
     private int pozX = 0;   // pozycja X na mapie
     private int pozY = 0;   // pozycja Y na mapie
-
     // Zmienne określające które stopnie awansu posiada bohater
     private boolean g0 = true;
     private boolean g1 = false;
@@ -43,7 +48,6 @@ public class Bohater extends Actor {
     private boolean g2B = false;
     private boolean g3A = false;
     private boolean g3B = false;
-
     // ekwipunek bohatera
     private Item itemGlowa = null;
     private Item itemKorpus = null;
@@ -51,32 +55,20 @@ public class Bohater extends Actor {
     private Item itemPrawaReka = null;
     private Item itemLewaReka = null;
     private Item itemStopy = null;
-
     private ArrayList<Spells> listOfSpells;
     private ArrayList<SpellActor> spells;
     private ArrayList<Item> equipment;
-
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
-
     // informuje cz bohater jest zaznaczony
     private boolean zaznaczony = false;
-
     private boolean otwartaSkrzyniaZeSkarbem = false;
-
     // lokacja bohatera w obiekcie klasy Mapa
     private int pozXnaMapie;
     private int pozYnaMapie;
-
     // informuje czy dozwolony jest ruch dla bohatera
-    // Bez sprawdzania na mapie poruszał się tylko pierwszy z utworzonych 
+    // Bez sprawdzania na mapie poruszał się tylko pierwszy z utworzonych
     // bohaterów za sprawą funkcji draw która jako pierwsza została wywołana
     // u bohatera który był utworzony jako pierwszy.
     private boolean moveable = false;
-
-    // Statystyki
-    private final String imie = null;
     private int atak = 0;
     private int obrona = 0;
     private int hp = 0;
@@ -94,8 +86,6 @@ public class Bohater extends Actor {
     private int expToNextLevel = 100;
     // pocziom doświadczenia
     private int levelOfExp = 1;
-    // klasa bohatera
-    public KlasyPostaci klasyPostaci;
     private String actualHeroClass;
 
     private int przynaleznoscDoGracza;
@@ -168,22 +158,42 @@ public class Bohater extends Actor {
         }
     }
 
+    /**
+     * Zwraca indeks bohatera w ArrayList bohaterów należących do gracza
+     *
+     * @param b Referencja do obiektu Gracza
+     * @return indeks bohatera w tablicy.
+     */
+    public static int getHeroNumberInArrayList(Bohater b, Gracz g) {
+
+        int amountOfHero = g.getBohaterowie().size();
+        int heroIndex = -99;
+
+        for (int i = 0; i < amountOfHero; i++) {
+            if (g.getBohaterowie().get(i).equals(b)) {
+                heroIndex = i;
+            }
+        }
+
+        return heroIndex;
+    }
+
     // 1. Dodoaje Click Listnera do obiektu klasy Bohater
     // 2. Jeżeli obiekt zostanie kliknięty wtedy włącza przyciski odpowiedzialne
     // za ruch.
     // 3. Zmienia teksture obiketu Bohatera na zaznaczoną
     // 4. Zmiena możliwość ruchu na TRUE
-    // 5. Zmienia status bohatera na zaznaczony (wykorzystywane przy 
+    // 5. Zmienia status bohatera na zaznaczony (wykorzystywane przy
     // wyświetlaniu statsów, oraz sprawdzaniu czy inny bohater nie został
     // już zaznaczony aby uniemożliwić zaznaczenie dwóch bohaterów na raz.
-    // 6. Sprawdza czy kliknięty bohater należy do gracz którego trwa aktualnie 
+    // 6. Sprawdza czy kliknięty bohater należy do gracz którego trwa aktualnie
     // tura.
     private void dodajListnera() {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean bohaterZaznaczony = false;
-                // Sprawdza czy któryś z bohaterów na mapie nie jest już zaznaczony                
+                // Sprawdza czy któryś z bohaterów na mapie nie jest już zaznaczony
                 for (Gracz i : gs.getGracze()) {
                     for (Bohater j : i.getBohaterowie()) {
                         if (j.zaznaczony) {
@@ -194,7 +204,7 @@ public class Bohater extends Actor {
                         }
                     }
                 }
-                // Jeżeli TRUE wtedy uniemozliwia jego zaznaczenie                
+                // Jeżeli TRUE wtedy uniemozliwia jego zaznaczenie
                 if (bohaterZaznaczony) {
                     DialogScreen dS = new DialogScreen("Blad", a.skin, "Nie moge zaznaczyc dwoch bohaterow", Assets.stage01MapScreen);
                     System.out.println("Nie mogę zaznaczyc dwóch bohaterów");
@@ -467,6 +477,7 @@ public class Bohater extends Actor {
      * Setters and Getters
      * ************************************************************************
      */
+
     /**
      * Zwraca klasę postaci bohatera
      *
@@ -547,6 +558,15 @@ public class Bohater extends Actor {
     }
 
     /**
+     * Ustala pozycję X w obiekcie klasy Mapa
+     *
+     * @param pozXnaMapie
+     */
+    public void setPozXnaMapie(int pozXnaMapie) {
+        this.pozXnaMapie = pozXnaMapie;
+    }
+
+    /**
      * Zwraca do którego gracza z tablicy Graczy przynależy bohater
      *
      * @return
@@ -580,15 +600,6 @@ public class Bohater extends Actor {
      */
     public void setPozostaloRuchow(int pozostaloRuchow) {
         this.pozostaloRuchow = pozostaloRuchow;
-    }
-
-    /**
-     * Ustala pozycję X w obiekcie klasy Mapa
-     *
-     * @param pozXnaMapie
-     */
-    public void setPozXnaMapie(int pozXnaMapie) {
-        this.pozXnaMapie = pozXnaMapie;
     }
 
     /**

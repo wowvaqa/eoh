@@ -29,14 +29,14 @@ import static com.vs.eoh.Assets.server;
  */
 public class MultiplayerScreen implements Screen {
 
-    private final Assets a;
     private final Game g;
-    private final GameStatus gs;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
     public Stage mainStage;
     public Tables tables;
     public Interface interfce;
+    private Assets a;
+    private GameStatus gs;
 
     public MultiplayerScreen(Game g, Assets a, final GameStatus gs) {
         this.a = a;
@@ -95,6 +95,14 @@ public class MultiplayerScreen implements Screen {
     public void dispose() {
         server.close();
         client.close();
+    }
+
+    public Assets getA() {
+        return a;
+    }
+
+    public GameStatus getGs() {
+        return gs;
     }
 
     /**
@@ -355,7 +363,7 @@ public class MultiplayerScreen implements Screen {
                             name = "wowvaqa";
                         }
                         name.trim();
-                        RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777);
+                        RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777, gs, a);
                         rc.startClient();
                         gs.setNetworkStatus(2);
                         tables.formatMainTable();
