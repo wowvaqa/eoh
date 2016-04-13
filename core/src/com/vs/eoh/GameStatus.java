@@ -24,6 +24,7 @@ public class GameStatus {
     // Listy zawierają wszystkie dostępne itemy danych poziomów.
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
     public static ArrayList<DostepneItemki> itemyPoziom2 = new ArrayList<DostepneItemki>();
+    public static GameStatus gs;
     public float xDlaInterfejsuRuchu = 0;
     public float yDlaInterfejsuRuchu = 0;
     public int iloscGraczy = 6;                                                 // ilosć graczy
@@ -52,6 +53,7 @@ public class GameStatus {
     private Item item;
 
     public GameStatus() {
+        gs = this;
         wczytajItemy();
 //        try {
 //            wczytajMape();

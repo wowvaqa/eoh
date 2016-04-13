@@ -114,6 +114,17 @@ public class RunServer {
                     Gdx.app.log("Indeks Gracza  ", "" + move.player);
                     Gdx.app.log("Indeks Bohatera", "" + move.hero);
                     srv.sendToAllExceptTCP(connection.getID(), move);
+                    return;
+                }
+
+                if (object instanceof Network.DamageHero) {
+                    Gdx.app.log("Network.DamageHero", "Serwer odebrał obrażenia dla bohatera");
+                    Network.DamageHero damageHero = (Network.DamageHero) object;
+                    Gdx.app.log("Indeks Gracza", "" + damageHero.player);
+                    Gdx.app.log("Indeks Bohatera", "" + damageHero.hero);
+                    Gdx.app.log("Obrazenia", "" + damageHero.damage);
+                    srv.sendToAllExceptTCP(connection.getID(), damageHero);
+                    return;
                 }
             }
 

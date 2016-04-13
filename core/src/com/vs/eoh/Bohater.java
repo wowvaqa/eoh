@@ -33,12 +33,14 @@ public class Bohater extends Actor {
     private final String imie = null;
     // klasa bohatera
     public KlasyPostaci klasyPostaci;
+    public boolean teksturaZaktualizowana = false;
+    public boolean animujCiecieNetwork = false;
+    public int damageNetwork = 0;
     private Sprite sprite;    // wygląd
     private Image image;
     private Texture bohaterTex;
     private Texture bohaterCheckTex;
     private Pixmap pixMap;
-    private boolean teksturaZaktualizowana = false;
     private int pozX = 0;   // pozycja X na mapie
     private int pozY = 0;   // pozycja Y na mapie
     // Zmienne określające które stopnie awansu posiada bohater
@@ -87,9 +89,7 @@ public class Bohater extends Actor {
     // pocziom doświadczenia
     private int levelOfExp = 1;
     private String actualHeroClass;
-
     private int przynaleznoscDoGracza;
-
     // efekty które oddziaływują na bohatera
     private ArrayList<Effect> efekty;
     // efekty czarów które oddziaływują na bohatera
@@ -362,6 +362,13 @@ public class Bohater extends Actor {
             aktualizujTeksture();
             this.aktualizujKolorTeksturyBohatera();
             teksturaZaktualizowana = true;
+        }
+
+        if (this.animujCiecieNetwork) {
+            a.animujCiecie((int) this.getX(), (int) this.getY());
+            //a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater, gs.getMapa().getPola()[locX][locY].getMob());
+            a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
+            this.animujCiecieNetwork = false;
         }
 
         batch.draw(this.sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());

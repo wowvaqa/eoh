@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.vs.eoh.Assets;
+import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Ruch;
 
@@ -99,6 +100,24 @@ public class RunClient {
 
                     Ruch.makeNetworkMove(gs.getGracze().get(move.player).getBohaterowie().get(move.hero)
                             , gs, move.ruchX, move.ruchY);
+                    return;
+                }
+
+                if (object instanceof Network.DamageHero) {
+                    Gdx.app.log("Network.DamageHero", "Klient odebrał obrażenia dla bohatera");
+                    Network.DamageHero damageHero = (Network.DamageHero) object;
+                    Gdx.app.log("Indeks Gracza", "" + damageHero.player);
+                    Gdx.app.log("Indeks Bohatera", "" + damageHero.hero);
+                    Gdx.app.log("Obrazenia", "" + damageHero.damage);
+
+                    Bohater tmpBohater;
+
+                    tmpBohater = gs.getGracze().get(damageHero.player).getBohaterowie().get(damageHero.hero);
+                    tmpBohater.setActualHp(tmpBohater.getActualHp() - damageHero.damage);
+                    tmpBohater.teksturaZaktualizowana = false;
+                    tmpBohater.animujCiecieNetwork = true;
+                    tmpBohater.damageNetwork = damageHero.damage;
+
                     return;
                 }
             }

@@ -246,6 +246,16 @@ public class Assets {
         this.animujCiecie((int) bohaterBroniacy.getX(), (int) bohaterBroniacy.getY());
     }
 
+    public void animujLblDmgNetwork(float pozX, float pozY, int damage) {
+        lblDmg.setText("Dmg: " + damage);
+        lblDmg.setPosition(pozX - 50, pozY - 25);
+        lblDmg.setFontScale(1.5f);
+        lblDmg.addAction(Actions.alpha(1));
+        lblDmg.addAction(Actions.fadeOut(2.0f));
+        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
+        lblDmg.act(Gdx.graphics.getDeltaTime());
+    }
+
     public void animujLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Castle castle) {
         lblDmg.setText("Dmg: " + Integer.toString(Fight.getObrazenia(bohaterAtakujacy, castle)));
         lblDmg.setPosition(pozX - 50, pozY - 25);

@@ -201,4 +201,27 @@ CZARY
     fightEffect. Jeżeli warunek jest prawdziwy wtedy następuje wywołanie 
     metody SpellEffects.dzialanie(FightEffects, Object, Object).
     
-    
+SIEC:
+    1. Ruch
+
+    w metodzie Ruch.wykonajRuch() następuje sprawdzenie czy gra działa jako klient sieciowy.
+    Jeżeli tak utworzyony zostaje nowy obiekt klasy Network.Move i przesłany do Serwera który
+    przesyła go do klientów.
+    Klient odbiera ww. obiekt i wykonuje:
+    Ruch.makeNetworkMove(Bohater b, GameStatus gs, int ruchX, int ruchY)
+
+    2. Atak
+
+    Bohater vs Bohater
+    W metodzie Fight.getObrazenia(Bohater bohaterAtakujacy, Bohater bohaterBroniacy) sprawdzone
+    zostaje czy gra jest klientem sieciowym.
+    Jeżeli tak wywołana zostaje metoda Fight.networkHeroDamage(dmg, bohaterBroniacy);
+    W metodzie tej utworzony zostaje nowy obiekt klasy Network.DamageHero i przesłany do Serwera,
+    który przesyła go dalej do klientów.
+    Jeżeli klient odbierze obiekt klasy Network.DamageHero zmiena status zmiennych:
+        tmpBohater.teksturaZaktualizowana = false;
+        tmpBohater.animujCiecieNetwork = true;
+        tmpBohater.damageNetwork = damageHero.damage;
+    W metodzie Draw() obiektu klasy Bohater wg ww. zmiennych wywołane zostają odpowiednie metody
+    animujące cięcie i rysujuące labelkę z obrażeniami (Metody graficzne nie mogą zostać wywołane
+    z innego THREADu tj. obiektu SERWERA/KLIENTA).

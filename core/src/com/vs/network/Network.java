@@ -16,7 +16,7 @@ public class Network {
         kryo.register(ChatMessage.class);
         kryo.register(ChatMessagePrivate.class);
         kryo.register(Move.class);
-        kryo.register(HeroAttackHero.class);
+        kryo.register(DamageHero.class);
     }
 
     static public class RegisterName {
@@ -47,9 +47,11 @@ public class Network {
     }
 
     /**
-     * Klasa odpowiada za atak bohatera na bohatera przez sieć.
+     * Klasa odpowiada za przekazanie obrażeń przez sieć dla zadanego bohatera
      */
-    static public class HeroAttackHero {
-
+    static public class DamageHero {
+        public int damage;
+        public int player;
+        public int hero;
     }
 }

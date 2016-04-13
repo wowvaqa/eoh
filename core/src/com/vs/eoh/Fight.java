@@ -5,6 +5,9 @@
  */
 package com.vs.eoh;
 
+import com.badlogic.gdx.Game;
+import com.vs.network.Network;
+
 import java.util.Random;
 
 /**
@@ -103,6 +106,9 @@ public class Fight {
 
         bohaterBroniacy.aktualizujTeksture();
 
+        if (GameStatus.gs.getNetworkStatus() == 2) {
+            networkHeroDamage(dmg, bohaterBroniacy);
+        }
         return dmg;
     }
 
@@ -548,5 +554,21 @@ public class Fight {
             System.out.println("E ATK MOBA: " + sE.getEfektAtak());
         }
         return sumaEfektAtak;
+    }
+
+    /**
+     * Wykonuje przekazanie przez sieć obrażeń dla zadanego bohatera.
+     *
+     * @param dmg             obrażenia.
+     * @param bohaterBroniacy bohater którego dot. obrażenia.
+     */
+    static public void networkHeroDamage(int dmg, Bohater bohaterBroniacy) {
+        Network.DamageHero damageHero = new Network.DamageHero();
+        damageHero.damage = dmg;
+        damageHero.player = bohaterBroniacy.getPrzynaleznoscDoGracza();
+        damageHero.hero = Bohater.getHeroNumberInArrayList(bohaterBroniacy, GameStatus.gs.getGracze().get(
+                bohaterBroniacy.getPrzynaleznoscDoGracza()
+        ));
+        GameStatus.client.getCnt().sendTCP(damageHero);
     }
 }
