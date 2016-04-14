@@ -17,6 +17,7 @@ public class Network {
         kryo.register(ChatMessagePrivate.class);
         kryo.register(Move.class);
         kryo.register(DamageHero.class);
+        kryo.register(DamageMob.class);
     }
 
     static public class RegisterName {
@@ -53,5 +54,17 @@ public class Network {
         public int damage;
         public int player;
         public int hero;
+    }
+
+    /**
+     * Klasa odpowiada za przekazanie obrażeń przez sieć dla zadanego moba.
+     */
+    static public class DamageMob {
+        // Obrażenia zadane Mobowi.
+        public int damage;
+        // Pozycaj X na mapie Moba.
+        public int pozXmoba;
+        // Pozyca Y na mapie Moba.
+        public int pozYmoba;
     }
 }

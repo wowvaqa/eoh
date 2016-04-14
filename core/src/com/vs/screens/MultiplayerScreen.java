@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.eoh.Assets;
 import com.vs.eoh.GameStatus;
+import com.vs.network.NetEngine;
 import com.vs.network.RunClient;
 import com.vs.network.RunServer;
 
@@ -37,11 +38,13 @@ public class MultiplayerScreen implements Screen {
     public Interface interfce;
     private Assets a;
     private GameStatus gs;
+    private NetEngine ne;
 
-    public MultiplayerScreen(Game g, Assets a, final GameStatus gs) {
+    public MultiplayerScreen(Game g, Assets a, final GameStatus gs, NetEngine ne) {
         this.a = a;
         this.g = g;
         this.gs = gs;
+        this.ne = ne;
         GameStatus.mS = this;
 
         interfce = new Interface();
@@ -363,7 +366,7 @@ public class MultiplayerScreen implements Screen {
                             name = "wowvaqa";
                         }
                         name.trim();
-                        RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777, gs, a);
+                        RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777, ne);
                         rc.startClient();
                         gs.setNetworkStatus(2);
                         tables.formatMainTable();

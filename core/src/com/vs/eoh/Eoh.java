@@ -1,6 +1,7 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.vs.network.NetEngine;
 import com.vs.screens.AwansScreen;
 import com.vs.screens.BohaterScreen;
 import com.vs.screens.ItemScreen;
@@ -17,6 +18,7 @@ public class Eoh extends Game {
 
 	private final GameStatus gs = new GameStatus();
 	private Assets a;
+	private NetEngine ne;
 
 	private MainScreen mainScreen;
 	private MapScreen mapScreen;
@@ -33,6 +35,7 @@ public class Eoh extends Game {
 	@Override
 	public void create () {
 		a = new Assets();
+		ne = new NetEngine(this.gs, this.a);
 		mainScreen = new MainScreen(this, a, gs);
 		newGameScreen = new NewGameScreen(this, this.a, this.gs);
 		optionsScreen = new OptionsScreen(this.gs, this.a);
@@ -42,7 +45,7 @@ public class Eoh extends Game {
 		newBohaterScreen = new NewBohaterScreen(this, this.gs, this.a, Assets.stage01MapScreen);
 		mapEditor = new MapEditor(this, this.a);
 		awansScreen = new AwansScreen(this, this.a, this.gs);
-		multiplayerScreen = new MultiplayerScreen(this, this.a, this.gs);
+		multiplayerScreen = new MultiplayerScreen(this, this.a, this.gs, this.ne);
 
 		Assets.testScreen = testScreen;
 		Assets.mainMenuScreen = mainScreen;

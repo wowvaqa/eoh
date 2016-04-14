@@ -126,6 +126,16 @@ public class RunServer {
                     srv.sendToAllExceptTCP(connection.getID(), damageHero);
                     return;
                 }
+
+                if (object instanceof Network.DamageMob) {
+                    Gdx.app.log("Network.DamageMob", "Serwer odebrał obrażenia dla moba");
+                    Network.DamageMob damageMob = (Network.DamageMob) object;
+                    Gdx.app.log("Poz. X moba na mapie", "" + damageMob.pozXmoba);
+                    Gdx.app.log("Poz. Y moba na mapie", "" + damageMob.pozYmoba);
+                    Gdx.app.log("Obrazenia zadane Mobowi", "" + damageMob.damage);
+                    srv.sendToAllExceptTCP(connection.getID(), damageMob);
+                    return;
+                }
             }
 
             public void disconnected(Connection c) {

@@ -11,6 +11,8 @@ import com.vs.eoh.Ruch;
 
 import java.io.IOException;
 
+import sun.nio.ch.Net;
+
 /**
  * Created by v on 2016-03-09.
  */
@@ -20,6 +22,7 @@ public class RunClient {
     private final int portUDP;
     private GameStatus gs;
     private Assets a;
+    private NetEngine ne;
     private Client cnt;
     private String name;
     private String adresIP;
@@ -31,9 +34,10 @@ public class RunClient {
      * @param portTCP Port TCP serwera
      * @param portUDP Port UTP serwerea
      */
-    public RunClient(String name, String adresIP, int portTCP, int portUDP, GameStatus gs, Assets a) {
-        this.a = a;
-        this.gs = gs;
+    public RunClient(String name, String adresIP, int portTCP, int portUDP, NetEngine ne) {
+        this.ne = ne;
+        this.a = ne.a;
+        this.gs = ne.gs;
         this.name = name;
         this.adresIP = adresIP;
         this.portTCP = portTCP;
@@ -89,35 +93,16 @@ public class RunClient {
                     }
                     return;
                 }
-
                 if (object instanceof Network.Move) {
-                    Gdx.app.log("NetworkMove", "Klient odebrał ruch od serwera");
-                    Network.Move move = (Network.Move) object;
-                    Gdx.app.log("RuchX", "" + move.ruchX);
-                    Gdx.app.log("RuchY", "" + move.ruchY);
-                    Gdx.app.log("Indeks Gracza  ", "" + move.player);
-                    Gdx.app.log("Indeks Bohatera", "" + move.hero);
-
-                    Ruch.makeNetworkMove(gs.getGracze().get(move.player).getBohaterowie().get(move.hero)
-                            , gs, move.ruchX, move.ruchY);
+                    ne.networkMove((Network.Move) object);
                     return;
                 }
-
                 if (object instanceof Network.DamageHero) {
-                    Gdx.app.log("Network.DamageHero", "Klient odebrał obrażenia dla bohatera");
-                    Network.DamageHero damageHero = (Network.DamageHero) object;
-                    Gdx.app.log("Indeks Gracza", "" + damageHero.player);
-                    Gdx.app.log("Indeks Bohatera", "" + damageHero.hero);
-                    Gdx.app.log("Obrazenia", "" + damageHero.damage);
-
-                    Bohater tmpBohater;
-
-                    tmpBohater = gs.getGracze().get(damageHero.player).getBohaterowie().get(damageHero.hero);
-                    tmpBohater.setActualHp(tmpBohater.getActualHp() - damageHero.damage);
-                    tmpBohater.teksturaZaktualizowana = false;
-                    tmpBohater.animujCiecieNetwork = true;
-                    tmpBohater.damageNetwork = damageHero.damage;
-
+                    ne.damageHero((Network.DamageHero) object);
+                    return;
+                }
+                if (object instanceof Network.DamageMob) {
+                    ne.damageMob((Network.DamageMob) object);
                     return;
                 }
             }

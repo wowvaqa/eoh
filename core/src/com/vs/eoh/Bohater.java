@@ -35,7 +35,7 @@ public class Bohater extends Actor {
     public KlasyPostaci klasyPostaci;
     public boolean teksturaZaktualizowana = false;
     public boolean animujCiecieNetwork = false;
-    public int damageNetwork = 0;
+    public int damageNetwork = 0;   // do rysowania labelki z ilością obrażeń
     private Sprite sprite;    // wygląd
     private Image image;
     private Texture bohaterTex;
@@ -366,7 +366,6 @@ public class Bohater extends Actor {
 
         if (this.animujCiecieNetwork) {
             a.animujCiecie((int) this.getX(), (int) this.getY());
-            //a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater, gs.getMapa().getPola()[locX][locY].getMob());
             a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
             this.animujCiecieNetwork = false;
         }

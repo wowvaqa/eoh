@@ -219,6 +219,10 @@ public class Fight {
 
         bohaterAtakujacy.setPozostaloRuchow(bohaterAtakujacy.getPozostaloRuchow() - 1);
 
+        if (GameStatus.gs.getNetworkStatus() == 2) {
+            networkMobDamage(dmg, mob.getPozX(), mob.getPozY());
+        }
+
         return dmg;
     }
 
@@ -570,5 +574,20 @@ public class Fight {
                 bohaterBroniacy.getPrzynaleznoscDoGracza()
         ));
         GameStatus.client.getCnt().sendTCP(damageHero);
+    }
+
+    /**
+     * Wykonuje przekazanie przez sieć obrażeń dla zadanego moba.
+     *
+     * @param dmg      obrażenia
+     * @param pozXmoba Pozycja X na mapie Moba.
+     * @param pozYMoba Pozycja Y na mapie Moba.
+     */
+    static public void networkMobDamage(int dmg, int pozXmoba, int pozYMoba) {
+        Network.DamageMob damageMob = new Network.DamageMob();
+        damageMob.damage = dmg;
+        damageMob.pozXmoba = pozXmoba;
+        damageMob.pozYmoba = pozYMoba;
+        GameStatus.client.getCnt().sendTCP(damageMob);
     }
 }

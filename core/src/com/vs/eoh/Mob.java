@@ -15,25 +15,22 @@ import java.util.Random;
 
 public class Mob extends Actor {
 
-    private Sprite sprite;    // wygląd
-    private Texture icon;
-
-    // Pozycja X i Y bohatera atakującego.
-    private int pozXatakujacego;
-    private int pozYatakujacego;
-
-    private long poczatekAtaku;
-    private long nastepnyAtakMoba;
-
-    private int pozX = 0;   // pozycja X na mapie
-    private int pozY = 0;   // pozycja Y na mapie
-
     private final GameStatus gs;
     private final Assets a;
     private final Game g;
-
+    // Zmienne sieciowe
+    public boolean animujCiecieNetwork = false;
+    public int damageNetwork = -99;
+    private Sprite sprite;    // wygląd
+    private Texture icon;
+    // Pozycja X i Y bohatera atakującego.
+    private int pozXatakujacego;
+    private int pozYatakujacego;
+    private long poczatekAtaku;
+    private long nastepnyAtakMoba;
+    private int pozX = 0;   // pozycja X na mapie
+    private int pozY = 0;   // pozycja Y na mapie
     private boolean czyZaatakowany = false;
-
     // Statystyki
     private String imie = null;
     private int atak = 0;
@@ -47,7 +44,6 @@ public class Mob extends Actor {
     private int aktualnaSzybkosc = 0;
     private int expReward = 0;
     private int mobLevel = 0;
-
     // Lista efektów czarów które działają na moba.
     private ArrayList<SpellEffects> spellEffects;
 
@@ -79,6 +75,36 @@ public class Mob extends Actor {
 
         wygenerujStatystykiMoba(this.mobLevel);
         this.dodajListnera();
+    }
+
+    /**
+     * Losuje wg. zadanego poziomu odpowiedniego moba.
+     *
+     * @param levelMoba Poziom Moba
+     * @return Typ Enum DostepneMoby
+     */
+    public static DostepneMoby losujMoba(int levelMoba) {
+
+        Random rnd = new Random();
+
+        switch (levelMoba) {
+            case 1:
+                int indeks = rnd.nextInt(2);
+                if (indeks == 0) {
+                    return DostepneMoby.Szkielet;
+                } else {
+                    return DostepneMoby.Wilk;
+                }
+            case 2:
+                int indeks2 = rnd.nextInt(2);
+                if (indeks2 == 0) {
+                    return DostepneMoby.Pajak;
+                } else {
+                    return DostepneMoby.Zombie;
+                }
+
+        }
+        return DostepneMoby.Szkielet;
     }
 
     /**
@@ -223,36 +249,6 @@ public class Mob extends Actor {
     }
 
     /**
-     * Losuje wg. zadanego poziomu odpowiedniego moba.
-     *
-     * @param levelMoba Poziom Moba
-     * @return Typ Enum DostepneMoby
-     */
-    public static DostepneMoby losujMoba(int levelMoba) {
-
-        Random rnd = new Random();
-
-        switch (levelMoba) {
-            case 1:
-                int indeks = rnd.nextInt(2);
-                if (indeks == 0) {
-                    return DostepneMoby.Szkielet;
-                } else {
-                    return DostepneMoby.Wilk;
-                }
-            case 2:
-                int indeks2 = rnd.nextInt(2);
-                if (indeks2 == 0) {
-                    return DostepneMoby.Pajak;
-                } else {
-                    return DostepneMoby.Zombie;
-                }
-
-        }
-        return DostepneMoby.Szkielet;
-    }
-
-    /**
      * Generuje Tresure Box po pokonoaniu Moba
      * @param pozXTB Pozycja X na mapie
      * @param pozYTB Pozycja Y na mapie
@@ -280,7 +276,11 @@ public class Mob extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
-
+        if (this.animujCiecieNetwork) {
+            a.animujCiecie((int) this.getX(), (int) this.getY());
+            a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
+            this.animujCiecieNetwork = false;
+        }
     }
 
     /**

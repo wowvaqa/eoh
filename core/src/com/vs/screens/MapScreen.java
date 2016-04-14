@@ -646,11 +646,15 @@ public class MapScreen implements Screen {
 
                     Mob mob = new Mob(g, gs, a, i * 100, j * 100, 1, Mob.losujMoba(1));
                     gs.getMapa().getPola()[i][j].setMob(mob);
+                    mob.setPozX(i);
+                    mob.setPozY(j);
                     stage01.addActor(gs.getMapa().getPola()[i][j].getMob());
                 } else if (gs.getMapa().getPola()[i][j].isMob2Location()) {
 
                     Mob mob = new Mob(g, gs, a, i * 100, j * 100, 2, Mob.losujMoba(2));
                     gs.getMapa().getPola()[i][j].setMob(mob);
+                    mob.setPozX(i);
+                    mob.setPozY(j);
                     stage01.addActor(gs.getMapa().getPola()[i][j].getMob());
                 }
             }
