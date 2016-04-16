@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.vs.enums.DostepneItemki;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,20 +18,20 @@ import java.util.Random;
  */
 public class TresureBox extends Actor {
 
-    // wygląd
-    private Texture icon;
     private final Sprite sprite;
-
     // assety
     private final Assets a;
-    private Game g;
     private final GameStatus gs;
-
     // array list przechowujący itemy.
     private final ArrayList<Item> dostepneItemy = new ArrayList<Item>();
-
     // obiekt do generowania itemów.
     private final ItemCreator itemCreator;
+    // wygląd
+    private Texture icon;
+    private Game g;
+    // położenie na mapie
+    private int pozX;
+    private int pozY;
 
     /**
      *
@@ -47,6 +48,9 @@ public class TresureBox extends Actor {
         this.gs = gs;
         this.g = g;
 
+        this.pozX = pozXstage / 100;
+        this.pozY = pozYstage / 100;
+
         itemCreator = new ItemCreator(gs);
 
         sprite = new Sprite(a.texTresureBox);
@@ -54,6 +58,25 @@ public class TresureBox extends Actor {
         this.setPosition(pozXstage, pozYstage);
 
         this.losujItemy(poziomItemow, iloscItemow);
+    }
+
+    /**
+     * Usuwa skrzynię ze skarbem z planszy i mapy.
+     *
+     * @param tresureBox referencja do obiektur klasy TresureBox
+     * @param mapa       referencja do obiketu klasy Mapa
+     */
+    public static void removeTresureBox(TresureBox tresureBox, Mapa mapa) {
+        tresureBox.remove();
+        for (int i = 0; i < mapa.getIloscPolX(); i++) {
+            for (int j = 0; j < mapa.getIloscPolY(); j++) {
+                if (mapa.getPola()[i][j].getTresureBox() != null) {
+                    if (mapa.getPola()[i][j].getTresureBox().equals(tresureBox)) {
+                        mapa.getPola()[i][j].setTresureBox(null);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -129,5 +152,41 @@ public class TresureBox extends Actor {
         //System.out.println("Wylosowano indeks: " + indeks);
 
         return GameStatus.itemyPoziom2.get(indeks);
+    }
+
+    /**
+     * Zwraca pozycję X na mapie skrzyni
+     *
+     * @return Pozycja X
+     */
+    public int getPozX() {
+        return pozX;
+    }
+
+    /**
+     * Ustala pozycję X na mapie
+     *
+     * @param pozX
+     */
+    public void setPozX(int pozX) {
+        this.pozX = pozX;
+    }
+
+    /**
+     * Zwraca pozycję Y na mapie skrzyni
+     *
+     * @return Pozycja Y
+     */
+    public int getPozY() {
+        return pozY;
+    }
+
+    /**
+     * Ustala pozycję Y na mapie.
+     *
+     * @param pozY
+     */
+    public void setPozY(int pozY) {
+        this.pozY = pozY;
     }
 }

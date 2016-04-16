@@ -1,8 +1,10 @@
 package com.vs.eoh;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +22,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 import com.vs.enums.AnimsTypes;
 import com.vs.enums.CzesciCiala;
+import com.vs.network.Network;
 import com.vs.screens.MultiplayerScreen;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class Assets {
     public static Screen mapEditor;
     public static Screen awansScreen;
     public static Screen multiplayerScreen;
+    public static Screen gameOverScreen;
     public static Server server;
     public static Client client;
     // Tekstury terenu
@@ -121,6 +125,11 @@ public class Assets {
     public AssetManager am;
     public Label lblDmg;
     public int[] mapa = new int[100];
+    /**
+     * SOUNDS --------------------------------------------------------------------------------------
+     */
+
+    public Sound swordSound;
     // predefiniowane okno ifnoramcyjne
     private Window infoWindow;
 
@@ -178,6 +187,8 @@ public class Assets {
         texWsdIcon = new Texture("interface/texWsdIcon.png");
         texDmgIcon = new Texture("interface/texDmgIcon.png");
         texArmIcon = new Texture("interface/texArmIcon.png");
+
+        //makeSounds();
 
         makeItems();
         makeSpellTextures();
@@ -434,23 +445,18 @@ public class Assets {
         tmpExitBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Usuwa Tresure Boxa z Stage01
-                tresureBox.remove();
 
-                // Usuwa TresureBoxa z mapy
-                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                        if (gs.getMapa().getPola()[i][j].getTresureBox() != null) {
-                            if (gs.getMapa().getPola()[i][j].getTresureBox().equals(tresureBox)) {
-                                gs.getMapa().getPola()[i][j].setTresureBox(null);
-                            }
-                        }
-                    }
+                TresureBox.removeTresureBox(tresureBox, gs.getMapa());
+
+                if (gs.getNetworkStatus() == 2) {
+                    Network.RemoveTresureBox removeTresureBox = new Network.RemoveTresureBox();
+                    removeTresureBox.pozX = tresureBox.getPozX();
+                    removeTresureBox.pozY = tresureBox.getPozY();
+                    GameStatus.client.getCnt().sendTCP(removeTresureBox);
                 }
 
                 bohater.setOtwartaSkrzyniaZeSkarbem(false);
                 ukryjInfoWindow();
-
             }
         });
 
@@ -489,6 +495,10 @@ public class Assets {
         texSpeedPotion = new Texture("items/texSpeedPotion.png");
         texAttackPotion = new Texture("items/texAttackPotion.png");
         texDefencePotion = new Texture("items/texDefencePotion.png");
+    }
+
+    private void makeSounds() {
+        swordSound = Gdx.audio.newSound(Gdx.files.internal("sounds/sword_01.aif"));
     }
 
     private void makeSpellTextures() {

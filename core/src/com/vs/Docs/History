@@ -1,3 +1,8 @@
+version 0.0057 16042016
+DONE    1. Dodanie usuniecia mobów z HP < 0 i pustych skrzyń w grze sieciowej.
+DONE    2. Dodanie usunięcia bohaterów z HP < 0 w grze sieciowej.
+DONE    3. Dodanie do gry sieciowej zakładania itemków.
+
 version 0.0056 14042016
 DONE    1. Dodanie ataku bohatera na moba przez sieć.
 

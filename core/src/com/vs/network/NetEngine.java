@@ -1,11 +1,15 @@
 package com.vs.network;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.Item;
+import com.vs.eoh.ItemCreator;
 import com.vs.eoh.Mob;
 import com.vs.eoh.Ruch;
+import com.vs.eoh.TresureBox;
 
 /**
  * Created by v on 2016-04-14.
@@ -14,10 +18,12 @@ public class NetEngine {
 
     public GameStatus gs;
     public Assets a;
+    public Game g;
 
-    public NetEngine(GameStatus gs, Assets a) {
+    public NetEngine(GameStatus gs, Assets a, Game g) {
         this.gs = gs;
         this.a = a;
+        this.g = g;
     }
 
     /**
@@ -54,6 +60,10 @@ public class NetEngine {
         tmpBohater.teksturaZaktualizowana = false;
         tmpBohater.animujCiecieNetwork = true;
         tmpBohater.damageNetwork = dh.damage;
+
+        if (tmpBohater.getActualHp() < 0) {
+            tmpBohater.remove();
+        }
     }
 
     /**
@@ -73,5 +83,68 @@ public class NetEngine {
         tmpMob.setAktualneHp(tmpMob.getAktualneHp() - dm.damage);
         tmpMob.animujCiecieNetwork = true;
         tmpMob.damageNetwork = dm.damage;
+
+        gs.usunMartweMoby();
+    }
+
+    /**
+     * Usuwa z lokalizacji podanej przez serwer TresureBoxa
+     *
+     * @param rtb Referencja do obiektu klasy RemoveTresure Box
+     */
+    public void removeTresureBox(Network.RemoveTresureBox rtb) {
+        Gdx.app.log("Network.RemoveTresureBox", "Klient odebrał skrzynię ze skarbem do usunięcia");
+        Gdx.app.log("Pozycja X skrzyni", "" + rtb.pozX);
+        Gdx.app.log("Pozycja Y skrzyni", "" + rtb.pozY);
+
+        TresureBox tmpTresureBox;
+
+        tmpTresureBox = gs.getMapa().getPola()[rtb.pozX][rtb.pozY].getTresureBox();
+        TresureBox.removeTresureBox(tmpTresureBox, gs.getMapa());
+    }
+
+    /**
+     * Klasa odpowiada za dodanie itema do bohatera zadanego przez obiekt
+     *
+     * @param aie
+     */
+    public void addItemEquip(Network.AddItemEquip aie) {
+        /*
+        Części ciała:
+        0 - Głowa, 1 - Korpus, 2 - Prawa ręka, 3 - Lewa ręka, 4 - Nogi, 5 - stopy
+         */
+
+        Gdx.app.log("Network.AddItemEquip", "Klient odebrał Item");
+        Gdx.app.log("Numer bohatera", "" + aie.hero);
+        Gdx.app.log("Numer Gracza", "" + aie.player);
+        Gdx.app.log("Item", "" + aie.item.toString());
+        Gdx.app.log("Część ciała", "" + aie.czescCiala);
+
+
+        ItemCreator itemCreator = new ItemCreator(gs);
+
+        Bohater tmpHero;
+        tmpHero = gs.getGracze().get(aie.player).getBohaterowie().get(aie.hero);
+
+        switch (aie.czescCiala) {
+            case 0:
+                tmpHero.setItemGlowa(itemCreator.utworzItem(aie.item, a, g));
+                break;
+            case 1:
+                tmpHero.setItemKorpus(itemCreator.utworzItem(aie.item, a, g));
+                break;
+            case 2:
+                tmpHero.setItemPrawaReka(itemCreator.utworzItem(aie.item, a, g));
+                break;
+            case 3:
+                tmpHero.setItemLewaReka(itemCreator.utworzItem(aie.item, a, g));
+                break;
+            case 4:
+                tmpHero.setItemNogi(itemCreator.utworzItem(aie.item, a, g));
+                break;
+            case 5:
+                tmpHero.setItemStopy(itemCreator.utworzItem(aie.item, a, g));
+                break;
+        }
     }
 }

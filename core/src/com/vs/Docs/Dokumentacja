@@ -23,6 +23,8 @@ SRZYNIA ZE SKARBEM:
     Z ww. ArrayList losowo wybiera sie Item i dodaje do zawartosci skrzyni.
     Losowanie następuje poprzez podanie odpowiednich danych do konstruktora
     klasy TresureBox.
+    Usunięcie skrzyni ze skarbem odbywa się po niciśnięciu przycisku Exit w oknie TresureBoxa.
+    Wywołana zostaje metoda TresureBox.removeTresureBox().
 
 
 MAPA:

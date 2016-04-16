@@ -136,6 +136,18 @@ public class RunServer {
                     srv.sendToAllExceptTCP(connection.getID(), damageMob);
                     return;
                 }
+
+                if (object instanceof Network.RemoveTresureBox) {
+                    Network.RemoveTresureBox removeTresureBox = (Network.RemoveTresureBox) object;
+                    srv.sendToAllExceptTCP(connection.getID(), removeTresureBox);
+                    return;
+                }
+
+                if (object instanceof Network.AddItemEquip) {
+                    Network.AddItemEquip addItemEquip = (Network.AddItemEquip) object;
+                    srv.sendToAllExceptTCP(connection.getID(), addItemEquip);
+                    return;
+                }
             }
 
             public void disconnected(Connection c) {

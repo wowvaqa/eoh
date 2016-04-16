@@ -55,6 +55,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.glowa);
                 item.getSprite().setTexture(a.texLinenCap);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.LnianaCzapka);
                 break;
             case SkorzanaCzapka:
                 item.setNazwa("Skorzana czapka");
@@ -67,6 +68,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.glowa);
                 item.getSprite().setTexture(a.texLeatherCap);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.SkorzanaCzapka);
                 break;
 // KORPUS ======================================================================                
             case LnianaKoszula:
@@ -80,6 +82,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.korpus);
                 item.getSprite().setTexture(a.texLinenShirt);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.LnianaKoszula);
                 break;
             case SkorzanyNapiersnik:
                 item.setNazwa("Skorzany Napiersnik");
@@ -92,6 +95,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.korpus);
                 item.getSprite().setTexture(a.texLeatherShirt);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.SkorzanyNapiersnik);
                 break;
 // BROŃ RĘCE ===================================================================
             case Piesci:
@@ -116,6 +120,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.rece);
                 item.getSprite().setTexture(a.texStick);
                 item.setTypItemu(TypItemu.Bron);
+                item.setItemNazwa(DostepneItemki.Kij);
                 break;
             case Miecz:
                 item.setNazwa("Miecz");
@@ -128,6 +133,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.rece);
                 item.getSprite().setTexture(a.texSword);
                 item.setTypItemu(TypItemu.Bron);
+                item.setItemNazwa(DostepneItemki.Miecz);
                 break;
             case Tarcza:
                 item.setNazwa("Tarcza");
@@ -140,6 +146,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.rece);
                 item.getSprite().setTexture(a.texShield);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.Tarcza);
                 break;
             case Luk:
                 item.setNazwa("Luk");
@@ -153,6 +160,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.rece);
                 item.getSprite().setTexture(a.texBow);
                 item.setTypItemu(TypItemu.Bron);
+                item.setItemNazwa(DostepneItemki.Luk);
                 break;
             case DlugiLuk:
                 item.setNazwa("Dlugi Luk");
@@ -166,6 +174,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.rece);
                 item.getSprite().setTexture(a.texLongBow);
                 item.setTypItemu(TypItemu.Bron);
+                item.setItemNazwa(DostepneItemki.DlugiLuk);
                 break;
 // NOGI ========================================================================
             case Nogi:
@@ -190,6 +199,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.nogi);
                 item.getSprite().setTexture(a.texLinenTousers);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.LnianeSpodnie);
                 break;
             case SkorzaneSpodnie:
                 item.setNazwa("Skorzane Spodnie");
@@ -202,6 +212,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.nogi);
                 item.getSprite().setTexture(a.texLeatherTousers);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.SkorzaneSpodnie);
                 break;
 // OBUWIE ======================================================================
             case LnianeButy:
@@ -214,6 +225,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.stopy);
                 item.getSprite().setTexture(a.texLinenShoes);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.LnianeButy);
                 break;
             case SkorzaneButy:
                 item.setNazwa("Skorzane Buty");
@@ -225,6 +237,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.stopy);
                 item.getSprite().setTexture(a.texLeatherShoes);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.SkorzaneButy);
                 break;
             case WzmocnioneSkorzaneButy:
                 item.setNazwa("Wzmocnione Skorzane Buty");
@@ -237,6 +250,7 @@ public class ItemCreator {
                 item.setCzescCiala(CzesciCiala.stopy);
                 item.getSprite().setTexture(a.texHardLeatherShoes);
                 item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.WzmocnioneSkorzaneButy);
                 break;
 // INNE ========================================================================     
             case Gold:

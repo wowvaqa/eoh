@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.vs.network.NetEngine;
 import com.vs.screens.AwansScreen;
 import com.vs.screens.BohaterScreen;
+import com.vs.screens.GameOverScreen;
 import com.vs.screens.ItemScreen;
 import com.vs.screens.MainScreen;
 import com.vs.screens.MapScreen;
@@ -31,11 +32,12 @@ public class Eoh extends Game {
 	private MapEditor mapEditor;
 	private AwansScreen awansScreen;
 	private MultiplayerScreen multiplayerScreen;
+	private GameOverScreen gameOverScreen;
 
 	@Override
 	public void create () {
 		a = new Assets();
-		ne = new NetEngine(this.gs, this.a);
+		ne = new NetEngine(this.gs, this.a, this);
 		mainScreen = new MainScreen(this, a, gs);
 		newGameScreen = new NewGameScreen(this, this.a, this.gs);
 		optionsScreen = new OptionsScreen(this.gs, this.a);
@@ -46,6 +48,7 @@ public class Eoh extends Game {
 		mapEditor = new MapEditor(this, this.a);
 		awansScreen = new AwansScreen(this, this.a, this.gs);
 		multiplayerScreen = new MultiplayerScreen(this, this.a, this.gs, this.ne);
+		gameOverScreen = new GameOverScreen(ne);
 
 		Assets.testScreen = testScreen;
 		Assets.mainMenuScreen = mainScreen;
@@ -57,6 +60,7 @@ public class Eoh extends Game {
 		Assets.mapEditor = mapEditor;
 		Assets.awansScreen = awansScreen;
 		Assets.multiplayerScreen = multiplayerScreen;
+		Assets.gameOverScreen = gameOverScreen;
 
 		this.setScreen(mainScreen);
 	}

@@ -192,6 +192,7 @@ public class MapScreen implements Screen {
      * Przycisk Koniec Tury
      */
     private void koniecTuryClick() {
+        checkEndGame();
 
         if (!sprawdzCzyGraczPosiadaZamek()) {
             System.out.println("Sprawdzanie czy gracz posiada zamek.");
@@ -287,6 +288,12 @@ public class MapScreen implements Screen {
                 }
             }
             koniecTuryClick();
+        }
+    }
+
+    private void checkEndGame() {
+        if (gs.getGracze().size() < 2) {
+            g.setScreen(Assets.gameOverScreen);
         }
     }
 

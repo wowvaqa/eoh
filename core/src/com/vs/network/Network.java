@@ -1,7 +1,12 @@
 package com.vs.network;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.vs.enums.DostepneItemki;
+import com.vs.eoh.Assets;
+import com.vs.eoh.Item;
 
 /**
  * Created by v on 2016-04-09.
@@ -18,6 +23,9 @@ public class Network {
         kryo.register(Move.class);
         kryo.register(DamageHero.class);
         kryo.register(DamageMob.class);
+        kryo.register(RemoveTresureBox.class);
+        kryo.register(AddItemEquip.class);
+        kryo.register(DostepneItemki.class);
     }
 
     static public class RegisterName {
@@ -66,5 +74,26 @@ public class Network {
         public int pozXmoba;
         // Pozyca Y na mapie Moba.
         public int pozYmoba;
+    }
+
+    /**
+     * Klasa sieciowa odpowiadająca za przesłąnie inforamcji dot. usunięcia tresureBoxa.
+     */
+    static public class RemoveTresureBox {
+        // Pozycja X skrzyni ze skarbem.
+        public int pozX;
+        // Pozycja Y skrzyni ze skarbem.
+        public int pozY;
+    }
+
+    /**
+     * Klasa sieciowa odpowiadająca za przesłanie itema.
+     */
+    static public class AddItemEquip {
+        //public String nazwaItema;
+        public DostepneItemki item;
+        public int player;
+        public int hero;
+        public int czescCiala;
     }
 }

@@ -353,14 +353,19 @@ public class Ruch {
 
             if (sprawdzPrzeciwnika(locX, locY).getClass() == Mob.class) {
                 System.out.println("Atak na moba");
-                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater, gs.getMapa().getPola()[locX][locY].getMob());
+                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
+                        gs.getMapa().getPola()[locX][locY].getMob());
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Bohater.class) {
                 System.out.println("Atak na Bohatera");
-                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater, gs.getMapa().getPola()[locX][locY].getBohater());
+                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
+                        gs.getMapa().getPola()[locX][locY].getBohater());
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Castle.class) {
                 System.out.println("Atak na Zamek");
-                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater, gs.getMapa().getPola()[locX][locY].getCastle());
+                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
+                        gs.getMapa().getPola()[locX][locY].getCastle());
             }
+
+            //a.swordSound.play();
 
             this.bohater.getSprite().setTexture(bohater.getBohaterTex());
             this.bohater.setZaznaczony(false);

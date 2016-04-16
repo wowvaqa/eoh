@@ -256,6 +256,10 @@ public class Fight {
 
         bohaterBroniacy.aktualizujTeksture();
 
+        if (GameStatus.gs.getNetworkStatus() == 2) {
+            networkHeroDamage(dmg, bohaterBroniacy);
+        }
+
         return dmg;
     }
 

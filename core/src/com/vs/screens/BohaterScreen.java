@@ -27,6 +27,7 @@ import com.vs.eoh.GameStatus;
 import com.vs.eoh.Gracz;
 import com.vs.eoh.Item;
 import com.vs.eoh.SpellCreator;
+import com.vs.network.Network;
 
 import java.util.ArrayList;
 
@@ -74,7 +75,6 @@ public class BohaterScreen implements Screen {
         Item tmpItem;
 
         if (sprawdzBohatera().getEquipment().get(i).getTypItemu().equals(TypItemu.Mikstura)) {
-
             for (Effect dzialanieItema : sprawdzBohatera().getEquipment().get(i).dzialania) {
                 dzialanieItema.dzialanie(sprawdzBohatera().getEquipment().get(i).getItemNazwa(), gs.getBohaterZaznaczony());
             }
@@ -82,6 +82,17 @@ public class BohaterScreen implements Screen {
             sprawdzBohatera().getEquipment().remove(i);
 
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.glowa)) {
+
+            if (gs.getNetworkStatus() == 2) {
+                Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
+                addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
+                addItemEquip.czescCiala = 0;
+                addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
+                addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
+                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                GameStatus.client.getCnt().sendTCP(addItemEquip);
+            }
+
             tmpItem = sprawdzBohatera().getItemGlowa();
             sprawdzBohatera().setItemGlowa(sprawdzBohatera().getEquipment().get(i));
             sprawdzBohatera().getEquipment().remove(i);
@@ -89,6 +100,17 @@ public class BohaterScreen implements Screen {
                 sprawdzBohatera().getEquipment().add(tmpItem);
             }
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.korpus)) {
+
+            if (gs.getNetworkStatus() == 2) {
+                Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
+                addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
+                addItemEquip.czescCiala = 1;
+                addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
+                addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
+                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                GameStatus.client.getCnt().sendTCP(addItemEquip);
+            }
+
             tmpItem = sprawdzBohatera().getItemKorpus();
             sprawdzBohatera().setItemKorpus(sprawdzBohatera().getEquipment().get(i));
             sprawdzBohatera().getEquipment().remove(i);
@@ -96,6 +118,17 @@ public class BohaterScreen implements Screen {
                 sprawdzBohatera().getEquipment().add(tmpItem);
             }
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.nogi)) {
+
+            if (gs.getNetworkStatus() == 2) {
+                Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
+                addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
+                addItemEquip.czescCiala = 4;
+                addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
+                addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
+                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                GameStatus.client.getCnt().sendTCP(addItemEquip);
+            }
+
             tmpItem = sprawdzBohatera().getItemNogi();
             sprawdzBohatera().setItemNogi(sprawdzBohatera().getEquipment().get(i));
             sprawdzBohatera().getEquipment().remove(i);
@@ -103,6 +136,17 @@ public class BohaterScreen implements Screen {
                 sprawdzBohatera().getEquipment().add(tmpItem);
             }
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.stopy)) {
+
+            if (gs.getNetworkStatus() == 2) {
+                Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
+                addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
+                addItemEquip.czescCiala = 5;
+                addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
+                addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
+                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                GameStatus.client.getCnt().sendTCP(addItemEquip);
+            }
+
             tmpItem = sprawdzBohatera().getItemStopy();
             sprawdzBohatera().setItemStopy(sprawdzBohatera().getEquipment().get(i));
             sprawdzBohatera().getEquipment().remove(i);
@@ -119,6 +163,17 @@ public class BohaterScreen implements Screen {
                 protected void result(Object object) {
                     Item tmpItem2;
                     if (object.equals("lewa")) {
+
+                        if (gs.getNetworkStatus() == 2) {
+                            Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
+                            addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
+                            addItemEquip.czescCiala = 3;
+                            addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
+                            addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
+                                    gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                            GameStatus.client.getCnt().sendTCP(addItemEquip);
+                        }
+
                         System.out.println("Wcisnieto lewa");
                         tmpItem2 = sprawdzBohatera().getItemLewaReka();
                         sprawdzBohatera().setItemLewaReka(sprawdzBohatera().getEquipment().get(i));
@@ -129,6 +184,17 @@ public class BohaterScreen implements Screen {
                         tables.formatMainTable();
 
                     } else if (object.equals("prawa")) {
+
+                        if (gs.getNetworkStatus() == 2) {
+                            Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
+                            addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
+                            addItemEquip.czescCiala = 2;
+                            addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
+                            addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
+                                    gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                            GameStatus.client.getCnt().sendTCP(addItemEquip);
+                        }
+
                         System.out.println("Wcisnieto Prawa");
                         tmpItem2 = sprawdzBohatera().getItemPrawaReka();
                         sprawdzBohatera().setItemPrawaReka(sprawdzBohatera().getEquipment().get(i));

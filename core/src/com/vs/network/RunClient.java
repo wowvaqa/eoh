@@ -105,6 +105,14 @@ public class RunClient {
                     ne.damageMob((Network.DamageMob) object);
                     return;
                 }
+                if (object instanceof Network.RemoveTresureBox) {
+                    ne.removeTresureBox((Network.RemoveTresureBox) object);
+                    return;
+                }
+                if (object instanceof Network.AddItemEquip) {
+                    ne.addItemEquip((Network.AddItemEquip) object);
+                    return;
+                }
             }
         });
     }
