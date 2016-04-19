@@ -291,6 +291,12 @@ public class BohaterScreen implements Screen {
         public Table tableBackPack = new Table();
         public Table tableSpells = new Table();
 
+        /**
+         * Rozmiar ekranu:
+         * 1 - duży, 2 - mały.
+         */
+        private int screenSize = 1;
+
         public Tables() {
         }
 
@@ -298,6 +304,7 @@ public class BohaterScreen implements Screen {
          * Framtuje główną tablę
          */
         public void formatMainTable() {
+
             interfce.updateLabels();
             tableMain.clear();
             tableMain.setFillParent(true);
@@ -344,30 +351,30 @@ public class BohaterScreen implements Screen {
             tableStats.clear();
             tableStats.setDebug(true);
 
-            tableStats.add(new Label("Statystyki", a.skin)).pad(5).colspan(3);
+            tableStats.add(new Label("Statystyki", a.skin)).pad(3).colspan(3);
             tableStats.row();
 
-            tableStats.add(new Image(a.texAtcIcon)).size(50, 50).pad(5);
-            tableStats.add(new Image(a.texDefIcon)).size(50, 50).pad(5);
-            tableStats.add(new Image(a.texHpIcon)).size(50, 50).pad(5);
+            tableStats.add(new Image(a.texAtcIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(a.texDefIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(a.texHpIcon)).size(50, 50).pad(2);
             tableStats.row();
 
-            tableStats.add(interfce.lblAttack).size(150, 30).pad(5);
-            tableStats.add(interfce.lblDefence).size(150, 30).pad(5);
+            tableStats.add(interfce.lblAttack).size(150, 30).pad(2);
+            tableStats.add(interfce.lblDefence).size(150, 30).pad(2);
             tableStats.add(interfce.lblHp).size(150, 30).pad(5);
             tableStats.row();
 
-            tableStats.add(new Image(a.texSpdIcon)).size(50, 50).pad(5);
-            tableStats.add(new Image(a.texPwrIcon)).size(50, 50).pad(5);
-            tableStats.add(new Image(a.texWsdIcon)).size(50, 50).pad(5);
+            tableStats.add(new Image(a.texSpdIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(a.texPwrIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(a.texWsdIcon)).size(50, 50).pad(2);
             tableStats.row();
 
-            tableStats.add(interfce.lblSpeed).size(150, 30).pad(5);
-            tableStats.add(interfce.lblPower).size(150, 30).pad(5);
-            tableStats.add(interfce.lblWisdom).size(150, 30).pad(5);
+            tableStats.add(interfce.lblSpeed).size(150, 30).pad(2);
+            tableStats.add(interfce.lblPower).size(150, 30).pad(2);
+            tableStats.add(interfce.lblWisdom).size(150, 30).pad(2);
             tableStats.row();
 
-            tableStats.add(tableHero).colspan(3).pad(5);
+            tableStats.add(tableHero).colspan(3).pad(3);
         }
 
         /**
@@ -377,28 +384,28 @@ public class BohaterScreen implements Screen {
             tableEquip.clear();
             tableEquip.setDebug(true);
 
-            tableEquip.add(new Label("Ekwipunek", a.skin)).pad(5).colspan(3);
+            tableEquip.add(new Label("Ekwipunek", a.skin)).pad(3).colspan(3);
             tableEquip.row();
 
             tableEquip.add(interfce.lblHead).colspan(3);
             tableEquip.row();
-            tableEquip.add(sprawdzBohatera().getItemGlowa()).size(50, 50).colspan(3).pad(5);
+            tableEquip.add(sprawdzBohatera().getItemGlowa()).size(40, 40).colspan(3).pad(3);
             tableEquip.row();
             tableEquip.add(interfce.lblLHand);
             tableEquip.add(interfce.lblBody);
             tableEquip.add(interfce.lblRHand);
             tableEquip.row();
-            tableEquip.add(sprawdzBohatera().getItemLewaReka()).size(50, 50).pad(5);
-            tableEquip.add(sprawdzBohatera().getItemKorpus()).size(50, 50).pad(5);
-            tableEquip.add(sprawdzBohatera().getItemPrawaReka()).size(50, 50).pad(5);
+            tableEquip.add(sprawdzBohatera().getItemLewaReka()).size(40, 40).pad(3);
+            tableEquip.add(sprawdzBohatera().getItemKorpus()).size(40, 40).pad(3);
+            tableEquip.add(sprawdzBohatera().getItemPrawaReka()).size(40, 40).pad(3);
             tableEquip.row();
             tableEquip.add(interfce.lblLegs).colspan(3);
             tableEquip.row();
-            tableEquip.add(sprawdzBohatera().getItemNogi()).size(50, 50).colspan(3).pad(5);
+            tableEquip.add(sprawdzBohatera().getItemNogi()).size(40, 40).colspan(3).pad(3);
             tableEquip.row();
             tableEquip.add(interfce.lblFoots).colspan(3);
             tableEquip.row();
-            tableEquip.add(sprawdzBohatera().getItemStopy()).size(50, 50).colspan(3).pad(5);
+            tableEquip.add(sprawdzBohatera().getItemStopy()).size(40, 40).colspan(3).pad(3);
         }
 
         /**
@@ -418,7 +425,7 @@ public class BohaterScreen implements Screen {
             tableBackPack.row();
 
             for (int i = 0; i < sprawdzBohatera().getEquipment().size(); i++) {
-                tableBackPack.add(sprawdzBohatera().getEquipment().get(i)).size(50).pad(2);
+                tableBackPack.add(sprawdzBohatera().getEquipment().get(i)).size(40).pad(2);
                 tmpButtonRemove.add(new TextButton("Usun" + i, a.skin));
                 tmpButtonSetUp.add(new TextButton("Zaloz" + i, a.skin));
 
@@ -484,7 +491,7 @@ public class BohaterScreen implements Screen {
             tableSpells.clear();
             tableSpells.setDebug(true);
 
-            tableSpells.add(new Label("Czary", a.skin)).pad(5).colspan(10);
+            tableSpells.add(new Label("Czary", a.skin)).pad(2).colspan(10);
             tableSpells.row();
 
             for (int i = 0; i < sprawdzBohatera().getListOfSpells().size(); i++) {
@@ -513,7 +520,7 @@ public class BohaterScreen implements Screen {
 
                     }
                 });
-                tableSpells.add(dA).pad(2);
+                tableSpells.add(dA).pad(2).size(40, 40);
             }
         }
     }

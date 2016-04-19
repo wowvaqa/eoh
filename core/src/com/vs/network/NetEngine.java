@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
-import com.vs.eoh.Item;
 import com.vs.eoh.ItemCreator;
+import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
 import com.vs.eoh.Ruch;
 import com.vs.eoh.TresureBox;
@@ -16,6 +16,12 @@ import com.vs.eoh.TresureBox;
  */
 public class NetEngine {
 
+    // Liczba graczy którzy zakończyli turę.
+    public static int playersEndTurn = 0;
+    public static int amountOfMultiPlayers = 0;
+    // Którym graczem Multi jest gracz.
+    public static int playerNumber = 0;
+    public static boolean gameStarted = false;
     public GameStatus gs;
     public Assets a;
     public Game g;
@@ -146,5 +152,37 @@ public class NetEngine {
                 tmpHero.setItemStopy(itemCreator.utworzItem(aie.item, a, g));
                 break;
         }
+    }
+
+    /**
+     * @param endOfTurn
+     */
+    public void endOfTurn(Network.EndOfTurn endOfTurn) {
+        NetEngine.playersEndTurn += 1;
+    }
+
+    /**
+     * Ustala którym graczem w grze jest połączony do serwera klient.
+     *
+     * @param startMultiGame
+     */
+    public void startMultiGame(Network.StartMultiGame startMultiGame) {
+        if (!NetEngine.gameStarted) {
+            NetEngine.amountOfMultiPlayers += 1;
+            Gdx.app.log("Odebrano kolejnego gracza do rozgrywki", "Ilość graczy: " + NetEngine.amountOfMultiPlayers);
+            NetEngine.playerNumber = NetEngine.amountOfMultiPlayers;
+        }
+    }
+
+    /**
+     * Odbiera mapę od serwera i konwertuje na obiekt klasy Mapa
+     *
+     * @param networkMap
+     */
+    public void networkMap(Network.NetworkMap networkMap) {
+        Gdx.app.log("Odebrano mape", "");
+        Mapa mapa = new Mapa(networkMap.amountX, networkMap.amountY);
+        Mapa.convertTokMap(mapa, networkMap);
+        gs.setMapa(mapa);
     }
 }

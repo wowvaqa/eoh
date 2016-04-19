@@ -467,7 +467,7 @@ public class NewGameScreen implements Screen {
      */
     private Window getLoadMapWindow() {
         final Window window = new Window("Wybierz Mape", a.skin);
-        window.setSize(800, 600);
+        window.setSize(600, 400);
         window.align(Align.center);
 
         final List listOfMap = new List(a.skin);
@@ -499,7 +499,7 @@ public class NewGameScreen implements Screen {
         });
 
 
-        window.add(listOfMap).size(300, 400);
+        window.add(listOfMap).size(300, 200);
         window.row();
         window.add(btnExitWindow).size(100, 50).spaceRight(5);
         window.add(btnWybierzWindow).size(100, 50);

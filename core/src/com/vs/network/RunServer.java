@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.vs.enums.TypyTerenu;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.Mapa;
 import com.vs.screens.MultiplayerScreen;
+import com.vs.testing.MapEditor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +72,27 @@ public class RunServer {
                     GameStatus.mS.interfce.lstLogList.getItems().add(connection.getEndPoint().toString());
                     updateNames();
                     Gdx.app.log("Serwer Listener: Network.RegisterName", name);
+
+                    //Wysłanie mapy do nowo połączonego klienta
+
+                    Mapa mapa = null;
+
+                    try {
+                        mapa = MapEditor.readMap("map01.dat");
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    Network.NetworkMap networkMap = new Network.NetworkMap(
+                            mapa.getIloscPolX(), mapa.getIloscPolY());
+
+                    Mapa.convertToNetworkMap(mapa, networkMap);
+
+                    srv.sendToTCP(connection.getID(), networkMap);
+
                     return;
                 }
 
@@ -148,6 +172,16 @@ public class RunServer {
                     srv.sendToAllExceptTCP(connection.getID(), addItemEquip);
                     return;
                 }
+                if (object instanceof Network.EndOfTurn) {
+                    Network.EndOfTurn endOfTurn = (Network.EndOfTurn) object;
+                    srv.sendToAllExceptTCP(connection.getID(), endOfTurn);
+                    return;
+                }
+                if (object instanceof Network.StartMultiGame) {
+                    Network.StartMultiGame startMultiGame = (Network.StartMultiGame) object;
+                    srv.sendToAllExceptTCP(connection.getID(), startMultiGame);
+                    return;
+                }
             }
 
             public void disconnected(Connection c) {
@@ -161,6 +195,7 @@ public class RunServer {
             }
         });
     }
+
 
     public void updateNames() {
         Connection[] connections = srv.getConnections();

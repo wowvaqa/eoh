@@ -39,9 +39,13 @@ import com.vs.eoh.Ruch;
 import com.vs.eoh.SpellActor;
 import com.vs.eoh.SpellCreator;
 import com.vs.eoh.TresureBox;
+import com.vs.network.NetEngine;
+import com.vs.network.Network;
 
 import java.util.ArrayList;
 import java.util.EventListener;
+
+import sun.nio.ch.Net;
 
 public class MapScreen implements Screen {
 
@@ -54,8 +58,6 @@ public class MapScreen implements Screen {
     private final Stage stage02 = new Stage();  // zarządza przyciskami interfejsu
     private final Stage stage03 = new Stage();  // zarządza czarami
     private final TextButton btnExit;
-    private final TextButton btnKoniecTury;
-    private final TextButton btnKupBohatera;
     //private final ArrayList<DefaultActor> teren = new ArrayList<DefaultActor>();
     private final ArrayList<Image> teren = new ArrayList<Image>();
     // labele informujące o statystykach klikniętego bohatera
@@ -64,6 +66,8 @@ public class MapScreen implements Screen {
     // ikona gracza który aktualnie posiada swoją kolej
     private final DefaultActor ikonaGracza;
     private final DefaultActor ikonaGold;
+    public TextButton btnKoniecTury;
+    public TextButton btnKupBohatera;
     Tables tables = new Tables();
     private InputMultiplexer inputMultiPlexer = new InputMultiplexer();
     private MyGestureListener myGL = null;
@@ -189,11 +193,20 @@ public class MapScreen implements Screen {
 //    }
 
     /**
-     * Przycisk Koniec Tury
+     * Koniec Tury
      */
     private void koniecTuryClick() {
-        checkEndGame();
+        if (gs.getNetworkStatus() == 2) {
+            koniecTuryMuli();
+        } else {
+            koniecTurySingle();
+        }
+    }
 
+    /**
+     * Koniec tury w trybie Single Player
+     */
+    private void koniecTurySingle() {
         if (!sprawdzCzyGraczPosiadaZamek()) {
             System.out.println("Sprawdzanie czy gracz posiada zamek.");
             // Jeżeli gracz nie będzie posiadał zamku wtedy zmianie ulegnie jego
@@ -254,6 +267,71 @@ public class MapScreen implements Screen {
     }
 
     /**
+     * Koniec tury w trybie multiplayer
+     */
+    public void koniecTuryMuli() {
+        NetEngine.playersEndTurn += 1;
+
+        Network.EndOfTurn endOfTurn = new Network.EndOfTurn();
+        GameStatus.client.getCnt().sendTCP(endOfTurn);
+
+        // Sprawdzenie czy wszyscy gracze zakończyli turę
+        if (NetEngine.playersEndTurn >= gs.getGracze().size()) {
+            Gdx.app.log("Koniec tury mulit", "ilość graczy: " + NetEngine.playersEndTurn);
+            NetEngine.playersEndTurn = 0;
+
+            wylaczAktywnychBohaterow();
+            sprawdzCzyKoniecTuryOgolnej();
+            System.out.println("Koniec Tury");
+            // Ustala turę następnego gracza
+            gs.setTuraGracza(NetEngine.playerNumber);
+            lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
+
+            // Przywrócenie wszystkich punktów ruchu dla bohaterów oraz aktualizacja czasu działania efektów
+            // Regenereacja many
+            for (Bohater i : gs.getGracze().get(gs.getTuraGracza()).getBohaterowie()) {
+                i.setPozostaloRuchow(i.getSzybkosc()
+                        + /**
+                 * Fight.getSzybkoscEkwipunkuBohatera(i) + *
+                 */
+                        i.getSzybkoscEfekt());
+                i.aktualizujDzialanieEfektow();
+                i.czyscEfektyTymczasowe();
+
+                i.setActualMana(i.getActualMana() + i.getManaRegeneration());
+                if (i.getActualMana() > i.getMana()) {
+                    i.setActualMana(i.getMana());
+                }
+            }
+
+            //  Aktualizuje działanie efektów czarów moba.
+            for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+                for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+                    if (gs.getMapa().getPola()[i][j].getMob() != null) {
+                        gs.getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
+                    }
+                }
+            }
+
+            usunBohaterowGraczyGO();
+
+            przesunKamereNadBohatera();
+
+            // zmiana ikony gracza na górnej belce
+            this.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
+
+            Ruch.wylaczIkonyEfektow();
+
+            btnKoniecTury.setVisible(true);
+            btnKupBohatera.setVisible(true);
+        } else {
+            Gdx.app.log("Oczekiwanie na pozostałych graczy", "ilość graczy: " + NetEngine.playersEndTurn);
+            btnKoniecTury.setVisible(false);
+            btnKupBohatera.setVisible(false);
+        }
+    }
+
+    /**
      * Przesuwa kamerę nad bohatera
      */
     public void przesunKamereNadBohatera() {
@@ -288,12 +366,6 @@ public class MapScreen implements Screen {
                 }
             }
             koniecTuryClick();
-        }
-    }
-
-    private void checkEndGame() {
-        if (gs.getGracze().size() < 2) {
-            g.setScreen(Assets.gameOverScreen);
         }
     }
 
@@ -335,6 +407,9 @@ public class MapScreen implements Screen {
 
     // Działania wywołane po naciśnięciu przycisku Exit
     private void exitClick() {
+        NetEngine.gameStarted = false;
+        NetEngine.amountOfMultiPlayers = 0;
+        NetEngine.playerNumber = 0;
         g.setScreen(Assets.mainMenuScreen);
         gs.setActualScreen(0);
     }
@@ -719,6 +794,10 @@ public class MapScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        if (NetEngine.playersEndTurn == gs.getGracze().size()) {
+            koniecTuryMuli();
+        }
 
         Gdx.input.setInputProcessor(inputMultiPlexer);
 

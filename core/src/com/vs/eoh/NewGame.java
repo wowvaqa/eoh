@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
+import com.vs.network.NetEngine;
+import com.vs.network.Network;
 import com.vs.screens.MapScreen;
 
 import java.io.IOException;
@@ -17,18 +19,15 @@ import java.io.IOException;
  */
 public class NewGame {
 
+    private static final Assets a = new Assets();
     static public KlasyPostaci klasaPostaciGracz01 = KlasyPostaci.Wojownik;
     static public KlasyPostaci klasaPostaciGracz02 = KlasyPostaci.Wojownik;
     static public KlasyPostaci klasaPostaciGracz03 = KlasyPostaci.Wojownik;
     static public KlasyPostaci klasaPostaciGracz04 = KlasyPostaci.Wojownik;
-
     static public Pixmap pixmapRed = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
     static public Pixmap pixmapBlue = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
     static public Pixmap pixmapGreen = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
     static public Pixmap pixmapYellow = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
-
-    private static final Assets a = new Assets();
-
     /**
      * Określa ilość graczy
      */
@@ -313,7 +312,10 @@ public class NewGame {
      */
     static public void zakonczGenerowanieNowejGry(Game g, GameStatus gs, Assets a) throws IOException, ClassNotFoundException {
 
-        gs.wczytajMape();
+        if (gs.getNetworkStatus() != 2) {
+            gs.wczytajMape();
+        }
+
         gs.setTuraGracza(0);
 
         //gs.setActualScreen(1);
@@ -384,6 +386,13 @@ public class NewGame {
         }
 
         podepnijStatystkiBohaterow(gs);
+
+        if (gs.getNetworkStatus() == 2) {
+            NetEngine.gameStarted = true;
+            Network.StartMultiGame startMultiGame = new Network.StartMultiGame();
+            GameStatus.client.getCnt().sendTCP(startMultiGame);
+            gs.setTuraGracza(NetEngine.playerNumber);
+        }
 
         Assets.mapScreen = new MapScreen(g, a, gs);
     }

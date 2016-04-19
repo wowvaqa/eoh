@@ -3,13 +3,13 @@ package com.vs.eoh;
 // Klasa Mapa przechowuje obiekty Klasy Pole
 import java.io.Serializable;
 import com.vs.enums.TypyTerenu;
+import com.vs.network.Network;
 
 public final class Mapa implements Serializable {
 
+    public Pole[][] pola;
     private int iloscPolX = 10;
     private int iloscPolY = 10;
-
-    public Pole[][] pola;
 
     /**
      * Tworzy mapę domyślną 10x10 pól
@@ -28,24 +28,6 @@ public final class Mapa implements Serializable {
         this.iloscPolX = iloscPolX;
         this.iloscPolY = iloscPolY;
         this.generujMape(this.iloscPolX, this.iloscPolY);
-    }
-
-    /**
-     * Generuje mapę z zadanych ilości pól.
-     *
-     * @param iloscPolX
-     * @param iloscPolY
-     */
-    public void generujMape(int iloscPolX, int iloscPolY) {
-        this.iloscPolX = iloscPolX;
-        this.iloscPolY = iloscPolY;
-        pola = new Pole[iloscPolX][iloscPolY];
-
-        for (int i = 0; i < this.iloscPolX; i++) {
-            for (int j = 0; j < this.iloscPolY; j++) {
-                pola[i][j] = new Pole();
-            }
-        }
     }
 
     /**
@@ -68,7 +50,7 @@ public final class Mapa implements Serializable {
             } else {
                 return "riverNS";
             }
-        } // Lewy górny róg mapy  
+        } // Lewy górny róg mapy
         else if ("LG".equals(getPartOfMap(x, y, mapa))) {
             if (tT == TypyTerenu.Drzewo) {
                 return "forestC";
@@ -346,8 +328,8 @@ public final class Mapa implements Serializable {
     /**
      * Zwraca Stringa informujacego w jakiej części mapy znajduje się pole.
      *
-     * @param x Współżędna X pola na mapie.
-     * @param y Współżędna Y pola na mapie.
+     * @param x    Współżędna X pola na mapie.
+     * @param y    Współżędna Y pola na mapie.
      * @param mapa Referencja do obiektu mapy.
      * @return D - dolna krawędź mapy. G - Górna krawędź mapy. S - Środek mapy.
      * L - Lewa krawędź mapy. P - Prawa krawędź mapy
@@ -379,6 +361,114 @@ public final class Mapa implements Serializable {
             return "G";
         }
         return "C";
+    }
+
+    /**
+     * Konwertuje Mapę do networkMapy
+     *
+     * @param mapa   Referencja do obiektu mapy
+     * @param netMap Referencja do obiketu Network.Map
+     */
+    public static void convertToNetworkMap(Mapa mapa, Network.NetworkMap netMap) {
+        for (int i = 0; i < mapa.getIloscPolX(); i++) {
+            for (int j = 0; j < mapa.getIloscPolY(); j++) {
+
+                if (mapa.getPola()[i][j].isLokacjaStartowaP1()) {
+                    netMap.networkPole[i][j].isPlayer1Start = true;
+                } else if (mapa.getPola()[i][j].isLokacjaStartowaP2()) {
+                    netMap.networkPole[i][j].isPlayer2Start = true;
+                } else if (mapa.getPola()[i][j].isLokacjaStartowaP3()) {
+                    netMap.networkPole[i][j].isPlayer3Start = true;
+                } else if (mapa.getPola()[i][j].isLokacjaStartowaP4()) {
+                    netMap.networkPole[i][j].isPlayer4Start = true;
+                }
+
+                if (mapa.getPola()[i][j].isMob1Location()) {
+                    netMap.networkPole[i][j].isMobLevel1 = true;
+                } else if (mapa.getPola()[i][j].isMob2Location()) {
+                    netMap.networkPole[i][j].isMobLevel2 = true;
+                }
+
+                if (mapa.getPola()[i][j].isTresureBox1Location()) {
+                    netMap.networkPole[i][j].isTresureBoxLevel1 = true;
+                } else if (mapa.getPola()[i][j].isTresureBox2Location()) {
+                    netMap.networkPole[i][j].isTresureBoxLevel2 = true;
+                }
+
+                if (mapa.getPola()[i][j].getTypTerenu().equals(TypyTerenu.Trawa)) {
+                    netMap.networkPole[i][j].isTerrainType1 = true;
+                } else if (mapa.getPola()[i][j].getTypTerenu().equals(TypyTerenu.Gory)) {
+                    netMap.networkPole[i][j].isTerrainType2 = true;
+                } else if (mapa.getPola()[i][j].getTypTerenu().equals(TypyTerenu.Drzewo)) {
+                    netMap.networkPole[i][j].isTerrainType3 = true;
+                } else if (mapa.getPola()[i][j].getTypTerenu().equals(TypyTerenu.Rzeka)) {
+                    netMap.networkPole[i][j].isTerrainType4 = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Konwertuje z NetworkMap do Map
+     *
+     * @param mapa
+     * @param netMap
+     */
+    public static void convertTokMap(Mapa mapa, Network.NetworkMap netMap) {
+        for (int i = 0; i < netMap.amountX; i++) {
+            for (int j = 0; j < netMap.amountY; j++) {
+
+                if (netMap.networkPole[i][j].isPlayer1Start) {
+                    mapa.getPola()[i][j].setLokacjaStartowaP1(true);
+                } else if (netMap.networkPole[i][j].isPlayer2Start) {
+                    mapa.getPola()[i][j].setLokacjaStartowaP2(true);
+                } else if (netMap.networkPole[i][j].isPlayer3Start) {
+                    mapa.getPola()[i][j].setLokacjaStartowaP3(true);
+                } else if (netMap.networkPole[i][j].isPlayer4Start) {
+                    mapa.getPola()[i][j].setLokacjaStartowaP4(true);
+                }
+
+                if (netMap.networkPole[i][j].isMobLevel1) {
+                    mapa.getPola()[i][j].setMob1Location(true);
+                } else if (netMap.networkPole[i][j].isMobLevel2) {
+                    mapa.getPola()[i][j].setMob2Location(true);
+                }
+
+                if (netMap.networkPole[i][j].isTresureBoxLevel1) {
+                    mapa.getPola()[i][j].setTresureBox1Location(true);
+                } else if (netMap.networkPole[i][j].isTresureBoxLevel2) {
+                    mapa.getPola()[i][j].setTresureBox2Location(true);
+                }
+
+                if (netMap.networkPole[i][j].isTerrainType1) {
+                    mapa.getPola()[i][j].setTypTerenu(TypyTerenu.Trawa);
+                } else if (netMap.networkPole[i][j].isTerrainType2) {
+                    mapa.getPola()[i][j].setTypTerenu(TypyTerenu.Gory);
+                } else if (netMap.networkPole[i][j].isTerrainType3) {
+                    mapa.getPola()[i][j].setTypTerenu(TypyTerenu.Drzewo);
+                } else if (netMap.networkPole[i][j].isTerrainType4) {
+                    mapa.getPola()[i][j].setTypTerenu(TypyTerenu.Rzeka);
+                }
+            }
+        }
+    }
+
+    /**
+     * Generuje mapę z zadanych ilości pól.
+     *
+     * @param iloscPolX
+     * @param iloscPolY
+     */
+    public void generujMape(int iloscPolX, int iloscPolY) {
+        this.iloscPolX = iloscPolX;
+        this.iloscPolY = iloscPolY;
+        pola = new Pole[iloscPolX][iloscPolY];
+
+        for (int i = 0; i < this.iloscPolX; i++) {
+            for (int j = 0; j < this.iloscPolY; j++) {
+                pola[i][j] = new Pole();
+            }
+        }
     }
 
     //SETTERS AND GETTERS

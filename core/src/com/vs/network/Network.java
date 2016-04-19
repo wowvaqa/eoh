@@ -8,6 +8,8 @@ import com.vs.enums.DostepneItemki;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Item;
 
+import java.io.Serializable;
+
 /**
  * Created by v on 2016-04-09.
  */
@@ -26,6 +28,12 @@ public class Network {
         kryo.register(RemoveTresureBox.class);
         kryo.register(AddItemEquip.class);
         kryo.register(DostepneItemki.class);
+        kryo.register(EndOfTurn.class);
+        kryo.register(StartMultiGame.class);
+        kryo.register(NetworkMap.class);
+        kryo.register(NetworkPole.class);
+        kryo.register(NetworkPole[][].class);
+        kryo.register(NetworkPole[].class);
     }
 
     static public class RegisterName {
@@ -95,5 +103,71 @@ public class Network {
         public int player;
         public int hero;
         public int czescCiala;
+    }
+
+    /**
+     * Klasa oznajmia że nastąpił koniec tury kolejnego gracza.
+     */
+    static public class EndOfTurn {
+        /**
+         * Klasa jest pusta, odebranie klasy od serwera oznacza że kolejny z graczy zakończył
+         * turę.
+         */
+    }
+
+    static public class StartMultiGame {
+        /**
+         * Klasa jest pusta, odebranie obiektu klasy przez klienta zwiększa ilość graczy
+         * multi.
+         */
+    }
+
+    /**
+     * Klasa definiuje Mape do przesyłu przez sieć.
+     */
+    public static class NetworkMap implements Serializable {
+        public int amountX;
+        public int amountY;
+        public String nazwa = "NoName";
+        public NetworkPole[][] networkPole;
+
+        public NetworkMap(int amountOfX, int amountOfY) {
+            networkPole = new NetworkPole[amountOfX][amountOfY];
+            for (int i = 0; i < amountOfX; i++) {
+                for (int j = 0; j < amountOfY; j++) {
+                    this.networkPole[i][j] = new NetworkPole();
+                }
+            }
+            this.amountX = amountOfX;
+            this.amountY = amountOfY;
+        }
+
+        public NetworkMap() {
+            networkPole = new NetworkPole[0][0];
+        }
+    }
+
+    /**
+     * Klasa definiuje Pole do przesyłu przez sieć
+     */
+    public static class NetworkPole implements Serializable {
+        public boolean isPlayer1Start = false;
+        public boolean isPlayer2Start = false;
+        public boolean isPlayer3Start = false;
+        public boolean isPlayer4Start = false;
+
+        public boolean isMobLevel1 = false;
+        public boolean isMobLevel2 = false;
+
+        public boolean isTresureBoxLevel1 = false;
+        public boolean isTresureBoxLevel2 = false;
+
+        /*
+        1 - TRAWA, 2 - GÓRY, 3 - DRZEWO, 4 - RZEKA
+         */
+        public boolean isTerrainType1 = false;
+        public boolean isTerrainType2 = false;
+        public boolean isTerrainType3 = false;
+        public boolean isTerrainType4 = false;
     }
 }

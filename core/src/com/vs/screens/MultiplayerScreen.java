@@ -170,8 +170,8 @@ public class MultiplayerScreen implements Screen {
 
             tableChat.add(new Label("Chat", a.skin)).pad(5).colspan(2);
             tableChat.row();
-            tableChat.add(interfce.lstChatPlayers).pad(5).size(200, 200);
-            tableChat.add(interfce.lstChatList).pad(5).size(400, 200);
+            tableChat.add(interfce.lstChatPlayers).pad(5).size(100, 200);
+            tableChat.add(interfce.lstChatList).pad(5).size(200, 200);
             tableChat.row();
             tableChat.add(interfce.tfChatMessage).pad(5).colspan(2);
             tableChat.row();
@@ -366,7 +366,8 @@ public class MultiplayerScreen implements Screen {
                             name = "wowvaqa";
                         }
                         name.trim();
-                        RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777, ne);
+                        //RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777, ne);
+                        RunClient rc = new RunClient(name, interfce.tfIpAdress.getText(), 54556, 54777, ne);
                         rc.startClient();
                         gs.setNetworkStatus(2);
                         tables.formatMainTable();

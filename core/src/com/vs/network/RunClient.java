@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.Mapa;
 import com.vs.eoh.Ruch;
 
 import java.io.IOException;
@@ -111,6 +112,19 @@ public class RunClient {
                 }
                 if (object instanceof Network.AddItemEquip) {
                     ne.addItemEquip((Network.AddItemEquip) object);
+                    return;
+                }
+                if (object instanceof Network.EndOfTurn) {
+                    ne.endOfTurn((Network.EndOfTurn) object);
+                    return;
+                }
+                if (object instanceof Network.StartMultiGame) {
+                    ne.startMultiGame((Network.StartMultiGame) object);
+                    return;
+                }
+
+                if (object instanceof Network.NetworkMap) {
+                    ne.networkMap((Network.NetworkMap) object);
                     return;
                 }
             }
