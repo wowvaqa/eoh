@@ -5,17 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -43,12 +39,10 @@ import com.vs.network.NetEngine;
 import com.vs.network.Network;
 
 import java.util.ArrayList;
-import java.util.EventListener;
-
-import sun.nio.ch.Net;
 
 public class MapScreen implements Screen {
 
+    public static MapScreen mapScreen;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
     private final Assets a;
@@ -57,121 +51,36 @@ public class MapScreen implements Screen {
     private final Stage stage01 = new Stage();  // wyświetla mapę i playera
     private final Stage stage02 = new Stage();  // zarządza przyciskami interfejsu
     private final Stage stage03 = new Stage();  // zarządza czarami
-    private final TextButton btnExit;
-    //private final ArrayList<DefaultActor> teren = new ArrayList<DefaultActor>();
     private final ArrayList<Image> teren = new ArrayList<Image>();
-    // labele informujące o statystykach klikniętego bohatera
-    private final Label lblGold;
-    private final Label lblTuraGracza;
-    // ikona gracza który aktualnie posiada swoją kolej
-    private final DefaultActor ikonaGracza;
-    private final DefaultActor ikonaGold;
-    public TextButton btnKoniecTury;
-    public TextButton btnKupBohatera;
-    Tables tables = new Tables();
+    public Tables tables = new Tables();
+    public Interface interfce;
     private InputMultiplexer inputMultiPlexer = new InputMultiplexer();
     private MyGestureListener myGL = null;
     private MyGestureDetector myGD = null;
-    private DefaultActor gornaBelka;
-    // *** PANEL ZAKLĘĆ
-    //private boolean isSpellPanelActive = false;
-    // *** KONIEC PANEL ZAKLĘĆ
-    // *** PANEL BOHATERA
-    private Label pbLblHp;
-    private Label pbLblMove;
-    private Label pbLblMana;
-    private Label pbLblExp;
-    private Label pbLblEfekty;
-    private TextButton pbBtnBohaterScreen;
-    private TextButton pbBtnAwansujBohatera;
-    private TextButton pbBtnSpellBook;
-    // *** KONIEC PANELU BOHATERA
 
     /**
-     * Przechowuje efekty które oddziaływują na bohatera
+     * Klasa definiująca wygląd, zachowanie Mapy na której odbywa się gra
      *
-     * @param g
-     * @param a
-     * @param gs
+     * @param g  Referencja do obiektu klasy Game
+     * @param a  Referencja do obiektu klasy Assets
+     * @param gs Referecja do obiektu klasy Game Status
      */
     public MapScreen(final Game g, final Assets a, final GameStatus gs) {
         this.a = a;
         this.gs = gs;
         this.g = g;
 
+        interfce = new Interface();
+
         myGL = new MyGestureListener(stage01);
         myGD = new MyGestureDetector(myGL);
-
-        utworzPanelBohatera();
-        utworzInterfejs();
-
-        ikonaGracza = new DefaultActor(a.btnAttackTex, 0, 0);
-        ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
-        ikonaGracza.setPosition(110, Gdx.graphics.getHeight() - 23);
-
-        ikonaGold = new DefaultActor(a.texGold, 165, Gdx.graphics.getHeight() - 25);
-        ikonaGold.setSize(25, 25);
 
         Assets.stage01MapScreen = this.stage01;
         Assets.stage02MapScreen = this.stage02;
         Assets.stage03MapScreen = this.stage03;
 
-        btnKupBohatera = new TextButton("Kup bohatera", a.skin);
-        btnKupBohatera.setSize(100, 50);
-        btnKupBohatera.setPosition(Gdx.graphics.getWidth() - btnKupBohatera.getWidth() - 25, 175);
-        btnKupBohatera.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Dodanie nowego bohatera.");
-                if (gs.getGracze().get(gs.getTuraGracza()).getGold() < 10) {
-                    System.out.println("Za mało złota!");
-                    DialogScreen dialogScreen = new DialogScreen("ERROR", a.skin, "Za malo zlota", stage01);
-                } else {
-                    g.setScreen(Assets.newBohaterScreen);
-                }
-            }
-        });
-
-        // Dodaje przycisk wyjścia do planszy 02.
-        btnExit = new TextButton("EXIT", a.skin);
-        btnExit.setSize(100, 50);
-        btnExit.setPosition(Gdx.graphics.getWidth() - btnExit.getWidth() - 25, 25);
-        btnExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                exitClick();
-            }
-        });
-
-        // Przycisk Koniec Tury
-        // 1. Zmienia turę gracza na następnego gracza
-        // 2. Sprawdza czy rozmiar tablicy graczy nie został przekroczony
-        // jeżeli TRUE ustawia turę gracza na pierwszego z tablicy graczy
-        // 3. Wyrzuca do labela aktualną turę gracza.
-        btnKoniecTury = new TextButton("Koniec Tury", a.skin);
-        btnKoniecTury.setSize(100, 50);
-        //btnKoniecTury.setPosition(Gdx.graphics.getWidth() - btnKoniecTury.getWidth() - 25, 125);
-        btnKoniecTury.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                koniecTuryClick();
-            }
-        });
-
-        // Dodanie etykiet prezentujących statsy graczy
-        lblTuraGracza = new Label("Tura gracz: " + gs.getTuraGracza(), a.skin);
-        lblTuraGracza.setPosition(10, Gdx.graphics.getHeight() - 25);
-//        lblPozostaloRuchow = new Label("Pozostalo ruchow: ", a.skin);
-//        lblPozostaloRuchow.setPosition(150, Gdx.graphics.getHeight() - 25);
-
-        lblGold = new Label("" + gs.getGracze().get(gs.getTuraGracza()).getGold(), a.skin);
-        lblGold.setPosition(200, Gdx.graphics.getHeight() - 25);
-
-        dodajDoStage02();
-
         generujPlansze();
         generujGraczy();
-
         dodajDoStage01();
 
         gs.czyUtworzonoMape = true;
@@ -181,16 +90,12 @@ public class MapScreen implements Screen {
 
         c = new OrthographicCamera(w, h);
         viewPort = new FitViewport(w, h, c);
+
+        stage03.addActor(tables.tableStage03Main);
+        stage02.addActor(tables.tableInterface);
+
+        mapScreen = this;
     }
-//
-//    /**
-//     * Aktualizuje ikony efektów które działają na zaznaczonego bohatera.
-//     */
-//    public void aktualizujEfektyBohatera() {
-//        if (gs.getBohaterZaznaczony() != null) {
-//            stage02.addActor(gs.getBohaterZaznaczony().getEfekty().get(0).getIkona());
-//        }
-//    }
 
     /**
      * Koniec Tury
@@ -228,7 +133,7 @@ public class MapScreen implements Screen {
         if (gs.getTuraGracza() > gs.getGracze().size() - 1) {
             gs.setTuraGracza(0);
         }
-        lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
+        interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
 
         // Przywrócenie wszystkich punktów ruchu dla bohaterów oraz aktualizacja czasu działania efektów
         // Regenereacja many
@@ -261,7 +166,7 @@ public class MapScreen implements Screen {
         przesunKamereNadBohatera();
 
         // zmiana ikony gracza na górnej belce
-        this.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
+        this.interfce.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
 
         Ruch.wylaczIkonyEfektow();
     }
@@ -285,7 +190,7 @@ public class MapScreen implements Screen {
             System.out.println("Koniec Tury");
             // Ustala turę następnego gracza
             gs.setTuraGracza(NetEngine.playerNumber);
-            lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
+            interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
 
             // Przywrócenie wszystkich punktów ruchu dla bohaterów oraz aktualizacja czasu działania efektów
             // Regenereacja many
@@ -318,16 +223,16 @@ public class MapScreen implements Screen {
             przesunKamereNadBohatera();
 
             // zmiana ikony gracza na górnej belce
-            this.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
+            this.interfce.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
 
             Ruch.wylaczIkonyEfektow();
 
-            btnKoniecTury.setVisible(true);
-            btnKupBohatera.setVisible(true);
+            interfce.btnKoniecTury.setVisible(true);
+            interfce.btnKupBohatera.setVisible(true);
         } else {
             Gdx.app.log("Oczekiwanie na pozostałych graczy", "ilość graczy: " + NetEngine.playersEndTurn);
-            btnKoniecTury.setVisible(false);
-            btnKupBohatera.setVisible(false);
+            interfce.btnKoniecTury.setVisible(false);
+            interfce.btnKupBohatera.setVisible(false);
         }
     }
 
@@ -372,8 +277,6 @@ public class MapScreen implements Screen {
     /**
      * Sprawdza czy gracz posiada zamek. Zwraca True jeżeli posiada False jeżeli
      * nie posiada
-     *
-     * @return
      */
     private boolean sprawdzCzyGraczPosiadaZamek() {
         for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
@@ -403,15 +306,6 @@ public class MapScreen implements Screen {
             }
         }
         gs.setCzyZaznaczonoBohatera(false);
-    }
-
-    // Działania wywołane po naciśnięciu przycisku Exit
-    private void exitClick() {
-        NetEngine.gameStarted = false;
-        NetEngine.amountOfMultiPlayers = 0;
-        NetEngine.playerNumber = 0;
-        g.setScreen(Assets.mainMenuScreen);
-        gs.setActualScreen(0);
     }
 
     /**
@@ -462,176 +356,20 @@ public class MapScreen implements Screen {
         }
     }
 
-    /**
-     * Tworzy panel bohatera.
-     */
-    private void utworzPanelBohatera() {
-        pbLblHp = new Label("HP: X/X", a.skin);
-        pbLblMove = new Label("MV: X/X", a.skin);
-        pbLblMana = new Label("MN: X/X", a.skin);
-        pbLblExp = new Label("EX: X/X", a.skin);
-        pbLblEfekty = new Label("EFEKTY:", a.skin);
-
-        pbLblHp.setPosition(Gdx.graphics.getWidth() - 220, 500);
-        pbLblMove.setPosition(Gdx.graphics.getWidth() - 110, 500);
-        pbLblMana.setPosition(Gdx.graphics.getWidth() - 220, 475);
-        pbLblExp.setPosition(Gdx.graphics.getWidth() - 110, 475);
-
-        pbLblEfekty.setPosition(Gdx.graphics.getWidth() - pbLblEfekty.getWidth() - 100, 450);
-
-        pbBtnSpellBook = new TextButton("Spell Book", a.skin);
-        pbBtnSpellBook.setSize(100, 50);
-        pbBtnSpellBook.setPosition(Gdx.graphics.getWidth() - 220, 360);
-        pbBtnSpellBook.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!gs.isSpellPanelActive) {
-                    stage03.addActor(a.getSpellPanel());
-                    gs.isSpellPanelActive = true;
-
-                    TextButton btnSpellPanelExit = new TextButton("EXIT", a.skin);
-                    btnSpellPanelExit.setPosition(695, 54);
-                    btnSpellPanelExit.setSize(50, 50);
-
-                    btnSpellPanelExit.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            stage03.clear();
-                            gs.isSpellPanelActive = false;
-                            //Gdx.input.setInputProcessor(stage01);
-                            gs.getBohaterZaznaczony().getSpells().clear();
-                        }
-                    });
-                    stage03.addActor(btnSpellPanelExit);
-
-                    int spellXpos = 254;
-                    int spellYpos = 54;
-
-                    SpellCreator spellCreator = new SpellCreator(a, gs);
-
-                    for (Spells spl : gs.getBohaterZaznaczony().getListOfSpells()) {
-                        gs.getBohaterZaznaczony().getSpells().add(spellCreator.utworzSpell(spl, gs.getBohaterZaznaczony()));
-                    }
-
-                    for (SpellActor sA : gs.getBohaterZaznaczony().getSpells()) {
-                        sA.setPosition(spellXpos, spellYpos);
-                        stage03.addActor(sA);
-                        spellXpos += 52;
-                    }
-                }
-            }
-        });
-
-        // Dodaje przycisk wyjścia do planszy 02.
-        pbBtnBohaterScreen = new TextButton("Bohater", a.skin);
-        pbBtnBohaterScreen.setSize(100, 50);
-        pbBtnBohaterScreen.setPosition(Gdx.graphics.getWidth() - 110, 360);
-        pbBtnBohaterScreen.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (gs.isCzyZaznaczonoBohatera()) {
-                    //gs.setActualScreen(5);
-                    g.setScreen(Assets.bohaterScreen);
-                } else {
-                    System.out.println("Nie zaznaczono bohatera");
-                }
-            }
-        });
-
-        pbBtnAwansujBohatera = new TextButton("Awans", a.skin);
-        pbBtnAwansujBohatera.setSize(210, 50);
-        pbBtnAwansujBohatera.setPosition(Gdx.graphics.getWidth() - 220, 300);
-        pbBtnAwansujBohatera.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                pbBtnAwansujBohatera.setVisible(false);
-                g.setScreen(Assets.awansScreen);
-            }
-        });
-    }
-
     private void aktualizujPanelBohatera() {
         Bohater b = gs.getBohaterZaznaczony();
-        pbLblHp.setVisible(true);
-        pbLblHp.setText("HP:" + b.getActualHp() + "/" + b.getHp());
-        pbLblMove.setVisible(true);
-        pbLblMove.setText("MV:" + b.getPozostaloRuchow() + "/" + b.getSzybkosc());
-        pbLblExp.setVisible(true);
-        pbLblExp.setText("EX:" + b.getExp() + "/" + b.getExpToNextLevel());
-        pbLblMana.setVisible(true);
-        pbLblMana.setText("MN:" + b.getActualMana() + "/" + b.getMana());
+        interfce.lblHp.setVisible(true);
+        interfce.lblHp.setText("HP:" + b.getActualHp() + "/" + b.getHp());
+        interfce.lblMove.setVisible(true);
+        interfce.lblMove.setText("MV:" + b.getPozostaloRuchow() + "/" + b.getSzybkosc());
+        interfce.lblExp.setVisible(true);
+        interfce.lblExp.setText("EX:" + b.getExp() + "/" + b.getExpToNextLevel());
+        interfce.lblMana.setVisible(true);
+        interfce.lblMana.setText("MN:" + b.getActualMana() + "/" + b.getMana());
 
-        pbLblEfekty.setVisible(true);
-        pbBtnBohaterScreen.setVisible(true);
-        pbBtnSpellBook.setVisible(true);
-    }
-
-    /**
-     * Tworzy wygląd interfejsu
-     */
-    private void utworzInterfejs() {
-        Pixmap pmGornaBelka = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
-        pmGornaBelka.setColor(Color.LIGHT_GRAY);
-        pmGornaBelka.fillRectangle(0, 0, Gdx.graphics.getWidth(), 30);
-        pmGornaBelka.fillRectangle(Gdx.graphics.getWidth() - 250, 0, 250, Gdx.graphics.getHeight());
-        pmGornaBelka.setColor(Color.BLACK);
-        // czarna ramka wokół mapy 
-        pmGornaBelka.drawRectangle(0, 30, Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 30);
-        pmGornaBelka.drawRectangle(1, 31, Gdx.graphics.getWidth() - 252, Gdx.graphics.getHeight() - 2 - 30);
-        // imitacja miniMapy
-        pmGornaBelka.fillRectangle(Gdx.graphics.getWidth() - 240, 30, 230, 200);
-        pmGornaBelka.setColor(Color.WHITE);
-        pmGornaBelka.drawRectangle(Gdx.graphics.getWidth() - 240, 30, 230, 200);
-
-        Texture texGornaBelka = new Texture(pmGornaBelka);
-
-        gornaBelka = new DefaultActor(texGornaBelka, 0, Gdx.graphics.getHeight() - texGornaBelka.getHeight());
-    }
-
-    // Dodaje do Stage 02 przycisk Exit i koniec tury oraz labele wyświetlające statystyki
-    private void dodajDoStage02() {
-//        stage02.addActor(gornaBelka);
-//        stage02.addActor(lblTuraGracza);
-//        stage02.addActor(btnExit);
-//        stage02.addActor(btnKoniecTury);
-//        stage02.addActor(btnKupBohatera);
-//        stage02.addActor(lblGold);
-//        stage02.addActor(ikonaGracza);
-//        stage02.addActor(ikonaGold);
-
-        tables.tabUpBar.add(lblTuraGracza).padRight(5);
-        tables.tabUpBar.add(ikonaGracza).padRight(10);
-        tables.tabUpBar.add(ikonaGold).padRight(5);
-        tables.tabUpBar.add(lblGold).padRight(5);
-
-//        //Panel Bohatera
-//        stage02.addActor(pbLblHp);
-//        stage02.addActor(pbLblMove);
-//        stage02.addActor(pbLblMana);
-//        stage02.addActor(pbLblExp);
-//        stage02.addActor(pbLblEfekty);
-//        stage02.addActor(pbBtnBohaterScreen);
-//        stage02.addActor(pbBtnAwansujBohatera);
-//        stage02.addActor(pbBtnSpellBook);
-
-        tables.tabLeftBar.add(pbLblHp).size(100, 25).pad(5);
-        tables.tabLeftBar.add(pbLblMove).size(100, 25).pad(5);
-        tables.tabLeftBar.row();
-        tables.tabLeftBar.add(pbLblMana).size(100, 25).pad(5);
-        tables.tabLeftBar.add(pbLblExp).size(100, 25).pad(5);
-        tables.tabLeftBar.row();
-        tables.tabLeftBar.add(pbBtnBohaterScreen).bottom().size(100, 50).pad(5);
-        tables.tabLeftBar.add(pbBtnSpellBook).bottom().size(100, 50).pad(5);
-        tables.tabLeftBar.row();
-        tables.tabLeftBar.add(pbBtnAwansujBohatera).size(210, 50).pad(5).colspan(2);
-        tables.tabLeftBar.row();
-        tables.tabLeftBar.add(btnKoniecTury).bottom().size(100, 50).pad(5).expandY();
-        tables.tabLeftBar.add(btnKupBohatera).bottom().size(100, 50).pad(5).expandY();
-        tables.tabLeftBar.row();
-        tables.tabLeftBar.add(btnExit).align(Align.bottom).size(210, 50).pad(5).colspan(2);
-
-        stage02.addActor(tables.getTabInterface());
-
+        interfce.lblEfekty.setVisible(true);
+        interfce.btnBohater.setVisible(true);
+        interfce.btnSpellBook.setVisible(true);
     }
 
     // Dodaj do stage 01 predefiniowane przyciski ruchu i ataku oraz przycisk cancel
@@ -804,25 +542,24 @@ public class MapScreen implements Screen {
         if (gs.getBohaterZaznaczony() != null) {
             aktualizujPanelBohatera();
             if (gs.getBohaterZaznaczony().getExp() >= gs.getBohaterZaznaczony().getExpToNextLevel()) {
-                pbBtnAwansujBohatera.setVisible(true);
+                interfce.btnAwansujBohatera.setVisible(true);
             }
         } else {
-            pbLblHp.setVisible(false);
-            pbLblMove.setVisible(false);
-            pbLblExp.setVisible(false);
-            pbLblMana.setVisible(false);
-            pbLblEfekty.setVisible(false);
-            pbBtnAwansujBohatera.setVisible(false);
-            pbBtnBohaterScreen.setVisible(false);
-            pbBtnSpellBook.setVisible(false);
+            interfce.lblHp.setVisible(false);
+            interfce.lblMove.setVisible(false);
+            interfce.lblExp.setVisible(false);
+            interfce.lblMana.setVisible(false);
+            interfce.lblEfekty.setVisible(false);
+            interfce.btnAwansujBohatera.setVisible(false);
+            interfce.btnBohater.setVisible(false);
+            interfce.btnSpellBook.setVisible(false);
         }
 
         sortujZindex();
 
-        //sprawdzPolozenieKursora();
         ruchKamery();
-        //wyswietlStatystykiBohatera();
-        this.lblGold.setText(Integer.toString(gs.getZlotoAktualnegoGracza()));
+
+        this.interfce.lblGold.setText(Integer.toString(gs.getZlotoAktualnegoGracza()));
 
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -835,19 +572,6 @@ public class MapScreen implements Screen {
 
         stage03.act();
         stage03.draw();
-    }
-
-    // Sprawdza położenie kursora 
-    // w zależności od lokalizacji ustawia sterowanie na odpowiedni stage
-    private void sprawdzPolozenieKursora() {
-        //Ustawia stage 02 na 1/6 ekranu z prawej strony
-//        if (!gs.isSpellPanelActive) {
-//            if (Gdx.input.getX() < Gdx.graphics.getWidth() / 6 * 5) {
-//                Gdx.input.setInputProcessor(stage01);
-//            } else {
-//                Gdx.input.setInputProcessor(stage02);
-//            }
-//        }
     }
 
     // Steruje ruchem kamery
@@ -937,6 +661,7 @@ public class MapScreen implements Screen {
     public void resize(int width, int height) {
         stage01.getViewport().update(width, height, true);
         stage02.getViewport().update(width, height, true);
+        stage03.getViewport().update(width, height, true);
         viewPort.update(width, height, true);
     }
 
@@ -964,6 +689,9 @@ public class MapScreen implements Screen {
         inputMultiPlexer.addProcessor(stage02);
         inputMultiPlexer.addProcessor(stage01);
         Gdx.input.setInputProcessor(inputMultiPlexer);
+
+        tables.formatInterfaceTable();
+        tables.formatStage03MainTable();
     }
 
     // Setters and Getters
@@ -972,16 +700,13 @@ public class MapScreen implements Screen {
     }
 
     /**
-     *
+     *  Klasa przechwytująca gesty.
      */
     public class MyGestureDetector extends GestureDetector {
-
         private GestureListener listener;
-
         public MyGestureDetector(GestureListener listner) {
             super(listner);
         }
-
         @Override
         public boolean isPanning() {
             return super.isPanning();
@@ -1042,56 +767,327 @@ public class MapScreen implements Screen {
         }
     }
 
+    /**
+     * Klasa odpowiada za obsługę tabel.
+     */
     public class Tables {
-        public Table tabInterface = new Table();
-        public Table tabUpBar = new Table();
-        public Table tabLeftBar = new Table();
-        public Table tabSpells = new Table();
+
+        public Table tableStage03Main = new Table();
+        public Table tableSpells = new Table();
+
+        public Table tableInterface = new Table();
+        public Table tableUpBar = new Table();
+        public Table tableRightBar = new Table();
+
+        public Table tableEffectsBar = new Table();
+        public Table tableStatsBar = new Table();
+        public Table tableButtonPanel01 = new Table();
+        public Table tableButtonPanel02 = new Table();
 
         private Texture tex = new Texture("background.jpg");
         Image img = new Image(tex);
 
+        public Tables() {
+            tableSpells.setVisible(false);
+        }
 
         /**
-         * Tworzy tabele interfejsu
-         *
-         * @return Referencje do tabeli.
+         * Formatuje tabelę interfejsu
          */
-        public Table getTabInterface() {
-            this.tempSettings();
+        public void formatInterfaceTable() {
+            tableInterface.clear();
+            tableInterface.setFillParent(true);
+            tableInterface.setDebug(true);
 
-            tabInterface.setFillParent(true);
-            tabInterface.pad(0);
-            tabInterface.setDebug(true);
+            formatUpBarTable();
+            formatRightBarTable();
+            formatEffetsBarTable();
 
-            tabInterface.add(tabUpBar).align(Align.topLeft).expandX().top().maxHeight(25);
-            tabInterface.row();
-            tabInterface.add(tabLeftBar).align(Align.topRight).maxWidth(250).expandY().maxHeight(Gdx.graphics.getHeight() - 20);
-
-            return tabInterface;
+            tableInterface.add(tableUpBar).align(Align.topLeft).expandX().top().maxHeight(25);
+            tableInterface.row();
+            tableInterface.add(tableRightBar).align(Align.topRight).expandY().maxWidth(250).maxHeight(Gdx.graphics.getHeight() - 20);
         }
 
-        public Table getUpBarTable() {
-            tabUpBar.setFillParent(true);
-            tabUpBar.setDebug(true);
-            tabUpBar.setSize(100, 100);
-            tabUpBar.setPosition(100, 100);
-            tabUpBar.setOriginX(100);
-            tabUpBar.setOriginY(100);
-            //tabUpBar.add(new Label("testowy labal UP BAR --------------------------------------", a.skin));
-            return tabUpBar;
+        /**
+         * Formatuje tabelę górnej belki interfejsu.
+         */
+        public void formatUpBarTable() {
+            tableUpBar.clear();
+            tableUpBar.setDebug(true);
+
+            tableUpBar.add(interfce.lblTuraGracza).padRight(5);
+            tableUpBar.add(interfce.ikonaGracza).padRight(10).size(25, 25);
+            tableUpBar.add(interfce.ikonaGold).padRight(5).size(25, 25);
+            tableUpBar.add(interfce.lblGold).padRight(5);
+
+            tableUpBar.setBackground(img.getDrawable());
         }
 
-        public void tempSettings() {
-            //tabUpBar.add(new Label("testowy labal UP BAR -----------------", a.skin));
+        /**
+         * Formatuje tabelę prawej belki interfejsu.
+         */
+        public void formatRightBarTable() {
+            tableRightBar.clear();
+            tableRightBar.setDebug(true);
 
-            tabLeftBar.setBackground(img.getDrawable());
-            tabUpBar.setBackground(img.getDrawable());
+            formatButtonPanel01Table();
+            formatButtonPanel02Table();
+            formatStatsTable();
+            formatEffetsBarTable();
 
-            tabLeftBar.top();
-//            tabLeftBar.add(new Label("testowy labal LEFT BAR -------------", a.skin));
-//            tabLeftBar.row();
-//            tabLeftBar.add(new TextButton("BUTTON 1", a.skin)).size(200, 100);
+            tableRightBar.add(tableStatsBar);
+            tableRightBar.row();
+
+            tableRightBar.add(tableEffectsBar);
+            tableRightBar.row();
+
+            tableRightBar.add(tableButtonPanel01);
+            tableRightBar.row();
+
+            tableRightBar.add(tableButtonPanel02).bottom().expandY();
+            tableRightBar.row();
+
+            tableRightBar.setBackground(img.getDrawable());
+            tableRightBar.top();
+        }
+
+        /**
+         * Formatuje tabelę efektów.
+         */
+        public void formatEffetsBarTable() {
+            tableEffectsBar.clear();
+            tableEffectsBar.setDebug(true);
+
+            tableEffectsBar.add(new Label("Aktywne Efekty:", a.skin)).pad(2).colspan(5);
+            tableEffectsBar.row();
+        }
+
+        public void formatButtonPanel01Table() {
+            tableButtonPanel01.clear();
+            tableButtonPanel01.setDebug(true);
+
+            tableButtonPanel01.add(interfce.btnBohater).bottom().size(100, 50).pad(5);
+            tableButtonPanel01.add(interfce.btnSpellBook).bottom().size(100, 50).pad(5);
+            tableButtonPanel01.row();
+            tableButtonPanel01.add(interfce.btnAwansujBohatera).size(210, 50).pad(5).colspan(2);
+        }
+
+        public void formatButtonPanel02Table() {
+            tableButtonPanel02.clear();
+            tableButtonPanel02.setDebug(true);
+
+            tableButtonPanel02.add(interfce.btnKoniecTury).bottom().size(100, 50).pad(5);
+            tableButtonPanel02.add(interfce.btnKupBohatera).bottom().size(100, 50).pad(5);
+            tableButtonPanel02.row();
+            tableButtonPanel02.add(interfce.btnExit).align(Align.bottom).size(210, 50).pad(5).colspan(2);
+        }
+
+        public void formatStatsTable() {
+            tableStatsBar.clear();
+            tableStatsBar.setDebug(true);
+
+            tableStatsBar.add(interfce.lblHp).size(100, 25).pad(5);
+            tableStatsBar.add(interfce.lblMove).size(100, 25).pad(5);
+            tableStatsBar.row();
+            tableStatsBar.add(interfce.lblMana).size(100, 25).pad(5);
+            tableStatsBar.add(interfce.lblExp).size(100, 25).pad(5);
+            tableStatsBar.row();
+        }
+
+        /**
+         * Formatuje główną tabelę z Stage 03
+         */
+        public void formatStage03MainTable() {
+            tableStage03Main.clear();
+            tableStage03Main.setFillParent(true);
+            tableStage03Main.setDebug(true);
+
+            formatSpellsTable();
+
+            tableStage03Main.add(tableSpells);
+        }
+
+        /**
+         * Formatuje tabelę czarów.
+         */
+        public void formatSpellsTable() {
+            tableSpells.clear();
+            tableSpells.setDebug(true);
+
+            int indeksWiersza = 0;
+            if (gs.isCzyZaznaczonoBohatera()) {
+                gs.getBohaterZaznaczony().getSpells().clear();
+                SpellCreator spellCreator = new SpellCreator(a, gs);
+                for (Spells spl : gs.getBohaterZaznaczony().getListOfSpells()) {
+                    gs.getBohaterZaznaczony().getSpells().add(spellCreator.utworzSpell(spl, gs.getBohaterZaznaczony()));
+
+                }
+                for (SpellActor sA : gs.getBohaterZaznaczony().getSpells()) {
+                    if (indeksWiersza > 4) {
+                        tableSpells.row();
+                        indeksWiersza = 0;
+                    }
+                    tableSpells.add(sA).pad(2);
+                    indeksWiersza += 1;
+                }
+            }
+            tableSpells.row();
+            tableSpells.add(interfce.btnSpellExit).size(100, 50).colspan(10);
+        }
+    }
+
+    /**
+     * Klasa odpowiada za obsługę elementów interfejsu.
+     */
+    public class Interface {
+
+        // PRZYCISKI
+        public TextButton btnExit = new TextButton("EXIT", a.skin);
+        public TextButton btnKoniecTury = new TextButton("Koniec Tury", a.skin);
+        public TextButton btnKupBohatera = new TextButton("Kup Bohatera", a.skin);
+        public TextButton btnSpellBook = new TextButton("Spell Book", a.skin);
+        public TextButton btnSpellExit = new TextButton("EXIT", a.skin);
+        public TextButton btnBohater = new TextButton("Bohater", a.skin);
+        public TextButton btnAwansujBohatera = new TextButton("AWANSUJ BOHATERA", a.skin);
+
+        // LABELKI
+        public Label lblHp = new Label("", a.skin);
+        public Label lblMove = new Label("", a.skin);
+        public Label lblMana = new Label("", a.skin);
+        public Label lblExp = new Label("", a.skin);
+        public Label lblEfekty = new Label("", a.skin);
+        public Label lblGold = new Label("", a.skin);
+        public Label lblTuraGracza = new Label("Tura Gracza: 0", a.skin);
+
+        // POZOSTALE
+        public DefaultActor ikonaGracza = new DefaultActor(a.btnAttackTex, 0, 0);
+        ;
+        public DefaultActor ikonaGold = new DefaultActor(a.texGold, 165, Gdx.graphics.getHeight() - 25);
+
+        public Interface() {
+            Listeners listeners = new Listeners();
+            listeners.addListeners();
+        }
+
+        /**
+         * Klasa odpowiada za obsługę listenerów.
+         */
+        public class Listeners {
+            public Listeners() {
+            }
+
+            /**
+             * Dodaje wszystkie listenery
+             */
+            public void addListeners() {
+                addListnerBtnExit();
+                addListnerBtnKoniecTury();
+                addListnerBtnKupBohatera();
+                addListnerBtnSpellExit();
+                addListnerBtnSpellBook();
+                addListnerBtnBohater();
+                addListnerBtnAwansujBohatera();
+            }
+
+            /**
+             * Dodaje Listner do przycisku Exit.
+             */
+            public void addListnerBtnExit() {
+                btnExit.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        NetEngine.gameStarted = false;
+                        NetEngine.amountOfMultiPlayers = 0;
+                        NetEngine.playerNumber = 0;
+                        g.setScreen(Assets.mainMenuScreen);
+                        gs.setActualScreen(0);
+                    }
+                });
+            }
+
+            /**
+             * Dodaje Listener do przycisku koniec tury.
+             */
+            public void addListnerBtnKoniecTury() {
+                btnKoniecTury.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        koniecTuryClick();
+                    }
+                });
+            }
+
+            /**
+             * Dodaje Listener do przycisku Kup Bohatera.
+             */
+            public void addListnerBtnKupBohatera() {
+                btnKupBohatera.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        if (gs.getGracze().get(gs.getTuraGracza()).getGold() < 10) {
+                            DialogScreen dialogScreen = new DialogScreen("ERROR", a.skin, "Za malo zlota", stage01);
+                        } else {
+                            g.setScreen(Assets.newBohaterScreen);
+                        }
+                    }
+                });
+            }
+
+            /**
+             * Dodaje Listener do przycisku koniec tury.
+             */
+            public void addListnerBtnSpellExit() {
+                btnSpellExit.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        tables.tableSpells.setVisible(false);
+                        gs.getBohaterZaznaczony().getSpells().clear();
+                    }
+                });
+            }
+
+            /**
+             * Dodaje Listener do przyciski Spell Book
+             */
+            public void addListnerBtnSpellBook() {
+                btnSpellBook.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        tables.formatStage03MainTable();
+                        tables.tableSpells.setVisible(true);
+                    }
+                });
+            }
+
+            /**
+             * Dodaje Listner do przycisku bohater.
+             */
+            public void addListnerBtnBohater() {
+                btnBohater.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        if (gs.isCzyZaznaczonoBohatera()) {
+                            //gs.setActualScreen(5);
+                            g.setScreen(Assets.bohaterScreen);
+                        } else {
+                            System.out.println("Nie zaznaczono bohatera");
+                        }
+                    }
+                });
+            }
+
+            /**
+             * Dodaje Listner do przycisku Awansuj Bohatera.
+             */
+            public void addListnerBtnAwansujBohatera() {
+                btnAwansujBohatera.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        btnAwansujBohatera.setVisible(false);
+                        g.setScreen(Assets.awansScreen);
+                    }
+                });
+            }
         }
     }
 }

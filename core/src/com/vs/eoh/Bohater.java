@@ -16,6 +16,7 @@ import com.vs.enums.DostepneItemki;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
 import com.vs.screens.DialogScreen;
+import com.vs.screens.MapScreen;
 
 import java.util.ArrayList;
 
@@ -250,11 +251,14 @@ public class Bohater extends Actor {
 
         int pozycjaX = Gdx.graphics.getWidth() - 220;
 
+        MapScreen.mapScreen.tables.formatEffetsBarTable();
+
         if (!this.efekty.isEmpty()) {
             for (Effect dI : this.efekty) {
                 dI.getIkona().setSize(25, 25);
                 dI.getIkona().setPosition(pozycjaX, 425);
                 Assets.stage02MapScreen.addActor(dI.getIkona());
+                MapScreen.mapScreen.tables.tableEffectsBar.add(dI.getIkona()).pad(2);
                 pozycjaX += 30;
             }
         }
@@ -264,6 +268,7 @@ public class Bohater extends Actor {
                 sE.getIkona().setSize(25, 25);
                 sE.getIkona().setPosition(pozycjaX, 425);
                 Assets.stage02MapScreen.addActor(sE.getIkona());
+                MapScreen.mapScreen.tables.tableEffectsBar.add(sE.getIkona()).pad(2);
                 pozycjaX += 30;
             }
         }

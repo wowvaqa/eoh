@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.vs.network.Network;
+import com.vs.screens.MapScreen;
 import com.vs.screens.MultiplayerScreen;
 
 /**
@@ -150,6 +151,8 @@ public class Ruch {
      */
     public static void wylaczIkonyEfektow() {
         int indeksEfektu = 999;
+
+        MapScreen.mapScreen.tables.formatEffetsBarTable();
 
         for (int j = 0; j < Assets.stage02MapScreen.getActors().size; j++) {
             if (Assets.stage02MapScreen.getActors().get(j).getClass() == EffectActor.class) {

@@ -119,8 +119,6 @@ public class MultiplayerScreen implements Screen {
         public Table table02 = new Table();
 
         public Tables() {
-            table01.setDebug(true);
-            table02.setDebug(true);
         }
 
         /**
@@ -295,7 +293,7 @@ public class MultiplayerScreen implements Screen {
             }
 
             /**
-             * Dodaje wszystki listnery
+             * Dodaje wszystkie listnery
              */
             public void addListners() {
                 addListnerBtnSendMessage();

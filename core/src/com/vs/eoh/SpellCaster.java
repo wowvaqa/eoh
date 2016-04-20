@@ -33,8 +33,6 @@ public class SpellCaster {
         // Sprawdza czy czar działa tylko na bohatera castującego
         if (spell.isSpellWorksOnlyForCaster()) {
             spell.getSpellEffects().get(0).dzialanie(spell, bohaterCastujacy, bohaterCastujacy, a);
-            Assets.stage03MapScreen.clear();
-            gs.isSpellPanelActive = false;
             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
             Ruch.wylaczPrzyciski();
 
@@ -48,8 +46,6 @@ public class SpellCaster {
                             CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
                             castButton.setPosition(i * 100, j * 100);
                             Assets.stage01MapScreen.addActor(castButton);
-                            Assets.stage03MapScreen.clear();
-                            gs.isSpellPanelActive = false;
                             Ruch.wylaczPrzyciski();
                             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                         }
@@ -66,7 +62,6 @@ public class SpellCaster {
                             CastButtonCancel przyciskCancel = new CastButtonCancel(new TextureRegionDrawable(new TextureRegion(a.cancelIcon)));
                             przyciskCancel.setPosition(i * 100, j * 100);
                             Assets.stage01MapScreen.addActor(przyciskCancel);
-                            Assets.stage03MapScreen.clear();
                             gs.isSpellPanelActive = false;
                             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                             Ruch.wylaczPrzyciski();
@@ -77,7 +72,6 @@ public class SpellCaster {
                                 CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
                                 castButton.setPosition(i * 100, j * 100);
                                 Assets.stage01MapScreen.addActor(castButton);
-                                Assets.stage03MapScreen.clear();
                                 gs.isSpellPanelActive = false;
                                 Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                             }
