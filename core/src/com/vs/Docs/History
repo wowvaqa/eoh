@@ -1,3 +1,9 @@
+verion 0.0063 11052016
+DONE    1. Usunięcie błędu powodującego zawieszanie się gry w przypadku zamknięcia księgi zaklęć
+        jeżeli żaden z bohaterów nie był zaznaczony.
+DONE    2. Usunięcie błędu powodującego rozpoczęcie kolejnegej serii ataków moba w turze, której
+        mob już wykonywał atak.
+
 version 0.0062 10052016
 DONE    1. Dodanie czaru Thuner.
 DONE    2. Dodanie czaru Meteor Shower.

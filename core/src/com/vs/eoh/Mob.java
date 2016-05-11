@@ -219,7 +219,7 @@ public class Mob extends Image {
             } else {
                 System.out.println("Bohater dał szusa, lub Mob zmęczył się.");
                 this.czyZaatakowany = false;
-                this.aktualnaSzybkosc = this.szybkosc;
+                //this.aktualnaSzybkosc = this.szybkosc;
             }
         }
         gs.usunMartweMoby();

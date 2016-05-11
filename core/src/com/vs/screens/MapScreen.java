@@ -157,6 +157,8 @@ public class MapScreen implements Screen {
             for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
                 if (gs.getMapa().getPola()[i][j].getMob() != null) {
                     gs.getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
+                    gs.getMapa().getPola()[i][j].getMob().setAktualnaSzybkosc(
+                            gs.getMapa().getPola()[i][j].getMob().getSzybkosc());
                 }
             }
         }
@@ -214,6 +216,8 @@ public class MapScreen implements Screen {
                 for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
                     if (gs.getMapa().getPola()[i][j].getMob() != null) {
                         gs.getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
+                        gs.getMapa().getPola()[i][j].getMob().setAktualnaSzybkosc(
+                                gs.getMapa().getPola()[i][j].getMob().getSzybkosc());
                     }
                 }
             }
@@ -1041,7 +1045,9 @@ public class MapScreen implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         tables.tableSpells.setVisible(false);
-                        gs.getBohaterZaznaczony().getSpells().clear();
+                        if (gs.getBohaterZaznaczony() != null) {
+                            gs.getBohaterZaznaczony().getSpells().clear();
+                        }
                     }
                 });
             }
