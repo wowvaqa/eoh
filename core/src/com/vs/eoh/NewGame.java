@@ -411,6 +411,7 @@ public class NewGame {
                 //bohater.getListOfSpells().add(Spells.FinalJudgment);
                 break;
             case Giermek:
+                bohater.getListOfSpells().add(Spells.Frozen);
                 break;
             case Lowca:
                 bohater.getListOfSpells().add(Spells.Haste);
@@ -420,6 +421,10 @@ public class NewGame {
                 break;
             case Czarodziej:
                 bohater.getListOfSpells().add(Spells.FireBall);
+                bohater.getListOfSpells().add(Spells.Thunder);
+                bohater.getListOfSpells().add(Spells.MeteorShower);
+                bohater.getListOfSpells().add(Spells.Bless);
+                bohater.getListOfSpells().add(Spells.Prayer);
                 break;
         }
     }

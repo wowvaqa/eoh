@@ -26,6 +26,28 @@ public class AnimationCreator {
 
         switch (animations) {
 
+            case ThunderSpellAnimation:
+                texture = new Texture(Gdx.files.internal("animation/texThunderExplosion.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 5, texture.getHeight() / 3);
+                walkFrames = new TextureRegion[5 * 3];
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case FrozenSpellAnimation:
+                texture = new Texture(Gdx.files.internal("animation/Ice1-1.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 5, texture.getHeight() / 6);
+                walkFrames = new TextureRegion[5 * 6];
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
             case FireExplosionAnimation:
                 //Texture texture = new Texture(Gdx.files.internal("animation/texExplosionFire.png"));
                 texture = new Texture(Gdx.files.internal("animation/texExplosionFire.png"));

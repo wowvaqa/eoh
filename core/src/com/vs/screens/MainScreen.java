@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -25,7 +26,8 @@ public class MainScreen implements Screen {
 
     private final OrthographicCamera c;
     private final FitViewport viewPort;
-
+    // deklaracja tabeli
+    private final Table tabela = new Table();
     // deklaracja przycisków
     private TextButton btnNowaGra;
     private TextButton btnMultiplayer;
@@ -33,12 +35,8 @@ public class MainScreen implements Screen {
     private TextButton btnOptions;
     private TextButton btnTest;
     private TextButton btnExit;
-
     // deklaracja labeli
     private Label lblMenuGlowne;
-
-    // deklaracja tabeli
-    private final Table tabela = new Table();
 
     public MainScreen(Game g, Assets a, GameStatus gs) {
         this.g = g;
@@ -59,7 +57,10 @@ public class MainScreen implements Screen {
         // ustawia odstęp od krawędzi tabeli
         tabela.pad(10);
         // włacza linie debugujące tabelę
-        tabela.setDebug(true);
+        tabela.setDebug(false);
+
+        Image img = new Image(a.texMainPic);
+        tabela.setBackground(img.getDrawable());
 
         // dodaje label do tabeli
         lblMenuGlowne = new Label("MENU GLOWNE", a.skin);

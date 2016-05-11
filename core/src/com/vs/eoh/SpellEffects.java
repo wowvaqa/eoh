@@ -35,12 +35,11 @@ public class SpellEffects {
     private DefaultActor ikona;
 
     /**
-     *
-     * @param spell Referencja do obiketu czaru
-     * @param a Referencja do obiketu Assts
+     * @param spell            Referencja do obiketu czaru
+     * @param a                Referencja do obiketu Assts
      * @param bohaterCastujacy Referencja do obiketu bohatera rzucającego czar
-     * @param obiketBroniacy Referencja do obiektu na którego czar jest rzucany
-     * (bohater/mob)
+     * @param obiketBroniacy   Referencja do obiektu na którego czar jest rzucany
+     *                         (bohater/mob)
      */
     public void dzialanie(SpellActor spell, Object obiketBroniacy, Bohater bohaterCastujacy, Assets a) {
         switch (spell.getRodzajCzaru()) {
@@ -66,10 +65,55 @@ public class SpellEffects {
                 bohaterCastujacy.getSpells().clear();
                 break;
 
+            case Thunder:
+                // Zadaje obrażenia
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
+                    if (obiketBroniacy.getClass() == Bohater.class) {
+                        Bohater tmpBoh = (Bohater) obiketBroniacy;
+                        a.animujSpellLblDmg(tmpBoh.getX(), tmpBoh.getY(), bohaterCastujacy, tmpBoh, spell);
+                        animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
+                    } else if (obiketBroniacy.getClass() == Mob.class) {
+                        System.out.println("przeciwnik jest mobem");
+                        Mob tmpMob = (Mob) obiketBroniacy;
+                        animActor.setPosition(tmpMob.getX(), tmpMob.getY());
+                        a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }
+                    Assets.stage01MapScreen.addActor(animActor);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
+            case MeteorShower:
+                // Zadaje obrażenia
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
+                    if (obiketBroniacy.getClass() == Bohater.class) {
+                        Bohater tmpBoh = (Bohater) obiketBroniacy;
+                        a.animujSpellLblDmg(tmpBoh.getX(), tmpBoh.getY(), bohaterCastujacy, tmpBoh, spell);
+                        animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
+                    } else if (obiketBroniacy.getClass() == Mob.class) {
+                        System.out.println("przeciwnik jest mobem");
+                        Mob tmpMob = (Mob) obiketBroniacy;
+                        animActor.setPosition(tmpMob.getX(), tmpMob.getY());
+                        a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }
+                    Assets.stage01MapScreen.addActor(animActor);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
             case Frozen:
                 // Zmniejsza szybkosć na zadaną ilość tur
                 Random rnd = new Random();
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation));
+
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
                         int modSzybkosci = 1 + rnd.nextInt(bohaterCastujacy.getMoc() + 1);
@@ -77,13 +121,18 @@ public class SpellEffects {
                         this.efektSzybkosc = -1 * modSzybkosci;
                         tmpBoh.setPozostaloRuchow(tmpBoh.getPozostaloRuchow() - modSzybkosci);
                         tmpBoh.getSpellEffects().add(this);
-                        System.out.println("Efekt zmiany szybkosci: " + this.efektSzybkosc);
+                        animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
                         int modSzybkosci = 1 + rnd.nextInt(bohaterCastujacy.getMoc() + 1);
                         tmpMob.setAktualnaSzybkosc(tmpMob.getAktualnaSzybkosc() - modSzybkosci);
+                        this.dlugoscTrwaniaEfektu = modSzybkosci;
+                        this.efektSzybkosc = -1 * modSzybkosci;
+                        tmpMob.getSpellEffects().add(this);
+                        animActor.setPosition(tmpMob.getX(), tmpMob.getY());
                     }
+                    Assets.stage01MapScreen.addActor(animActor);
                 } else {
                     System.out.println("Za mało MANY");
                 }
@@ -152,6 +201,48 @@ public class SpellEffects {
                     Bohater tempBoh;
                     tempBoh = (Bohater) obiketBroniacy;
                     tempBoh.getSpellEffects().add(this);
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    animActor.setPosition(tempBoh.getX(), tempBoh.getY());
+                    Assets.stage01MapScreen.addActor(animActor);
+
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
+            case Bless:
+                System.out.println("Czar Blogoslawienstwo");
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    this.efektAtak = 5;
+                    this.efektObrona = 5;
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+                    Bohater tempBoh;
+                    tempBoh = (Bohater) obiketBroniacy;
+                    tempBoh.getSpellEffects().add(this);
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    animActor.setPosition(tempBoh.getX(), tempBoh.getY());
+                    Assets.stage01MapScreen.addActor(animActor);
+
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
+            case Prayer:
+                System.out.println("Czar Modlitwa");
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    this.efektAtak = 7;
+                    this.efektObrona = 7;
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+                    Bohater tempBoh;
+                    tempBoh = (Bohater) obiketBroniacy;
+                    tempBoh.getSpellEffects().add(this);
+                    tempBoh.setActualHp(tempBoh.getHp());
+                    tempBoh.setPozostaloRuchow(tempBoh.getSzybkosc() + getEfektSzybkosc());
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
                     animActor.setPosition(tempBoh.getX(), tempBoh.getY());
                     Assets.stage01MapScreen.addActor(animActor);
@@ -235,9 +326,9 @@ public class SpellEffects {
     /**
      * Wykonuje działanie efektu podczas walki
      *
-     * @param fightEffects efekt czaru w czasie walki
+     * @param fightEffects    efekt czaru w czasie walki
      * @param obiektAtakujacy Referencja do obiektu atakującego
-     * @param obiektBroniacy Referencja do obiektu broniącego
+     * @param obiektBroniacy  Referencja do obiektu broniącego
      */
     public void dzialanie(FightEffects fightEffects, Object obiektAtakujacy, Object obiektBroniacy) {
 
@@ -335,7 +426,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getDlugoscTrwaniaEfektu() {
@@ -343,7 +433,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param dlugoscTrwaniaEfektu
      */
     public void setDlugoscTrwaniaEfektu(int dlugoscTrwaniaEfektu) {
@@ -351,7 +440,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getEfektAtak() {
@@ -359,7 +447,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param efektAtak
      */
     public void setEfektAtak(int efektAtak) {
@@ -367,7 +454,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getEfektObrona() {
@@ -375,7 +461,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param efektObrona
      */
     public void setEfektObrona(int efektObrona) {
@@ -383,7 +468,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getEfektSzybkosc() {
@@ -391,7 +475,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param efektSzybkosc
      */
     public void setEfektSzybkosc(int efektSzybkosc) {
@@ -399,7 +482,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getEfektHp() {
@@ -407,7 +489,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param efektHp
      */
     public void setEfektHp(int efektHp) {
@@ -415,7 +496,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getEfektMana() {
@@ -423,7 +503,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param efektMana
      */
     public void setEfektMana(int efektMana) {
@@ -431,7 +510,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public int getZmianaHp() {
@@ -439,7 +517,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param zmianaHp
      */
     public void setZmianaHp(int zmianaHp) {
@@ -447,7 +524,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public String getOpis() {
@@ -455,7 +531,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param opis
      */
     public void setOpis(String opis) {
@@ -463,7 +538,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @return
      */
     public DefaultActor getIkona() {
@@ -471,7 +545,6 @@ public class SpellEffects {
     }
 
     /**
-     *
      * @param ikona
      */
     public void setIkona(DefaultActor ikona) {

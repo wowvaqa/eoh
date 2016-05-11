@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.vs.enums.DostepneMoby;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Mob extends Actor {
+public class Mob extends Image {
 
     private final GameStatus gs;
     private final Assets a;
@@ -140,6 +141,8 @@ public class Mob extends Actor {
                         text("Obrona: " + obrona);
                         row();
                         text("HP: " + aktualneHp);
+                        row();
+                        text("S: " + aktualnaSzybkosc);
                         row();
                         text("Dzialajace efekty czarow:");
                         this.row();

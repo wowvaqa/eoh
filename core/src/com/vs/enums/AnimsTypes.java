@@ -6,5 +6,7 @@ public enum AnimsTypes {
     UseMixtureAnimation,
     SelfSpellAnimation,
     GoodSpellAnimation,
-    BadSpellAnimation;
+    BadSpellAnimation,
+    FrozenSpellAnimation,
+    ThunderSpellAnimation;
 }

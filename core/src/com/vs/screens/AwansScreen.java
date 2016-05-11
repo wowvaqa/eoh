@@ -8,12 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
@@ -39,16 +37,13 @@ public class AwansScreen implements Screen {
     private final Stage stage01 = new Stage();
 
     private final TextButton btnExit;
-
-    private Awans awans = new Awans();
-
     /**
      * Główna tabela.
      */
     private final Table mainTable;
     private final Table leftTable;
     private final Table rightTable;
-
+    private Awans awans = new Awans();
     /**
      * informuje czy Screen awansu jest pokazany
      */
@@ -114,12 +109,30 @@ public class AwansScreen implements Screen {
         leftTable.pad(5);
         leftTable.setDebug(true);
 
-        Image imgPoziom1 = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("0")));
-        final Image imgPoziom2 = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("1")));
-        Image imgPoziom3A = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("2A")));
-        Image imgPoziom3B = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("2B")));
-        Image imgPoziom4A = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("3A")));
-        Image imgPoziom4B = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("3B")));
+        final Image imgPoziom1, imgPoziom2, imgPoziom3A, imgPoziom3B, imgPoziom4A, imgPoziom4B;
+
+        if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej) {
+            imgPoziom1 = new Image(a.tAtlasWizard.findRegion(getImageTextureRegion("0")));
+            imgPoziom2 = new Image(a.tAtlasWizard.findRegion(getImageTextureRegion("1")));
+            imgPoziom3A = new Image(a.tAtlasWizard.findRegion(getImageTextureRegion("2A")));
+            imgPoziom3B = new Image(a.tAtlasWizard.findRegion(getImageTextureRegion("2B")));
+            imgPoziom4A = new Image(a.tAtlasWizard.findRegion(getImageTextureRegion("3A")));
+            imgPoziom4B = new Image(a.tAtlasWizard.findRegion(getImageTextureRegion("3B")));
+        } else if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
+            imgPoziom1 = new Image(a.tAtlasHunter.findRegion(getImageTextureRegion("0")));
+            imgPoziom2 = new Image(a.tAtlasHunter.findRegion(getImageTextureRegion("1")));
+            imgPoziom3A = new Image(a.tAtlasHunter.findRegion(getImageTextureRegion("2A")));
+            imgPoziom3B = new Image(a.tAtlasHunter.findRegion(getImageTextureRegion("2B")));
+            imgPoziom4A = new Image(a.tAtlasHunter.findRegion(getImageTextureRegion("3A")));
+            imgPoziom4B = new Image(a.tAtlasHunter.findRegion(getImageTextureRegion("3B")));
+        } else {
+            imgPoziom1 = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("0")));
+            imgPoziom2 = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("1")));
+            imgPoziom3A = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("2A")));
+            imgPoziom3B = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("2B")));
+            imgPoziom4A = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("3A")));
+            imgPoziom4B = new Image(a.tAtlasWarrior.findRegion(getImageTextureRegion("3B")));
+        }
 
         Label lblPoziom1 = new Label("1", a.skin);
         final Label lblPoziom2 = new Label("2", a.skin);
@@ -143,8 +156,16 @@ public class AwansScreen implements Screen {
                 awans.wybor2 = true;
                 gs.getBohaterZaznaczony().setG1(true);
                 gs.getBohaterZaznaczony().setImage(imgPoziom2);
-                gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/1.png"));
-                gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/1z.png"));
+                if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/wizard/1.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/wizard/1z.png"));
+                } else if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/hunter/1.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/hunter/1z.png"));
+                } else {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/1.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/1z.png"));
+                }
                 awans.classOfHero = lblPoziom2.getText().toString();
                 Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
@@ -158,8 +179,16 @@ public class AwansScreen implements Screen {
                 awans.wybor3A = true;
                 gs.getBohaterZaznaczony().setG2A(true);
                 gs.getBohaterZaznaczony().setG2B(false);
-                gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/2A.png"));
-                gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/2Az.png"));
+                if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/wizard/2A.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/wizard/2Az.png"));
+                } else if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/hunter/2A.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/hunter/2Az.png"));
+                } else {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/2A.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/2Az.png"));
+                }
                 awans.classOfHero = lblPoziom3A.getText().toString();
                 Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
@@ -173,8 +202,16 @@ public class AwansScreen implements Screen {
                 awans.wybor3B = true;
                 gs.getBohaterZaznaczony().setG2B(true);
                 gs.getBohaterZaznaczony().setG2A(false);
-                gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/2B.png"));
-                gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/2Bz.png"));
+                if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/wizard/2B.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/wizard/2Bz.png"));
+                } else if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/hunter/2B.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/hunter/2Bz.png"));
+                } else {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/2B.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/2Bz.png"));
+                }
                 awans.classOfHero = lblPoziom3B.getText().toString();
                 Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
@@ -188,8 +225,16 @@ public class AwansScreen implements Screen {
                 awans.wybor4A = true;
                 gs.getBohaterZaznaczony().setG3B(false);
                 gs.getBohaterZaznaczony().setG3A(true);
-                gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/3A.png"));
-                gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/3Az.png"));
+                if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/wizard/3A.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/wizard/3Az.png"));
+                } else if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/hunter/3A.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/hunter/3Az.png"));
+                } else {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/3A.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/3Az.png"));
+                }
                 awans.classOfHero = lblPoziom4A.getText().toString();
                 Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
@@ -203,8 +248,16 @@ public class AwansScreen implements Screen {
                 awans.wybor4B = true;
                 gs.getBohaterZaznaczony().setG3B(true);
                 gs.getBohaterZaznaczony().setG3A(false);
-                gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/3B.png"));
-                gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/3Bz.png"));
+                if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/wizard/3B.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/wizard/3Bz.png"));
+                } else if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/hunter/3B.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/hunter/3Bz.png"));
+                } else {
+                    gs.getBohaterZaznaczony().setBohaterTex(new Texture("moby/warrior/3B.png"));
+                    gs.getBohaterZaznaczony().setBohaterCheckTex(new Texture("moby/warrior/3Bz.png"));
+                }
                 awans.classOfHero = lblPoziom4B.getText().toString();
                 Gdx.app.log("Aktualna klasa postaci", awans.classOfHero);
                 reformatujTabele();
@@ -228,15 +281,14 @@ public class AwansScreen implements Screen {
                     btnPoziom2.setVisible(false);
                     btnPoziom3A.setVisible(false);
                     btnPoziom3B.setVisible(false);
-                    if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Arcypaladyn")){
+                    if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Arcypaladyn")) {
                         btnPoziom4B.setVisible(false);
-                    } else if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Msciciel")){
+                    } else if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Msciciel")) {
                         btnPoziom4A.setVisible(false);
                     }
                     break;
             }
-        }
-        else {
+        } else {
             btnPoziom2.setVisible(false);
             btnPoziom3A.setVisible(false);
             btnPoziom3B.setVisible(false);
@@ -285,18 +337,13 @@ public class AwansScreen implements Screen {
         Label lbl01 = new Label("Wybierz atrybut: ", this.a.skin);
         rightTable.add(lbl01).colspan(10).align(Align.center);
         rightTable.row();
-        //TextButton btn01 = new TextButton("A", a.skin);
+
         ButtonActor btn01 = new ButtonActor(a.texAtcIcon, 0, 0);
         ButtonActor btn02 = new ButtonActor(a.texDefIcon, 0, 0);
         ButtonActor btn03 = new ButtonActor(a.texSpdIcon, 0, 0);
         ButtonActor btn04 = new ButtonActor(a.texHpIcon, 0, 0);
         ButtonActor btn05 = new ButtonActor(a.texPwrIcon, 0, 0);
         ButtonActor btn06 = new ButtonActor(a.texWsdIcon, 0, 0);
-//        TextButton btn02 = new TextButton("O", a.skin);
-//        TextButton btn03 = new TextButton("S", a.skin);
-//        TextButton btn04 = new TextButton("HP", a.skin);
-//        TextButton btn05 = new TextButton("M", a.skin);
-//        TextButton btn06 = new TextButton("W", a.skin);
 
         btn01.addListener(new ClickListener() {
             @Override
@@ -424,6 +471,12 @@ public class AwansScreen implements Screen {
                     return new DefaultActor(a.texSpellCharge, 0, 0);
                 case FinalJudgment:
                     return new DefaultActor(a.texSpellFinalJudgment, 0, 0);
+                case Frozen:
+                    return new DefaultActor(a.texSpellFreez, 0, 0);
+                case Thunder:
+                    return new DefaultActor(a.texSpellThunder, 0, 0);
+                case MeteorShower:
+                    return new DefaultActor(a.texSpellMeteorShower, 0, 0);
             }
         }
         return null;
@@ -478,7 +531,9 @@ public class AwansScreen implements Screen {
      * @return String z Texture Regionem
      */
     private String getImageTextureRegion(String level) {
-        if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Wojownik) {
+        if (gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Wojownik ||
+                gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Czarodziej ||
+                gs.getBohaterZaznaczony().getKlasyPostaci() == KlasyPostaci.Lowca) {
             if (level.equals("0")) {
                 return "0";
             } else if (level.equals("1")) {
@@ -663,6 +718,18 @@ public class AwansScreen implements Screen {
                         listaCzarow.add(Spells.FinalJudgment);
                     }
                     break;
+                case Czarodziej:
+                    if (wybor2) {
+                        listaCzarow.add(Spells.Frozen);
+                    } else if (wybor3A) {
+                        listaCzarow.add(Spells.Thunder);
+                    } else if (wybor3B) {
+                        listaCzarow.add(Spells.Discouragement);
+                    } else if (wybor4A) {
+                        listaCzarow.add(Spells.Fury);
+                    } else if (wybor4B) {
+                        listaCzarow.add(Spells.FinalJudgment);
+                    }
             }
         }
 
@@ -752,8 +819,8 @@ public class AwansScreen implements Screen {
             b.setActualHeroClass(this.classOfHero);
 
             // Oryginalne ustawienie osiągnięcia następnego poziomu. NIE KASOWAĆ
-            b.setExpToNextLevel(b.getExp() + 2 * b.getExp());
-            //b.setExpToNextLevel(b.getExp() + 100);
+            //b.setExpToNextLevel(b.getExp() + 2 * b.getExp());
+            b.setExpToNextLevel(b.getExp() + 100);
 
             for (Spells listaCzarow1 : awans.listaCzarow) {
                 gs.getBohaterZaznaczony().getListOfSpells().add(listaCzarow1);

@@ -14,5 +14,9 @@ public enum Spells {
     Fury,
     Discouragement,
     Charge,
-    FinalJudgment;
+    FinalJudgment,
+    Thunder,
+    MeteorShower,
+    Bless,
+    Prayer;
 }

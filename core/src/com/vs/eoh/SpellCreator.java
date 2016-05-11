@@ -51,6 +51,26 @@ public class SpellCreator {
                 spell.setRodzajCzaru(spells);
                 break;
 
+            case Thunder:
+                spell.getSprite().setTexture(a.texSpellThunder);
+                spell.setDmg(7);
+                spell.setKoszt(2);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setEfektDmg(7);
+                spell.setRodzajCzaru(spells);
+                break;
+
+            case MeteorShower:
+                spell.getSprite().setTexture(a.texSpellMeteorShower);
+                spell.setDmg(12);
+                spell.setKoszt(3);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setEfektDmg(7);
+                spell.setRodzajCzaru(spells);
+                break;
+
             case Frozen:
                 spell.getSprite().setTexture(a.texSpellFreez);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
@@ -66,6 +86,7 @@ public class SpellCreator {
                     }
                 });
                 break;
+
 
             case Rage:
                 spell.setSpellWorksOnlyForCaster(true);
@@ -111,7 +132,6 @@ public class SpellCreator {
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellSongOfGlory, 0, 0));
                 spell.setRodzajCzaru(spells);
-                spell.setKoszt(1);
                 spell.getSpellEffects().get(0).setOpis("Zwiększenie ataku +1 do końca tury");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
@@ -120,6 +140,43 @@ public class SpellCreator {
                     }
                 });
                 break;
+
+            case Bless:
+                spell.setSpellWorksOnlyForPlayersHeroes(true);
+                spell.getSprite().setTexture(a.texSpellBless);
+                spell.setKoszt(1);
+                spell.setZasieg(5);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellBless, 0, 0));
+                spell.setRodzajCzaru(spells);
+                spell.getSpellEffects().get(0).setOpis("Zwiększa atak i obronę o 5");
+                spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        DialogScreen dialogScreen = new DialogScreen("Blogoslawienstwo", a.skin, "Zwiększa atak i obronę o 5", Assets.stage01MapScreen);
+                    }
+                });
+                break;
+
+            case Prayer:
+                spell.setSpellWorksOnlyForPlayersHeroes(true);
+                spell.getSprite().setTexture(a.texSpellPrayer);
+                spell.setKoszt(1);
+                spell.setZasieg(5);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellPrayer, 0, 0));
+                spell.setRodzajCzaru(spells);
+                spell.getSpellEffects().get(0).setOpis("Zwiększa atak i obronę o 7, przywracając szybkość i punkty HP");
+                spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        DialogScreen dialogScreen = new DialogScreen("Modlitwa", a.skin, "Zwiększa atak i obronę o 7, przywracając szybkość i punkty HP", Assets.stage01MapScreen);
+                    }
+                });
+                break;
+
 
             case Discouragement:
                 spell.setSpellWorksOnlyForCaster(true);
@@ -182,11 +239,11 @@ public class SpellCreator {
                 spell.getSpellEffects().add(new SpellEffects());
 
                 spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellFinalJudgment, 0, 0));
-                spell.getSpellEffects().get(0).setOpis("Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak +1.");
+                spell.getSpellEffects().get(0).setOpis("Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak bohatera o +1.");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Final Judgment", a.skin, "Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak +1.", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Final Judgment", a.skin, "Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak bohatera o +1.", Assets.stage01MapScreen);
                     }
                 });
 
@@ -219,6 +276,12 @@ public class SpellCreator {
                 return a.texSpellFinalJudgment;
             case FireBall:
                 return a.texSpellFireBall;
+            case Thunder:
+                return a.texSpellThunder;
+            case MeteorShower:
+                return a.texSpellMeteorShower;
+            case Bless:
+                return a.texSpellBless;
             case Frozen:
                 return a.texSpellFreez;
             case Haste:
@@ -245,6 +308,8 @@ public class SpellCreator {
                 return "Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak +1.";
             case FireBall:
                 return "Fireball";
+            case Thunder:
+                return "Razi przeciwnika piorunem";
             case Frozen:
                 return "Frozen";
             case Haste:

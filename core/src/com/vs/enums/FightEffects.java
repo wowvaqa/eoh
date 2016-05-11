@@ -13,5 +13,5 @@ public enum FightEffects {
     DiscouragementEffect,
     ChargeEffect,
     FuryEffect,
-    FinalJudgeEffect;
+    FinalJudgeEffect,
 }

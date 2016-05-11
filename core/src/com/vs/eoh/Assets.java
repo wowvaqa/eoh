@@ -27,6 +27,8 @@ import com.vs.screens.MultiplayerScreen;
 
 import java.util.ArrayList;
 
+import javax.xml.soap.Text;
+
 public class Assets {
 
     public static Stage stage01MapScreen;
@@ -72,6 +74,8 @@ public class Assets {
     // Texture Atlas
     public TextureAtlas tAtals;
     public TextureAtlas tAtlasWarrior;
+    public TextureAtlas tAtlasWizard;
+    public TextureAtlas tAtlasHunter;
     public AssetManager aM;
     // tekstury itemków
     public Texture texHead;
@@ -104,6 +108,10 @@ public class Assets {
     public Texture texSpellFury;
     public Texture texSpellCharge;
     public Texture texSpellFinalJudgment;
+    public Texture texSpellThunder;
+    public Texture texSpellMeteorShower;
+    public Texture texSpellBless;
+    public Texture texSpellPrayer;
     // Potions
     public Texture texHelthPotion;
     public Texture texSpeedPotion;
@@ -125,6 +133,14 @@ public class Assets {
     public AssetManager am;
     public Label lblDmg;
     public int[] mapa = new int[100];
+
+    /**
+     * Pictures
+     */
+    public Texture texMainPic;
+    public Texture texNewGamePic;
+    public Texture texNewGamePlayerTabPic;
+
     /**
      * SOUNDS --------------------------------------------------------------------------------------
      */
@@ -136,7 +152,10 @@ public class Assets {
     public Assets() {
 
         tAtals = new TextureAtlas(Gdx.files.internal("terrain/test.atlas"));
+
         tAtlasWarrior = new TextureAtlas(Gdx.files.internal("moby/warrior/warrior.atlas"));
+        tAtlasWizard = new TextureAtlas(Gdx.files.internal("moby/wizard/wizard.atlas"));
+        tAtlasHunter = new TextureAtlas(Gdx.files.internal("moby/hunter/hunter.atlas"));
         
         aM = new AssetManager();
         //aM.load("mapa.dat", Mapa.class);
@@ -154,8 +173,8 @@ public class Assets {
         btnOK = new Texture("btnOK.png");
         btnRight = new Texture("btnRight.png");
         btnLeft = new Texture("btnLeft.png");
-        mobElfTex = new Texture("mobElfTex.png");
-        mobElfTexZaznaczony = new Texture("mobElfTexZaznaczony.png");
+        mobElfTex = new Texture("moby/hunter/0.png");
+        mobElfTexZaznaczony = new Texture("moby/hunter/0z.png");
         mobOrkTex = new Texture("mobOrkTex.png");
         mobOrkTexZaznaczony = new Texture("mobOrkTexZaznaczony.png");
         mobDwarfTex = new Texture("mobDwarfTex.png");
@@ -164,8 +183,8 @@ public class Assets {
         //mobHumanTexZaznaczony = new Texture("mobHumanTexZaznaczony.png");
         mobHumanTex = new Texture("moby/warrior/0.png");
         mobHumanTexZaznaczony = new Texture("moby/warrior/0z.png");
-        mobWizardTex = new Texture("mobWizardTex.png");
-        mobWizardTexZaznaczony = new Texture("mobWizardTexZaznaczony.png");
+        mobWizardTex = new Texture("moby/wizard/0.png");
+        mobWizardTexZaznaczony = new Texture("moby/wizard/0z.png");
 
         cancelTex = new Texture("cancelBtt.png");
 
@@ -187,6 +206,10 @@ public class Assets {
         texWsdIcon = new Texture("interface/texWsdIcon.png");
         texDmgIcon = new Texture("interface/texDmgIcon.png");
         texArmIcon = new Texture("interface/texArmIcon.png");
+
+        texMainPic = new Texture("mainPic.jpg");
+        texNewGamePic = new Texture("newGamePic.png");
+        texNewGamePlayerTabPic = new Texture("texNewGamePlayerTabPic.png");
 
         //makeSounds();
 
@@ -512,6 +535,11 @@ public class Assets {
         texSpellFury = new Texture("spells/texFury.png");
         texSpellCharge = new Texture("spells/texCharge.png");
         texSpellFinalJudgment = new Texture("spells/texFinalJudgment.png");
+        texSpellThunder = new Texture("spells/texThunder.png");
+        texSpellMeteorShower = new Texture("spells/texMeteorShower.png");
+        texSpellBless = new Texture("spells/texBless.png");
+        texSpellPrayer = new Texture("spells/texPrayer.png");
+
     }
 
     /**
