@@ -41,6 +41,35 @@ public class SpellCreator {
 
         switch (spells) {
 
+            case Poison:
+                spell.getSprite().setTexture(a.texSpellPoison);
+                spell.setDmg(1);
+                spell.setKoszt(1);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setEfektDmg(1);
+                spell.getSpellEffects().get(0).setPosionEffect(true);
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellPoison, 0, 0));
+                spell.getSpellEffects().get(0).setOpis("Po zadaja obrazenia po kazdym ruchu bohatera");
+                spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        DialogScreen dialogScreen = new DialogScreen("Trucizna", a.skin, "Trucizna", Assets.stage01MapScreen);
+                    }
+                });
+                spell.setRodzajCzaru(spells);
+                break;
+
+            case VampireTouch:
+                spell.getSprite().setTexture(a.texSpellVampireTouch);
+                spell.setDmg(2 + bohater.getMoc() * 2);
+                spell.setKoszt(1);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setEfektDmg(2 + bohater.getMoc() * 2);
+                spell.setRodzajCzaru(spells);
+                break;
+
             case FireBall:
                 spell.getSprite().setTexture(a.texSpellFireBall);
                 spell.setDmg(3);
@@ -48,6 +77,35 @@ public class SpellCreator {
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setEfektDmg(3);
+                spell.setRodzajCzaru(spells);
+                break;
+
+            case LongShot:
+                spell.getSprite().setTexture(a.texSpellLongShot);
+                spell.setDmg(5 + bohater.getMoc());
+                spell.setKoszt(1);
+                spell.setZasieg(bohater.getMoc());
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setEfektDmg(5 + bohater.getMoc());
+                spell.setRodzajCzaru(spells);
+                break;
+
+            case SummonBear:
+                spell.setSpellSummonSpell(true);
+                spell.getSprite().setTexture(a.texSpellSummonBear);
+                spell.setKoszt(1);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
+                spell.setRodzajCzaru(spells);
+                break;
+
+            case SummonWolf:
+                spell.setSpellSummonSpell(true);
+                spell.getSprite().setTexture(a.texSpellSummonWolf);
+                spell.setKoszt(1);
+                spell.setSpellEffects(new ArrayList<SpellEffects>());
+                spell.getSpellEffects().add(new SpellEffects());
                 spell.setRodzajCzaru(spells);
                 break;
 

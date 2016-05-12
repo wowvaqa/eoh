@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
 import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
@@ -335,8 +336,21 @@ public class MapScreen implements Screen {
                         && gs.getMapa().getPola()[i][j].getBohater().getActualHp()
                         < gs.getMapa().getPola()[i][j].getBohater().getHp()) {
                     System.out.println("Bohater odnawia życie");
+
+                    int hpRenew = 1;
+
+                    if (gs.getMapa().getPola()[i][j].getCastle() != null) {
+                        Gdx.app.log("Gracz siedzi na zamku", "");
+                        hpRenew = 3;
+                    }
+
                     gs.getMapa().getPola()[i][j].getBohater().setActualHp(
-                            gs.getMapa().getPola()[i][j].getBohater().getActualHp() + 1);
+                            gs.getMapa().getPola()[i][j].getBohater().getActualHp() + hpRenew);
+
+                    if (gs.getMapa().getPola()[i][j].getBohater().getActualHp() > gs.getMapa().getPola()[i][j].getBohater().getHp()) {
+                        gs.getMapa().getPola()[i][j].getBohater().setActualHp(gs.getMapa().getPola()[i][j].getBohater().getHp());
+                    }
+
                     gs.getMapa().getPola()[i][j].getBohater().aktualizujTeksture();
                 }
             }
@@ -545,7 +559,8 @@ public class MapScreen implements Screen {
 
         if (gs.getBohaterZaznaczony() != null) {
             aktualizujPanelBohatera();
-            if (gs.getBohaterZaznaczony().getExp() >= gs.getBohaterZaznaczony().getExpToNextLevel()) {
+            if (gs.getBohaterZaznaczony().getExp() >= gs.getBohaterZaznaczony().getExpToNextLevel() &&
+                    gs.getBohaterZaznaczony().getKlasyPostaci() != KlasyPostaci.Summmon) {
                 interfce.btnAwansujBohatera.setVisible(true);
             }
         } else {
@@ -704,13 +719,15 @@ public class MapScreen implements Screen {
     }
 
     /**
-     *  Klasa przechwytująca gesty.
+     * Klasa przechwytująca gesty.
      */
     public class MyGestureDetector extends GestureDetector {
         private GestureListener listener;
+
         public MyGestureDetector(GestureListener listner) {
             super(listner);
         }
+
         @Override
         public boolean isPanning() {
             return super.isPanning();
@@ -919,7 +936,8 @@ public class MapScreen implements Screen {
             tableSpells.setDebug(true);
 
             int indeksWiersza = 0;
-            if (gs.isCzyZaznaczonoBohatera()) {
+            //if (gs.isCzyZaznaczonoBohatera()) {
+            if (gs.getBohaterZaznaczony() != null) {
                 gs.getBohaterZaznaczony().getSpells().clear();
                 SpellCreator spellCreator = new SpellCreator(a, gs);
                 for (Spells spl : gs.getBohaterZaznaczony().getListOfSpells()) {

@@ -27,9 +27,6 @@ import java.util.ArrayList;
  */
 public class Bohater extends Actor {
 
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
     // Statystyki
     private final String imie = null;
     // klasa bohatera
@@ -37,6 +34,9 @@ public class Bohater extends Actor {
     public boolean teksturaZaktualizowana = false;
     public boolean animujCiecieNetwork = false;
     public int damageNetwork = 0;   // do rysowania labelki z ilością obrażeń
+    private Assets a;
+    private GameStatus gs;
+    private Game g;
     private Sprite sprite;    // wygląd
     private Image image;
     private Texture bohaterTex;
@@ -212,9 +212,9 @@ public class Bohater extends Actor {
                     // Jeżeli FALSE wtedy uruchamia reszte procedur dla bohatera
                 } else {
                     // Sprawdza czy bohater gracza porusza się w sowjej turze.
-                    if (przynaleznoscDoGracza != gs.getTuraGracza()) {
-                        System.out.println("Ten Gracz teraz nie ma swojej tury");
-                    } else {
+//                    if (przynaleznoscDoGracza != gs.getTuraGracza()) {
+//                        System.out.println("Ten Gracz teraz nie ma swojej tury");
+//                    } else {
                         // Sprawdza czy bohater posiada jeszcze punkty ruchu.
                         if (pozostaloRuchow < 1) {
                             System.out.println("Bohater nie posiada już ruchu!");
@@ -237,7 +237,7 @@ public class Bohater extends Actor {
                                 Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
                             }
                         }
-                    }
+                    //}
                 }
             }
         });
@@ -323,9 +323,11 @@ public class Bohater extends Actor {
         this.setPixMap(bohaterTex.getTextureData().consumePixmap());
 
         this.getPixMap().setColor(Color.RED);
-        this.getPixMap().fillRectangle(0, 0, 5, 100);
+        //this.getPixMap().fillRectangle(0, 0, 5, 100);
+        this.getPixMap().fillRectangle(0, 2, 5, 98);
         this.getPixMap().setColor(Color.WHITE);
-        this.getPixMap().fillRectangle(1, 1, 3, 100 - poziomHP());
+        //this.getPixMap().fillRectangle(1, 1, 3, 100 - poziomHP());
+        this.getPixMap().fillRectangle(1, 3, 3, 97 - poziomHP());
 
         this.setBohaterTex(new Texture(this.getPixMap()));
         this.sprite.setTexture(bohaterTex);
@@ -337,9 +339,11 @@ public class Bohater extends Actor {
         this.setPixMap(bohaterCheckTex.getTextureData().consumePixmap());
 
         this.getPixMap().setColor(Color.RED);
-        this.getPixMap().fillRectangle(0, 0, 5, 100);
+        //this.getPixMap().fillRectangle(0, 0, 5, 100);
+        this.getPixMap().fillRectangle(0, 2, 5, 98);
         this.getPixMap().setColor(Color.WHITE);
-        this.getPixMap().fillRectangle(1, 1, 3, 100 - poziomHP());
+        //this.getPixMap().fillRectangle(1, 1, 3, 100 - poziomHP());
+        this.getPixMap().fillRectangle(1, 3, 3, 97 - poziomHP());
 
         this.setBohaterCheckTex(new Texture(this.getPixMap()));
     }
@@ -351,7 +355,7 @@ public class Bohater extends Actor {
      * @return
      */
     private int poziomHP() {
-        float poziom = this.actualHp * 100 / this.hp;
+        float poziom = this.actualHp * 97 / this.hp;
 
         return (int) Math.round(poziom);
     }
@@ -1051,5 +1055,17 @@ public class Bohater extends Actor {
      */
     public void setActualHeroClass(String actualHeroClass) {
         this.actualHeroClass = actualHeroClass;
+    }
+
+    public Assets getA() {
+        return a;
+    }
+
+    public GameStatus getGs() {
+        return gs;
+    }
+
+    public Game getG() {
+        return g;
     }
 }

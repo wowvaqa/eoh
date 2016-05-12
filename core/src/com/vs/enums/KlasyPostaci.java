@@ -5,5 +5,5 @@ package com.vs.enums;
  * @author v
  */
 public enum KlasyPostaci {
-     Wojownik, Giermek, Lowca, Twierdza, Czarodziej;
+     Wojownik, Giermek, Lowca, Twierdza, Czarodziej, Summmon;
 }

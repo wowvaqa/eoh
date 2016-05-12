@@ -1,7 +1,10 @@
 package com.vs.eoh;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.vs.enums.KlasyPostaci;
 import com.vs.screens.DialogScreen;
 
 import com.vs.enums.AnimsTypes;
@@ -18,6 +21,8 @@ public class SpellEffects {
 
     private boolean fightEffect = false;
     private FightEffects fightEffects;
+
+    private boolean posionEffect = false;
 
     private int dlugoscTrwaniaEfektu = 0;
 
@@ -44,6 +49,72 @@ public class SpellEffects {
     public void dzialanie(SpellActor spell, Object obiketBroniacy, Bohater bohaterCastujacy, Assets a) {
         switch (spell.getRodzajCzaru()) {
 
+            case SummonBear:
+                Gdx.app.log("case dziala", "");
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+
+                    Texture texSummon = new Texture("moby/summons/bear.png");
+                    Texture texSummonZ = new Texture("moby/summons/bearZ.png");
+
+                    Bohater summonBohater = new Bohater(texSummon, texSummonZ, spell.getSpellX() * 100, spell.getSpellY() * 100, bohaterCastujacy.getA(), spell.getSpellX()
+                            , spell.getSpellY(), bohaterCastujacy.getGs(), bohaterCastujacy.getG(), KlasyPostaci.Summmon);
+
+                    bohaterCastujacy.getGs().getMapa().getPola()[spell.getSpellX()][spell.getSpellY()].setBohater(summonBohater);
+
+                    summonBohater.setHp(8 + bohaterCastujacy.getMoc());
+                    summonBohater.setActualHp(summonBohater.getHp());
+                    summonBohater.setAtak(5 + bohaterCastujacy.getMoc());
+                    summonBohater.setObrona(3 + bohaterCastujacy.getMoc());
+                    summonBohater.setSzybkosc(2 + bohaterCastujacy.getMoc());
+                    summonBohater.setPozostaloRuchow(summonBohater.getSzybkosc());
+                    summonBohater.setPozXnaMapie(spell.getSpellX());
+                    summonBohater.setPozYnaMapie(spell.getSpellY());
+                    summonBohater.setPrzynaleznoscDoGracza(bohaterCastujacy.getPrzynaleznoscDoGracza());
+                    bohaterCastujacy.getGs().getGracze().get(bohaterCastujacy.getPrzynaleznoscDoGracza()).getBohaterowie().add(summonBohater);
+
+                    Assets.stage01MapScreen.addActor(summonBohater);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+
+                break;
+
+            case SummonWolf:
+                Gdx.app.log("case dziala", "");
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+
+                    Texture texSummon = new Texture("moby/summons/wolf.png");
+                    Texture texSummonZ = new Texture("moby/summons/wolfZ.png");
+
+                    Bohater summonBohater = new Bohater(texSummon, texSummonZ, spell.getSpellX() * 100, spell.getSpellY() * 100, bohaterCastujacy.getA(), spell.getSpellX()
+                            , spell.getSpellY(), bohaterCastujacy.getGs(), bohaterCastujacy.getG(), KlasyPostaci.Summmon);
+
+                    bohaterCastujacy.getGs().getMapa().getPola()[spell.getSpellX()][spell.getSpellY()].setBohater(summonBohater);
+
+                    summonBohater.setHp(4 + bohaterCastujacy.getMoc());
+                    summonBohater.setActualHp(summonBohater.getHp());
+                    summonBohater.setAtak(3 + bohaterCastujacy.getMoc());
+                    summonBohater.setObrona(3 + bohaterCastujacy.getMoc());
+                    summonBohater.setSzybkosc(5 + bohaterCastujacy.getMoc());
+                    summonBohater.setPozostaloRuchow(summonBohater.getSzybkosc());
+                    summonBohater.setPozXnaMapie(spell.getSpellX());
+                    summonBohater.setPozYnaMapie(spell.getSpellY());
+                    summonBohater.setPrzynaleznoscDoGracza(bohaterCastujacy.getPrzynaleznoscDoGracza());
+                    bohaterCastujacy.getGs().getGracze().get(bohaterCastujacy.getPrzynaleznoscDoGracza()).getBohaterowie().add(summonBohater);
+
+                    Assets.stage01MapScreen.addActor(summonBohater);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+
+                break;
+
             case FireBall:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
@@ -57,6 +128,52 @@ public class SpellEffects {
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
                         a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }
+                    Assets.stage01MapScreen.addActor(animActor);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
+            case LongShot:
+                // Zadaje obrażenia
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.SlashAnimation));
+                    if (obiketBroniacy.getClass() == Bohater.class) {
+                        Bohater tmpBoh = (Bohater) obiketBroniacy;
+                        a.animujSpellLblDmg(tmpBoh.getX(), tmpBoh.getY(), bohaterCastujacy, tmpBoh, spell);
+                        animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
+                    } else if (obiketBroniacy.getClass() == Mob.class) {
+                        System.out.println("przeciwnik jest mobem");
+                        Mob tmpMob = (Mob) obiketBroniacy;
+                        animActor.setPosition(tmpMob.getX(), tmpMob.getY());
+                        a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }
+                    Assets.stage01MapScreen.addActor(animActor);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
+            case VampireTouch:
+                // Zadaje obrażenia
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    if (obiketBroniacy.getClass() == Bohater.class) {
+                        Bohater tmpBoh = (Bohater) obiketBroniacy;
+                        a.animujSpellLblDmg(tmpBoh.getX(), tmpBoh.getY(), bohaterCastujacy, tmpBoh, spell);
+                        bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + spell.getDmg() / 2);
+                        bohaterCastujacy.aktualizujTeksture();
+                        animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
+                    } else if (obiketBroniacy.getClass() == Mob.class) {
+                        System.out.println("przeciwnik jest mobem");
+                        Mob tmpMob = (Mob) obiketBroniacy;
+                        animActor.setPosition(tmpMob.getX(), tmpMob.getY());
+                        a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                        bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + spell.getDmg() / 2);
+                        bohaterCastujacy.aktualizujTeksture();
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -113,6 +230,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation));
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
 
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
@@ -165,7 +283,6 @@ public class SpellEffects {
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
-
                 } else {
                     System.out.println("Za mało MANY");
                 }
@@ -214,6 +331,9 @@ public class SpellEffects {
             case Bless:
                 System.out.println("Czar Blogoslawienstwo");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+
                     this.efektAtak = 5;
                     this.efektObrona = 5;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
@@ -234,6 +354,9 @@ public class SpellEffects {
             case Prayer:
                 System.out.println("Czar Modlitwa");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+
                     this.efektAtak = 7;
                     this.efektObrona = 7;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
@@ -245,6 +368,7 @@ public class SpellEffects {
                     tempBoh.setPozostaloRuchow(tempBoh.getSzybkosc() + getEfektSzybkosc());
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
                     animActor.setPosition(tempBoh.getX(), tempBoh.getY());
+                    tempBoh.aktualizujTeksture();
                     Assets.stage01MapScreen.addActor(animActor);
 
                 } else {
@@ -263,6 +387,32 @@ public class SpellEffects {
                     bohaterCastujacy.getSpellEffects().add(this);
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
+                    Assets.stage01MapScreen.addActor(animActor);
+                } else {
+                    System.out.println("Za mało MANY");
+                }
+                bohaterCastujacy.getSpells().clear();
+                break;
+
+            case Poison:
+                System.out.println("Czar POISON");
+                if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+
+                    if (obiketBroniacy.getClass() == Bohater.class) {
+                        Bohater tmpBoh = (Bohater) obiketBroniacy;
+                        this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                        tmpBoh.getSpellEffects().add(this);
+                        animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
+                    } else if (obiketBroniacy.getClass() == Mob.class) {
+                        System.out.println("przeciwnik jest mobem");
+                        this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                        Mob tmpMob = (Mob) obiketBroniacy;
+                        tmpMob.getSpellEffects().add(this);
+                        animActor.setPosition(tmpMob.getX(), tmpMob.getY());
+                    }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
                     System.out.println("Za mało MANY");
@@ -623,4 +773,21 @@ public class SpellEffects {
         this.fightEffects = fightEffects;
     }
 
+    /**
+     * Zwraca czy efekt jest efektem trucizny.
+     *
+     * @return
+     */
+    public boolean isPosionEffect() {
+        return posionEffect;
+    }
+
+    /**
+     * Ustala czy efekt jest efektem trucizny.
+     *
+     * @param posionEffect
+     */
+    public void setPosionEffect(boolean posionEffect) {
+        this.posionEffect = posionEffect;
+    }
 }

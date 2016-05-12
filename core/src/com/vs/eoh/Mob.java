@@ -1,6 +1,7 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -209,6 +210,16 @@ public class Mob extends Image {
     private void atakMoba() {
 
         if (System.currentTimeMillis() / 1000 > nastepnyAtakMoba) {
+
+            if (this.getSpellEffects().size() > 0) {
+                if (this.getSpellEffects().get(0).isPosionEffect()) {
+                    Gdx.app.log("Wykryto Poison Effect na Mobie", "ot co");
+                    int damage = this.getSpellEffects().get(0).getEfektDmg();
+                    this.aktualneHp = aktualneHp - damage;
+                    a.animujLblDamage(this.getX() + 50, this.getY() + 50, Integer.toString(damage));
+                }
+            }
+
             nastepnyAtakMoba += 2;
             System.out.println("TERAZ NASTEPUJE ATAK MOBA");
             if (gs.getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater() != null

@@ -21,6 +21,13 @@ public class SpellActor extends DefaultActor {
     private ArrayList<SpellEffects> spellEffects;
     private boolean spellWorksOnlyForCaster = false;
     private boolean spellWorksOnlyForPlayersHeroes = false;
+    private boolean spellSummonSpell = false;
+
+    /**
+     * Określa pozycję na mapie na które ma zadziałać zaklęcie. W przypadku przywołania.
+     */
+    private int spellX;
+    private int spellY;
 
     private int zasieg = 0;
     private int dmg = 0;
@@ -56,6 +63,13 @@ public class SpellActor extends DefaultActor {
         //this.spellEffects = new ArrayList<SpellEffects>();
     }
 
+    /**
+     *
+     */
+    public static void animateDamage() {
+
+    }
+
     private void dodajListnera() {
         final SpellActor sA = this;
         this.addListener(new ClickListener() {
@@ -68,15 +82,9 @@ public class SpellActor extends DefaultActor {
     }
 
     /**
-     *
-     */
-    public static void animateDamage() {
-
-    }
-
-    /**
      * GETTERS AND SETTERS *
      */
+
     /**
      * Zwraca zasięg czaru.
      *
@@ -200,6 +208,38 @@ public class SpellActor extends DefaultActor {
     public void setSpellWorksOnlyForPlayersHeroes(boolean spellWorksOnlyForPlayersHeroes) {
         this.spellWorksOnlyForPlayersHeroes = spellWorksOnlyForPlayersHeroes;
     }
-    
-    
+
+    /**
+     * Sprawdza czy zaklęcie jest przyzywające
+     *
+     * @return Zwraca TRUE jeżeli tak
+     */
+    public boolean isSpellSummonSpell() {
+        return spellSummonSpell;
+    }
+
+    /**
+     * Ustala czy zaklęcie jest czarem przyzywającym
+     *
+     * @param spellSummonSpell
+     */
+    public void setSpellSummonSpell(boolean spellSummonSpell) {
+        this.spellSummonSpell = spellSummonSpell;
+    }
+
+    public int getSpellX() {
+        return spellX;
+    }
+
+    public void setSpellX(int spellX) {
+        this.spellX = spellX;
+    }
+
+    public int getSpellY() {
+        return spellY;
+    }
+
+    public void setSpellY(int spellY) {
+        this.spellY = spellY;
+    }
 }

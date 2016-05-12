@@ -14,4 +14,5 @@ public enum FightEffects {
     ChargeEffect,
     FuryEffect,
     FinalJudgeEffect,
+    PoisonEffect;
 }

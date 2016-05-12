@@ -18,5 +18,10 @@ public enum Spells {
     Thunder,
     MeteorShower,
     Bless,
-    Prayer;
+    Prayer,
+    Poison,
+    SummonBear,
+    SummonWolf,
+    VampireTouch,
+    LongShot;
 }

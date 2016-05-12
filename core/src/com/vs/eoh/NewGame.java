@@ -415,16 +415,21 @@ public class NewGame {
                 break;
             case Lowca:
                 bohater.getListOfSpells().add(Spells.Haste);
+                bohater.getListOfSpells().add(Spells.Poison);
+                bohater.getListOfSpells().add(Spells.SummonBear);
+                bohater.getListOfSpells().add(Spells.SummonWolf);
+                bohater.getListOfSpells().add(Spells.VampireTouch);
+                bohater.getListOfSpells().add(Spells.LongShot);
                 break;
             case Twierdza:
                 bohater.getListOfSpells().add(Spells.Cure);
                 break;
             case Czarodziej:
                 bohater.getListOfSpells().add(Spells.FireBall);
-                bohater.getListOfSpells().add(Spells.Thunder);
-                bohater.getListOfSpells().add(Spells.MeteorShower);
-                bohater.getListOfSpells().add(Spells.Bless);
-                bohater.getListOfSpells().add(Spells.Prayer);
+                //bohater.getListOfSpells().add(Spells.Thunder);
+                //bohater.getListOfSpells().add(Spells.MeteorShower);
+                //bohater.getListOfSpells().add(Spells.Bless);
+                //bohater.getListOfSpells().add(Spells.Prayer);
                 break;
         }
     }

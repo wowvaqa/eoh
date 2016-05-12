@@ -112,6 +112,11 @@ public class Assets {
     public Texture texSpellMeteorShower;
     public Texture texSpellBless;
     public Texture texSpellPrayer;
+    public Texture texSpellPoison;
+    public Texture texSpellSummonBear;
+    public Texture texSpellSummonWolf;
+    public Texture texSpellVampireTouch;
+    public Texture texSpellLongShot;
     // Potions
     public Texture texHelthPotion;
     public Texture texSpeedPotion;
@@ -259,6 +264,37 @@ public class Assets {
         lblDmg.addAction(Actions.fadeOut(2.0f));
         lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
         lblDmg.act(Gdx.graphics.getDeltaTime());
+    }
+
+    /**
+     * Animuje etykietę obrażeń z zadanym Stringiem obrażeń.
+     *
+     * @param pozX Pozycja X gdzie ma być ustawiona etykieta.
+     * @param pozY Pozycja Y gdzie ma być ustawiona etykieta.
+     * @param dmg  String z ilością obrażeń.
+     */
+    public void animujLblDamage(float pozX, float pozY, String dmg) {
+
+        Label label = new Label("", skin);
+
+        Assets.stage01MapScreen.addActor(label);
+
+        label.setText("Dmg: " + dmg);
+        label.setPosition(pozX - 50, pozY - 25);
+        label.setFontScale(1.5f);
+        label.addAction(Actions.alpha(1));
+        label.addAction(Actions.fadeOut(2.0f));
+        label.addAction(Actions.moveBy(0, 175, 2.0f));
+        label.act(Gdx.graphics.getDeltaTime());
+
+
+//        lblDmg.setText("Dmg: " + dmg);
+//        lblDmg.setPosition(pozX - 50, pozY - 25);
+//        lblDmg.setFontScale(1.5f);
+//        lblDmg.addAction(Actions.alpha(1));
+//        lblDmg.addAction(Actions.fadeOut(2.0f));
+//        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
+//        lblDmg.act(Gdx.graphics.getDeltaTime());
     }
 
     /**
@@ -539,7 +575,11 @@ public class Assets {
         texSpellMeteorShower = new Texture("spells/texMeteorShower.png");
         texSpellBless = new Texture("spells/texBless.png");
         texSpellPrayer = new Texture("spells/texPrayer.png");
-
+        texSpellPoison = new Texture("spells/texPoison.png");
+        texSpellSummonBear = new Texture("spells/texSummonBear.png");
+        texSpellSummonWolf = new Texture("spells/texSummonWolf.png");
+        texSpellVampireTouch = new Texture("spells/texVampireTouch.png");
+        texSpellLongShot = new Texture("spells/texLongShot.png");
     }
 
     /**

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.vs.enums.KlasyPostaci;
 import com.vs.network.Network;
 import com.vs.screens.MapScreen;
 import com.vs.screens.MultiplayerScreen;
@@ -270,7 +271,9 @@ public class Ruch {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     wykonajRuch();
-                    ruch.checkTresureBox();
+                    if (!bohater.getKlasyPostaci().equals(KlasyPostaci.Summmon)) {
+                        ruch.checkTresureBox();
+                    }
                     ruch.checkCastle();
                 }
             });
@@ -280,6 +283,15 @@ public class Ruch {
          * Wykonuje ruch na mapie bohatera
          */
         private void wykonajRuch() {
+
+            if (gs.getBohaterZaznaczony().getSpellEffects().size() > 0) {
+                if (gs.getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
+                    Gdx.app.log("Wykryto Poison Effect", "ot co");
+                    int damage = gs.getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
+                    gs.getBohaterZaznaczony().setActualHp(gs.getBohaterZaznaczony().getActualHp() - damage);
+                    a.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                }
+            }
 
             // polecenia wykonają się tylko jeżeli gra jest klientem
             if (gs.getNetworkStatus() == 2) {
@@ -353,6 +365,15 @@ public class Ruch {
          * Wykonuje atak
          */
         private void wykonajAtak() {
+
+            if (gs.getBohaterZaznaczony().getSpellEffects().size() > 0) {
+                if (gs.getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
+                    Gdx.app.log("Wykryto Poison Effect", "ot co");
+                    int damage = gs.getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
+                    gs.getBohaterZaznaczony().setActualHp(gs.getBohaterZaznaczony().getActualHp() - damage);
+                    a.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                }
+            }
 
             if (sprawdzPrzeciwnika(locX, locY).getClass() == Mob.class) {
                 System.out.println("Atak na moba");
@@ -456,6 +477,7 @@ public class Ruch {
 
             Ruch.wylaczIkonyEfektow();
             Ruch.wylaczPrzyciski();
+
         }
     }
 }

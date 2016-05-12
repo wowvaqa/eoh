@@ -724,11 +724,11 @@ public class AwansScreen implements Screen {
                     } else if (wybor3A) {
                         listaCzarow.add(Spells.Thunder);
                     } else if (wybor3B) {
-                        listaCzarow.add(Spells.Discouragement);
+                        listaCzarow.add(Spells.Bless);
                     } else if (wybor4A) {
-                        listaCzarow.add(Spells.Fury);
+                        listaCzarow.add(Spells.MeteorShower);
                     } else if (wybor4B) {
-                        listaCzarow.add(Spells.FinalJudgment);
+                        listaCzarow.add(Spells.Prayer);
                     }
             }
         }
@@ -825,6 +825,8 @@ public class AwansScreen implements Screen {
             for (Spells listaCzarow1 : awans.listaCzarow) {
                 gs.getBohaterZaznaczony().getListOfSpells().add(listaCzarow1);
             }
+
+            b.aktualizujTeksture();
         }
 
         /**
