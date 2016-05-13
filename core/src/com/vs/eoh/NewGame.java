@@ -28,6 +28,12 @@ public class NewGame {
     static public Pixmap pixmapBlue = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
     static public Pixmap pixmapGreen = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
     static public Pixmap pixmapYellow = new Pixmap(50, 25, Pixmap.Format.RGBA8888);
+
+    static public boolean ai0 = false;
+    static public boolean ai1 = false;
+    static public boolean ai2 = false;
+    static public boolean ai3 = false;
+
     /**
      * Określa ilość graczy
      */
@@ -334,8 +340,6 @@ public class NewGame {
         for (int i = 0; i < gs.iloscGraczy; i++) {
             gs.gracze.add(new Gracz(i));
             gs.gracze.get(i).setNumerGracza(i);
-
-            //System.out.println(gs.gracze.size());
         }
         // Dodanie dla każdego gracza bohatera
         for (int i = 0; i < gs.gracze.size(); i++) {
@@ -392,6 +396,19 @@ public class NewGame {
             Network.StartMultiGame startMultiGame = new Network.StartMultiGame();
             GameStatus.client.getCnt().sendTCP(startMultiGame);
             gs.setTuraGracza(NetEngine.playerNumber);
+        }
+
+        if (ai0) {
+            gs.gracze.get(0).setAi(true);
+        }
+        if (ai1) {
+            gs.gracze.get(0).setAi(true);
+        }
+        if (ai2) {
+            gs.gracze.get(0).setAi(true);
+        }
+        if (ai3) {
+            gs.gracze.get(0).setAi(true);
         }
 
         Assets.mapScreen = new MapScreen(g, a, gs);

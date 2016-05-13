@@ -67,6 +67,7 @@ public class SpellCreator {
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setEfektDmg(2 + bohater.getMoc() * 2);
+                spell.getSpellEffects().get(0).setOpis("Wampirzy dotyk zabiera Hp ofiary przekazujac ja rzucajacemu czar");
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -88,6 +89,7 @@ public class SpellCreator {
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setEfektDmg(5 + bohater.getMoc());
+                spell.getSpellEffects().get(0).setOpis("Kula ognia");
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -97,6 +99,7 @@ public class SpellCreator {
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setOpis("Przyzwanie niedzwiedzia");
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -106,6 +109,7 @@ public class SpellCreator {
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setOpis("Przyzwanie wilka");
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -116,6 +120,7 @@ public class SpellCreator {
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setEfektDmg(7);
+                spell.getSpellEffects().get(0).setOpis("Piorun");
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -126,6 +131,8 @@ public class SpellCreator {
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setEfektDmg(7);
+                spell.getSpellEffects().get(0).setOpis("Deszcz meteorow");
+
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -169,6 +176,7 @@ public class SpellCreator {
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setOpis("Przyspieszenie");
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -178,6 +186,14 @@ public class SpellCreator {
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
+                spell.getSpellEffects().get(0).setOpis("Leczenie");
+                spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        DialogScreen dialogScreen = new DialogScreen("Leczenie",
+                                a.skin, "Przywrocenie punktow HP", Assets.stage01MapScreen);
+                    }
+                });
                 spell.setRodzajCzaru(spells);
                 break;
 
@@ -340,6 +356,8 @@ public class SpellCreator {
                 return a.texSpellMeteorShower;
             case Bless:
                 return a.texSpellBless;
+            case Prayer:
+                return a.texSpellPrayer;
             case Frozen:
                 return a.texSpellFreez;
             case Haste:
@@ -348,6 +366,16 @@ public class SpellCreator {
                 return a.texSpellRage;
             case SongOfGlory:
                 return a.texSpellSongOfGlory;
+            case Poison:
+                return a.texSpellPoison;
+            case SummonWolf:
+                return a.texSpellSummonWolf;
+            case SummonBear:
+                return a.texSpellSummonBear;
+            case LongShot:
+                return a.texSpellLongShot;
+            case VampireTouch:
+                return a.texSpellVampireTouch;
         }
         return a.texStick;
     }

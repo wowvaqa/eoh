@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.vs.enums.KlasyPostaci;
+import com.vs.enums.Spells;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
@@ -21,8 +23,10 @@ import com.vs.eoh.NewGame;
 import static com.vs.eoh.NewGame.klasaPostaciGracz01;
 import static com.vs.eoh.NewGame.pobierzAtak;
 import static com.vs.eoh.NewGame.pobierzHp;
+import static com.vs.eoh.NewGame.pobierzMoc;
 import static com.vs.eoh.NewGame.pobierzObrone;
 import static com.vs.eoh.NewGame.pobierzSzybkosc;
+import static com.vs.eoh.NewGame.pobierzWiedze;
 
 /**
  * Screen odpowiedzialny za kupno nowego bohatera
@@ -223,6 +227,19 @@ public class NewBohaterScreen implements Screen {
         gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setActualHp(pobierzHp(klasaPostaciGracz01));
         gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setSzybkosc(pobierzSzybkosc(klasaPostaciGracz01));
         gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setPozostaloRuchow(pobierzSzybkosc(klasaPostaciGracz01));
+        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setWiedza(pobierzWiedze(klasaPostaciGracz01));
+        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setMoc(pobierzMoc(klasaPostaciGracz01));
+        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setMana(pobierzWiedze(klasaPostaciGracz01));
+        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setActualMana(pobierzWiedze(klasaPostaciGracz01));
+
+        if (klasaPostaciGracz01.equals(KlasyPostaci.Lowca)) {
+            gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Haste);
+        } else if (klasaPostaciGracz01.equals(KlasyPostaci.Czarodziej)) {
+            gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.FireBall);
+        } else if (klasaPostaciGracz01.equals(KlasyPostaci.Wojownik)) {
+            gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Rage);
+        }
+
         
         Assets.stage01MapScreen.addActor(gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(wymTabBoh));
         

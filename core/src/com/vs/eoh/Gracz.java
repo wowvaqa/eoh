@@ -30,6 +30,9 @@ public class Gracz {
     // Kolora ikona gracza wyświetlana w na Mapie. Informująca który gracz ma turę
     private Texture teksturaIkonyGracza;
 
+    // określa czy gracz jest pod kontrolą sztucznej inetligencji.
+    private boolean ai = false;
+
     /**
      * 
      * @param numerGracza 
@@ -186,7 +189,22 @@ public class Gracz {
     public void setStatusBezZamku(boolean statusBezZamku) {
         this.statusBezZamku = statusBezZamku;
     }
-    
-    
 
+    /**
+     * Sprawdza czy tracz jest pod kontrolą sztucznej inteligencji
+     *
+     * @return TRUE jeżeli tak
+     */
+    public boolean isAi() {
+        return ai;
+    }
+
+    /**
+     * Określa czy gracz będzie pod kontrolą AI
+     *
+     * @param ai TRUE - tak, FALSE - nie
+     */
+    public void setAi(boolean ai) {
+        this.ai = ai;
+    }
 }

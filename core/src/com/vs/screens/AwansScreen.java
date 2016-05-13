@@ -477,6 +477,20 @@ public class AwansScreen implements Screen {
                     return new DefaultActor(a.texSpellThunder, 0, 0);
                 case MeteorShower:
                     return new DefaultActor(a.texSpellMeteorShower, 0, 0);
+                case Bless:
+                    return new DefaultActor(a.texSpellBless, 0, 0);
+                case Prayer:
+                    return new DefaultActor(a.texSpellPrayer, 0, 0);
+                case LongShot:
+                    return new DefaultActor(a.texSpellLongShot, 0, 0);
+                case VampireTouch:
+                    return new DefaultActor(a.texSpellVampireTouch, 0, 0);
+                case SummonBear:
+                    return new DefaultActor(a.texSpellSummonBear, 0, 0);
+                case SummonWolf:
+                    return new DefaultActor(a.texSpellSummonWolf, 0, 0);
+                case Poison:
+                    return new DefaultActor(a.texSpellPoison, 0, 0);
             }
         }
         return null;
@@ -730,6 +744,20 @@ public class AwansScreen implements Screen {
                     } else if (wybor4B) {
                         listaCzarow.add(Spells.Prayer);
                     }
+                    break;
+                case Lowca:
+                    if (wybor2) {
+                        listaCzarow.add(Spells.Frozen);
+                    } else if (wybor3A) {
+                        listaCzarow.add(Spells.Thunder);
+                    } else if (wybor3B) {
+                        listaCzarow.add(Spells.Bless);
+                    } else if (wybor4A) {
+                        listaCzarow.add(Spells.MeteorShower);
+                    } else if (wybor4B) {
+                        listaCzarow.add(Spells.Prayer);
+                    }
+                    break;
             }
         }
 

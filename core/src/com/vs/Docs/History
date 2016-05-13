@@ -1,3 +1,8 @@
+version 0.0065  13052016
+DONE    1. Dodanie brakujacych ikon czarów w Screenie bohatera.
+DONE    2. Dodanie nowego sprita szkieleta, pająka, zombie.
+DONE    3. Dodanie czarów początkowych dla nowo wykupionych bohaterów.
+
 version 0.0064 12052016
 DONE    1. Poprawiono błąd powodujący zawieszanie się programu podczas startu nowej gry jeżeli żaden
         z bohaterów nie był zaznaczony.

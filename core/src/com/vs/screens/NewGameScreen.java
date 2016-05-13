@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -53,11 +54,12 @@ public class NewGameScreen implements Screen {
     private final Table tabelaGracz02 = new Table();
     private final Table tabelaGracz03 = new Table();
     private final Table tabelaGracz04 = new Table();
-
     private final Stage stage01;
-
     private final Label lblIloscGraczy;
-
+    private CheckBox cbAI0;
+    private CheckBox cbAI1;
+    private CheckBox cbAI2;
+    private CheckBox cbAI3;
     //private int iloscGraczy = 2;
     private boolean tabelaUtworzona = false;
 
@@ -83,6 +85,11 @@ public class NewGameScreen implements Screen {
         NewGame.pixmapYellow.fillRectangle(0, 0, 50, 25);
         NewGame.pixmapGreen.setColor(Color.GREEN);
         NewGame.pixmapGreen.fillRectangle(0, 0, 50, 25);
+
+        cbAI0 = new CheckBox("CPU", a.skin);
+        cbAI1 = new CheckBox("CPU", a.skin);
+        cbAI2 = new CheckBox("CPU", a.skin);
+        cbAI3 = new CheckBox("CPU", a.skin);
     }
 
     private void dodajDoStage01() {
@@ -148,6 +155,13 @@ public class NewGameScreen implements Screen {
                 System.out.println("EXIT");
                 if (!GameStatus.nazwaMapy.equals("brak") || !GameStatus.nazwaMapy.equals("mapa z serwera")) {
                     try {
+                        NewGame.ai0 = false;
+                        NewGame.ai1 = false;
+                        NewGame.ai2 = false;
+                        NewGame.ai3 = false;
+
+
+
                         NewGame.zakonczGenerowanieNowejGry(g, gs, a);
                     } catch (IOException ex) {
                         Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -225,10 +239,9 @@ public class NewGameScreen implements Screen {
         Image img = new Image(a.texNewGamePlayerTabPic);
         tabelaGracz01.setBackground(img.getDrawable());
 
-
-
         tabelaGracz01.pad(10);
-        tabelaGracz01.add(new Label("Gracz 1", a.skin)).colspan(2).padTop(10);
+        tabelaGracz01.add(new Label("Gracz 1", a.skin)).padTop(10);
+        tabelaGracz01.add(cbAI0).padTop(10);
         tabelaGracz01.row();
 
         // Przycisk - przy wyborze ilosci graczy
@@ -293,7 +306,8 @@ public class NewGameScreen implements Screen {
         tabelaGracz02.setBackground(img.getDrawable());
 
         tabelaGracz02.pad(10);
-        tabelaGracz02.add(new Label("Gracz 2", a.skin)).colspan(2).padTop(10);
+        tabelaGracz02.add(new Label("Gracz 2", a.skin)).padTop(10);
+        tabelaGracz02.add(cbAI1).padTop(10);
         tabelaGracz02.row();
 
         // Przycisk - przy wyborze ilosci graczy
@@ -354,7 +368,8 @@ public class NewGameScreen implements Screen {
      */
     private void formatujTabeleGracza03() {
         tabelaGracz03.pad(10);
-        tabelaGracz03.add(new Label("Gracz 3", a.skin)).colspan(tabelaGracz03.getColumns()).align(Align.center);
+        tabelaGracz03.add(new Label("Gracz 3", a.skin)).padTop(10);
+        tabelaGracz03.add(cbAI2).padTop(10);
         tabelaGracz03.row();
 
         // Przycisk - przy wyborze ilosci graczy
@@ -415,8 +430,10 @@ public class NewGameScreen implements Screen {
      * Formatuje tabelę gracza 4
      */
     private void formatujTabeleGracza04() {
+
         tabelaGracz04.pad(10);
-        tabelaGracz04.add(new Label("Gracz 3", a.skin)).colspan(tabelaGracz04.getColumns()).align(Align.center);
+        tabelaGracz04.add(new Label("Gracz 3", a.skin)).padTop(10);
+        tabelaGracz04.add(cbAI3).padTop(10);
         tabelaGracz04.row();
 
         // Przycisk - przy wyborze ilosci graczy
