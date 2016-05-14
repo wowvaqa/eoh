@@ -1,3 +1,11 @@
+version 0.0066 14052016
+DONE    1. Poprawiono błąd powodujący zawieszanie się gry gdy "Łowca" na krawędzi mapy rzucał
+        zaklęcie przywołujące wilka lub niedźwiedzia.
+DONE    2. Poprawiono błąd powodujący niepoprawne wyświetlanie się proporcji ekranu podczas
+        ZOOM OUTU.
+DONE    3. Dodanie ograniczeń w zoomie kamery.
+DONE    4. Dodanie ograniczeń w ruchu kamery z poziomu klawiatury, myszy i ekranów dotykowych.
+
 version 0.0065  13052016
 DONE    1. Dodanie brakujacych ikon czarów w Screenie bohatera.
 DONE    2. Dodanie nowego sprita szkieleta, pająka, zombie.

@@ -46,6 +46,8 @@ public class MapScreen implements Screen {
     public static MapScreen mapScreen;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
+    private float w;
+    private float h;
     private final Assets a;
     private final GameStatus gs;
     private final Game g;
@@ -86,11 +88,12 @@ public class MapScreen implements Screen {
 
         gs.czyUtworzonoMape = true;
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
 
         c = new OrthographicCamera(w, h);
         viewPort = new FitViewport(w, h, c);
+        stage01.setViewport(viewPort);
 
         stage03.addActor(tables.tableStage03Main);
         stage02.addActor(tables.tableInterface);
@@ -600,24 +603,46 @@ public class MapScreen implements Screen {
         int predkoscZoom = gs.getPredkoscZoomKamery();
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            stage01.getCamera().translate(-predkoscRuchuKamery, 0, 0);
+            if (stage01.getCamera().position.x > 350) {
+                stage01.getCamera().translate(-predkoscRuchuKamery, 0, 0);
+            }
+            Gdx.app.log("Position", "" + stage01.getCamera().position);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            stage01.getCamera().translate(predkoscRuchuKamery, 0, 0);
+            if (stage01.getCamera().position.x < gs.getMapa().getIloscPolX() * 100) {
+                stage01.getCamera().translate(predkoscRuchuKamery, 0, 0);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            stage01.getCamera().translate(0, predkoscRuchuKamery, 0);
+            if (stage01.getCamera().position.y < gs.getMapa().getIloscPolY() * 100) {
+                stage01.getCamera().translate(0, predkoscRuchuKamery, 0);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            stage01.getCamera().translate(0, -predkoscRuchuKamery, 0);
+            if (stage01.getCamera().position.y > 50) {
+                stage01.getCamera().translate(0, -predkoscRuchuKamery, 0);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            stage01.getCamera().viewportHeight += predkoscZoom;
-            stage01.getCamera().viewportWidth += predkoscZoom;
+            if (stage01.getCamera().viewportWidth < 2 * w) {
+                if (stage01.getCamera().viewportHeight < 2 * h) {
+                    stage01.getCamera().viewportHeight += predkoscZoom;
+                    stage01.getCamera().viewportWidth += predkoscZoom;
+                }
+            }
+            Gdx.app.log("WIDTH", "" + stage01.getCamera().viewportWidth);
+            Gdx.app.log("HEIGHT", "" + stage01.getCamera().viewportHeight);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            stage01.getCamera().viewportHeight -= predkoscZoom;
-            stage01.getCamera().viewportWidth -= predkoscZoom;
+
+            if (stage01.getCamera().viewportWidth > w) {
+                if (stage01.getCamera().viewportHeight > h) {
+                    stage01.getCamera().viewportHeight -= predkoscZoom;
+                    stage01.getCamera().viewportWidth -= predkoscZoom;
+                }
+            }
+            Gdx.app.log("WIDTH", "" + stage01.getCamera().viewportWidth);
+            Gdx.app.log("HEIGHT", "" + stage01.getCamera().viewportHeight);
         }
     }
 
@@ -767,8 +792,26 @@ public class MapScreen implements Screen {
 
         @Override
         public boolean pan(float x, float y, float deltaX, float deltaY) {
+
+            if (stage01.getCamera().position.x < 350) {
+                stage01.getCamera().position.x = 350;
+            }
+
+            if (stage01.getCamera().position.x > gs.getMapa().getIloscPolX() * 100) {
+                stage01.getCamera().position.x = gs.getMapa().getIloscPolX() * 100;
+            }
+
+            if (stage01.getCamera().position.y > gs.getMapa().getIloscPolY() * 100) {
+                stage01.getCamera().position.y = gs.getMapa().getIloscPolY() * 100;
+            }
+
+            if (stage01.getCamera().position.y < 50) {
+                stage01.getCamera().position.y = 50;
+            }
+
             stage.getCamera().translate(-deltaX, deltaY, 0);
             stage.getCamera().update();
+
             return false;
         }
 

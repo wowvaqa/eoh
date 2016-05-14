@@ -52,6 +52,8 @@ public class GameStatus {
     // Do uniemożliweinia ruchu podczas penetrowania skrzyni ze skarbem
     private Item item;
 
+    public static boolean gameStart = false;
+
     public GameStatus() {
         gs = this;
         wczytajItemy();

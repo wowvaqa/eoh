@@ -160,7 +160,18 @@ public class NewGameScreen implements Screen {
                         NewGame.ai2 = false;
                         NewGame.ai3 = false;
 
-
+                        if (cbAI0.isChecked()){
+                            NewGame.ai0 = true;
+                        }
+                        if (cbAI1.isChecked()){
+                            NewGame.ai1 = true;
+                        }
+                        if (cbAI2.isChecked()){
+                            NewGame.ai2 = true;
+                        }
+                        if (cbAI3.isChecked()){
+                            NewGame.ai3 = true;
+                        }
 
                         NewGame.zakonczGenerowanieNowejGry(g, gs, a);
                     } catch (IOException ex) {
@@ -168,6 +179,7 @@ public class NewGameScreen implements Screen {
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    GameStatus.gameStart = true;
                     g.setScreen(Assets.mapScreen);
                 } else {
                     new Dialog("Nie wybrano mapy", a.skin) {
@@ -183,7 +195,6 @@ public class NewGameScreen implements Screen {
                         }
                     }.show(stage01);
                 }
-
             }
         });
         //tabela01.add(btnExit).align(Align.right).colspan(tabela01.getColumns()).pad(10);

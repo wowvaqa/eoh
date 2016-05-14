@@ -65,12 +65,14 @@ public class SpellCaster {
                         Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                         Ruch.wylaczPrzyciski();
                     } else {
-                        if (!sprawdzPrzeciwnika(i, j) && !sprawdzPrzyjaciela(i, j) && gs.getMapa().getPola()[i][j].getTypTerenu() != TypyTerenu.Gory) {
-                            CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
-                            castButton.setPosition(i * 100, j * 100);
-                            Assets.stage01MapScreen.addActor(castButton);
-                            gs.isSpellPanelActive = false;
-                            Gdx.input.setInputProcessor(Assets.stage01MapScreen);
+                        if (i >= 0 && j >= 0 && i < gs.getMapa().getIloscPolX() && j < gs.getMapa().getIloscPolY()) {
+                            if (!sprawdzPrzeciwnika(i, j) && !sprawdzPrzyjaciela(i, j) && gs.getMapa().getPola()[i][j].getTypTerenu() != TypyTerenu.Gory) {
+                                CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
+                                castButton.setPosition(i * 100, j * 100);
+                                Assets.stage01MapScreen.addActor(castButton);
+                                gs.isSpellPanelActive = false;
+                                Gdx.input.setInputProcessor(Assets.stage01MapScreen);
+                            }
                         }
                     }
                 }
@@ -214,6 +216,8 @@ public class SpellCaster {
                         spell.getSpellEffects().get(0).dzialanie(spell, gs.getMapa().getPola()[locX][locY].getBohater(), bohaterCastujacy, a);
                     } else if (gs.getMapa().getPola()[locX][locY].getMob() != null) {
                         spell.getSpellEffects().get(0).dzialanie(spell, gs.getMapa().getPola()[locX][locY].getMob(), bohaterCastujacy, a);
+                    } else if (gs.getMapa().getPola()[locX][locY].getCastle() != null){
+                        spell.getSpellEffects().get(0).dzialanie(spell, gs.getMapa().getPola()[locX][locY].getCastle(), bohaterCastujacy, a);
                     } else {
                         spell.getSpellEffects().get(0).dzialanie(spell, null, bohaterCastujacy, a);
                     }

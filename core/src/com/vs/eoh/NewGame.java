@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.vs.ai.AI;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
 import com.vs.network.NetEngine;
@@ -11,6 +12,7 @@ import com.vs.network.Network;
 import com.vs.screens.MapScreen;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Klasa zarządza zachowanie nowej gry
@@ -398,18 +400,29 @@ public class NewGame {
             gs.setTuraGracza(NetEngine.playerNumber);
         }
 
+        ArrayList<AI> aiList = new ArrayList<AI>();
+
         if (ai0) {
             gs.gracze.get(0).setAi(true);
+            aiList.add(new AI(gs.gracze.get(0)));
         }
         if (ai1) {
-            gs.gracze.get(0).setAi(true);
+            gs.gracze.get(1).setAi(true);
+            aiList.add(new AI(gs.gracze.get(1)));
         }
         if (ai2) {
-            gs.gracze.get(0).setAi(true);
+            gs.gracze.get(2).setAi(true);
+            aiList.add(new AI(gs.gracze.get(2)));
         }
         if (ai3) {
-            gs.gracze.get(0).setAi(true);
+            gs.gracze.get(3).setAi(true);
+            aiList.add(new AI(gs.gracze.get(3)));
         }
+
+        if (AI.aiList != null) {
+            AI.aiList.clear();
+        }
+        AI.aiList = aiList;
 
         Assets.mapScreen = new MapScreen(g, a, gs);
     }

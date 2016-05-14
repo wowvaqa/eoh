@@ -44,6 +44,7 @@ public class Gracz {
         pM.setColor(color);
         pM.fillRectangle(0, 0, 20, 20);
         teksturaIkonyGracza = new Texture(pM);
+
     }
     
     /** 

@@ -267,6 +267,24 @@ public class Assets {
     }
 
     /**
+     * Animuje etykietę obrażeń oraz uruchamia procedurę liczenia obrażeń dla bohater vs zamek.
+     * @param pozX
+     * @param pozY
+     * @param bohaterAtakujacy
+     * @param castle
+     * @param spell
+     */
+    public void animujSpellLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Castle castle, SpellActor spell) {
+        lblDmg.setText(Integer.toString(Fight.getSpellObrazenia(bohaterAtakujacy, castle, spell)));
+        lblDmg.setPosition(pozX - 50, pozY - 25);
+        lblDmg.setFontScale(1.5f);
+        lblDmg.addAction(Actions.alpha(1));
+        lblDmg.addAction(Actions.fadeOut(2.0f));
+        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
+        lblDmg.act(Gdx.graphics.getDeltaTime());
+    }
+
+    /**
      * Animuje etykietę obrażeń z zadanym Stringiem obrażeń.
      *
      * @param pozX Pozycja X gdzie ma być ustawiona etykieta.

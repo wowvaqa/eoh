@@ -128,6 +128,11 @@ public class SpellEffects {
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
                         a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    } else if (obiketBroniacy.getClass() == Castle.class){
+                        Gdx.app.log("Typ przeciwnika:", "Zamek");
+                        Castle tmpCastle = (Castle) obiketBroniacy;
+                        animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
+                        a.animujSpellLblDmg(tmpCastle.getX(), tmpCastle.getY(), bohaterCastujacy, tmpCastle, spell);
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -149,6 +154,11 @@ public class SpellEffects {
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
                         a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }  else if (obiketBroniacy.getClass() == Castle.class){
+                        Gdx.app.log("Typ przeciwnika:", "Zamek");
+                        Castle tmpCastle = (Castle) obiketBroniacy;
+                        animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
+                        a.animujSpellLblDmg(tmpCastle.getX(), tmpCastle.getY(), bohaterCastujacy, tmpCastle, spell);
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -195,6 +205,11 @@ public class SpellEffects {
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
                         a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }  else if (obiketBroniacy.getClass() == Castle.class){
+                        Gdx.app.log("Typ przeciwnika:", "Zamek");
+                        Castle tmpCastle = (Castle) obiketBroniacy;
+                        animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
+                        a.animujSpellLblDmg(tmpCastle.getX(), tmpCastle.getY(), bohaterCastujacy, tmpCastle, spell);
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -216,6 +231,11 @@ public class SpellEffects {
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
                         a.animujSpellLblDmg(tmpMob.getX(), tmpMob.getY(), bohaterCastujacy, tmpMob, spell);
+                    }  else if (obiketBroniacy.getClass() == Castle.class){
+                        Gdx.app.log("Typ przeciwnika:", "Zamek");
+                        Castle tmpCastle = (Castle) obiketBroniacy;
+                        animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
+                        a.animujSpellLblDmg(tmpCastle.getX(), tmpCastle.getY(), bohaterCastujacy, tmpCastle, spell);
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {

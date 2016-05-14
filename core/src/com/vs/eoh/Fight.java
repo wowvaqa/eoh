@@ -300,6 +300,40 @@ public class Fight {
         return dmg;
     }
 
+    /**
+     * Zwraca obrażenia zadane zamkowi
+     * @param bohaterAtakujacy  Referencja do obiektu bohatera atakującego
+     * @param castle    Referenja do obiektu zamku
+     * @param spell Referencja do obiektu zaklęcia
+     * @return  ilość obrażeń
+     */
+    static public int getSpellObrazenia(Bohater bohaterAtakujacy, Castle castle, SpellActor spell) {
+
+        Random rnd = new Random();
+        System.out.println("Nastąpił sepll na zamek");
+        int damage = rnd.nextInt(bohaterAtakujacy.getMoc() + 1) + spell.getDmg();
+        int obrona = rnd.nextInt(castle.getObrona() + 1);
+        System.out.println("Siła ataku:  " + damage);
+        System.out.println("siła obrony: " + obrona);
+        int dmg = damage - obrona;
+        if (dmg < 0) {
+            dmg = 0;
+        }
+        System.out.println("damage: " + dmg);
+        if (dmg > 0) {
+            castle.setActualHp(castle.getActualHp() - dmg);
+        }
+        if (castle.getActualHp() <=0) {
+            System.out.println("Zamek stracił całe HP.");
+            castle.setActualHp(0);
+        }
+
+        bohaterAtakujacy.setPozostaloRuchow(bohaterAtakujacy.getPozostaloRuchow() - 1);
+        bohaterAtakujacy.setActualMana(bohaterAtakujacy.getActualMana() - spell.getKoszt());
+
+        return dmg;
+    }
+
     static public int getSpellObrazenia(Bohater bohaterAtakujacy, Bohater bohaterBroniacy, SpellActor spell) {
         System.out.println("Funkacja Fight.getObrazenia");
 
