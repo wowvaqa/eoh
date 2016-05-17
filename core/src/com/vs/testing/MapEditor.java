@@ -279,6 +279,13 @@ public class MapEditor implements Screen {
 
                 mapa.getPola()[i][j].setMob1Location(mapaPolEdycyjncyh[i][j].mob1Location);
                 mapa.getPola()[i][j].setMob2Location(mapaPolEdycyjncyh[i][j].mob2Location);
+
+                mapa.getPola()[i][j].setAttackCamp(mapaPolEdycyjncyh[i][j].locTreningCamp);
+                mapa.getPola()[i][j].setDefenceCamp(mapaPolEdycyjncyh[i][j].locDefenceCamp);
+                mapa.getPola()[i][j].setPowerCamp(mapaPolEdycyjncyh[i][j].locPowerCamp);
+                mapa.getPola()[i][j].setWisdomCamp(mapaPolEdycyjncyh[i][j].locWisdomCamp);
+                mapa.getPola()[i][j].setSpeedCamp(mapaPolEdycyjncyh[i][j].locSpeedCamp);
+                mapa.getPola()[i][j].setHpCamp(mapaPolEdycyjncyh[i][j].locHpCamp);
             }
         }
 
@@ -411,6 +418,14 @@ public class MapEditor implements Screen {
         public boolean mob1Location = false;
         public boolean mob2Location = false;
 
+        // Budynki
+        public boolean locTreningCamp = false;
+        public boolean locDefenceCamp = false;
+        public boolean locPowerCamp = false;
+        public boolean locWisdomCamp = false;
+        public boolean locSpeedCamp = false;
+        public boolean locHpCamp = false;
+
         /**
          * @param tekstura Tekstura pola
          * @param x        Współżędna X
@@ -446,6 +461,7 @@ public class MapEditor implements Screen {
                             button("Teren", "teren");
                             button("Moby", "mobs");
                             button("Skrzynia", "skrzynia");
+                            button("Budynki", "budynki");
                             button("Zakoncz", "zakoncz");
                         }
 
@@ -547,6 +563,54 @@ public class MapEditor implements Screen {
                                         } else if (object.equals("anuluj")) {
                                             mob1Location = false;
                                             mob2Location = false;
+                                            getSprite().setTexture(a.trawaTex);
+                                            this.remove();
+                                        }
+                                    }
+                                }.show(stage);
+
+                                // BUDYNKI
+                            } else if (object.equals("budynki")) {
+                                new Dialog("Budynki", a.skin) {
+                                    {
+                                        button("Atak", "atak");
+                                        button("Obrona", "obrona");
+                                        button("Moc", "moc");
+                                        button("Wiedza", "wiedza");
+                                        button("Speed", "speed");
+                                        button("HP", "hp");
+
+
+                                        button("anuluj", "anuluj");
+                                    }
+
+                                    @Override
+                                    protected void result(Object object) {
+                                        if (object.equals("atak")) {
+                                            locTreningCamp = true;
+                                            getSprite().setTexture(a.texTreningCamp);
+                                            this.remove();
+                                        } else if (object.equals("obrona")) {
+                                            locDefenceCamp = true;
+                                            getSprite().setTexture(a.texDefenceCamp);
+                                            this.remove();
+                                        } else if (object.equals("moc")) {
+                                            locPowerCamp = true;
+                                            getSprite().setTexture(a.texPowerCamp);
+                                            this.remove();
+                                        } else if (object.equals("wiedza")) {
+                                            locWisdomCamp = true;
+                                            getSprite().setTexture(a.texWisdomCamp);
+                                            this.remove();
+                                        } else if (object.equals("speed")) {
+                                            locSpeedCamp = true;
+                                            getSprite().setTexture(a.texSpeedCamp);
+                                            this.remove();
+                                        } else if (object.equals("hp")) {
+                                            locHpCamp = true;
+                                            getSprite().setTexture(a.texHpCamp);
+                                            this.remove();
+                                        } else if (object.equals("anuluj")) {
                                             getSprite().setTexture(a.trawaTex);
                                             this.remove();
                                         }

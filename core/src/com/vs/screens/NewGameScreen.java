@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.vs.ai.AI;
 import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;

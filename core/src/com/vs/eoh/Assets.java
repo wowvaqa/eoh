@@ -48,6 +48,13 @@ public class Assets {
     public static Screen gameOverScreen;
     public static Server server;
     public static Client client;
+    // Tekstury budynków
+    public Texture texTreningCamp;
+    public Texture texDefenceCamp;
+    public Texture texPowerCamp;
+    public Texture texWisdomCamp;
+    public Texture texSpeedCamp;
+    public Texture texHpCamp;
     // Tekstury terenu
     public Texture trawaDrzewoTex;
     public Texture trawaTex;
@@ -220,7 +227,7 @@ public class Assets {
 
         makeItems();
         makeSpellTextures();
-
+        makeBuldingsTextures();
         makeMobs();
 
         fillMap();
@@ -297,7 +304,7 @@ public class Assets {
 
         Assets.stage01MapScreen.addActor(label);
 
-        label.setText("Dmg: " + dmg);
+        label.setText("" + dmg);
         label.setPosition(pozX - 50, pozY - 25);
         label.setFontScale(1.5f);
         label.addAction(Actions.alpha(1));
@@ -572,6 +579,15 @@ public class Assets {
         texSpeedPotion = new Texture("items/texSpeedPotion.png");
         texAttackPotion = new Texture("items/texAttackPotion.png");
         texDefencePotion = new Texture("items/texDefencePotion.png");
+    }
+
+    private void makeBuldingsTextures() {
+        texTreningCamp = new Texture("buldings/texTreningCamp.png");
+        texDefenceCamp = new Texture("buldings/texDefenceTower.png");
+        texPowerCamp = new Texture("buldings/texPowerCamp.png");
+        texWisdomCamp = new Texture("buldings/texWisdomCamp.png");
+        texSpeedCamp = new Texture("buldings/texSpeedCamp.png");
+        texHpCamp = new Texture("buldings/texHpCamp.png");
     }
 
     private void makeSounds() {

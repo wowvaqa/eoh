@@ -2,35 +2,41 @@ package com.vs.eoh;
 
 // Klasa Pole jest wirtualnym polem przechowującym referencje do obiektu bohatera
 import java.io.Serializable;
+import java.util.ArrayList;
+
 import com.vs.enums.TypyTerenu;
 
 public class Pole implements Serializable {
 
+    // Zmienne do odnajdywania najkrótszej scieżki
+    public double pathG;
+    public double pathH;
+    public double pathF;
     private boolean movable = true;
-
     private Bohater bohater;
-
     private TresureBox tresureBox = null;
-
     private Castle castle = null;
-
     private Mob mob = null;
-
+    private Bulding bulding = null;
     private TypyTerenu typTerenu;
-
     // Zmienne określają czy dane pole jest lokacją startową któregoś z graczy
     private boolean lokacjaStartowaP1 = false;
     private boolean lokacjaStartowaP2 = false;
     private boolean lokacjaStartowaP3 = false;
     private boolean lokacjaStartowaP4 = false;
-
     // Zmienne określają czy pole w polu ma zostać wygenerowana skrzynka ze skarbem.
     private boolean tresureBox1Location = false;
     private boolean tresureBox2Location = false;
-
     // Zmienne określają czy pole w polu ma zostać wygenerowany Mob
     private boolean mob1Location = false;
     private boolean mob2Location = false;
+    // Zmienne określające czy w polu jest budynek
+    private boolean attackCamp = false;
+    private boolean defenceCamp = false;
+    private boolean PowerCamp = false;
+    private boolean WisdomCamp = false;
+    private boolean SpeedCamp = false;
+    private boolean HpCamp = false;
 
     public Pole() {
 
@@ -171,5 +177,71 @@ public class Pole implements Serializable {
 
     public void setMob2Location(boolean mob2Location) {
         this.mob2Location = mob2Location;
+    }
+
+    public boolean isAttackCamp() {
+        return attackCamp;
+    }
+
+    public void setAttackCamp(boolean attackCamp) {
+        this.attackCamp = attackCamp;
+    }
+
+    public boolean isDefenceCamp() {
+        return defenceCamp;
+    }
+
+    public void setDefenceCamp(boolean defenceCamp) {
+        this.defenceCamp = defenceCamp;
+    }
+
+    public boolean isPowerCamp() {
+        return PowerCamp;
+    }
+
+    public void setPowerCamp(boolean powerCamp) {
+        PowerCamp = powerCamp;
+    }
+
+    public boolean isWisdomCamp() {
+        return WisdomCamp;
+    }
+
+    public void setWisdomCamp(boolean wisdomCamp) {
+        WisdomCamp = wisdomCamp;
+    }
+
+    public boolean isSpeedCamp() {
+        return SpeedCamp;
+    }
+
+    public void setSpeedCamp(boolean speedCamp) {
+        SpeedCamp = speedCamp;
+    }
+
+    public boolean isHpCamp() {
+        return HpCamp;
+    }
+
+    public void setHpCamp(boolean hpCamp) {
+        HpCamp = hpCamp;
+    }
+
+    /**
+     * Zwraca referencję do obiektu budynku
+     *
+     * @return Budynek
+     */
+    public Bulding getBulding() {
+        return bulding;
+    }
+
+    /**
+     * Ustala Budynek
+     *
+     * @param bulding
+     */
+    public void setBulding(Bulding bulding) {
+        this.bulding = bulding;
     }
 }

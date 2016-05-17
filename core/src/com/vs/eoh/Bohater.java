@@ -212,9 +212,9 @@ public class Bohater extends Actor {
                     // Jeżeli FALSE wtedy uruchamia reszte procedur dla bohatera
                 } else {
                     // Sprawdza czy bohater gracza porusza się w sowjej turze.
-//                    if (przynaleznoscDoGracza != gs.getTuraGracza()) {
-//                        System.out.println("Ten Gracz teraz nie ma swojej tury");
-//                    } else {
+                    if (przynaleznoscDoGracza != gs.getTuraGracza()) {
+                        System.out.println("Ten Gracz teraz nie ma swojej tury");
+                    } else {
                         // Sprawdza czy bohater posiada jeszcze punkty ruchu.
                         if (pozostaloRuchow < 1) {
                             System.out.println("Bohater nie posiada już ruchu!");
@@ -237,7 +237,7 @@ public class Bohater extends Actor {
                                 Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
                             }
                         }
-                    //}
+                    }
                 }
             }
         });

@@ -233,6 +233,30 @@ public class Ruch {
     }
 
     /**
+     * Sprawdza czy bohater nadepnął na budynek.
+     */
+    private void checkBulding() {
+        boolean buldingVisited = false;
+        if (gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding() != null) {
+
+            Bulding bulding = gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding();
+
+            for (int i = 0; i < bulding.getVisited().size(); i++) {
+                if (bulding.getVisited().get(i).equals(bohater)) {
+                    buldingVisited = true;
+                }
+            }
+
+            System.out.println("Nadepnięto na budynek");
+            if (!buldingVisited) {
+                Bulding.modyfiAttributes(bohater, gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding());
+            } else {
+                a.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone");
+            }
+        }
+    }
+
+    /**
      * Przycisk ruchu bohatera
      */
     public class PrzyciskRuchu extends ImageButton {
@@ -273,6 +297,7 @@ public class Ruch {
                     wykonajRuch();
                     if (!bohater.getKlasyPostaci().equals(KlasyPostaci.Summmon)) {
                         ruch.checkTresureBox();
+                        ruch.checkBulding();
                     }
                     ruch.checkCastle();
                 }

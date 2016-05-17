@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
@@ -19,13 +21,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.vs.ai.AI;
+import com.vs.enums.Buldings;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
 import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
+import com.vs.eoh.Bulding;
+import com.vs.eoh.BuldingCreator;
 import com.vs.eoh.ButtonActor;
 import com.vs.eoh.Castle;
 import com.vs.eoh.DefaultActor;
@@ -46,8 +54,6 @@ public class MapScreen implements Screen {
     public static MapScreen mapScreen;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
-    private float w;
-    private float h;
     private final Assets a;
     private final GameStatus gs;
     private final Game g;
@@ -57,6 +63,8 @@ public class MapScreen implements Screen {
     private final ArrayList<Image> teren = new ArrayList<Image>();
     public Tables tables = new Tables();
     public Interface interfce;
+    private float w;
+    private float h;
     private InputMultiplexer inputMultiPlexer = new InputMultiplexer();
     private MyGestureListener myGL = null;
     private MyGestureDetector myGD = null;
@@ -477,6 +485,44 @@ public class MapScreen implements Screen {
     }
 
     /**
+     * Generuje budynki
+     */
+    private void buldingsGenerator() {
+
+        BuldingCreator buldingCreator = new BuldingCreator(a);
+
+        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < gs.getMapa().getIloscPolX(); j++) {
+                if (gs.getMapa().getPola()[i][j].isAttackCamp()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.traningCamp, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isDefenceCamp()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.defenceCamp, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isPowerCamp()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.powerCamp, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isWisdomCamp()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.wisdomCamp, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isSpeedCamp()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.speedCamp, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isHpCamp()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.hpCamp, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                }
+            }
+        }
+    }
+
+    /**
      * Generuje moby na mapie.
      */
     private void mobsGenerator() {
@@ -547,12 +593,31 @@ public class MapScreen implements Screen {
             stage01.addActor(teren1);
         }
 
+        this.buldingsGenerator();
         this.tresureBoxGenerator();
         this.mobsGenerator();
     }
 
     @Override
     public void render(float delta) {
+
+        long curTime = System.currentTimeMillis() / 1000;
+        if (!AI.aiStarted) {
+            AI.nextMove = curTime + 2;
+            AI.aiStarted = true;
+        }
+
+        //Gdx.app.log("CURRENT TIME", "" + curTime);
+        //Gdx.app.log("NEXT TIME", "" + AI.nextMove);
+
+        if (curTime > AI.nextMove) {
+            Gdx.app.log("Następuje ruch AI", "" + AI.witchMove);
+            AI.witchMove += 1;
+            AI.nextMove += 2;
+            for (AI ai : AI.aiList) {
+                ai.makeAIMove();
+            }
+        }
 
         if (NetEngine.playersEndTurn == gs.getGracze().size()) {
             koniecTuryMuli();
@@ -561,6 +626,7 @@ public class MapScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiPlexer);
 
         if (gs.getBohaterZaznaczony() != null) {
+            countMoveCost(gs.getBohaterZaznaczony());
             aktualizujPanelBohatera();
             if (gs.getBohaterZaznaczony().getExp() >= gs.getBohaterZaznaczony().getExpToNextLevel() &&
                     gs.getBohaterZaznaczony().getKlasyPostaci() != KlasyPostaci.Summmon) {
@@ -594,6 +660,18 @@ public class MapScreen implements Screen {
 
         stage03.act();
         stage03.draw();
+    }
+
+
+    private void countMoveCost(Bohater bohater) {
+        bohater.getPozXnaMapie();
+        bohater.getPozYnaMapie();
+
+        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+
+            }
+        }
     }
 
     // Steruje ruchem kamery
@@ -661,6 +739,12 @@ public class MapScreen implements Screen {
         // Pętla szukająca bohaterowie
         for (int i = 0; i < stage01.getActors().size; i++) {
             if (stage01.getActors().get(i).getClass() == Bohater.class) {
+                stage01.getActors().get(i).toBack();
+            }
+        }
+
+        for (int i = 0; i < stage01.getActors().size; i++) {
+            if (stage01.getActors().get(i).getClass() == Bulding.class) {
                 stage01.getActors().get(i).toBack();
             }
         }
