@@ -11,5 +11,8 @@ public enum Buldings {
     powerCamp,
     wisdomCamp,
     speedCamp,
-    hpCamp;
+    hpCamp,
+    well,
+    temple,
+    randomBulding;
 }

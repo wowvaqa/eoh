@@ -286,6 +286,9 @@ public class MapEditor implements Screen {
                 mapa.getPola()[i][j].setWisdomCamp(mapaPolEdycyjncyh[i][j].locWisdomCamp);
                 mapa.getPola()[i][j].setSpeedCamp(mapaPolEdycyjncyh[i][j].locSpeedCamp);
                 mapa.getPola()[i][j].setHpCamp(mapaPolEdycyjncyh[i][j].locHpCamp);
+                mapa.getPola()[i][j].setWell(mapaPolEdycyjncyh[i][j].locWell);
+                mapa.getPola()[i][j].setTemple(mapaPolEdycyjncyh[i][j].locTemple);
+                mapa.getPola()[i][j].setRandomBulding(mapaPolEdycyjncyh[i][j].locRandomBulding);
             }
         }
 
@@ -425,6 +428,9 @@ public class MapEditor implements Screen {
         public boolean locWisdomCamp = false;
         public boolean locSpeedCamp = false;
         public boolean locHpCamp = false;
+        public boolean locWell = false;
+        public boolean locTemple = false;
+        public boolean locRandomBulding = false;
 
         /**
          * @param tekstura Tekstura pola
@@ -579,7 +585,9 @@ public class MapEditor implements Screen {
                                         button("Wiedza", "wiedza");
                                         button("Speed", "speed");
                                         button("HP", "hp");
-
+                                        button("Well", "well");
+                                        button("Temple", "temple");
+                                        button("rnd", "rnd");
 
                                         button("anuluj", "anuluj");
                                     }
@@ -609,6 +617,18 @@ public class MapEditor implements Screen {
                                         } else if (object.equals("hp")) {
                                             locHpCamp = true;
                                             getSprite().setTexture(a.texHpCamp);
+                                            this.remove();
+                                        } else if (object.equals("well")) {
+                                            locWell = true;
+                                            getSprite().setTexture(a.texWell);
+                                            this.remove();
+                                        } else if (object.equals("temple")) {
+                                            locTemple = true;
+                                            getSprite().setTexture(a.texTemple);
+                                            this.remove();
+                                        } else if (object.equals("rnd")) {
+                                            locRandomBulding = true;
+                                            getSprite().setTexture(a.texRandomBulding);
                                             this.remove();
                                         } else if (object.equals("anuluj")) {
                                             getSprite().setTexture(a.trawaTex);

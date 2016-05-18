@@ -1,5 +1,5 @@
 /**
- * TODO Dokończyć funkcje losującą budynki.
+ * TODO Poprawić: przy zakupie nowego bohatera ów bohater pojawia się na predefiniowanych pozycjach, nie w lokalizacji gdzie jest zamek.
  */
 
 package com.vs.eoh;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.vs.enums.Buldings;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by v on 2016-05-17.
@@ -33,6 +34,9 @@ public class Bulding extends Image {
     private int modExp;
     private int modPow;
     private int modWsd;
+    private boolean maxMana = false;
+    private boolean maxHp = false;
+    private boolean cancelVisited = false;
 
     private Buldings typeOfBulding;
 
@@ -58,8 +62,19 @@ public class Bulding extends Image {
         bohater.setHp(bohater.getHp() + bulding.getModHp());
         bohater.setMoc(bohater.getMoc() + bulding.getModPow());
         bohater.setWiedza(bohater.getWiedza() + bulding.getModWsd());
+        bohater.setMana(bohater.getMana() + bulding.getModWsd());
 
-        bulding.getVisited().add(bohater);
+        if (bulding.isMaxMana()) {
+            bohater.setActualMana(bohater.getMana());
+        }
+
+        if (bulding.isMaxHp()) {
+            bohater.setActualHp(bohater.getHp());
+        }
+
+        if (!bulding.isCancelVisited()) {
+            bulding.getVisited().add(bohater);
+        }
 
         bohater.getA().animujLblDamage(bulding.getX(), bulding.getY(), bulding.getShortBuldingDescription());
     }
@@ -70,6 +85,24 @@ public class Bulding extends Image {
      * @return Typ Budynku
      */
     public static Buldings drawBulding() {
+
+        Random random = new Random();
+        int index = random.nextInt(6);
+
+        switch (index) {
+            case 1:
+                return Buldings.traningCamp;
+            case 2:
+                return Buldings.defenceCamp;
+            case 3:
+                return Buldings.hpCamp;
+            case 4:
+                return Buldings.powerCamp;
+            case 5:
+                return Buldings.wisdomCamp;
+            case 6:
+                return Buldings.speedCamp;
+        }
         return Buldings.traningCamp;
     }
 
@@ -213,5 +246,29 @@ public class Bulding extends Image {
 
     public void setTypeOfBulding(Buldings typeOfBulding) {
         this.typeOfBulding = typeOfBulding;
+    }
+
+    public boolean isMaxMana() {
+        return maxMana;
+    }
+
+    public void setMaxMana(boolean maxMana) {
+        this.maxMana = maxMana;
+    }
+
+    public boolean isMaxHp() {
+        return maxHp;
+    }
+
+    public void setMaxHp(boolean maxHp) {
+        this.maxHp = maxHp;
+    }
+
+    public boolean isCancelVisited() {
+        return cancelVisited;
+    }
+
+    public void setCancelVisited(boolean cancelVisited) {
+        this.cancelVisited = cancelVisited;
     }
 }

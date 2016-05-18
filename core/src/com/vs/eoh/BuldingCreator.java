@@ -16,8 +16,6 @@ public class BuldingCreator {
     private int pozX;
     private int pozY;
 
-    private Bulding bulding;
-
     public BuldingCreator(Assets a) {
         this.a = a;
     }
@@ -46,6 +44,12 @@ public class BuldingCreator {
                 return createSpeedTower();
             case hpCamp:
                 return createHpTower();
+            case well:
+                return createWell();
+            case temple:
+                return createTemple();
+            case randomBulding:
+                return createRandomBulding(typeOfBulding);
         }
         return createTraningCamp();
     }
@@ -162,5 +166,67 @@ public class BuldingCreator {
         bulding.setModHp(5);
 
         return bulding;
+    }
+
+    /**
+     * Przypisuje do obiektu klasy Bulding charakterystykę Wieży obrońców.
+     */
+    private Bulding createWell() {
+
+        Bulding bulding = new Bulding(a);
+
+        bulding.setPosition(pozX * 100, pozY * 100);
+        bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texWell.png"))));
+        bulding.setSize(100, 100);
+
+        bulding.setName("Magiczna studnia");
+        bulding.setBuldingDescription("Odnawia wszystkie punkty many");
+        bulding.setShortBuldingDescription("Mana MAX");
+        bulding.setMaxMana(true);
+        bulding.setCancelVisited(true);
+
+        return bulding;
+    }
+
+    /**
+     * Przypisuje do obiektu klasy Bulding charakterystykę Wieży obrońców.
+     */
+    private Bulding createTemple() {
+
+        Bulding bulding = new Bulding(a);
+
+        bulding.setPosition(pozX * 100, pozY * 100);
+        bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texTemple.png"))));
+        bulding.setSize(100, 100);
+
+        bulding.setName("Magiczna swiatynia");
+        bulding.setBuldingDescription("Odnawia wszystkie punkty Hp");
+        bulding.setShortBuldingDescription("Hp MAX");
+        bulding.setMaxHp(true);
+        bulding.setCancelVisited(true);
+
+        return bulding;
+    }
+
+    /**
+     * Przypisuje do obiektu klasy Bulding charakterystykę Wieży obrońców.
+     */
+    private Bulding createRandomBulding(Buldings buldingType) {
+
+        switch (buldingType) {
+            case traningCamp:
+                return createTraningCamp();
+            case defenceCamp:
+                return createDefenceTower();
+            case powerCamp:
+                return createPowerTower();
+            case hpCamp:
+                return createHpTower();
+            case speedCamp:
+                return createSpeedTower();
+            case wisdomCamp:
+                return createWisdomTower();
+        }
+        return createTraningCamp();
     }
 }

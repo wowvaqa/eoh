@@ -34,6 +34,12 @@ public class Gracz {
     private boolean ai = false;
 
     /**
+     * Współżedne X,Y ostatnio zaznaczonego bohatra.
+     */
+    private float cameraPositionX;
+    private float cameraPositionY;
+
+    /**
      * 
      * @param numerGracza 
      */
@@ -207,5 +213,41 @@ public class Gracz {
      */
     public void setAi(boolean ai) {
         this.ai = ai;
+    }
+
+    /**
+     * Zwraca pozycję X kamery dla ostatnio zaznaczonego bohatera
+     *
+     * @return współżędna X
+     */
+    public float getCameraPositionX() {
+        return cameraPositionX;
+    }
+
+    /**
+     * Ustala pozycję X kamery dla ostatnio zaznaczonego bohatera
+     *
+     * @param cameraPositionX Współżędna Y pozycji kamery dla ostatnio zaznaczonego bohatra.
+     */
+    public void setCameraPositionX(float cameraPositionX) {
+        this.cameraPositionX = cameraPositionX;
+    }
+
+    /**
+     * Zwraca pozycję Y kamery dla ostatnio zaznaczonego bohatera
+     *
+     * @return współżędna Y
+     */
+    public float getCameraPositionY() {
+        return cameraPositionY;
+    }
+
+    /**
+     * Ustala pozycję X kamery dla ostatnio zaznaczonego bohatera
+     *
+     * @param cameraPositionY Współżędna Y pozycji kamery dla ostatnio zaznaczonego bohatra.
+     */
+    public void setCameraPositionY(float cameraPositionY) {
+        this.cameraPositionY = cameraPositionY;
     }
 }

@@ -55,6 +55,9 @@ public class Assets {
     public Texture texWisdomCamp;
     public Texture texSpeedCamp;
     public Texture texHpCamp;
+    public Texture texWell;
+    public Texture texTemple;
+    public Texture texRandomBulding;
     // Tekstury terenu
     public Texture trawaDrzewoTex;
     public Texture trawaTex;
@@ -588,6 +591,9 @@ public class Assets {
         texWisdomCamp = new Texture("buldings/texWisdomCamp.png");
         texSpeedCamp = new Texture("buldings/texSpeedCamp.png");
         texHpCamp = new Texture("buldings/texHpCamp.png");
+        texWell = new Texture("buldings/texWell.png");
+        texTemple = new Texture("buldings/texTemple.png");
+        texRandomBulding = new Texture("buldings/texRandomBulding.png");
     }
 
     private void makeSounds() {

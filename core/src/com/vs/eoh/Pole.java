@@ -37,6 +37,9 @@ public class Pole implements Serializable {
     private boolean WisdomCamp = false;
     private boolean SpeedCamp = false;
     private boolean HpCamp = false;
+    private boolean Well = false;
+    private boolean Temple = false;
+    private boolean randomBulding = false;
 
     public Pole() {
 
@@ -225,6 +228,30 @@ public class Pole implements Serializable {
 
     public void setHpCamp(boolean hpCamp) {
         HpCamp = hpCamp;
+    }
+
+    public boolean isWell() {
+        return Well;
+    }
+
+    public void setWell(boolean well) {
+        Well = well;
+    }
+
+    public boolean isTemple() {
+        return Temple;
+    }
+
+    public void setTemple(boolean temple) {
+        Temple = temple;
+    }
+
+    public boolean isRandomBulding() {
+        return randomBulding;
+    }
+
+    public void setRandomBulding(boolean randomBulding) {
+        this.randomBulding = randomBulding;
     }
 
     /**

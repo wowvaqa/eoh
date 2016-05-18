@@ -517,6 +517,18 @@ public class MapScreen implements Screen {
                     Bulding bulding = buldingCreator.createBulding(Buldings.hpCamp, i, j);
                     stage01.addActor(bulding);
                     gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isWell()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.well, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isTemple()) {
+                    Bulding bulding = buldingCreator.createBulding(Buldings.temple, i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (gs.getMapa().getPola()[i][j].isRandomBulding()) {
+                    Bulding bulding = buldingCreator.createBulding(Bulding.drawBulding(), i, j);
+                    stage01.addActor(bulding);
+                    gs.getMapa().getPola()[i][j].setBulding(bulding);
                 }
             }
         }
