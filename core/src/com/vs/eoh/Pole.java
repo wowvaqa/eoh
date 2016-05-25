@@ -3,15 +3,36 @@ package com.vs.eoh;
 // Klasa Pole jest wirtualnym polem przechowującym referencje do obiektu bohatera
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import com.vs.enums.TypyTerenu;
 
 public class Pole implements Serializable {
 
     // Zmienne do odnajdywania najkrótszej scieżki
+
+    // Długość (koszt) ścieżki prowadzącej z punktu startu do aktualnej, rozpatrywanej pozycji w
+    // przestrzeni (jest to rzeczywista długość ścieżki, którą już wygenerowaliśmy)
     public double pathG;
+    //szacunkowa długość ścieżki prowadząca z aktualnej pozycji do punktu docelowego; wartość H
+    // jest najczęściej wyznaczana metodami heurystycznymi, gdyż z oczywistego względu nie znamy tej
+    // długości (gdyby tak było, użycie takiego algorytmu byłoby niepotrzebne)
     public double pathH;
+    // F = G+H – wartość równa sumie długości dwóch powyższych ścieżek.
     public double pathF;
+
+    // Pole rodzić do znajdywania ścieżki.
+    public Pole parentField;
+
+    // Określa czy pole jest początkiem ścieżki.
+    public boolean startField = false;
+    // Określa czy pole jest końcem ścieżki.
+    public boolean endField = false;
+
+    // położenie pola na mapie
+    public int locXonMap;
+    public int locYonMap;
+
     private boolean movable = true;
     private Bohater bohater;
     private TresureBox tresureBox = null;
@@ -271,4 +292,6 @@ public class Pole implements Serializable {
     public void setBulding(Bulding bulding) {
         this.bulding = bulding;
     }
+
+
 }

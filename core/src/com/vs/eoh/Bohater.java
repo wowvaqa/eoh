@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.vs.ai.PathFinder;
+import com.vs.ai.PathMoves;
 import com.vs.enums.DostepneItemki;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
@@ -99,22 +101,21 @@ public class Bohater extends Actor {
     private ArrayList<Effect> tempEffects;
 
     /**
-     *
-     * @param textureIcon Tekstura bohatera wyświetlająca się na mapie
+     * @param textureIcon           Tekstura bohatera wyświetlająca się na mapie
      * @param textureIconZaznaczona Tekstura bohatera wyświetlana kiedy bohater
-     * zostanie kliknięty
-     * @param lokaczjaPoczatkowaX Lokacja X początkowa bohatera na mapie
-     * @param lokaczjaPoczatkowaY Lokacja Y początkowa bohatera na mapie
-     * @param a Referencja do obiektu przechowującego Assety
-     * @param pozycjaXnaMapie definiuje pozycje X w obiekcie klasy Mapa
-     * @param pozycjaYnaMapie definiuje pozycje Y w obiekcie klasy Mapa
-     * @param gs Referencja do obiektu klasy GameStatus
-     * @param g Referencja do obiektu kalsy Game
-     * @param kp Klasa postaci
+     *                              zostanie kliknięty
+     * @param lokaczjaPoczatkowaX   Lokacja X początkowa bohatera na mapie
+     * @param lokaczjaPoczatkowaY   Lokacja Y początkowa bohatera na mapie
+     * @param a                     Referencja do obiektu przechowującego Assety
+     * @param pozycjaXnaMapie       definiuje pozycje X w obiekcie klasy Mapa
+     * @param pozycjaYnaMapie       definiuje pozycje Y w obiekcie klasy Mapa
+     * @param gs                    Referencja do obiektu klasy GameStatus
+     * @param g                     Referencja do obiektu kalsy Game
+     * @param kp                    Klasa postaci
      */
     public Bohater(Texture textureIcon, Texture textureIconZaznaczona,
-            int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, Assets a,
-            int pozycjaXnaMapie, int pozycjaYnaMapie, GameStatus gs, Game g, KlasyPostaci kp) {
+                   int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, Assets a,
+                   int pozycjaXnaMapie, int pozycjaYnaMapie, GameStatus gs, Game g, KlasyPostaci kp) {
 
         this.efekty = new ArrayList<Effect>();
         this.spellEffects = new ArrayList<SpellEffects>();
@@ -233,6 +234,21 @@ public class Bohater extends Actor {
                                 sprite.setTexture(bohaterCheckTex);
                                 zaznaczony = true;
                                 gs.setCzyZaznaczonoBohatera(true);
+
+//                                PathFinder.countF(gs.getMapa().getPola()
+//                                                [gs.getBohaterZaznaczony().getPozXnaMapie()]
+//                                                [gs.getBohaterZaznaczony().getPozYnaMapie()],
+//                                        gs.getMapa().getPola()
+//                                                [gs.getBohaterZaznaczony().getPozXnaMapie()]
+//                                                [gs.getBohaterZaznaczony().getPozYnaMapie()], gs.getMapa().getPola()[9][9]
+//                                );
+
+                                ArrayList<PathMoves> pathMoves;
+
+                                PathFinder.findPath(gs.getMapa(), gs.getMapa().getPola()
+                                                [gs.getBohaterZaznaczony().getPozXnaMapie()]
+                                                [gs.getBohaterZaznaczony().getPozYnaMapie()],
+                                        gs.getMapa().getPola()[3][3]);
 
                                 Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
                             }
@@ -512,7 +528,6 @@ public class Bohater extends Actor {
     }
 
     /**
-     *
      * @return
      */
     public Pixmap getPixMap() {
@@ -1043,6 +1058,7 @@ public class Bohater extends Actor {
 
     /**
      * Zwraca aktualną klasę postaci
+     *
      * @return KlasyPostaci
      */
     public String getActualHeroClass() {
@@ -1051,6 +1067,7 @@ public class Bohater extends Actor {
 
     /**
      * Ustala aktualną klasę postaci
+     *
      * @param actualHeroClass KlasyPostaci
      */
     public void setActualHeroClass(String actualHeroClass) {

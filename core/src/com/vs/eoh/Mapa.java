@@ -2,6 +2,9 @@ package com.vs.eoh;
 
 // Klasa Mapa przechowuje obiekty Klasy Pole
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import com.vs.ai.PathFinder;
 import com.vs.enums.TypyTerenu;
 import com.vs.network.Network;
 
@@ -28,6 +31,9 @@ public final class Mapa implements Serializable {
         this.iloscPolX = iloscPolX;
         this.iloscPolY = iloscPolY;
         this.generujMape(this.iloscPolX, this.iloscPolY);
+
+        PathFinder.openLink = new ArrayList<Pole>();
+        PathFinder.closedLinks = new ArrayList<Pole>();
     }
 
     /**
@@ -467,6 +473,8 @@ public final class Mapa implements Serializable {
         for (int i = 0; i < this.iloscPolX; i++) {
             for (int j = 0; j < this.iloscPolY; j++) {
                 pola[i][j] = new Pole();
+                pola[i][j].locXonMap = i;
+                pola[i][j].locYonMap = j;
             }
         }
     }

@@ -613,23 +613,24 @@ public class MapScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        long curTime = System.currentTimeMillis() / 1000;
-        if (!AI.aiStarted) {
-            AI.nextMove = curTime + 2;
-            AI.aiStarted = true;
-        }
+        // Następny ruch AI nie kasować
+//        long curTime = System.currentTimeMillis() / 1000;
+//        if (!AI.aiStarted) {
+//            AI.nextMove = curTime + 2;
+//            AI.aiStarted = true;
+//        }
 
         //Gdx.app.log("CURRENT TIME", "" + curTime);
         //Gdx.app.log("NEXT TIME", "" + AI.nextMove);
 
-        if (curTime > AI.nextMove) {
-            Gdx.app.log("Następuje ruch AI", "" + AI.witchMove);
-            AI.witchMove += 1;
-            AI.nextMove += 2;
-            for (AI ai : AI.aiList) {
-                ai.makeAIMove();
-            }
-        }
+//        if (curTime > AI.nextMove) {
+//            Gdx.app.log("Następuje ruch AI", "" + AI.witchMove);
+//            AI.witchMove += 1;
+//            AI.nextMove += 2;
+//            for (AI ai : AI.aiList) {
+//                ai.makeAIMove();
+//            }
+//        }
 
         if (NetEngine.playersEndTurn == gs.getGracze().size()) {
             koniecTuryMuli();
