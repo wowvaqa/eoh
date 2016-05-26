@@ -26,6 +26,15 @@ public class PathFinder {
      * @param endField   Pole które jest końcem ścieżki
      */
     public static ArrayList<PathMoves> findPath(Mapa map, Pole startField, Pole endField) {
+
+        int destiantion = 0;
+
+        if (endField.getMob() != null) {
+            destiantion = 1;
+        } else if (endField.getTresureBox() != null) {
+            destiantion = 2;
+        }
+
         clearLists();
 
         startField.startField = true;
@@ -55,7 +64,9 @@ public class PathFinder {
                 //openLink.clear();
                 startField.startField = false;
                 endField.endField = false;
-                return extractMoves(q);
+                ArrayList<PathMoves> listOfMoves = extractMoves(q);
+                map.clearParentsOfFields();
+                return listOfMoves;
             }
 
             // inicjacja pola z sąsiadami.
@@ -97,43 +108,55 @@ public class PathFinder {
         Gdx.app.log("NIE ZNLEZIONO SCIEŻKI", "");
         startField.startField = false;
         endField.endField = false;
+        map.clearParentsOfFields();
         return null;
     }
 
+    /**
+     * Zwraca listę ruchów (X,Y) w postaci tablicy ArrayList
+     *
+     * @param field pole Q
+     * @return ArrayList PathMoves
+     */
     public static ArrayList<PathMoves> extractMoves(Pole field) {
-        int licznik = 0;
         Pole pole;
         ArrayList<PathMoves> tmpLisoOfMoves = new ArrayList<PathMoves>();
         ArrayList<PathMoves> listOfMoves = new ArrayList<PathMoves>();
+        ArrayList<Pole> fieldsToClear = new ArrayList<Pole>();
 
         if (field.parentField != null) {
-            tmpLisoOfMoves.add(new PathMoves(field.locXonMap, field.locYonMap));
             tmpLisoOfMoves.add(new PathMoves(field.locXonMap - field.parentField.locXonMap,
                     field.locYonMap - field.parentField.locYonMap));
+            fieldsToClear.add(field);
             pole = field.parentField;
-//            while (pole.parentField != null){
-////                tmpLisoOfMoves.add(new PathMoves(pole.locXonMap - pole.parentField.locXonMap,
-////                        pole.locYonMap - pole.parentField.locYonMap));
-////                pole = pole.parentField;
-//                licznik += 1;
-//            }
+            while (pole.parentField != null) {
+                tmpLisoOfMoves.add(new PathMoves(pole.locXonMap - pole.parentField.locXonMap,
+                        pole.locYonMap - pole.parentField.locYonMap));
+                fieldsToClear.add(pole);
+                pole = pole.parentField;
+            }
         }
-        Gdx.app.log("LICZNIK", "" + licznik);
 
-//        for (int i = tmpLisoOfMoves.size() - 1; i <= 0; i --){
-//            listOfMoves.add(tmpLisoOfMoves.get(i));
-//        }
+        if (tmpLisoOfMoves.size() > 0) {
+            for (int i = tmpLisoOfMoves.size() - 1; i >= 0; i--) {
+                listOfMoves.add(tmpLisoOfMoves.get(i));
+            }
+        }
 
-//        for (PathMoves pathMoves: tmpLisoOfMoves){
-//            Gdx.app.log("X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
-//        }
+        Gdx.app.log("SIZE: " + tmpLisoOfMoves.size(), "");
+        for (PathMoves pathMoves : tmpLisoOfMoves) {
+            Gdx.app.log("X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
+        }
 
-//        for (PathMoves pathMoves: listOfMoves){
-//            Gdx.app.log("X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
-//        }
+        for (PathMoves pathMoves : listOfMoves) {
+            Gdx.app.log("Lista ruchow| X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
+        }
+
+        for (Pole fieldToClear : fieldsToClear) {
+            fieldToClear.parentField = null;
+        }
 
         return listOfMoves;
-
     }
 
     /**
@@ -154,14 +177,14 @@ public class PathFinder {
         closedLinks.clear();
     }
 
-    /**
-     * Metoda uruchamiająca liczenie
-     *
-     * @param field
-     */
-    public static void countFactors(Pole parentField, Pole field, Pole endField) {
-        countF(parentField, field, endField);
-    }
+//    /**
+//     * Metoda uruchamiająca liczenie
+//     *
+//     * @param field
+//     */
+//    public static void countFactors(Pole parentField, Pole field, Pole endField) {
+//        countF(parentField, field, endField);
+//    }
 
     /**
      * Liczy współczynnik G dla zadanego pola
@@ -253,7 +276,7 @@ public class PathFinder {
             for (int j = field.locYonMap - 1; j < field.locYonMap + 2; j++) {
                 if (i >= 0 && j >= 0 && i < mapa.getIloscPolX() && j < mapa.getIloscPolY()) {
                     Pole fieldToAdd = mapa.getPola()[i][j];
-                    if (fieldToAdd.isMovable() && fieldToAdd.getMob() == null && fieldToAdd != field) {
+                    if (fieldToAdd.isMovable() && fieldToAdd.getMob() == null && fieldToAdd != field && fieldToAdd.getBohater() == null) {
                         neighborsList.add(fieldToAdd);
                     }
                 }
