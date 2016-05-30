@@ -69,6 +69,8 @@ public class MapScreen implements Screen {
     private MyGestureListener myGL = null;
     private MyGestureDetector myGD = null;
 
+    private long curTime;
+
     /**
      * Klasa definiująca wygląd, zachowanie Mapy na której odbywa się gra
      *
@@ -614,23 +616,23 @@ public class MapScreen implements Screen {
     public void render(float delta) {
 
         // Następny ruch AI nie kasować
-//        long curTime = System.currentTimeMillis() / 1000;
-//        if (!AI.aiStarted) {
-//            AI.nextMove = curTime + 2;
-//            AI.aiStarted = true;
-//        }
+        curTime = System.currentTimeMillis() / 1000;
+        if (!AI.aiStarted) {
+            AI.nextMove = curTime + 2;
+            AI.aiStarted = true;
+        }
 
         //Gdx.app.log("CURRENT TIME", "" + curTime);
         //Gdx.app.log("NEXT TIME", "" + AI.nextMove);
 
-//        if (curTime > AI.nextMove) {
-//            Gdx.app.log("Następuje ruch AI", "" + AI.witchMove);
-//            AI.witchMove += 1;
-//            AI.nextMove += 2;
-//            for (AI ai : AI.aiList) {
-//                ai.makeAIMove();
-//            }
-//        }
+        if (curTime > AI.nextMove) {
+            Gdx.app.log("Następuje ruch AI", "" + AI.whichMove);
+            AI.whichMove += 1;
+            AI.nextMove += 2;
+            for (AI ai : AI.aiList) {
+                ai.makeAIMove();
+            }
+        }
 
         if (NetEngine.playersEndTurn == gs.getGracze().size()) {
             koniecTuryMuli();
@@ -824,6 +826,10 @@ public class MapScreen implements Screen {
 
     @Override
     public void show() {
+
+        curTime = System.currentTimeMillis() / 1000;
+        AI.nextMove = curTime + 2;
+
         this.sortujZindex();
         inputMultiPlexer.addProcessor(myGD);
         inputMultiPlexer.addProcessor(stage03);

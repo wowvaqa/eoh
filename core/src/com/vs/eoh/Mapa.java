@@ -4,6 +4,7 @@ package com.vs.eoh;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.vs.ai.PathFinder;
 import com.vs.enums.TypyTerenu;
 import com.vs.network.Network;
@@ -475,6 +476,19 @@ public final class Mapa implements Serializable {
                 pola[i][j] = new Pole();
                 pola[i][j].locXonMap = i;
                 pola[i][j].locYonMap = j;
+            }
+        }
+    }
+
+    /**
+     * Czyści rodziców każdego pola na mapie
+     */
+    public void clearParentsOfFields() {
+        for (int i = 0; i < getIloscPolX(); i++) {
+            for (int j = 0; j < getIloscPolY(); j++) {
+                if (getPola()[i][j].parentField != null) {
+                    getPola()[i][j].parentField = null;
+                }
             }
         }
     }

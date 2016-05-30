@@ -235,20 +235,10 @@ public class Bohater extends Actor {
                                 zaznaczony = true;
                                 gs.setCzyZaznaczonoBohatera(true);
 
-//                                PathFinder.countF(gs.getMapa().getPola()
-//                                                [gs.getBohaterZaznaczony().getPozXnaMapie()]
-//                                                [gs.getBohaterZaznaczony().getPozYnaMapie()],
-//                                        gs.getMapa().getPola()
-//                                                [gs.getBohaterZaznaczony().getPozXnaMapie()]
-//                                                [gs.getBohaterZaznaczony().getPozYnaMapie()], gs.getMapa().getPola()[9][9]
-//                                );
-
-                                ArrayList<PathMoves> pathMoves;
-
                                 PathFinder.findPath(gs.getMapa(), gs.getMapa().getPola()
                                                 [gs.getBohaterZaznaczony().getPozXnaMapie()]
                                                 [gs.getBohaterZaznaczony().getPozYnaMapie()],
-                                        gs.getMapa().getPola()[3][3]);
+                                        gs.getMapa().getPola()[4][4]);
 
                                 Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
                             }
@@ -362,6 +352,15 @@ public class Bohater extends Actor {
         this.getPixMap().fillRectangle(1, 3, 3, 97 - poziomHP());
 
         this.setBohaterCheckTex(new Texture(this.getPixMap()));
+    }
+
+    /**
+     * Zwraca pole na którym stoid bohater
+     *
+     * @return obiekt klasy pole.
+     */
+    public Pole getFiled() {
+        return gs.getMapa().getPola()[getPozXnaMapie()][getPozYnaMapie()];
     }
 
     /**

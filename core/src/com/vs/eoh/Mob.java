@@ -276,6 +276,15 @@ public class Mob extends Image {
         Assets.stage01MapScreen.addActor(gs.getMapa().getPola()[pozXTB][pozYTB].getTresureBox());
     }
 
+    /**
+     * Zwraca pole na którym znajduje się mob
+     *
+     * @return Obiekt klasy Pole
+     */
+    public Pole getField() {
+        return gs.getMapa().getPola()[getPozX()][getPozY()];
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);

@@ -29,11 +29,11 @@ public class PathFinder {
 
         int destiantion = 0;
 
-        if (endField.getMob() != null) {
-            destiantion = 1;
-        } else if (endField.getTresureBox() != null) {
-            destiantion = 2;
-        }
+//        if (endField.getMob() != null) {
+//            destiantion = 1;
+//        } else if (endField.getTresureBox() != null) {
+//            destiantion = 2;
+//        }
 
         clearLists();
 
@@ -45,15 +45,14 @@ public class PathFinder {
 
         Pole q;
 
-
         while (openLink.size() > 0) {
 
-            Gdx.app.log("STEP 1) ", "openLinkSIZE: " + openLink.size());
+//            Gdx.app.log("STEP 1) ", "openLinkSIZE: " + openLink.size());
 
             //Wyszukanie pola z najmniejszym F i przypisanie pod Q
             q = returnLessFfield(openLink);
 
-            Gdx.app.log("PROCESSING field", "" + q + " X: " + q.locXonMap + " Y: " + q.locYonMap);
+//            Gdx.app.log("PROCESSING field", "" + q + " X: " + q.locXonMap + " Y: " + q.locYonMap);
 
             // Dodanie pola Q do CL oraz usuniecie go z OL
             moveToClosedList(q);
@@ -73,14 +72,14 @@ public class PathFinder {
             ArrayList<Pole> neighbors = new ArrayList<Pole>();
 
             // Wypełnia listę sąsiadów polami sąsiadów
-            fillNeighbors(map, q, neighbors);
+            fillNeighbors(map, q, neighbors, endField);
 
             // Sprawdzenie każdego z sąsiadów
             for (Pole pole : neighbors) {
 
                 // Sprawdzenie czy pole znajduje się na liście zamkniętej
                 if (checkClosedList(pole)) {
-                    Gdx.app.log("" + pole + "X: " + pole.locXonMap + " Y: " + pole.locYonMap, "Jest na liście CL");
+//                    Gdx.app.log("" + pole + "X: " + pole.locXonMap + " Y: " + pole.locYonMap, "Jest na liście CL");
                 }
                 // Sprawdzenie czy pole nie znajduje się na liście pól otwartych
                 else if (!checkOpenList(pole)) {
@@ -143,14 +142,14 @@ public class PathFinder {
             }
         }
 
-        Gdx.app.log("SIZE: " + tmpLisoOfMoves.size(), "");
-        for (PathMoves pathMoves : tmpLisoOfMoves) {
-            Gdx.app.log("X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
-        }
+//        Gdx.app.log("SIZE: " + tmpLisoOfMoves.size(), "");
+//        for (PathMoves pathMoves : tmpLisoOfMoves) {
+//            Gdx.app.log("X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
+//        }
 
-        for (PathMoves pathMoves : listOfMoves) {
-            Gdx.app.log("Lista ruchow| X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
-        }
+//        for (PathMoves pathMoves : listOfMoves) {
+//            Gdx.app.log("Lista ruchow| X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
+//        }
 
         for (Pole fieldToClear : fieldsToClear) {
             fieldToClear.parentField = null;
@@ -204,7 +203,7 @@ public class PathFinder {
 
             distance = Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
 
-            Gdx.app.log("Distance G", "" + (startField.pathG + distance));
+//            Gdx.app.log("Distance G", "" + (startField.pathG + distance));
 
             return startField.pathG + distance;
         }
@@ -226,7 +225,7 @@ public class PathFinder {
 
         distance = Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
 
-        Gdx.app.log("Distance H", "" + distance);
+//        Gdx.app.log("Distance H", "" + distance);
         return distance;
     }
 
@@ -237,7 +236,7 @@ public class PathFinder {
      */
     public static void countF(Pole field, Pole partntField, Pole endField) {
         field.pathF = countG(partntField, field) + countH(field, endField);
-        Gdx.app.log("F " + "X:" + field.locXonMap + " Y:" + field.locYonMap, "" + field.pathF);
+//        Gdx.app.log("F " + "X:" + field.locXonMap + " Y:" + field.locYonMap, "" + field.pathF);
     }
 
     /**
@@ -258,9 +257,9 @@ public class PathFinder {
             }
         });
 
-        for (Pole pole : list) {
-            Gdx.app.log("1. " + pole, "X: " + pole.locXonMap + " Y: " + pole.locYonMap + " F: " + pole.pathF);
-        }
+//        for (Pole pole : list) {
+//            Gdx.app.log("1. " + pole, "X: " + pole.locXonMap + " Y: " + pole.locYonMap + " F: " + pole.pathF);
+//        }
         return list.get(0);
     }
 
@@ -269,24 +268,29 @@ public class PathFinder {
      *
      * @param neighborsList ArrayList pól
      */
-    private static void fillNeighbors(Mapa mapa, Pole field, ArrayList<Pole> neighborsList) {
+    private static void fillNeighbors(Mapa mapa, Pole field, ArrayList<Pole> neighborsList, Pole endField) {
         neighborsList.clear();
 
         for (int i = field.locXonMap - 1; i < field.locXonMap + 2; i++) {
             for (int j = field.locYonMap - 1; j < field.locYonMap + 2; j++) {
                 if (i >= 0 && j >= 0 && i < mapa.getIloscPolX() && j < mapa.getIloscPolY()) {
                     Pole fieldToAdd = mapa.getPola()[i][j];
-                    if (fieldToAdd.isMovable() && fieldToAdd.getMob() == null && fieldToAdd != field && fieldToAdd.getBohater() == null) {
+
+                    if (endField.getMob() != null && fieldToAdd.equals(endField)) {
+                        neighborsList.add(fieldToAdd);
+                    } else if (endField.getTresureBox() != null && fieldToAdd.equals(endField)) {
+                        neighborsList.add(fieldToAdd);
+                    } else if (fieldToAdd.isMovable() && fieldToAdd.getMob() == null && fieldToAdd != field && fieldToAdd.getBohater() == null) {
                         neighborsList.add(fieldToAdd);
                     }
                 }
             }
         }
 
-        Gdx.app.log("LISTA SASIADOW", "" + neighborsList.size());
-        for (Pole pole : neighborsList) {
-            Gdx.app.log("1. " + pole, "X: " + pole.locXonMap + " Y: " + pole.locYonMap);
-        }
+//        Gdx.app.log("LISTA SASIADOW", "" + neighborsList.size());
+//        for (Pole pole : neighborsList) {
+//            Gdx.app.log("1. " + pole, "X: " + pole.locXonMap + " Y: " + pole.locYonMap);
+//        }
     }
 
     /**
@@ -295,7 +299,7 @@ public class PathFinder {
      * @param field
      */
     private static void moveToClosedList(Pole field) {
-        Gdx.app.log("Dodaje pole do CL: ", "" + field + " X: " + field.locXonMap + " Y: " + field.locYonMap);
+//        Gdx.app.log("Dodaje pole do CL: ", "" + field + " X: " + field.locXonMap + " Y: " + field.locYonMap);
         closedLinks.add(field);
         if (openLink.size() > 0) {
             int indeksDoUsuniecia = -1;
@@ -305,7 +309,7 @@ public class PathFinder {
                 }
             }
             if (indeksDoUsuniecia != -1) {
-                Gdx.app.log("Usuwam pole z OL: ", "" + field + " X: " + field.locXonMap + " Y: " + field.locYonMap);
+//                Gdx.app.log("Usuwam pole z OL: ", "" + field + " X: " + field.locXonMap + " Y: " + field.locYonMap);
                 openLink.remove(indeksDoUsuniecia);
             }
         }

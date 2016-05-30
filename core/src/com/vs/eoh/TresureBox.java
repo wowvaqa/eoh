@@ -155,6 +155,15 @@ public class TresureBox extends Actor {
     }
 
     /**
+     * Zwraca pole na którym stoi Tresure Box
+     *
+     * @return Obiket klasy Pole
+     */
+    public Pole getField() {
+        return gs.getMapa().getPola()[this.pozX][this.pozY];
+    }
+
+    /**
      * Zwraca pozycję X na mapie skrzyni
      *
      * @return Pozycja X
