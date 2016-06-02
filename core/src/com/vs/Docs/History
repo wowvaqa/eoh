@@ -1,3 +1,14 @@
+version 0.0073 01062016
+DONE    1. Poprawion błąd powodujący zawieszanie się gry na Androidzie w grze z AI.
+DONE    2. Zredukowano ilość grywalnych klas postaci do: Wojownika, Lowcy, Czarodzieja.
+DONE    3. Poprawiono błąd przy awansie Lowcy i Czarodzieja na poziomie 3 można było wybrać dowolną
+        klasę postaci z drzewka.
+DONE    4. Dodanie dla AI: ataku na zamek przeciwnika.
+
+version 0.0072 31052015
+DONE    1. Poprawa błędów w działąniu AI
+DONE    2. Dodanie AI: ataku bohatera, ataku mobów LVL 2
+
 version 0.0071 30052016
 DONE    1. Dodanie podstawowego grywalnego AI
 

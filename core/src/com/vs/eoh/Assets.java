@@ -470,7 +470,6 @@ public class Assets {
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println("przycisk TAKE IT kliknięty");
                     for (int i = 0; i < tmpButtons.size(); i++) {
                         if (tmpButtons.get(i).isPressed()) {
                             // Sprawdzenie czy itemek jest złotem
@@ -498,7 +497,6 @@ public class Assets {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("przycisk TAKE IT kliknięty");
                     for (int i = 0; i < tmpButtons.size(); i++) {
                         if (tmpButtons.get(i).isPressed()) {
                             // Sprawdzenie czy itemek jest złotem

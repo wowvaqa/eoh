@@ -127,21 +127,16 @@ public class MapScreen implements Screen {
      */
     private void koniecTurySingle() {
         if (!sprawdzCzyGraczPosiadaZamek()) {
-            System.out.println("Sprawdzanie czy gracz posiada zamek.");
             // Jeżeli gracz nie będzie posiadał zamku wtedy zmianie ulegnie jego
             // status oraz zwiększona zostanie ilość tur bez zamku
             gs.getGracze().get(gs.getTuraGracza()).setStatusBezZamku(true);
             gs.getGracze().get(gs.getTuraGracza()).setTuryBezZamku(gs.getGracze().get(gs.getTuraGracza()).getTuryBezZamku() + 1);
             if (gs.getGracze().get(gs.getTuraGracza()).getTuryBezZamku() >= 5) {
-                System.out.println("Gracz: " + gs.getTuraGracza() + " kaput");
                 gs.getGracze().get(gs.getTuraGracza()).setStatusGameOver(true);
             }
-            System.out.println("Gracz " + gs.getTuraGracza() + " nie posiada zamku: "
-                    + gs.getGracze().get(gs.getTuraGracza()).getTuryBezZamku() + " tur.");
         }
         wylaczAktywnychBohaterow();
         sprawdzCzyKoniecTuryOgolnej();
-        System.out.println("Koniec Tury");
         // Ustala turę następnego gracza
         gs.setTuraGracza(gs.getTuraGracza() + 1);
         if (gs.getTuraGracza() > gs.getGracze().size() - 1) {
@@ -185,6 +180,10 @@ public class MapScreen implements Screen {
         this.interfce.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
 
         Ruch.wylaczIkonyEfektow();
+
+        if (gs.getGracze().get(gs.getTuraGracza()).isAi()) {
+            koniecTurySingle();
+        }
     }
 
     /**
@@ -198,12 +197,10 @@ public class MapScreen implements Screen {
 
         // Sprawdzenie czy wszyscy gracze zakończyli turę
         if (NetEngine.playersEndTurn >= gs.getGracze().size()) {
-            Gdx.app.log("Koniec tury mulit", "ilość graczy: " + NetEngine.playersEndTurn);
             NetEngine.playersEndTurn = 0;
 
             wylaczAktywnychBohaterow();
             sprawdzCzyKoniecTuryOgolnej();
-            System.out.println("Koniec Tury");
             // Ustala turę następnego gracza
             gs.setTuraGracza(NetEngine.playerNumber);
             interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
@@ -248,7 +245,6 @@ public class MapScreen implements Screen {
             interfce.btnKoniecTury.setVisible(true);
             interfce.btnKupBohatera.setVisible(true);
         } else {
-            Gdx.app.log("Oczekiwanie na pozostałych graczy", "ilość graczy: " + NetEngine.playersEndTurn);
             interfce.btnKoniecTury.setVisible(false);
             interfce.btnKupBohatera.setVisible(false);
         }
@@ -259,7 +255,6 @@ public class MapScreen implements Screen {
      */
     public void przesunKamereNadBohatera() {
         Camera cam = stage01.getCamera();
-        System.out.println(cam.position);
         float xCord = gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(0).getX();
         float yCord = gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(0).getY();
 
@@ -273,7 +268,6 @@ public class MapScreen implements Screen {
         if (gs.getGracze().get(gs.getTuraGracza()).isStatusGameOver()) {
             if (gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().size() > 0) {
                 for (int i = 0; i < gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().size(); i++) {
-                    System.out.println("Usunięcie bohatera");
                     gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().remove(i);
 
                 }
@@ -282,7 +276,6 @@ public class MapScreen implements Screen {
                 for (int y = 0; y < gs.getMapa().getIloscPolY(); y++) {
                     if (gs.getMapa().getPola()[x][y].getBohater() != null
                             && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() == gs.getTuraGracza()) {
-                        System.out.println("XXX");
                         gs.getMapa().pola[x][y].getBohater().remove();
                         gs.getMapa().pola[x][y].setBohater(null);
                     }
@@ -301,7 +294,6 @@ public class MapScreen implements Screen {
             for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
                 if (gs.getMapa().getPola()[i][j].getCastle() != null) {
                     if (gs.getMapa().getPola()[i][j].getCastle().getPrzynaleznoscDoGracza() == gs.getTuraGracza()) {
-                        System.out.println("Gracz posiada zamek.");
                         return true;
                     }
                 }
@@ -332,7 +324,6 @@ public class MapScreen implements Screen {
      */
     private void sprawdzCzyKoniecTuryOgolnej() {
         if (gs.getTuraGracza() == gs.iloscGraczy - 1) {
-            System.out.println("Koniec tury ogólnej");
             gs.setTuraGry(gs.getTuraGry() + 1);
             odnowZdrowieZamkow();
             odnowZdrowieBohaterow();
@@ -348,12 +339,10 @@ public class MapScreen implements Screen {
                 if (gs.getMapa().getPola()[i][j].getBohater() != null
                         && gs.getMapa().getPola()[i][j].getBohater().getActualHp()
                         < gs.getMapa().getPola()[i][j].getBohater().getHp()) {
-                    System.out.println("Bohater odnawia życie");
 
                     int hpRenew = 1;
 
                     if (gs.getMapa().getPola()[i][j].getCastle() != null) {
-                        Gdx.app.log("Gracz siedzi na zamku", "");
                         hpRenew = 3;
                     }
 
@@ -379,7 +368,6 @@ public class MapScreen implements Screen {
                 if (gs.getMapa().getPola()[i][j].getCastle() != null
                         && gs.getMapa().getPola()[i][j].getCastle().getActualHp()
                         < gs.getMapa().getPola()[i][j].getCastle().getMaxHp()) {
-                    System.out.println("Zamek odnawia życie");
                     gs.getMapa().getPola()[i][j].getCastle().setActualHp(
                             gs.getMapa().getPola()[i][j].getCastle().getActualHp() + 1);
                 }
@@ -420,6 +408,8 @@ public class MapScreen implements Screen {
                 if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
 
                     gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 0));
+                    gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                    gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
                     stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
 
                     gs.getGracze().get(0).getBohaterowie().get(0).setPozXnaMapie(i);
@@ -430,6 +420,8 @@ public class MapScreen implements Screen {
                 if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
 
                     gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 1));
+                    gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                    gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
                     stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
 
                     gs.getGracze().get(1).getBohaterowie().get(0).setPozXnaMapie(i);
@@ -442,6 +434,8 @@ public class MapScreen implements Screen {
                     if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
 
                         gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 2));
+                        gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                        gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
                         stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
 
                         gs.getGracze().get(2).getBohaterowie().get(0).setPozXnaMapie(i);
@@ -454,6 +448,8 @@ public class MapScreen implements Screen {
                     if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
 
                         gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 3));
+                        gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                        gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
                         stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
 
                         gs.getGracze().get(3).getBohaterowie().get(0).setPozXnaMapie(i);
@@ -563,7 +559,6 @@ public class MapScreen implements Screen {
     }
 
     private Texture teksturaTerenu(TypyTerenu tT) {
-        System.out.println(tT);
         switch (tT) {
             case Gory:
                 return a.trawaGoraTex;
@@ -621,9 +616,6 @@ public class MapScreen implements Screen {
             AI.nextMove = curTime + 2;
             AI.aiStarted = true;
         }
-
-        //Gdx.app.log("CURRENT TIME", "" + curTime);
-        //Gdx.app.log("NEXT TIME", "" + AI.nextMove);
 
         if (curTime > AI.nextMove) {
             Gdx.app.log("Następuje ruch AI", "" + AI.whichMove);
@@ -699,7 +691,6 @@ public class MapScreen implements Screen {
             if (stage01.getCamera().position.x > 350) {
                 stage01.getCamera().translate(-predkoscRuchuKamery, 0, 0);
             }
-            Gdx.app.log("Position", "" + stage01.getCamera().position);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             if (stage01.getCamera().position.x < gs.getMapa().getIloscPolX() * 100) {
@@ -723,8 +714,6 @@ public class MapScreen implements Screen {
                     stage01.getCamera().viewportWidth += predkoscZoom;
                 }
             }
-            Gdx.app.log("WIDTH", "" + stage01.getCamera().viewportWidth);
-            Gdx.app.log("HEIGHT", "" + stage01.getCamera().viewportHeight);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 
@@ -734,8 +723,6 @@ public class MapScreen implements Screen {
                     stage01.getCamera().viewportWidth -= predkoscZoom;
                 }
             }
-            Gdx.app.log("WIDTH", "" + stage01.getCamera().viewportWidth);
-            Gdx.app.log("HEIGHT", "" + stage01.getCamera().viewportHeight);
         }
     }
 
@@ -1192,7 +1179,7 @@ public class MapScreen implements Screen {
                 btnKupBohatera.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if (gs.getGracze().get(gs.getTuraGracza()).getGold() < 10) {
+                        if (gs.getGracze().get(gs.getTuraGracza()).getGold() < 20) {
                             DialogScreen dialogScreen = new DialogScreen("ERROR", a.skin, "Za malo zlota", stage01);
                         } else {
                             g.setScreen(Assets.newBohaterScreen);

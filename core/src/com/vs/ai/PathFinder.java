@@ -142,15 +142,6 @@ public class PathFinder {
             }
         }
 
-//        Gdx.app.log("SIZE: " + tmpLisoOfMoves.size(), "");
-//        for (PathMoves pathMoves : tmpLisoOfMoves) {
-//            Gdx.app.log("X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
-//        }
-
-//        for (PathMoves pathMoves : listOfMoves) {
-//            Gdx.app.log("Lista ruchow| X: " + pathMoves.moveX + " Y: " + pathMoves.moveY, "");
-//        }
-
         for (Pole fieldToClear : fieldsToClear) {
             fieldToClear.parentField = null;
         }
@@ -175,15 +166,6 @@ public class PathFinder {
         openLink.clear();
         closedLinks.clear();
     }
-
-//    /**
-//     * Metoda uruchamiająca liczenie
-//     *
-//     * @param field
-//     */
-//    public static void countFactors(Pole parentField, Pole field, Pole endField) {
-//        countF(parentField, field, endField);
-//    }
 
     /**
      * Liczy współczynnik G dla zadanego pola
@@ -246,16 +228,18 @@ public class PathFinder {
      */
     public static Pole returnLessFfield(ArrayList<Pole> list) {
 
-        list.sort(new Comparator<Pole>() {
-            @Override
-            public int compare(Pole o1, Pole o2) {
-                if (o2 == null) return -1;
-                if (o1.pathF > o2.pathF) return 1;
-                else if (o1.pathF < o2.pathF) return -1;
-                else
-                    return 0;
-            }
-        });
+        Sort.fieldSort(list);
+
+//        list.sort(new Comparator<Pole>() {
+//            @Override
+//            public int compare(Pole o1, Pole o2) {
+//                if (o2 == null) return -1;
+//                if (o1.pathF > o2.pathF) return 1;
+//                else if (o1.pathF < o2.pathF) return -1;
+//                else
+//                    return 0;
+//            }
+//        });
 
 //        for (Pole pole : list) {
 //            Gdx.app.log("1. " + pole, "X: " + pole.locXonMap + " Y: " + pole.locYonMap + " F: " + pole.pathF);
@@ -264,9 +248,11 @@ public class PathFinder {
     }
 
     /**
-     * Wypełnia listę podaną parametrem polami sąsiadów
-     *
-     * @param neighborsList ArrayList pól
+     * Wypełnia Arrayliste obiektami pól sąsiadujących.
+     * @param mapa Referencja do obiketu mapy
+     * @param field Referencja do obiektu pola wg którego będą dodawani sąsiedzi
+     * @param neighborsList ArrayLista z obiektami pól sąsiadów
+     * @param endField Referencja do obiektu pola końcowgo (szukanego)
      */
     private static void fillNeighbors(Mapa mapa, Pole field, ArrayList<Pole> neighborsList, Pole endField) {
         neighborsList.clear();
@@ -279,6 +265,8 @@ public class PathFinder {
                     if (endField.getMob() != null && fieldToAdd.equals(endField)) {
                         neighborsList.add(fieldToAdd);
                     } else if (endField.getTresureBox() != null && fieldToAdd.equals(endField)) {
+                        neighborsList.add(fieldToAdd);
+                    } else if (endField.getBohater() != null && fieldToAdd.equals(endField)) {
                         neighborsList.add(fieldToAdd);
                     } else if (fieldToAdd.isMovable() && fieldToAdd.getMob() == null && fieldToAdd != field && fieldToAdd.getBohater() == null) {
                         neighborsList.add(fieldToAdd);

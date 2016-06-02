@@ -1,6 +1,7 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -80,11 +81,11 @@ public class NewGame {
     static public KlasyPostaci nastepnaKlasaPostaci(KlasyPostaci kP) {
         switch (kP) {
             case Wojownik:
-                return KlasyPostaci.Giermek;
+                return KlasyPostaci.Lowca;
             case Giermek:
                 return KlasyPostaci.Lowca;
             case Lowca:
-                return KlasyPostaci.Twierdza;
+                return KlasyPostaci.Czarodziej;
             case Twierdza:
                 return KlasyPostaci.Czarodziej;
             case Czarodziej:
@@ -106,11 +107,11 @@ public class NewGame {
             case Giermek:
                 return KlasyPostaci.Wojownik;
             case Lowca:
-                return KlasyPostaci.Giermek;
+                return KlasyPostaci.Wojownik;
             case Twierdza:
                 return KlasyPostaci.Lowca;
             case Czarodziej:
-                return KlasyPostaci.Twierdza;
+                return KlasyPostaci.Lowca;
 
         }
         return KlasyPostaci.Wojownik;
@@ -249,7 +250,6 @@ public class NewGame {
     }
 
     /**
-     *
      * @param kP
      * @return
      */
@@ -271,6 +271,7 @@ public class NewGame {
 
     /**
      * Zwraca ilość mocy dla danej kalsy postaci
+     *
      * @param kP KlasaPostaci
      * @return int Ilość mocy
      */
@@ -291,7 +292,6 @@ public class NewGame {
     }
 
     /**
-     *
      * @param kP
      * @return
      */
@@ -319,6 +319,7 @@ public class NewGame {
      * @throws java.lang.ClassNotFoundException
      */
     static public void zakonczGenerowanieNowejGry(Game g, GameStatus gs, Assets a) throws IOException, ClassNotFoundException {
+
 
         if (gs.getNetworkStatus() != 2) {
             gs.wczytajMape();
@@ -445,11 +446,11 @@ public class NewGame {
                 break;
             case Lowca:
                 bohater.getListOfSpells().add(Spells.Haste);
-                bohater.getListOfSpells().add(Spells.Poison);
-                bohater.getListOfSpells().add(Spells.SummonBear);
-                bohater.getListOfSpells().add(Spells.SummonWolf);
-                bohater.getListOfSpells().add(Spells.VampireTouch);
-                bohater.getListOfSpells().add(Spells.LongShot);
+                //bohater.getListOfSpells().add(Spells.Poison);
+                //bohater.getListOfSpells().add(Spells.SummonBear);
+                //bohater.getListOfSpells().add(Spells.SummonWolf);
+                //bohater.getListOfSpells().add(Spells.VampireTouch);
+                //bohater.getListOfSpells().add(Spells.LongShot);
                 break;
             case Twierdza:
                 bohater.getListOfSpells().add(Spells.Cure);

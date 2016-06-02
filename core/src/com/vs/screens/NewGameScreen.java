@@ -140,8 +140,6 @@ public class NewGameScreen implements Screen {
         btnAnuluj.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Anuluj");
-                //gs.setActualScreen(0);
                 g.setScreen(Assets.mainMenuScreen);
             }
         });
@@ -153,8 +151,8 @@ public class NewGameScreen implements Screen {
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("EXIT");
-                if (!GameStatus.nazwaMapy.equals("brak") || !GameStatus.nazwaMapy.equals("mapa z serwera")) {
+
+                if (GameStatus.nazwaMapy != "brak" || !GameStatus.nazwaMapy.equals("mapa z serwera")) {
                     try {
                         NewGame.ai0 = false;
                         NewGame.ai1 = false;
@@ -535,6 +533,7 @@ public class NewGameScreen implements Screen {
                 FileHandle file = (FileHandle) listOfMap.getSelected();
                 Gdx.app.log("Nazwa Pliku", file.name());
                 GameStatus.nazwaMapy = file.name();
+
                 window.remove();
             }
         });

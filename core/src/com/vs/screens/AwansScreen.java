@@ -281,9 +281,13 @@ public class AwansScreen implements Screen {
                     btnPoziom2.setVisible(false);
                     btnPoziom3A.setVisible(false);
                     btnPoziom3B.setVisible(false);
-                    if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Arcypaladyn")) {
+                    if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Arcypaladyn")
+                            || gs.getBohaterZaznaczony().getActualHeroClass().equals("Strzelec")
+                            || gs.getBohaterZaznaczony().getActualHeroClass().equals("Kaplan")) {
                         btnPoziom4B.setVisible(false);
-                    } else if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Msciciel")) {
+                    } else if (gs.getBohaterZaznaczony().getActualHeroClass().equals("Msciciel")
+                            || gs.getBohaterZaznaczony().getActualHeroClass().equals("Lotr")
+                            || gs.getBohaterZaznaczony().getActualHeroClass().equals("Elementalista")) {
                         btnPoziom4A.setVisible(false);
                     }
                     break;
@@ -527,14 +531,22 @@ public class AwansScreen implements Screen {
                 l5.setText("Pogromca");
                 l6.setText("Sedzia");
                 break;
-            case Giermek:
-                l1.setText("Giermek");
-                l2.setText("Rycerz");
-                l3.setText("Hierofanta");
-                l4.setText("Golem");
-                l5.setText("Inkwizytor");
-                l6.setText("Diamentowy golem");
+            case Czarodziej:
+                l1.setText("Czarodziej");
+                l2.setText("Mag");
+                l3.setText("Kaplan");
+                l4.setText("Elementalista");
+                l5.setText("Hierofanta");
+                l6.setText("Arcymag");
                 break;
+            case Lowca:
+                l1.setText("Lowca");
+                l2.setText("Lucznik");
+                l3.setText("Strzelec");
+                l4.setText("Lotr");
+                l5.setText("Strzelec wyborowy");
+                l6.setText("Zabojca");
+
         }
     }
 
@@ -736,26 +748,26 @@ public class AwansScreen implements Screen {
                     if (wybor2) {
                         listaCzarow.add(Spells.Frozen);
                     } else if (wybor3A) {
-                        listaCzarow.add(Spells.Thunder);
-                    } else if (wybor3B) {
                         listaCzarow.add(Spells.Bless);
+                    } else if (wybor3B) {
+                        listaCzarow.add(Spells.Thunder);
                     } else if (wybor4A) {
-                        listaCzarow.add(Spells.MeteorShower);
-                    } else if (wybor4B) {
                         listaCzarow.add(Spells.Prayer);
+                    } else if (wybor4B) {
+                        listaCzarow.add(Spells.MeteorShower);
                     }
                     break;
                 case Lowca:
                     if (wybor2) {
-                        listaCzarow.add(Spells.Frozen);
+                        listaCzarow.add(Spells.Poison);
                     } else if (wybor3A) {
-                        listaCzarow.add(Spells.Thunder);
+                        listaCzarow.add(Spells.SummonWolf);
                     } else if (wybor3B) {
-                        listaCzarow.add(Spells.Bless);
+                        listaCzarow.add(Spells.SummonBear);
                     } else if (wybor4A) {
-                        listaCzarow.add(Spells.MeteorShower);
+                        listaCzarow.add(Spells.LongShot);
                     } else if (wybor4B) {
-                        listaCzarow.add(Spells.Prayer);
+                        listaCzarow.add(Spells.VampireTouch);
                     }
                     break;
             }

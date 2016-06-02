@@ -236,7 +236,6 @@ public class MapEditor implements Screen {
             }
         }
 
-        System.out.print(tabela01.getCells().size);
         poleEdytora tmpPE = (poleEdytora) tabela01.getCells().get(99).getActor();
         tmpPE.getSprite().setTexture(a.mobDwarfTex);
 
@@ -293,11 +292,6 @@ public class MapEditor implements Screen {
         }
 
         stage01.addActor(getWindowOfSaveMap());
-
-        System.out.println("Zapisuje mape");
-        //ObjectOutputStream wy = new ObjectOutputStream(new FileOutputStream("mapa.dat"));
-        //wy.writeObject(this.mapa);
-        //zapiszMape2(mapa);
     }
 
     /**
@@ -459,7 +453,6 @@ public class MapEditor implements Screen {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Pole edytora klikniete");
 
                     new Dialog("Edycja Pola", a.skin) {
                         {

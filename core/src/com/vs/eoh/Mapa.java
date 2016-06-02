@@ -343,28 +343,28 @@ public final class Mapa implements Serializable {
      */
     private static String getPartOfMap(int x, int y, Mapa mapa) {
         if (x == 0 && y == 0) {
-            System.out.println("Lewy Dolny róg mapy.");
+            //System.out.println("Lewy Dolny róg mapy.");
             return "LD";
         } else if (x == mapa.getIloscPolX() - 1 && y == 0) {
-            System.out.println("Prawy Dolny róg mapy.");
+            //System.out.println("Prawy Dolny róg mapy.");
             return "PD";
         } else if (x == mapa.getIloscPolX() - 1 && y == mapa.getIloscPolY() - 1) {
-            System.out.println("Prawy Górny róg mapy.");
+            //System.out.println("Prawy Górny róg mapy.");
             return "PG";
         } else if (x == 0 && y == mapa.getIloscPolY() - 1) {
-            System.out.println("Lewy Górny róg mapy.");
+            //System.out.println("Lewy Górny róg mapy.");
             return "LG";
         } else if (x == 0) {
-            System.out.println("Lewa krawędź mapy.");
+            //System.out.println("Lewa krawędź mapy.");
             return "L";
         } else if (x == mapa.getIloscPolX() - 1) {
-            System.out.println("Prawa krawędź mapy.");
+            //System.out.println("Prawa krawędź mapy.");
             return "P";
         } else if (y == 0) {
-            System.out.println("Dolna krawędź mapy.");
+            //System.out.println("Dolna krawędź mapy.");
             return "D";
         } else if (y == mapa.getIloscPolY() - 1) {
-            System.out.println("Górna krawędź mapy.");
+            //System.out.println("Górna krawędź mapy.");
             return "G";
         }
         return "C";

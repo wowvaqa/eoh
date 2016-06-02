@@ -148,7 +148,7 @@ public class NewBohaterScreen implements Screen {
                 System.out.println("EXIT");
                 zakonczGenerowanieNowegoBohatera();
                 gs.getGracze().get(gs.getTuraGracza()).setGold(
-                        gs.getGracze().get(gs.getTuraGracza()).getGold() - 30);
+                        gs.getGracze().get(gs.getTuraGracza()).getGold() - 20);
                 g.setScreen(Assets.mapScreen);
             }
         });

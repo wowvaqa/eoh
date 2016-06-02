@@ -1,5 +1,7 @@
 /**
- * TODO Poprawić: przy zakupie nowego bohatera ów bohater pojawia się na predefiniowanych pozycjach, nie w lokalizacji gdzie jest zamek.
+ * TODO Poprawić: przy zakupie nowego bohatera. Ów bohater pojawia się na predefiniowanych pozycjach, nie w lokalizacji gdzie jest zamek.
+ * TODO Poprawić: W momenice kiedy gracza ma aktywne przyciski i AI/bohater ruszy się przyciski pozstają nadal aktywne pomimo tego że pod przyciskiem nie ma już odpowiedniego celu.
+ *
  */
 
 package com.vs.eoh;

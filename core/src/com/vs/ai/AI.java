@@ -8,6 +8,7 @@ import com.vs.enums.CzesciCiala;
 import com.vs.enums.TypItemu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
+import com.vs.eoh.Castle;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Gracz;
 import com.vs.eoh.Item;
@@ -82,8 +83,86 @@ public class AI {
 
                         break;
                     case attackMobLevel1:
-
                         endField = setTarget(bohater, ActionModes.moveToMobLevel1);
+
+                        for (int i = 0; i < map.getIloscPolX(); i++) {
+                            for (int j = 0; j < map.getIloscPolY(); j++) {
+                                if (map.getPola()[i][j].equals(endField)) {
+                                    makeHeroAttack(bohater, i, j);
+                                }
+                            }
+                        }
+                        break;
+
+                    case moveToMobLevel2:
+                        startField = map.getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()];
+                        endField = setTarget(bohater, ActionModes.moveToMobLevel2);
+
+                        moves = PathFinder.findPath(map, startField, endField);
+
+                        if (moves != null && moves.size() > 0) {
+                            xMov = moves.get(0).moveX;
+                            yMov = moves.get(0).moveY;
+
+                            makeHeroMove(bohater, xMov, yMov);
+                        }
+
+                        break;
+
+                    case attackMobLevel2:
+                        endField = setTarget(bohater, ActionModes.moveToMobLevel2);
+
+                        for (int i = 0; i < map.getIloscPolX(); i++) {
+                            for (int j = 0; j < map.getIloscPolY(); j++) {
+                                if (map.getPola()[i][j].equals(endField)) {
+                                    makeHeroAttack(bohater, i, j);
+                                }
+                            }
+                        }
+                        break;
+
+                    case moveToHero:
+                        startField = map.getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()];
+                        endField = setTarget(bohater, ActionModes.moveToHero);
+
+                        moves = PathFinder.findPath(map, startField, endField);
+
+                        if (moves != null && moves.size() > 0) {
+                            xMov = moves.get(0).moveX;
+                            yMov = moves.get(0).moveY;
+
+                            makeHeroMove(bohater, xMov, yMov);
+                        }
+                        break;
+
+                    case attackHero:
+                        endField = setTarget(bohater, ActionModes.attackHero);
+
+                        for (int i = 0; i < map.getIloscPolX(); i++) {
+                            for (int j = 0; j < map.getIloscPolY(); j++) {
+                                if (map.getPola()[i][j].equals(endField)) {
+                                    makeHeroAttack(bohater, i, j);
+                                }
+                            }
+                        }
+                        break;
+
+                    case moveToCastle:
+                        startField = map.getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()];
+                        endField = setTarget(bohater, ActionModes.moveToCastle);
+
+                        moves = PathFinder.findPath(map, startField, endField);
+
+                        if (moves != null && moves.size() > 0) {
+                            xMov = moves.get(0).moveX;
+                            yMov = moves.get(0).moveY;
+
+                            makeHeroMove(bohater, xMov, yMov);
+                        }
+                        break;
+
+                    case attackCastle:
+                        endField = setTarget(bohater, ActionModes.attackCastle);
 
                         for (int i = 0; i < map.getIloscPolX(); i++) {
                             for (int j = 0; j < map.getIloscPolY(); j++) {
@@ -121,69 +200,34 @@ public class AI {
                             }
                         }
 
-                        int index = 0;
-
                         for (Item item : bohater.getEquipment()) {
                             if (item.getCzescCiala().equals(CzesciCiala.glowa)) {
                                 if (item.getLevel() > bohater.getItemGlowa().getLevel()) {
                                     bohater.setItemGlowa(item);
-                                    for (int i = 0; i < bohater.getEquipment().size(); i++) {
-                                        if (bohater.getItemGlowa().equals(item)) {
-                                            index = i;
-                                        }
-                                    }
                                 }
                             } else if (item.getCzescCiala().equals(CzesciCiala.korpus)) {
                                 if (item.getLevel() > bohater.getItemKorpus().getLevel()) {
                                     bohater.setItemKorpus(item);
-                                    for (int i = 0; i < bohater.getEquipment().size(); i++) {
-                                        if (bohater.getItemKorpus().equals(item)) {
-                                            index = i;
-                                        }
-                                    }
                                 }
                             } else if (item.getCzescCiala().equals(CzesciCiala.nogi)) {
                                 if (item.getLevel() > bohater.getItemNogi().getLevel()) {
                                     bohater.setItemNogi(item);
-                                    for (int i = 0; i < bohater.getEquipment().size(); i++) {
-                                        if (bohater.getItemNogi().equals(item)) {
-                                            index = i;
-                                        }
-                                    }
                                 }
                             } else if (item.getCzescCiala().equals(CzesciCiala.stopy)) {
                                 if (item.getLevel() > bohater.getItemStopy().getLevel()) {
                                     bohater.setItemStopy(item);
-                                    for (int i = 0; i < bohater.getEquipment().size(); i++) {
-                                        if (bohater.getItemStopy().equals(item)) {
-                                            index = i;
-                                        }
-                                    }
                                 }
                             } else if (item.getCzescCiala().equals(CzesciCiala.rece)) {
                                 if (item.getLevel() > bohater.getItemLewaReka().getLevel()) {
                                     bohater.setItemLewaReka(item);
-                                    for (int i = 0; i < bohater.getEquipment().size(); i++) {
-                                        if (bohater.getItemLewaReka().equals(item)) {
-                                            index = i;
-                                        }
-                                    }
                                 } else if (item.getLevel() > bohater.getItemPrawaReka().getLevel()) {
                                     bohater.setItemPrawaReka(item);
-                                    for (int i = 0; i < bohater.getEquipment().size(); i++) {
-                                        if (bohater.getItemPrawaReka().equals(item)) {
-                                            index = i;
-                                        }
-                                    }
                                 }
                             }
                         }
 
-                        if (index != 0) {
-                            bohater.getEquipment().remove(index);
-                        }
-
                         TresureBox.removeTresureBox(endField.getTresureBox(), bohater.getGs().getMapa());
+
                         break;
                 }
             }
@@ -198,32 +242,69 @@ public class AI {
      */
     public ActionModes getAiMode(Bohater bohater) {
 
-        double hp = bohater.getHp() / 2;
+        if (findTargetHero(bohater).size() == 0) {
+            if (findTargetCastle(bohater).size() > 0) {
+                if (findTargetCastle(bohater).get(0).distance == 1
+                        && findTargetCastle(bohater).get(0).castle.getActualHp() > 0) {
+                    return ActionModes.attackCastle;
+                } else {
+                    return ActionModes.moveToCastle;
+                }
+            }
+        }
 
-        //if (bohater.getActualHp() < hp) {
         if (bohater.getActualHp() < 2) {
             return ActionModes.wait;
         } else if (findTargetTresureBox(bohater) != null && findTargetTresureBox(bohater).size() > 0
-                && findTargetTresureBox(bohater).get(0).distance < 3) {
+                && findTargetTresureBox(bohater).get(0).distance < 4 + bohater.getAiDistance()) {
             if (findTargetTresureBox(bohater).get(0).distance == 0) {
                 return ActionModes.takeTresureBox;
             } else {
                 return ActionModes.moveToTresureBox;
             }
-        } else if (findTargetMobLevel1(bohater) != null && findTargetMobLevel1(bohater).size() > 0) {
+        } else if (findTargetMobLevel1(bohater) != null && findTargetMobLevel1(bohater).size() > 0
+                && findTargetMobLevel1(bohater).get(0).distance < 4 + bohater.getAiDistance()) {
             if (findTargetMobLevel1(bohater).get(0).distance == 1) {
+                if (bohater.getPozostaloRuchow() <= 2) {
+                    return ActionModes.wait;
+                }
                 return ActionModes.attackMobLevel1;
             } else {
                 return ActionModes.moveToMobLevel1;
             }
+        } else if (findTargetHero(bohater) != null && findTargetHero(bohater).size() > 0
+                && findTargetHero(bohater).get(0).distance < 4 + bohater.getAiDistance()) {
+            if (findTargetHero(bohater).get(0).distance == 1) {
+                return ActionModes.attackHero;
+            } else {
+                return ActionModes.moveToHero;
+            }
+        } else if (findTargetMobLevel2(bohater) != null && findTargetMobLevel2(bohater).size() > 0
+                && bohater.getLevelOfExp() >= 3) {
+            if (findTargetMobLevel2(bohater).get(0).distance == 1) {
+                if (bohater.getPozostaloRuchow() <= 2) {
+                    return ActionModes.wait;
+                }
+                return ActionModes.attackMobLevel2;
+            } else {
+                return ActionModes.moveToMobLevel2;
+            }
+        } else if (findTargetCastle(bohater) != null && findTargetCastle(bohater).size() > 0
+                && findTargetCastle(bohater).get(0).distance < 2 + bohater.getAiDistance()) {
+            if (findTargetCastle(bohater).get(0).distance == 1 && findTargetCastle(bohater).get(0).castle.getActualHp() > 0) {
+                return ActionModes.attackCastle;
+            } else {
+                return ActionModes.moveToCastle;
+            }
         }
+        bohater.setAiDistance(bohater.getAiDistance() + 1);
         return ActionModes.wait;
     }
 
     /**
-     * !!!
-     *
-     * @param bohater
+     * Metoda zwraca pole wg zadanych parametrów
+     * @param bohater Referencja do obiektu bohatera od którego ma rozpocząć się poszukiwanie ścieżki
+     * @param actionMode Tryb akcji dla którego ma odbyć się poszukiwanie.
      * @return
      */
     public Pole setTarget(Bohater bohater, ActionModes actionMode) {
@@ -233,6 +314,18 @@ public class AI {
                 return findTargetMobLevel1(bohater).get(0).mob.getField();
             case moveToMobLevel1:
                 return findTargetMobLevel1(bohater).get(0).mob.getField();
+            case attackMobLevel2:
+                return findTargetMobLevel2(bohater).get(0).mob.getField();
+            case moveToMobLevel2:
+                return findTargetMobLevel2(bohater).get(0).mob.getField();
+            case attackHero:
+                return findTargetHero(bohater).get(0).bohater.getFiled();
+            case moveToHero:
+                return findTargetHero(bohater).get(0).bohater.getFiled();
+            case moveToCastle:
+                return findTargetCastle(bohater).get(0).castle.getField();
+            case attackCastle:
+                return findTargetCastle(bohater).get(0).castle.getField();
             case moveToTresureBox:
                 return findTargetTresureBox(bohater).get(0).tresureBox.getField();
             case takeTresureBox:
@@ -246,10 +339,17 @@ public class AI {
     private void makeHeroAttack(Bohater bohater, int locXofField, int locYofField) {
 
         if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
-//            Ruch ruch = new Ruch(bohater, bohater.getA(), bohater.getGs());
             bohater.getA().animujLblDmg(locXofField * 100 + 50, locYofField * 100, bohater,
                     bohater.getGs().getMapa().getPola()[locXofField][locYofField].getMob());
+        } else if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getBohater() != null) {
+            bohater.getA().animujLblDmg(locXofField * 100 + 50, locYofField * 100, bohater,
+                    bohater.getGs().getMapa().getPola()[locXofField][locYofField].getBohater());
+        } else if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getCastle() != null) {
+            bohater.getA().animujLblDmg(locXofField * 100 + 50, locYofField * 100, bohater,
+                    bohater.getGs().getMapa().getPola()[locXofField][locYofField].getCastle());
         }
+
+        bohater.getGs().usunMartweMoby();
     }
 
     /**
@@ -267,7 +367,67 @@ public class AI {
 
         GameStatus.gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
 
+        if (bohater.getFiled().getCastle() != null) {
+            retakeCastle(bohater.getFiled());
+        }
+
         bohater.setPozostaloRuchow(bohater.getPozostaloRuchow() - 1);
+    }
+
+    /**
+     * Zmienia właściciela zamku na gracza do którego należy bohater.
+     *
+     * @param field Pole na którym znajduje się bohater.
+     */
+    private void retakeCastle(Pole field) {
+        field.getCastle().setPrzynaleznoscDoGracza(field.getBohater().getPrzynaleznoscDoGracza());
+        field.getCastle().aktualizujIkoneZamku();
+    }
+
+    /**
+     * Zwraca ArrayList z obiektem klasy HeroCell zawierającym wszystkich bohaterów poza bohaterem
+     * wg którego następuje porównanie oraz
+     * dystansem od bohatera
+     *
+     * @param bohater Referencja do obiektu bohatera wg. którego mają być sprawdzane moby
+     * @return Obiekt klasy MobCell
+     */
+    public ArrayList<HeroCell> findTargetHero(Bohater bohater) {
+        Mapa map = bohater.getGs().getMapa();
+        ArrayList<HeroCell> listHero = new ArrayList<HeroCell>();
+
+        for (int i = 0; i < map.getIloscPolX(); i++) {
+            for (int j = 0; j < map.getIloscPolY(); j++) {
+                if (map.getPola()[i][j].getBohater() != null) {
+                    if (map.getPola()[i][j].getBohater().getPrzynaleznoscDoGracza() != bohater.getPrzynaleznoscDoGracza()) {
+                        if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
+                            listHero.add(new HeroCell(map.getPola()[i][j].getBohater(),
+                                    PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                        }
+                    }
+                }
+            }
+        }
+
+        Sort.HeroCellSort(listHero);
+
+//        listHero.sort(new Comparator<HeroCell>() {
+//            @Override
+//            public int compare(HeroCell o1, HeroCell o2) {
+//                if (o2 == null) return -1;
+//                if (o1.distance > o2.distance) return 1;
+//                else if (o1.distance < o2.distance) return -1;
+//                else
+//                    return 0;
+//            }
+//        });
+
+        Gdx.app.log("Mobs level 1", "" + listHero.size());
+        for (HeroCell mc : listHero) {
+            Gdx.app.log("MOB LVL1: " + mc.bohater + " DISTANCE: " + mc.distance, "");
+        }
+
+        return listHero;
     }
 
     /**
@@ -292,16 +452,7 @@ public class AI {
             }
         }
 
-        listMobsLevel.sort(new Comparator<MobCell>() {
-            @Override
-            public int compare(MobCell o1, MobCell o2) {
-                if (o2 == null) return -1;
-                if (o1.distance > o2.distance) return 1;
-                else if (o1.distance < o2.distance) return -1;
-                else
-                    return 0;
-            }
-        });
+        Sort.mobCellSort(listMobsLevel);
 
         Gdx.app.log("Mobs level 1", "" + listMobsLevel.size());
         for (MobCell mc : listMobsLevel) {
@@ -333,16 +484,7 @@ public class AI {
             }
         }
 
-        listMobsLevel.sort(new Comparator<MobCell>() {
-            @Override
-            public int compare(MobCell o1, MobCell o2) {
-                if (o2 == null) return -1;
-                if (o1.distance > o2.distance) return 1;
-                else if (o1.distance < o2.distance) return -1;
-                else
-                    return 0;
-            }
-        });
+        Sort.mobCellSort(listMobsLevel);
 
         Gdx.app.log("Mobs level 2", "" + listMobsLevel.size());
         for (MobCell mc : listMobsLevel) {
@@ -366,22 +508,15 @@ public class AI {
         for (int i = 0; i < map.getIloscPolX(); i++) {
             for (int j = 0; j < map.getIloscPolY(); j++) {
                 if (map.getPola()[i][j].getTresureBox() != null) {
-                    listTresureBox.add(new TresureBoxCell(map.getPola()[i][j].getTresureBox(),
-                            PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                    if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
+                        listTresureBox.add(new TresureBoxCell(map.getPola()[i][j].getTresureBox(),
+                                PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                    }
                 }
             }
         }
 
-        listTresureBox.sort(new Comparator<TresureBoxCell>() {
-            @Override
-            public int compare(TresureBoxCell o1, TresureBoxCell o2) {
-                if (o2 == null) return -1;
-                if (o1.distance > o2.distance) return 1;
-                else if (o1.distance < o2.distance) return -1;
-                else
-                    return 0;
-            }
-        });
+        Sort.tresureBoxCellSort(listTresureBox);
 
         Gdx.app.log("Tresure Boxes", "" + listTresureBox.size());
         for (TresureBoxCell tbc : listTresureBox) {
@@ -389,6 +524,39 @@ public class AI {
         }
 
         return listTresureBox;
+    }
+
+    /**
+     * Zwraca ArrayList z obiektem klasy CastleCell zawierającym wszystkie zamki oraz
+     * dystansem zamku od bohatera
+     *
+     * @param bohater Referencja do obiektu bohatera wg. którego mają być lokalizowane skrzynie
+     * @return Zwraca ArrayList z obiektami klasy CastleCell
+     */
+    public ArrayList<CastleCell> findTargetCastle(Bohater bohater) {
+        Mapa map = bohater.getGs().getMapa();
+        ArrayList<CastleCell> listCastle = new ArrayList<CastleCell>();
+
+        for (int i = 0; i < map.getIloscPolX(); i++) {
+            for (int j = 0; j < map.getIloscPolY(); j++) {
+                if (map.getPola()[i][j].getCastle() != null
+                        && map.getPola()[i][j].getCastle().getPrzynaleznoscDoGracza() != bohater.getPrzynaleznoscDoGracza()) {
+                    if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
+                        listCastle.add(new CastleCell(map.getPola()[i][j].getCastle(),
+                                PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                    }
+                }
+            }
+        }
+
+        Sort.castleCellSort(listCastle);
+
+        Gdx.app.log("Tresure Boxes", "" + listCastle.size());
+        for (CastleCell tbc : listCastle) {
+            Gdx.app.log("TBoxes: " + tbc.castle + " DISTANCE: " + tbc.distance, "");
+        }
+
+        return listCastle;
     }
 
 
@@ -429,6 +597,32 @@ public class AI {
 
         public MobCell(Mob mob, int distance) {
             this.mob = mob;
+            this.distance = distance;
+        }
+    }
+
+    /**
+     * Klasa zawiera Bohatera i dystans do obiektu.
+     */
+    public class HeroCell {
+        public Bohater bohater;
+        public int distance;
+
+        public HeroCell(Bohater bohater, int distance) {
+            this.bohater = bohater;
+            this.distance = distance;
+        }
+    }
+
+    /**
+     * Klasa zawiera zamek i dystans do obiektu.
+     */
+    public class CastleCell {
+        public Castle castle;
+        public int distance;
+
+        public CastleCell(Castle castle, int distance) {
+            this.castle = castle;
             this.distance = distance;
         }
     }

@@ -29,13 +29,14 @@ import java.util.ArrayList;
  */
 public class Bohater extends Actor {
 
-    // Statystyki
     private final String imie = null;
     // klasa bohatera
     public KlasyPostaci klasyPostaci;
     public boolean teksturaZaktualizowana = false;
     public boolean animujCiecieNetwork = false;
     public int damageNetwork = 0;   // do rysowania labelki z ilością obrażeń
+    // Statystyki
+    private int aiDistance = 0;
     private Assets a;
     private GameStatus gs;
     private Game g;
@@ -117,6 +118,7 @@ public class Bohater extends Actor {
                    int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, Assets a,
                    int pozycjaXnaMapie, int pozycjaYnaMapie, GameStatus gs, Game g, KlasyPostaci kp) {
 
+        aiDistance = 0;
         this.efekty = new ArrayList<Effect>();
         this.spellEffects = new ArrayList<SpellEffects>();
         this.listOfSpells = new ArrayList<Spells>();
@@ -202,7 +204,6 @@ public class Bohater extends Actor {
                             j.setZaznaczony(false);
                             j.getSprite().setTexture(j.bohaterTex);
                             Ruch.wylaczPrzyciski();
-                            //bohaterZaznaczony = true;
                         }
                     }
                 }
@@ -230,15 +231,9 @@ public class Bohater extends Actor {
                             } else {
                                 aktualizujEfektyBohatera();
                                 moveable = true;
-                                //definiujPrzyciski();
                                 sprite.setTexture(bohaterCheckTex);
                                 zaznaczony = true;
                                 gs.setCzyZaznaczonoBohatera(true);
-
-                                PathFinder.findPath(gs.getMapa(), gs.getMapa().getPola()
-                                                [gs.getBohaterZaznaczony().getPozXnaMapie()]
-                                                [gs.getBohaterZaznaczony().getPozYnaMapie()],
-                                        gs.getMapa().getPola()[4][4]);
 
                                 Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
                             }
@@ -401,23 +396,18 @@ public class Bohater extends Actor {
      * Aktualizuje czas trawania efektów
      */
     public void aktualizujDzialanieEfektow() {
-        System.out.println("Aktualizacja czasu działania efektów");
 
         // Aktualizacja efektów itemków
         int indeksEfektuDoUsuniecia = 99;
 
         for (int i = 0; i < this.efekty.size(); i++) {
-            System.out.println("Wykonuje petle w efektach");
             efekty.get(i).setDlugoscTrwaniaEfektu(efekty.get(i).getDlugoscTrwaniaEfektu() - 1);
-            System.out.println(i + ": " + efekty.get(i).getDlugoscTrwaniaEfektu());
             if (efekty.get(i).getDlugoscTrwaniaEfektu() < 1) {
-                System.out.println("Warunek usuniecia efektu został spełniony");
                 indeksEfektuDoUsuniecia = i;
             }
         }
 
         if (indeksEfektuDoUsuniecia != 99) {
-            System.out.println("Usuwam efekt: ");
             this.efekty.remove(indeksEfektuDoUsuniecia);
             this.aktualizujDzialanieEfektow();
         }
@@ -426,17 +416,13 @@ public class Bohater extends Actor {
         int indeksSpellEfektuDoUsuniecia = 99;
 
         for (int i = 0; i < this.spellEffects.size(); i++) {
-            System.out.println("Wykonuje petle w Spell efektach");
             spellEffects.get(i).setDlugoscTrwaniaEfektu(spellEffects.get(i).getDlugoscTrwaniaEfektu() - 1);
-            System.out.println(i + ": " + spellEffects.get(i).getDlugoscTrwaniaEfektu());
             if (spellEffects.get(i).getDlugoscTrwaniaEfektu() < 1) {
-                System.out.println("Warunek usuniecia Spell efektu został spełniony");
                 indeksSpellEfektuDoUsuniecia = i;
             }
         }
 
         if (indeksSpellEfektuDoUsuniecia != 99) {
-            System.out.println("Usuwam Spell efekt: ");
             this.spellEffects.remove(indeksSpellEfektuDoUsuniecia);
             this.aktualizujDzialanieEfektow();
         }
@@ -1083,5 +1069,23 @@ public class Bohater extends Actor {
 
     public Game getG() {
         return g;
+    }
+
+    /**
+     * Zwraca dystans AI do ustalania kolejności posunieć przez AI
+     *
+     * @return dystans AI
+     */
+    public int getAiDistance() {
+        return aiDistance;
+    }
+
+    /**
+     * Ustala dystans AI do ustalania kolejności posunięć
+     *
+     * @param aiDistance dystans AI
+     */
+    public void setAiDistance(int aiDistance) {
+        this.aiDistance = aiDistance;
     }
 }

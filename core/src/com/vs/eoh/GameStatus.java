@@ -25,6 +25,7 @@ public class GameStatus {
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
     public static ArrayList<DostepneItemki> itemyPoziom2 = new ArrayList<DostepneItemki>();
     public static GameStatus gs;
+    public static boolean gameStart = false;
     public float xDlaInterfejsuRuchu = 0;
     public float yDlaInterfejsuRuchu = 0;
     public int iloscGraczy = 6;                                                 // ilosć graczy
@@ -52,8 +53,6 @@ public class GameStatus {
     // Do uniemożliweinia ruchu podczas penetrowania skrzyni ze skarbem
     private Item item;
 
-    public static boolean gameStart = false;
-
     public GameStatus() {
         gs = this;
         wczytajItemy();
@@ -73,8 +72,6 @@ public class GameStatus {
         if (!nazwaMapy.equals("mapa z serwera")) {
             mapa = MapEditor.readMap(nazwaMapy);
         }
-
-        System.out.println("odczyt obiektu");
     }
 
     public int getIloscGraczy() {
@@ -138,6 +135,15 @@ public class GameStatus {
                     if (this.getMapa().pola[i][j].getBohater().getActualHp() <= 0) {
                         this.getMapa().pola[i][j].setBohater(null);
                     }
+                }
+            }
+        }
+
+        for (int j = 0; j < Assets.stage01MapScreen.getActors().size; j++) {
+            if (Assets.stage01MapScreen.getActors().get(j).getClass() == Bohater.class) {
+                Bohater tmpMob = (Bohater) Assets.stage01MapScreen.getActors().get(j);
+                if (tmpMob.getActualHp() < 1) {
+                    Assets.stage01MapScreen.getActors().removeIndex(j);
                 }
             }
         }

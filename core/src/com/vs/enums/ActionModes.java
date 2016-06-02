@@ -10,8 +10,11 @@ public enum ActionModes {
     attackMobLevel2,
     moveToTresureBox,
     takeTresureBox,
+    moveToHero,
+    attackHero,
     wait,
     heal,
     moveToCastle,
+    attackCastle,
     defendCastle;
 }

@@ -26,6 +26,9 @@ public class Castle extends Actor {
     private int przynaleznoscDoGracza = 0;
     private Pixmap ikonaZamku;
 
+    private int locXonMap;
+    private int locYonMap;
+
     /**
      *
      * @param a
@@ -114,6 +117,15 @@ public class Castle extends Actor {
         });
     }
 
+    /**
+     * Zwraca obiekt klasy Pole na którym znajduje się zamek.
+     *
+     * @return Obiekt klasy Pole
+     */
+    public Pole getField() {
+        return GameStatus.gs.getMapa().getPola()[locXonMap][locYonMap];
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -189,4 +201,39 @@ public class Castle extends Actor {
         this.przynaleznoscDoGracza = przynaleznoscDoGracza;
     }
 
+    /**
+     * Zwraca lokacje X zamku na mapie
+     *
+     * @return
+     */
+    public int getLocXonMap() {
+        return locXonMap;
+    }
+
+    /**
+     * Ustala lokacje X zamku na mapie
+     *
+     * @param locXonMap
+     */
+    public void setLocXonMap(int locXonMap) {
+        this.locXonMap = locXonMap;
+    }
+
+    /**
+     * Zwraca lokacje Y zamku na mapie
+     *
+     * @return
+     */
+    public int getLocYonMap() {
+        return locYonMap;
+    }
+
+    /**
+     * Ustala lokacje Y zamku na mapie.
+     *
+     * @param locYonMap
+     */
+    public void setLocYonMap(int locYonMap) {
+        this.locYonMap = locYonMap;
+    }
 }
