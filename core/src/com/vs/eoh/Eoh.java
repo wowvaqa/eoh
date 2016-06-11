@@ -62,6 +62,10 @@ public class Eoh extends Game {
 		Assets.multiplayerScreen = multiplayerScreen;
 		Assets.gameOverScreen = gameOverScreen;
 
+		GameStatus.a = a;
+		GameStatus.gs = gs;
+		GameStatus.g = this;
+
 		this.setScreen(mainScreen);
 	}
 

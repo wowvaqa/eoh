@@ -1,3 +1,7 @@
+version 0.0074
+DONE    1. Poprawiono błąd powodujący niprawidłową lokację nowego bohatera po jego zakupie.
+DONE    2. Dodano: Gracz AI może dokupić bohatera.
+
 version 0.0073 01062016
 DONE    1. Poprawion błąd powodujący zawieszanie się gry na Androidzie w grze z AI.
 DONE    2. Zredukowano ilość grywalnych klas postaci do: Wojownika, Lowcy, Czarodzieja.

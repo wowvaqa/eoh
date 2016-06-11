@@ -20,6 +20,7 @@ import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.NewGame;
+
 import static com.vs.eoh.NewGame.klasaPostaciGracz01;
 import static com.vs.eoh.NewGame.pobierzAtak;
 import static com.vs.eoh.NewGame.pobierzHp;
@@ -49,7 +50,6 @@ public class NewBohaterScreen implements Screen {
     private boolean tabelaUtworzona = false;
 
     /**
-     *
      * @param g
      * @param gs
      * @param a
@@ -148,7 +148,7 @@ public class NewBohaterScreen implements Screen {
                 System.out.println("EXIT");
                 zakonczGenerowanieNowegoBohatera();
                 gs.getGracze().get(gs.getTuraGracza()).setGold(
-                        gs.getGracze().get(gs.getTuraGracza()).getGold() - 20);
+                        gs.getGracze().get(gs.getTuraGracza()).getGold() - GameStatus.CostOfNewHero);
                 g.setScreen(Assets.mapScreen);
             }
         });
@@ -168,56 +168,81 @@ public class NewBohaterScreen implements Screen {
         // tymczasowa tekstura do określenia lokacji początkowej gracza
         int lokPoczatkowaX = 0, lokPoczatkowaY = 0;
 
+
         switch (gs.getTuraGracza()) {
             case 0:
-                lokPoczatkowaX = 0;
-                lokPoczatkowaY = 0;
+                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
                 break;
             case 1:
-                lokPoczatkowaX = 900;
-                lokPoczatkowaY = 900;
+                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
                 break;
             case 2:
-                lokPoczatkowaX = 0;
-                lokPoczatkowaY = 900;
+                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
                 break;
             case 3:
-                lokPoczatkowaX = 900;
-                lokPoczatkowaY = 0;
+                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
                 break;
         }
 
         tmpTex = NewGame.getTeksturaBohatera(klasaPostaciGracz01);
         tmpTexZazanaczony = NewGame.getTeksturaBohateraZaznaczonego(klasaPostaciGracz01);
-        
-        gs.gracze.get(gs.getTuraGracza()).getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX, lokPoczatkowaY, a, 0, 0, gs, g, klasaPostaciGracz01));
+
+        gs.gracze.get(gs.getTuraGracza()).getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX * 100, lokPoczatkowaY * 100, a, 0, 0, gs, g, klasaPostaciGracz01));
 
         int bohGracza = gs.getTuraGracza();
         int wymTabBoh = gs.gracze.get(gs.getTuraGracza()).getBohaterowie().size() - 1;
-        
+
         // Ustala do którego gracza z tablicy graczy należy bohater
         gs.gracze.get(gs.getTuraGracza()).getBohaterowie().get(wymTabBoh).setPrzynaleznoscDoGracza(gs.getTuraGracza());
 
         switch (bohGracza) {
             case 0:
-                gs.getMapa().pola[0][0].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[0][0].getBohater().setPozXnaMapie(0);
-                gs.getMapa().pola[0][0].getBohater().setPozYnaMapie(0);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 1:
-                gs.getMapa().pola[9][9].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[9][9].getBohater().setPozXnaMapie(9);
-                gs.getMapa().pola[9][9].getBohater().setPozYnaMapie(9);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 2:
-                gs.getMapa().pola[0][9].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[0][9].getBohater().setPozXnaMapie(0);
-                gs.getMapa().pola[0][9].getBohater().setPozYnaMapie(9);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 3:
-                gs.getMapa().pola[9][0].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[9][0].getBohater().setPozXnaMapie(9);
-                gs.getMapa().pola[9][0].getBohater().setPozYnaMapie(0);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
         }
 
@@ -240,10 +265,10 @@ public class NewBohaterScreen implements Screen {
             gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Rage);
         }
 
-        
+
         Assets.stage01MapScreen.addActor(gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(wymTabBoh));
-        
-    }    
+
+    }
 
     @Override
     public void show() {

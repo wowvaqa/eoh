@@ -2,25 +2,40 @@ package com.vs.ai;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.vs.enums.ActionModes;
 import com.vs.enums.CzesciCiala;
+import com.vs.enums.KlasyPostaci;
+import com.vs.enums.Spells;
 import com.vs.enums.TypItemu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.Castle;
+import com.vs.eoh.Eoh;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Gracz;
 import com.vs.eoh.Item;
 import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
+import com.vs.eoh.NewGame;
 import com.vs.eoh.Pole;
 import com.vs.eoh.Ruch;
 import com.vs.eoh.TresureBox;
+import com.vs.network.NetEngine;
+import com.vs.network.Network;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
+
+import static com.vs.eoh.NewGame.klasaPostaciGracz01;
+import static com.vs.eoh.NewGame.pobierzAtak;
+import static com.vs.eoh.NewGame.pobierzHp;
+import static com.vs.eoh.NewGame.pobierzMoc;
+import static com.vs.eoh.NewGame.pobierzObrone;
+import static com.vs.eoh.NewGame.pobierzSzybkosc;
+import static com.vs.eoh.NewGame.pobierzWiedze;
 
 /**
  * Created by v on 2016-05-13.
@@ -57,6 +72,10 @@ public class AI {
      * Ai wykonuje ruch.
      */
     public void makeAIMove() {
+
+        if (gracz.getGold() >= GameStatus.CostOfNewHero) {
+            buyNewHero(gracz);
+        }
 
         for (Bohater bohater : gracz.getBohaterowie()) {
             if (bohater.getPozostaloRuchow() > 0) {
@@ -235,6 +254,140 @@ public class AI {
     }
 
     /**
+     * Metoda odpowiada za awans bohatera AI
+     */
+    private void heroPromotion() {
+
+    }
+
+    /**
+     * Metoda sprawdza czy bohater osiagnął następny poziom
+     *
+     * @param bohater
+     */
+    private boolean checkNextLevel(Bohater bohater) {
+        if (bohater.getExp() >= bohater.getExpToNextLevel()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Metoda odpowiada za kupowanie nowego bohatera.
+     */
+    private void buyNewHero(Gracz gracz) {
+
+        gracz.setGold(gracz.getGold() - GameStatus.CostOfNewHero);
+
+        // tymczasowa tekstura przekazana do konstruktora nowego bohatera
+        Texture tmpTex, tmpTexZazanaczony;
+        // tymczasowa tekstura do określenia lokacji początkowej gracza
+        int lokPoczatkowaX = 0, lokPoczatkowaY = 0;
+
+
+        switch (gracz.getNumerGracza()) {
+            case 0:
+                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
+                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
+                break;
+            case 1:
+                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
+                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
+                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
+                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
+                            lokPoczatkowaX = i;
+                            lokPoczatkowaY = j;
+                        }
+                    }
+                }
+                break;
+        }
+
+        tmpTex = NewGame.getTeksturaBohatera(klasaPostaciGracz01);
+        tmpTexZazanaczony = NewGame.getTeksturaBohateraZaznaczonego(klasaPostaciGracz01);
+
+        gracz.getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX * 100, lokPoczatkowaY * 100, GameStatus.a, 0, 0, GameStatus.gs, GameStatus.g, klasaPostaciGracz01));
+
+        int bohGracza = gracz.getNumerGracza();
+        int wymTabBoh = gracz.getBohaterowie().size() - 1;
+
+        // Ustala do którego gracza z tablicy graczy należy bohater
+        gracz.getBohaterowie().get(wymTabBoh).setPrzynaleznoscDoGracza(gracz.getNumerGracza());
+
+        switch (bohGracza) {
+            case 0:
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                break;
+            case 1:
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                break;
+            case 2:
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                break;
+            case 3:
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                break;
+        }
+
+        gracz.getBohaterowie().get(wymTabBoh).setAtak(pobierzAtak(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setObrona(pobierzObrone(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setHp(pobierzHp(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setActualHp(pobierzHp(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setSzybkosc(pobierzSzybkosc(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setPozostaloRuchow(pobierzSzybkosc(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setWiedza(pobierzWiedze(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setMoc(pobierzMoc(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setMana(pobierzWiedze(klasaPostaciGracz01));
+        gracz.getBohaterowie().get(wymTabBoh).setActualMana(pobierzWiedze(klasaPostaciGracz01));
+
+        if (klasaPostaciGracz01.equals(KlasyPostaci.Lowca)) {
+            gracz.getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Haste);
+        } else if (klasaPostaciGracz01.equals(KlasyPostaci.Czarodziej)) {
+            gracz.getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.FireBall);
+        } else if (klasaPostaciGracz01.equals(KlasyPostaci.Wojownik)) {
+            gracz.getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Rage);
+        }
+
+
+        Assets.stage01MapScreen.addActor(gracz.getBohaterowie().get(wymTabBoh));
+
+
+    }
+
+    /**
      * Zwraca tryb AI - MOVE, ATTACK, WAIT
      *
      * @param bohater Referencja do obiektu bohatera.
@@ -305,7 +458,7 @@ public class AI {
      * Metoda zwraca pole wg zadanych parametrów
      * @param bohater Referencja do obiektu bohatera od którego ma rozpocząć się poszukiwanie ścieżki
      * @param actionMode Tryb akcji dla którego ma odbyć się poszukiwanie.
-     * @return
+     * @return Referencja do obiektu pole
      */
     public Pole setTarget(Bohater bohater, ActionModes actionMode) {
 
@@ -410,17 +563,6 @@ public class AI {
         }
 
         Sort.HeroCellSort(listHero);
-
-//        listHero.sort(new Comparator<HeroCell>() {
-//            @Override
-//            public int compare(HeroCell o1, HeroCell o2) {
-//                if (o2 == null) return -1;
-//                if (o1.distance > o2.distance) return 1;
-//                else if (o1.distance < o2.distance) return -1;
-//                else
-//                    return 0;
-//            }
-//        });
 
         Gdx.app.log("Mobs level 1", "" + listHero.size());
         for (HeroCell mc : listHero) {

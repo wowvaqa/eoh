@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.vs.enums.DostepneItemki;
@@ -25,7 +26,10 @@ public class GameStatus {
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
     public static ArrayList<DostepneItemki> itemyPoziom2 = new ArrayList<DostepneItemki>();
     public static GameStatus gs;
+    public static Assets a;
+    public static Game g;
     public static boolean gameStart = false;
+    public static int CostOfNewHero = 20;
     public float xDlaInterfejsuRuchu = 0;
     public float yDlaInterfejsuRuchu = 0;
     public int iloscGraczy = 6;                                                 // ilosć graczy

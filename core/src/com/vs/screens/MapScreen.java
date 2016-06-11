@@ -1179,7 +1179,7 @@ public class MapScreen implements Screen {
                 btnKupBohatera.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        if (gs.getGracze().get(gs.getTuraGracza()).getGold() < 20) {
+                        if (gs.getGracze().get(gs.getTuraGracza()).getGold() < GameStatus.CostOfNewHero) {
                             DialogScreen dialogScreen = new DialogScreen("ERROR", a.skin, "Za malo zlota", stage01);
                         } else {
                             g.setScreen(Assets.newBohaterScreen);
