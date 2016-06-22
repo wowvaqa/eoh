@@ -8,21 +8,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 import com.vs.enums.AnimsTypes;
-import com.vs.enums.CzesciCiala;
-import com.vs.network.Network;
-
-import java.util.ArrayList;
 
 public class Assets {
 
@@ -283,108 +275,6 @@ public class Assets {
         infoWindow.add(Integer.toString(szybkosc));
         infoWindow.row();
         infoWindow.toFront();
-    }
-
-    /**
-     * Pokazuje okno z informacjami dla Tresure Box
-     *
-     * @param tresureBox Referencja do obiektu TresureBox którego itemy mają być
-     * wyświetlone w oknie informacyjnym
-     * @param bohater Referencja do obiketu bohatera do którego ekwipunku
-     * dodawane będą itemki z tresure boxa
-     * @param gs
-     */
-    public void pokazInfoWindow(final TresureBox tresureBox, final Bohater bohater, final GameStatus gs) {
-        infoWindow.setZIndex(200);
-        infoWindow.setVisible(true);
-
-        // Tymczasowa ArrayLista przechowująca TextButtony
-        final ArrayList<TextButton> tmpButtons = new ArrayList<TextButton>();
-
-        for (int i = 0; i < tresureBox.getDostepneItemy().size(); i++) {
-            infoWindow.add(tresureBox.getDostepneItemy().get(i).getNazwa());
-            infoWindow.add(new Image(tresureBox.getDostepneItemy().get(i).getSprite().getTexture())).size(50, 50).pad(2);
-            tmpButtons.add(new TextButton("TAKE IT", skin));
-            tmpButtons.get(i).addListener(new ClickListener() {
-
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    for (int i = 0; i < tmpButtons.size(); i++) {
-                        if (tmpButtons.get(i).isPressed()) {
-                            // Sprawdzenie czy itemek jest złotem
-                            if (tresureBox.getDostepneItemy().get(i).getCzescCiala().equals(CzesciCiala.gold)) {
-                                gs.dodajDoZlotaAktualnegoGracza(tresureBox.getDostepneItemy().get(i).getGold());
-                                tresureBox.getDostepneItemy().remove(i);
-                                tmpButtons.get(i).remove();
-                                ukryjInfoWindow();
-                                pokazInfoWindow(tresureBox, bohater, gs);
-                                // Jeżeli nie jest złotem
-                            } else {
-                                tmpButtons.get(i).remove();
-                                // dodanie itemka z tresureboxa do ekwipunku
-                                bohater.getEquipment().add(tresureBox.getDostepneItemy().get(i));
-                                // usuniecie wybranego itemka z trasureboxa
-                                tresureBox.getDostepneItemy().remove(i);
-                                // aktualizacja okna
-                                ukryjInfoWindow();
-                                pokazInfoWindow(tresureBox, bohater, gs);
-                            }
-                        }
-                    }
-                    return false;
-                }
-
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    for (int i = 0; i < tmpButtons.size(); i++) {
-                        if (tmpButtons.get(i).isPressed()) {
-                            // Sprawdzenie czy itemek jest złotem
-                            if (tresureBox.getDostepneItemy().get(i).getCzescCiala().equals(CzesciCiala.gold)) {
-                                gs.dodajDoZlotaAktualnegoGracza(tresureBox.getDostepneItemy().get(i).getGold());
-                                tresureBox.getDostepneItemy().remove(i);
-                                tmpButtons.get(i).remove();
-                                ukryjInfoWindow();
-                                pokazInfoWindow(tresureBox, bohater, gs);
-                                // Jeżeli nie jest złotem
-                            } else {
-                                tmpButtons.get(i).remove();
-                                // dodanie itemka z tresureboxa do ekwipunku
-                                bohater.getEquipment().add(tresureBox.getDostepneItemy().get(i));
-                                // usuniecie wybranego itemka z trasureboxa
-                                tresureBox.getDostepneItemy().remove(i);
-                                // aktualizacja okna
-                                ukryjInfoWindow();
-                                pokazInfoWindow(tresureBox, bohater, gs);
-                            }
-                        }
-                    }
-                }
-            });
-            infoWindow.add(tmpButtons.get(i));
-            infoWindow.row();
-        }
-
-        // tymczasowy przycisk Exit dodany do okna InfoWindow
-        TextButton tmpExitBtn = new TextButton("EXIT", skin);
-        tmpExitBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-                TresureBox.removeTresureBox(tresureBox, gs.getMapa());
-
-                if (gs.getNetworkStatus() == 2) {
-                    Network.RemoveTresureBox removeTresureBox = new Network.RemoveTresureBox();
-                    removeTresureBox.pozX = tresureBox.getPozX();
-                    removeTresureBox.pozY = tresureBox.getPozY();
-                    GameStatus.client.getCnt().sendTCP(removeTresureBox);
-                }
-
-                bohater.setOtwartaSkrzyniaZeSkarbem(false);
-                ukryjInfoWindow();
-            }
-        });
-
-        infoWindow.add(tmpExitBtn);
     }
 
     /**
