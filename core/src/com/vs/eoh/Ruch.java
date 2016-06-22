@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.vs.enums.KlasyPostaci;
 import com.vs.network.Network;
 import com.vs.screens.MapScreen;
-import com.vs.screens.MultiplayerScreen;
 
 /**
  * Klasa odpowiada za ruch, obsługe przycisków ruchu i ataku.
@@ -251,7 +250,8 @@ public class Ruch {
             if (!buldingVisited) {
                 Bulding.modyfiAttributes(bohater, gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding());
             } else {
-                a.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone");
+                //a.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone");
+                Animation.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone", a);
             }
         }
     }
@@ -314,7 +314,7 @@ public class Ruch {
                     Gdx.app.log("Wykryto Poison Effect", "ot co");
                     int damage = gs.getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
                     gs.getBohaterZaznaczony().setActualHp(gs.getBohaterZaznaczony().getActualHp() - damage);
-                    a.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                    Animation.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
                 }
             }
 
@@ -336,14 +336,6 @@ public class Ruch {
             bohater.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));
             bohater.setPozXnaMapie(bohater.getPozXnaMapie() + (int) ruchX);
             bohater.setPozYnaMapie(bohater.getPozYnaMapie() + (int) ruchY);
-
-//            Assets.netStatus.pozXboh1 = gs.getGracze().get(0).getBohaterowie().get(0).getPozXnaMapie();
-//            Assets.netStatus.pozYboh1 = gs.getGracze().get(0).getBohaterowie().get(0).getPozYnaMapie();
-//
-//            Assets.netStatus.pozXboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozXnaMapie();
-//            Assets.netStatus.pozYboh2 = gs.getGracze().get(1).getBohaterowie().get(0).getPozYnaMapie();
-
-            //Assets.client.sendTCP(Assets.netStatus);
 
             gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
 
@@ -396,22 +388,33 @@ public class Ruch {
                     Gdx.app.log("Wykryto Poison Effect", "ot co");
                     int damage = gs.getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
                     gs.getBohaterZaznaczony().setActualHp(gs.getBohaterZaznaczony().getActualHp() - damage);
-                    a.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                    //a.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                    Animation.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
                 }
             }
 
             if (sprawdzPrzeciwnika(locX, locY).getClass() == Mob.class) {
                 System.out.println("Atak na moba");
-                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
-                        gs.getMapa().getPola()[locX][locY].getMob());
+//                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
+//                        gs.getMapa().getPola()[locX][locY].getMob());
+
+                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
+                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getMob())), a);
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Bohater.class) {
                 System.out.println("Atak na Bohatera");
-                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
-                        gs.getMapa().getPola()[locX][locY].getBohater());
+//                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
+//                        gs.getMapa().getPola()[locX][locY].getBohater());
+
+                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100, "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getBohater())), a);
+
+                //Fight.getObrazenia(this.bohater,  gs.getMapa().getPola()[locX][locY].getBohater())
+
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Castle.class) {
                 System.out.println("Atak na Zamek");
-                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
-                        gs.getMapa().getPola()[locX][locY].getCastle());
+//                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
+//                        gs.getMapa().getPola()[locX][locY].getCastle());
+                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
+                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getCastle())), a);
             }
 
             //a.swordSound.play();

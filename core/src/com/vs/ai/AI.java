@@ -1,6 +1,5 @@
 package com.vs.ai;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -8,11 +7,11 @@ import com.vs.enums.ActionModes;
 import com.vs.enums.CzesciCiala;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
-import com.vs.enums.TypItemu;
+import com.vs.eoh.Animation;
 import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.Castle;
-import com.vs.eoh.Eoh;
+import com.vs.eoh.Fight;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Gracz;
 import com.vs.eoh.Item;
@@ -20,14 +19,9 @@ import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
 import com.vs.eoh.NewGame;
 import com.vs.eoh.Pole;
-import com.vs.eoh.Ruch;
 import com.vs.eoh.TresureBox;
-import com.vs.network.NetEngine;
-import com.vs.network.Network;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
 
 import static com.vs.eoh.NewGame.klasaPostaciGracz01;
 import static com.vs.eoh.NewGame.pobierzAtak;
@@ -492,14 +486,18 @@ public class AI {
     private void makeHeroAttack(Bohater bohater, int locXofField, int locYofField) {
 
         if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
-            bohater.getA().animujLblDmg(locXofField * 100 + 50, locYofField * 100, bohater,
-                    bohater.getGs().getMapa().getPola()[locXofField][locYofField].getMob());
+            Animation.animujLblDamage(locXofField * 100 + 50, locYofField * 100,
+                    "Dmg: " + Integer.toString(Fight.getObrazenia(bohater, bohater.getGs().getMapa().getPola()[locXofField][locYofField].getMob())),
+                    bohater.getA());
+
         } else if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getBohater() != null) {
-            bohater.getA().animujLblDmg(locXofField * 100 + 50, locYofField * 100, bohater,
-                    bohater.getGs().getMapa().getPola()[locXofField][locYofField].getBohater());
+            Animation.animujLblDamage(locXofField * 100 + 50, locYofField * 100,
+                    "Dmg: " + Integer.toString(Fight.getObrazenia(bohater, bohater.getGs().getMapa().getPola()[locXofField][locYofField].getBohater())),
+                    bohater.getA());
         } else if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getCastle() != null) {
-            bohater.getA().animujLblDmg(locXofField * 100 + 50, locYofField * 100, bohater,
-                    bohater.getGs().getMapa().getPola()[locXofField][locYofField].getCastle());
+            Animation.animujLblDamage(locXofField * 100 + 50, locYofField * 100,
+                    "Dmg: " + Integer.toString(Fight.getObrazenia(bohater, bohater.getGs().getMapa().getPola()[locXofField][locYofField].getCastle())),
+                    bohater.getA());
         }
 
         bohater.getGs().usunMartweMoby();

@@ -1,6 +1,5 @@
 package com.vs.eoh;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,11 +21,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.vs.enums.AnimsTypes;
 import com.vs.enums.CzesciCiala;
 import com.vs.network.Network;
-import com.vs.screens.MultiplayerScreen;
 
 import java.util.ArrayList;
-
-import javax.xml.soap.Text;
 
 public class Assets {
 
@@ -236,162 +231,6 @@ public class Assets {
         fillMap();
         utworzInfoWindow();
 
-    }
-
-    /**
-     * Animuje label obrażeń oraz uruchamia procedurę liczenia dmg. dla BohVSBoh
-     *
-     * @param pozX
-     * @param pozY
-     * @param bohaterAtakujacy
-     * @param bohaterBroniacy
-     * @param spell
-     */
-    public void animujSpellLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Bohater bohaterBroniacy, SpellActor spell) {
-        lblDmg.setText("Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterAtakujacy, bohaterBroniacy, spell)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-    }
-
-    /**
-     * Animuje label obrażeń oraz uruchamia procedurę liczenia dmg. dla BohVSMob
-     *
-     * @param pozX
-     * @param pozY
-     * @param bohaterAtakujacy
-     * @param mob
-     * @param spell
-     */
-    public void animujSpellLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Mob mob, SpellActor spell) {
-        lblDmg.setText(Integer.toString(Fight.getSpellObrazenia(bohaterAtakujacy, mob, spell)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-    }
-
-    /**
-     * Animuje etykietę obrażeń oraz uruchamia procedurę liczenia obrażeń dla bohater vs zamek.
-     * @param pozX
-     * @param pozY
-     * @param bohaterAtakujacy
-     * @param castle
-     * @param spell
-     */
-    public void animujSpellLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Castle castle, SpellActor spell) {
-        lblDmg.setText(Integer.toString(Fight.getSpellObrazenia(bohaterAtakujacy, castle, spell)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-    }
-
-    /**
-     * Animuje etykietę obrażeń z zadanym Stringiem obrażeń.
-     *
-     * @param pozX Pozycja X gdzie ma być ustawiona etykieta.
-     * @param pozY Pozycja Y gdzie ma być ustawiona etykieta.
-     * @param dmg  String z ilością obrażeń.
-     */
-    public void animujLblDamage(float pozX, float pozY, String dmg) {
-
-        Label label = new Label("", skin);
-
-        Assets.stage01MapScreen.addActor(label);
-
-        label.setText("" + dmg);
-        label.setPosition(pozX - 50, pozY - 25);
-        label.setFontScale(1.5f);
-        label.addAction(Actions.alpha(1));
-        label.addAction(Actions.fadeOut(2.0f));
-        label.addAction(Actions.moveBy(0, 175, 2.0f));
-        label.act(Gdx.graphics.getDeltaTime());
-
-
-//        lblDmg.setText("Dmg: " + dmg);
-//        lblDmg.setPosition(pozX - 50, pozY - 25);
-//        lblDmg.setFontScale(1.5f);
-//        lblDmg.addAction(Actions.alpha(1));
-//        lblDmg.addAction(Actions.fadeOut(2.0f));
-//        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-//        lblDmg.act(Gdx.graphics.getDeltaTime());
-    }
-
-    /**
-     * Funkcja animuje Labelkę od wyświetlania obrażeń
-     *
-     * @param pozX pozycja x gdzie ma być ustawiona labelka
-     * @param pozY pozycja y gdzie ma być ustawiona labelka
-     * @param bohaterAtakujacy referencja do obiketu bohatera atakującego
-     * @param bohaterBroniacy referencja do obiektu bohatera broniącego
-     */
-    public void animujLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Bohater bohaterBroniacy) {
-        lblDmg.setText("Dmg: " + Integer.toString(Fight.getObrazenia(bohaterAtakujacy, bohaterBroniacy)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-        this.animujCiecie((int) bohaterBroniacy.getX(), (int) bohaterBroniacy.getY());
-    }
-
-    public void animujLblDmgNetwork(float pozX, float pozY, int damage) {
-        lblDmg.setText("Dmg: " + damage);
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-    }
-
-    public void animujLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Castle castle) {
-        lblDmg.setText("Dmg: " + Integer.toString(Fight.getObrazenia(bohaterAtakujacy, castle)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-        this.animujCiecie((int) castle.getX(), (int) castle.getY());
-    }
-
-    public void animujLblDmg(float pozX, float pozY, Mob mob, Bohater bohaterBroniacy) {
-        lblDmg.setText("Dmg: " + Integer.toString(Fight.getObrazenia(mob, bohaterBroniacy)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-        this.animujCiecie((int) bohaterBroniacy.getX(), (int) bohaterBroniacy.getY());
-    }
-
-    /**
-     *
-     * @param pozX
-     * @param pozY
-     * @param bohaterAtakujacy
-     * @param mob
-     */
-    public void animujLblDmg(float pozX, float pozY, Bohater bohaterAtakujacy, Mob mob) {
-        lblDmg.setText("Dmg: " + Integer.toString(Fight.getObrazenia(bohaterAtakujacy, mob)));
-        lblDmg.setPosition(pozX - 50, pozY - 25);
-        lblDmg.setFontScale(1.5f);
-        lblDmg.addAction(Actions.alpha(1));
-        lblDmg.addAction(Actions.fadeOut(2.0f));
-        lblDmg.addAction(Actions.moveBy(0, 175, 2.0f));
-        lblDmg.act(Gdx.graphics.getDeltaTime());
-        this.animujCiecie((int) mob.getX(), (int) mob.getY());
     }
 
     /**

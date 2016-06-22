@@ -49,11 +49,8 @@ public class AnimationCreator {
                 break;
 
             case FireExplosionAnimation:
-                //Texture texture = new Texture(Gdx.files.internal("animation/texExplosionFire.png"));
                 texture = new Texture(Gdx.files.internal("animation/texExplosionFire.png"));
-                //TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth() / 8, texture.getHeight() / 5);
                 tmp = TextureRegion.split(texture, texture.getWidth() / 8, texture.getHeight() / 5);
-                //TextureRegion[] walkFrames = new TextureRegion[8 * 5];
                 walkFrames = new TextureRegion[8 * 5];
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 8; j++) {

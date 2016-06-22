@@ -1,3 +1,6 @@
+version 0.0075 22062016
+DONE    1. Optymalizacja wyświetlania się etykiety z obrażeniami na ekranie mapy.
+
 version 0.0074
 DONE    1. Poprawiono błąd powodujący niprawidłową lokację nowego bohatera po jego zakupie.
 DONE    2. Dodano: Gracz AI może dokupić bohatera.

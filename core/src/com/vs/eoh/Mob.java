@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -216,7 +215,8 @@ public class Mob extends Image {
                     Gdx.app.log("Wykryto Poison Effect na Mobie", "ot co");
                     int damage = this.getSpellEffects().get(0).getEfektDmg();
                     this.aktualneHp = aktualneHp - damage;
-                    a.animujLblDamage(this.getX() + 50, this.getY() + 50, Integer.toString(damage));
+                    //a.animujLblDamage(this.getX() + 50, this.getY() + 50, Integer.toString(damage));
+                    Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damage), a);
                 }
             }
 
@@ -225,7 +225,10 @@ public class Mob extends Image {
             if (gs.getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater() != null
                     && this.aktualnaSzybkosc > 0) {
                 Bohater bohaterAtakujacy = gs.getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater();
-                a.animujLblDmg(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(), this, bohaterAtakujacy);
+                //a.animujLblDmg(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(), this, bohaterAtakujacy);
+
+                Animation.animujLblDamage(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(),
+                        "Dmg: " + Integer.toString(Fight.getObrazenia(this, bohaterAtakujacy)), a);
                 this.aktualnaSzybkosc -= 1;
             } else {
                 System.out.println("Bohater dał szusa, lub Mob zmęczył się.");
@@ -301,7 +304,7 @@ public class Mob extends Image {
 
         if (this.animujCiecieNetwork) {
             a.animujCiecie((int) this.getX(), (int) this.getY());
-            a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
+            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), a);
             this.animujCiecieNetwork = false;
         }
     }

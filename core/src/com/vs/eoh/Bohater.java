@@ -385,7 +385,8 @@ public class Bohater extends Actor {
 
         if (this.animujCiecieNetwork) {
             a.animujCiecie((int) this.getX(), (int) this.getY());
-            a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
+            //a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
+            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), a);
             this.animujCiecieNetwork = false;
         }
 

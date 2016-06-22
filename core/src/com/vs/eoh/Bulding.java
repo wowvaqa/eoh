@@ -78,7 +78,8 @@ public class Bulding extends Image {
             bulding.getVisited().add(bohater);
         }
 
-        bohater.getA().animujLblDamage(bulding.getX(), bulding.getY(), bulding.getShortBuldingDescription());
+        //bohater.getA().animujLblDamage(bulding.getX(), bulding.getY(), bulding.getShortBuldingDescription());
+        Animation.animujLblDamage(bulding.getX(), bulding.getY(), bulding.getShortBuldingDescription(), bohater.getA());
     }
 
     /**
