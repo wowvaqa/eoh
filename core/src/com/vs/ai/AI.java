@@ -585,8 +585,10 @@ public class AI {
             for (int j = 0; j < map.getIloscPolY(); j++) {
                 if (map.getPola()[i][j].getMob() != null) {
                     if (map.getPola()[i][j].getMob().getMobLevel() == 1) {
-                        listMobsLevel.add(new MobCell(map.getPola()[i][j].getMob(),
-                                PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                        if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
+                            listMobsLevel.add(new MobCell(map.getPola()[i][j].getMob(),
+                                    PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                        }
                     }
                 }
             }
@@ -617,8 +619,10 @@ public class AI {
             for (int j = 0; j < map.getIloscPolY(); j++) {
                 if (map.getPola()[i][j].getMob() != null) {
                     if (map.getPola()[i][j].getMob().getMobLevel() == 2) {
-                        listMobsLevel.add(new MobCell(map.getPola()[i][j].getMob(),
-                                PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                        if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
+                            listMobsLevel.add(new MobCell(map.getPola()[i][j].getMob(),
+                                    PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                        }
                     }
                 }
             }

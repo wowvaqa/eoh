@@ -1,3 +1,7 @@
+version 0.0077 23062016
+DONE    1. Poprawiono błąd powodujący zawieszanie się gry w momencie zastawienia przez bohatera
+        drogi do moba do którego podążał bohater AI.
+
 version 0.0076 23062016
 DONE    1. Poprawiono wyświetlanie się okana po wejściu na skrzynię ze skarbem.
 
