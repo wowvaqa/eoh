@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.vs.enums.Spells;
 import com.vs.enums.TypyTerenu;
 
 /**
@@ -33,6 +34,7 @@ public class SpellCaster {
 
         // Sprawdza czy czar działa tylko na bohatera castującego
         if (spell.isSpellWorksOnlyForCaster()) {
+            a.magicWand.play();
             spell.getSpellEffects().get(0).dzialanie(spell, bohaterCastujacy, bohaterCastujacy, a);
             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
             Ruch.wylaczPrzyciski();
@@ -221,6 +223,7 @@ public class SpellCaster {
                     } else {
                         spell.getSpellEffects().get(0).dzialanie(spell, null, bohaterCastujacy, a);
                     }
+
                     wylaczPrzyciski();
                 }
             });

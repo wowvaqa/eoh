@@ -1,3 +1,6 @@
+version 0.0078 25062016
+DONE    1. Dodano dźwięk otwierania skrzyni, ataku bohatera, ataku wilka.
+
 version 0.0077 23062016
 DONE    1. Poprawiono błąd powodujący zawieszanie się gry w momencie zastawienia przez bohatera
         drogi do moba do którego podążał bohater AI.

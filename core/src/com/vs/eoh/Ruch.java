@@ -215,6 +215,7 @@ public class Ruch {
             System.out.println("Nadepnięto na skrzynkę ze skarbem");
             Assets.stage03MapScreen.addActor(Dialog.getTresureBoxWindow("test", a, gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getTresureBox(), this.gs, bohater));
             bohater.setOtwartaSkrzyniaZeSkarbem(true);
+            a.chestSqueek.play();
         }
     }
 
@@ -395,15 +396,11 @@ public class Ruch {
 
             if (sprawdzPrzeciwnika(locX, locY).getClass() == Mob.class) {
                 System.out.println("Atak na moba");
-//                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
-//                        gs.getMapa().getPola()[locX][locY].getMob());
 
                 Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
                         "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getMob())), a);
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Bohater.class) {
                 System.out.println("Atak na Bohatera");
-//                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
-//                        gs.getMapa().getPola()[locX][locY].getBohater());
 
                 Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100, "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getBohater())), a);
 
@@ -411,13 +408,11 @@ public class Ruch {
 
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Castle.class) {
                 System.out.println("Atak na Zamek");
-//                this.a.animujLblDmg(this.locX * 100 + 50, this.locY * 100, this.bohater,
-//                        gs.getMapa().getPola()[locX][locY].getCastle());
                 Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
                         "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getCastle())), a);
             }
 
-            //a.swordSound.play();
+            a.swordSound.play();
 
             this.bohater.getSprite().setTexture(bohater.getBohaterTex());
             this.bohater.setZaznaczony(false);

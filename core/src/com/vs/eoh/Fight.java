@@ -6,6 +6,7 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.vs.enums.DostepneMoby;
 import com.vs.network.Network;
 
 import java.util.Random;
@@ -234,6 +235,10 @@ public class Fight {
      * @return Zwraca ilość obrażeń
      */
     static public int getObrazenia(Mob mob, Bohater bohaterBroniacy) {
+
+        if (mob.getTypMoba() == DostepneMoby.Wilk) {
+            GameStatus.a.wolfSnarl.play();
+        }
 
         Random rnd = new Random();
         System.out.println("----- MOB VS BOHATER -----");

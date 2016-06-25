@@ -146,8 +146,11 @@ public class Assets {
     /**
      * SOUNDS --------------------------------------------------------------------------------------
      */
-
     public Sound swordSound;
+    public Sound chestSqueek;
+    public Sound magicWand;
+    public Sound wolfSnarl;
+
     // predefiniowane okno ifnoramcyjne
     private Window infoWindow;
 
@@ -213,7 +216,7 @@ public class Assets {
         texNewGamePic = new Texture("newGamePic.png");
         texNewGamePlayerTabPic = new Texture("texNewGamePlayerTabPic.png");
 
-        //makeSounds();
+        makeSounds();
 
         makeItems();
         makeSpellTextures();
@@ -324,7 +327,11 @@ public class Assets {
     }
 
     private void makeSounds() {
-        swordSound = Gdx.audio.newSound(Gdx.files.internal("sounds/sword_01.aif"));
+        swordSound = Gdx.audio.newSound(Gdx.files.internal("sounds/sword_01.wav"));
+        chestSqueek = Gdx.audio.newSound(Gdx.files.internal("sounds/floor-squeak_01.wav"));
+        magicWand = Gdx.audio.newSound(Gdx.files.internal("sounds/magic-wand_01.wav"));
+        wolfSnarl = Gdx.audio.newSound(Gdx.files.internal("sounds/wolf-snarl_01.wav"));
+
     }
 
     private void makeSpellTextures() {

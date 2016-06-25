@@ -22,6 +22,7 @@ public class Mob extends Image {
     // Zmienne sieciowe
     public boolean animujCiecieNetwork = false;
     public int damageNetwork = -99;
+    private DostepneMoby typMoba;
     private Sprite sprite;    // wygląd
     private Texture icon;
     // Pozycja X i Y bohatera atakującego.
@@ -57,10 +58,7 @@ public class Mob extends Image {
      * @param mobLevel            Poziom moba.
      * @param typMoba
      */
-    public Mob(/**
-                * Texture textureIcon, *
-                */
-               Game g, GameStatus gs, Assets a,
+    public Mob(Game g, GameStatus gs, Assets a,
                int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
                DostepneMoby typMoba) {
         this.spellEffects = new ArrayList<SpellEffects>();
@@ -73,6 +71,7 @@ public class Mob extends Image {
         sprite = new Sprite(this.icon);
         this.setSize(sprite.getWidth(), sprite.getHeight());
         this.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
+        this.typMoba = typMoba;
 
         wygenerujStatystykiMoba(this.mobLevel);
         this.dodajListnera();
@@ -455,6 +454,14 @@ public class Mob extends Image {
 
     public void setAktualnaSzybkosc(int aktualnaSzybkosc) {
         this.aktualnaSzybkosc = aktualnaSzybkosc;
+    }
+
+    public DostepneMoby getTypMoba() {
+        return typMoba;
+    }
+
+    public void setTypMoba(DostepneMoby typMoba) {
+        this.typMoba = typMoba;
     }
 
     /**
