@@ -87,6 +87,20 @@ public class Ruch {
     }
 
     /**
+     * Przerysowuje interfejs ruchu dla bohaterów.
+     */
+    public static void redrawMoveInterfaces() {
+        for (Gracz gracz : GameStatus.gs.getGracze()) {
+            for (Bohater bohater : gracz.getBohaterowie()) {
+                if (bohater.isMoveInterfaceOn()) {
+                    Ruch.wylaczPrzyciski();
+                    new Ruch(bohater, GameStatus.a, GameStatus.gs);
+                }
+            }
+        }
+    }
+
+    /**
      * Wyłącza przycisku Ruchu, Ataku, Cancel na Stage01
      */
     public static void wylaczPrzyciski() {
@@ -249,6 +263,7 @@ public class Ruch {
 
             System.out.println("Nadepnięto na budynek");
             if (!buldingVisited) {
+                a.statisticUp.play();
                 Bulding.modyfiAttributes(bohater, gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding());
             } else {
                 //a.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone");
@@ -295,6 +310,7 @@ public class Ruch {
             return super.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    a.buttonClick.play();
                     wykonajRuch();
                     if (!bohater.getKlasyPostaci().equals(KlasyPostaci.Summmon)) {
                         ruch.checkTresureBox();
@@ -345,6 +361,10 @@ public class Ruch {
             bohater.setPozostaloRuchow(bohater.getPozostaloRuchow() - 1);
 
             gs.setCzyZaznaczonoBohatera(false);
+
+            a.walk.play();
+
+            bohater.setMoveInterfaceOn(false);
 
             Ruch.wylaczIkonyEfektow();
             Ruch.wylaczPrzyciski();
@@ -412,14 +432,13 @@ public class Ruch {
                         "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getCastle())), a);
             }
 
-            a.swordSound.play();
-
             this.bohater.getSprite().setTexture(bohater.getBohaterTex());
             this.bohater.setZaznaczony(false);
 
             gs.setCzyZaznaczonoBohatera(false);
 
             gs.usunMartweMoby();
+            bohater.setMoveInterfaceOn(false);
             Ruch.wylaczIkonyEfektow();
             Ruch.wylaczPrzyciski();
         }
@@ -454,6 +473,7 @@ public class Ruch {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    a.buttonClick.play();
                     System.out.println("Przycisk ataku kliknięty");
                     wykonajAtak();
                 }
@@ -486,6 +506,7 @@ public class Ruch {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    a.buttonClick.play();
                     wykonajRuchCancel();
                 }
             });
@@ -497,6 +518,8 @@ public class Ruch {
         private void wykonajRuchCancel() {
             this.bohater.getSprite().setTexture(bohater.getBohaterTex());
             this.bohater.setZaznaczony(false);
+
+            bohater.setMoveInterfaceOn(false);
 
             Ruch.wylaczIkonyEfektow();
             Ruch.wylaczPrzyciski();

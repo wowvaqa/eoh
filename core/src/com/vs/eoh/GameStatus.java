@@ -167,6 +167,8 @@ public class GameStatus {
         itemyPoziom1.add(DostepneItemki.PotionSzybkosc);
         itemyPoziom1.add(DostepneItemki.PotionAttack);
         itemyPoziom1.add(DostepneItemki.PotionDefence);
+        itemyPoziom1.add(DostepneItemki.Laska);
+        itemyPoziom1.add(DostepneItemki.MagicznyKaptur);
 
         //Poziom 2
         itemyPoziom2.add(DostepneItemki.SkorzanaCzapka);

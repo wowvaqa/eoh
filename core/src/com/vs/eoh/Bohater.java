@@ -65,6 +65,7 @@ public class Bohater extends Actor {
     private ArrayList<SpellActor> spells;
     private ArrayList<Item> equipment;
     // informuje cz bohater jest zaznaczony
+    private boolean moveInterfaceOn = false;
     private boolean zaznaczony = false;
     private boolean otwartaSkrzyniaZeSkarbem = false;
     // lokacja bohatera w obiekcie klasy Mapa
@@ -234,6 +235,8 @@ public class Bohater extends Actor {
                                 sprite.setTexture(bohaterCheckTex);
                                 zaznaczony = true;
                                 gs.setCzyZaznaczonoBohatera(true);
+
+                                moveInterfaceOn = true;
 
                                 Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
                             }
@@ -1040,6 +1043,14 @@ public class Bohater extends Actor {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public boolean isMoveInterfaceOn() {
+        return moveInterfaceOn;
+    }
+
+    public void setMoveInterfaceOn(boolean moveInterfaceOn) {
+        this.moveInterfaceOn = moveInterfaceOn;
     }
 
     /**

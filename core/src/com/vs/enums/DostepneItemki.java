@@ -9,11 +9,13 @@ public enum DostepneItemki {
     Glowa,
     LnianaCzapka,
     SkorzanaCzapka,
+    MagicznyKaptur,
     // Korpus
     LnianaKoszula,
     SkorzanyNapiersnik,
     // Ręce
     Piesci,
+    Laska,
     Kij,
     Miecz,
     Tarcza,
@@ -25,7 +27,7 @@ public enum DostepneItemki {
     LnianeSpodnie,
     SkorzaneSpodnie,
     // Stopy
-    LnianeButy,  
+    LnianeButy,
     SkorzaneButy,
     WzmocnioneSkorzaneButy,
     // Inne

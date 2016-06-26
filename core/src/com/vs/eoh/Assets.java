@@ -82,6 +82,7 @@ public class Assets {
     public Texture texHardLeatherShoes;
     public Texture texLinenShirt;
     public Texture texLinenCap;
+    public Texture texMagicHood;
     public Texture texLeatherCap;
     public Texture texLeatherTousers;
     public Texture texLeatherShirt;
@@ -93,6 +94,7 @@ public class Assets {
     public Texture texShield;
     public Texture texBow;
     public Texture texLongBow;
+    public Texture texStaff;
     public Texture texGold;
     // Spell Textures
     public Texture texSpellFireBall;
@@ -146,10 +148,20 @@ public class Assets {
     /**
      * SOUNDS --------------------------------------------------------------------------------------
      */
+    public Sound buttonClick;
     public Sound swordSound;
     public Sound chestSqueek;
     public Sound magicWand;
     public Sound wolfSnarl;
+    public Sound fireball;
+    public Sound thuner;
+    public Sound walk;
+    public Sound levelUp;
+    public Sound statisticUp;
+    public Sound rageSpell;
+    public Sound freezSpell;
+    public Sound zombieAttack;
+    public Sound skeletonAttack;
 
     // predefiniowane okno ifnoramcyjne
     private Window infoWindow;
@@ -296,6 +308,7 @@ public class Assets {
         texLinenShoes = new Texture("items/texLinenShoes.png");
         texLinenTousers = new Texture("items/texLinenTrousers.png");
         texLeatherCap = new Texture("items/texLeatherCap.png");
+        texMagicHood = new Texture("items/texMagicHood.png");
         texLeatherTousers = new Texture("items/texLeatherTrousers.png");
         texLeatherShirt = new Texture("items/texLeatherArmor.png");
         texLeatherShoes = new Texture("items/texLeatherShoes.png");
@@ -308,6 +321,7 @@ public class Assets {
         texGold = new Texture("items/texGold.png");
         texBow = new Texture("items/texBow.png");
         texLongBow = new Texture("items/texLongBow.png");
+        texStaff = new Texture("items/texStaff.png");
         texHelthPotion = new Texture("items/texHealthPotion.png");
         texSpeedPotion = new Texture("items/texSpeedPotion.png");
         texAttackPotion = new Texture("items/texAttackPotion.png");
@@ -327,11 +341,20 @@ public class Assets {
     }
 
     private void makeSounds() {
+        buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonClick_01.wav"));
         swordSound = Gdx.audio.newSound(Gdx.files.internal("sounds/sword_01.wav"));
         chestSqueek = Gdx.audio.newSound(Gdx.files.internal("sounds/floor-squeak_01.wav"));
         magicWand = Gdx.audio.newSound(Gdx.files.internal("sounds/magic-wand_01.wav"));
         wolfSnarl = Gdx.audio.newSound(Gdx.files.internal("sounds/wolf-snarl_01.wav"));
-
+        fireball = Gdx.audio.newSound(Gdx.files.internal("sounds/fireball_01.wav"));
+        thuner = Gdx.audio.newSound(Gdx.files.internal("sounds/thunder_01.wav"));
+        walk = Gdx.audio.newSound(Gdx.files.internal("sounds/walk_01.wav"));
+        levelUp = Gdx.audio.newSound(Gdx.files.internal("sounds/levelUp_02.mp3"));
+        statisticUp = Gdx.audio.newSound(Gdx.files.internal("sounds/levelUp_02.wav"));
+        rageSpell = Gdx.audio.newSound(Gdx.files.internal("sounds/rage_01.wav"));
+        freezSpell = Gdx.audio.newSound(Gdx.files.internal("sounds/frost_01.wav"));
+        zombieAttack = Gdx.audio.newSound(Gdx.files.internal("sounds/zombieAttack_01.wav"));
+        skeletonAttack = Gdx.audio.newSound(Gdx.files.internal("sounds/skeletonAttack_01.wav"));
     }
 
     private void makeSpellTextures() {

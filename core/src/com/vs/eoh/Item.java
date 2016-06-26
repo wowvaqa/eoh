@@ -20,24 +20,22 @@ import java.util.ArrayList;
  */
 public class Item extends Actor {
     
-    private String nazwa;
-
     private final Assets a;
     private final GameStatus gs;
     private final Game g;
-
-    // ikona    
+    public ArrayList<Effect> dzialania;
+    private String nazwa;
+    // ikona
     private Sprite sprite;
-
     // na której części ciała można nośić item
     private CzesciCiala czescCiala;
-    
     // okresla jakiego rodzaju jetem
     private TypItemu typItemu;
-
     // statystyka itemka
     private int atak = 0;
     private int obrona = 0;
+    private int moc = 0;
+    private int wiedza = 0;
     private int hp = 0;
     private int szybkosc = 0;
     private int gold = 0;
@@ -46,11 +44,8 @@ public class Item extends Actor {
     private int czasDzialania = 0;
     private int dmg = 0;
     private int armor = 0;
-    
     private String opis;
     private DostepneItemki itemNazwa;
-    
-    public ArrayList<Effect> dzialania;
 
     public Item(Texture teksura, final Assets a, final GameStatus gs, final Game g) {
         this.g = g;
@@ -256,7 +251,23 @@ public class Item extends Actor {
 
     public void setGold(int gold) {
         this.gold = gold;
-    }    
+    }
+
+    public int getMoc() {
+        return moc;
+    }
+
+    public void setMoc(int moc) {
+        this.moc = moc;
+    }
+
+    public int getWiedza() {
+        return wiedza;
+    }
+
+    public void setWiedza(int wiedza) {
+        this.wiedza = wiedza;
+    }
 
     @Override
     public void act(float delta) {

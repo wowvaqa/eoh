@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.ai.AI;
+import com.vs.enums.KlasyPostaci;
 import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
@@ -140,6 +141,7 @@ public class NewGameScreen implements Screen {
         btnAnuluj.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 g.setScreen(Assets.mainMenuScreen);
             }
         });
@@ -151,6 +153,7 @@ public class NewGameScreen implements Screen {
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
 
                 if (GameStatus.nazwaMapy != "brak" || !GameStatus.nazwaMapy.equals("mapa z serwera")) {
                     try {
@@ -216,6 +219,7 @@ public class NewGameScreen implements Screen {
         tB01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.iloscGraczy = NewGame.odejmijGracza(NewGame.iloscGraczy);
                 lblIloscGraczy.setText(Integer.toString(NewGame.iloscGraczy));
                 tabela01.reset();
@@ -231,6 +235,7 @@ public class NewGameScreen implements Screen {
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.iloscGraczy = NewGame.dodajGracza(NewGame.iloscGraczy);
                 lblIloscGraczy.setText(Integer.toString(NewGame.iloscGraczy));
                 tabela01.reset();
@@ -259,6 +264,7 @@ public class NewGameScreen implements Screen {
         g01B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaGracz01.clear();
                 formatujTabeleGracza01();
@@ -271,6 +277,7 @@ public class NewGameScreen implements Screen {
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaGracz01.clear();
                 formatujTabeleGracza01();
@@ -325,6 +332,7 @@ public class NewGameScreen implements Screen {
         g02B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz02 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz02);
                 tabelaGracz02.clear();
                 formatujTabeleGracza02();
@@ -337,6 +345,7 @@ public class NewGameScreen implements Screen {
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz02 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz02);
                 tabelaGracz02.clear();
                 formatujTabeleGracza02();
@@ -387,6 +396,7 @@ public class NewGameScreen implements Screen {
         g02B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz03 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz03);
                 tabelaGracz03.clear();
                 formatujTabeleGracza03();
@@ -399,6 +409,7 @@ public class NewGameScreen implements Screen {
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz03 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz03);
                 tabelaGracz03.clear();
                 formatujTabeleGracza03();
@@ -451,6 +462,7 @@ public class NewGameScreen implements Screen {
         g02B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz04 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz04);
                 tabelaGracz04.clear();
                 formatujTabeleGracza04();
@@ -463,6 +475,7 @@ public class NewGameScreen implements Screen {
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz04 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz04);
                 tabelaGracz04.clear();
                 formatujTabeleGracza04();
@@ -522,6 +535,7 @@ public class NewGameScreen implements Screen {
         btnExitWindow.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 window.remove();
             }
         });
@@ -530,6 +544,7 @@ public class NewGameScreen implements Screen {
         btnWybierzWindow.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 FileHandle file = (FileHandle) listOfMap.getSelected();
                 Gdx.app.log("Nazwa Pliku", file.name());
                 GameStatus.nazwaMapy = file.name();
@@ -557,6 +572,7 @@ public class NewGameScreen implements Screen {
         btnWybierzMape.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 stage01.addActor(getLoadMapWindow());
             }
         });
@@ -565,6 +581,7 @@ public class NewGameScreen implements Screen {
 
     @Override
     public void show() {
+        NewGame.klasaPostaciGracz01 = KlasyPostaci.Wojownik;
         Gdx.input.setInputProcessor(stage01);
         if (!tabelaUtworzona) {
             formatujTabeleGracza01();
@@ -574,6 +591,9 @@ public class NewGameScreen implements Screen {
             formatujTabele01();
             formatujTabeleIlosciGraczy();
             dodajDoStage01();
+        } else {
+            tabelaGracz01.clear();
+            formatujTabeleGracza01();
         }
     }
 

@@ -176,6 +176,37 @@ public class ItemCreator {
                 item.setTypItemu(TypItemu.Bron);
                 item.setItemNazwa(DostepneItemki.DlugiLuk);
                 break;
+            case Laska:
+                item.setNazwa("Laska");
+                item.setLevel(1);
+                item.setAtak(0);
+                item.setObrona(0);
+                item.setMoc(1);
+                item.setSzybkosc(0);
+                item.setHp(0);
+                item.setDmg(0);
+                item.setZasieg(0);
+                item.setCzescCiala(CzesciCiala.rece);
+                item.getSprite().setTexture(a.texStaff);
+                item.setTypItemu(TypItemu.Bron);
+                item.setItemNazwa(DostepneItemki.Laska);
+                break;
+            case MagicznyKaptur:
+                item.setNazwa("Kaptur Wiedzy +1");
+                item.setLevel(1);
+                item.setAtak(0);
+                item.setObrona(0);
+                item.setMoc(0);
+                item.setWiedza(1);
+                item.setSzybkosc(0);
+                item.setHp(0);
+                item.setDmg(0);
+                item.setZasieg(0);
+                item.setCzescCiala(CzesciCiala.glowa);
+                item.getSprite().setTexture(a.texMagicHood);
+                item.setTypItemu(TypItemu.Pancerz);
+                item.setItemNazwa(DostepneItemki.MagicznyKaptur);
+                break;
 // NOGI ========================================================================
             case Nogi:
                 item.setNazwa("Gole Nogi");

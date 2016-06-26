@@ -37,6 +37,7 @@ import com.vs.eoh.BuldingCreator;
 import com.vs.eoh.ButtonActor;
 import com.vs.eoh.Castle;
 import com.vs.eoh.DefaultActor;
+import com.vs.eoh.Fight;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
@@ -147,18 +148,21 @@ public class MapScreen implements Screen {
         // Przywrócenie wszystkich punktów ruchu dla bohaterów oraz aktualizacja czasu działania efektów
         // Regenereacja many
         for (Bohater i : gs.getGracze().get(gs.getTuraGracza()).getBohaterowie()) {
-            i.setPozostaloRuchow(i.getSzybkosc()
-                    + /**
-             * Fight.getSzybkoscEkwipunkuBohatera(i) + *
-             */
-                    i.getSzybkoscEfekt());
+
+            i.setPozostaloRuchow(
+                    i.getSzybkosc()
+                            + Fight.getSzybkoscEkwipunkuBohatera(i)
+                            + i.getSzybkoscEfekt());
+
             i.aktualizujDzialanieEfektow();
             i.czyscEfektyTymczasowe();
 
             i.setActualMana(i.getActualMana() + i.getManaRegeneration());
-            if (i.getActualMana() > i.getMana()) {
-                i.setActualMana(i.getMana());
+            if (i.getActualMana() > i.getMana() + Fight.getWiedzaEkwipunkuBohatera(i)) {
+                i.setActualMana(i.getMana() + Fight.getWiedzaEkwipunkuBohatera(i));
             }
+
+            i.setMoveInterfaceOn(false);
         }
 
         //  Aktualizuje działanie efektów czarów moba.
@@ -415,6 +419,8 @@ public class MapScreen implements Screen {
                     gs.getGracze().get(0).getBohaterowie().get(0).setPozXnaMapie(i);
                     gs.getGracze().get(0).getBohaterowie().get(0).setPozYnaMapie(j);
                     gs.getGracze().get(0).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                    gs.getMapa().getPola()[i][j].setBohater(
+                            gs.getGracze().get(0).getBohaterowie().get(0));
                     stage01.addActor(gs.getGracze().get(0).getBohaterowie().get(0));
                 }
                 if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
@@ -427,6 +433,8 @@ public class MapScreen implements Screen {
                     gs.getGracze().get(1).getBohaterowie().get(0).setPozXnaMapie(i);
                     gs.getGracze().get(1).getBohaterowie().get(0).setPozYnaMapie(j);
                     gs.getGracze().get(1).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                    gs.getMapa().getPola()[i][j].setBohater(
+                            gs.getGracze().get(1).getBohaterowie().get(0));
                     stage01.addActor(gs.getGracze().get(1).getBohaterowie().get(0));
                 }
                 if (gs.getGracze().size() == 3 || gs.getGracze().size() == 4) {
@@ -441,6 +449,8 @@ public class MapScreen implements Screen {
                         gs.getGracze().get(2).getBohaterowie().get(0).setPozXnaMapie(i);
                         gs.getGracze().get(2).getBohaterowie().get(0).setPozYnaMapie(j);
                         gs.getGracze().get(2).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                        gs.getMapa().getPola()[i][j].setBohater(
+                                gs.getGracze().get(2).getBohaterowie().get(0));
                         stage01.addActor(gs.getGracze().get(2).getBohaterowie().get(0));
                     }
                 }
@@ -455,6 +465,8 @@ public class MapScreen implements Screen {
                         gs.getGracze().get(3).getBohaterowie().get(0).setPozXnaMapie(i);
                         gs.getGracze().get(3).getBohaterowie().get(0).setPozYnaMapie(j);
                         gs.getGracze().get(3).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                        gs.getMapa().getPola()[i][j].setBohater(
+                                gs.getGracze().get(3).getBohaterowie().get(0));
                         stage01.addActor(gs.getGracze().get(3).getBohaterowie().get(0));
                     }
                 }
@@ -813,6 +825,7 @@ public class MapScreen implements Screen {
 
     @Override
     public void show() {
+        System.gc();
 
         curTime = System.currentTimeMillis() / 1000;
         AI.nextMove = curTime + 2;
@@ -1151,6 +1164,7 @@ public class MapScreen implements Screen {
                 btnExit.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         NetEngine.gameStarted = false;
                         NetEngine.amountOfMultiPlayers = 0;
                         NetEngine.playerNumber = 0;
@@ -1167,6 +1181,7 @@ public class MapScreen implements Screen {
                 btnKoniecTury.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         koniecTuryClick();
                     }
                 });
@@ -1179,6 +1194,7 @@ public class MapScreen implements Screen {
                 btnKupBohatera.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         if (gs.getGracze().get(gs.getTuraGracza()).getGold() < GameStatus.CostOfNewHero) {
                             DialogScreen dialogScreen = new DialogScreen("ERROR", a.skin, "Za malo zlota", stage01);
                         } else {
@@ -1195,6 +1211,7 @@ public class MapScreen implements Screen {
                 btnSpellExit.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         tables.tableSpells.setVisible(false);
                         if (gs.getBohaterZaznaczony() != null) {
                             gs.getBohaterZaznaczony().getSpells().clear();
@@ -1210,6 +1227,7 @@ public class MapScreen implements Screen {
                 btnSpellBook.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         tables.formatStage03MainTable();
                         tables.tableSpells.setVisible(true);
                     }
@@ -1223,6 +1241,7 @@ public class MapScreen implements Screen {
                 btnBohater.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         if (gs.isCzyZaznaczonoBohatera()) {
                             //gs.setActualScreen(5);
                             g.setScreen(Assets.bohaterScreen);
@@ -1240,6 +1259,7 @@ public class MapScreen implements Screen {
                 btnAwansujBohatera.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        a.buttonClick.play();
                         btnAwansujBohatera.setVisible(false);
                         g.setScreen(Assets.awansScreen);
                     }

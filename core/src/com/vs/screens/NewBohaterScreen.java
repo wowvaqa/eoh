@@ -75,6 +75,7 @@ public class NewBohaterScreen implements Screen {
         g01B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaNowyBohater.clear();
                 formatujTabeleNowyBohater();
@@ -87,6 +88,7 @@ public class NewBohaterScreen implements Screen {
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaNowyBohater.clear();
                 formatujTabeleNowyBohater();
@@ -134,6 +136,7 @@ public class NewBohaterScreen implements Screen {
         btnAnuluj.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 System.out.println("Anuluj");
                 g.setScreen(Assets.mapScreen);
             }
@@ -145,6 +148,7 @@ public class NewBohaterScreen implements Screen {
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                a.buttonClick.play();
                 System.out.println("EXIT");
                 zakonczGenerowanieNowegoBohatera();
                 gs.getGracze().get(gs.getTuraGracza()).setGold(
@@ -272,11 +276,15 @@ public class NewBohaterScreen implements Screen {
 
     @Override
     public void show() {
+        NewGame.klasaPostaciGracz01 = KlasyPostaci.Wojownik;
         Gdx.input.setInputProcessor(stage01);
         if (!tabelaUtworzona) {
             formatujTabeleNowyBohater();
             formatujTabele01();
             dodajDoStage01();
+        } else {
+            tabelaNowyBohater.clear();
+            formatujTabeleNowyBohater();
         }
     }
 

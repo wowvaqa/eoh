@@ -19,6 +19,7 @@ import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
 import com.vs.eoh.NewGame;
 import com.vs.eoh.Pole;
+import com.vs.eoh.Ruch;
 import com.vs.eoh.TresureBox;
 
 import java.util.ArrayList;
@@ -419,6 +420,7 @@ public class AI {
             } else {
                 return ActionModes.moveToMobLevel1;
             }
+
         } else if (findTargetHero(bohater) != null && findTargetHero(bohater).size() > 0
                 && findTargetHero(bohater).get(0).distance < 4 + bohater.getAiDistance()) {
             if (findTargetHero(bohater).get(0).distance == 1) {
@@ -501,6 +503,7 @@ public class AI {
         }
 
         bohater.getGs().usunMartweMoby();
+        Ruch.redrawMoveInterfaces();
     }
 
     /**
@@ -523,6 +526,8 @@ public class AI {
         }
 
         bohater.setPozostaloRuchow(bohater.getPozostaloRuchow() - 1);
+
+        Ruch.redrawMoveInterfaces();
     }
 
     /**
@@ -540,8 +545,8 @@ public class AI {
      * wg którego następuje porównanie oraz
      * dystansem od bohatera
      *
-     * @param bohater Referencja do obiektu bohatera wg. którego mają być sprawdzane moby
-     * @return Obiekt klasy MobCell
+     * @param bohater Referencja do obiektu bohatera wg. którego mają być sprawdzani inni bohaterowie
+     * @return Obiekt klasy HeroCell
      */
     public ArrayList<HeroCell> findTargetHero(Bohater bohater) {
         Mapa map = bohater.getGs().getMapa();
@@ -562,9 +567,9 @@ public class AI {
 
         Sort.HeroCellSort(listHero);
 
-        Gdx.app.log("Mobs level 1", "" + listHero.size());
+        Gdx.app.log("Heroes", "" + listHero.size());
         for (HeroCell mc : listHero) {
-            Gdx.app.log("MOB LVL1: " + mc.bohater + " DISTANCE: " + mc.distance, "");
+            Gdx.app.log("Heroes: " + mc.bohater + " DISTANCE: " + mc.distance, "");
         }
 
         return listHero;
@@ -651,7 +656,12 @@ public class AI {
 
         for (int i = 0; i < map.getIloscPolX(); i++) {
             for (int j = 0; j < map.getIloscPolY(); j++) {
-                if (map.getPola()[i][j].getTresureBox() != null) {
+                if (map.getPola()[i][j].getTresureBox() != null && map.getPola()[i][j].getBohater() == null) {
+                    if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
+                        listTresureBox.add(new TresureBoxCell(map.getPola()[i][j].getTresureBox(),
+                                PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));
+                    }
+                } else if (map.getPola()[i][j].getTresureBox() != null && map.getPola()[i][j].getBohater() == bohater) {
                     if (PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]) != null) {
                         listTresureBox.add(new TresureBoxCell(map.getPola()[i][j].getTresureBox(),
                                 PathFinder.findPath(map, bohater.getFiled(), map.getPola()[i][j]).size()));

@@ -62,6 +62,8 @@ public class AwansScreen implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
 
+                        GameStatus.a.buttonClick.play();
+
                         awans.zakonczAwans(gs);
 
                         awansScreenShow = false;
@@ -152,6 +154,9 @@ public class AwansScreen implements Screen {
         btnPoziom2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                GameStatus.a.buttonClick.play();
+
                 awans.czyscWyborKlasy();
                 awans.wybor2 = true;
                 gs.getBohaterZaznaczony().setG1(true);
@@ -175,6 +180,9 @@ public class AwansScreen implements Screen {
         btnPoziom3A.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                GameStatus.a.buttonClick.play();
+
                 awans.czyscWyborKlasy();
                 awans.wybor3A = true;
                 gs.getBohaterZaznaczony().setG2A(true);
@@ -198,6 +206,9 @@ public class AwansScreen implements Screen {
         btnPoziom3B.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                GameStatus.a.buttonClick.play();
+
                 awans.czyscWyborKlasy();
                 awans.wybor3B = true;
                 gs.getBohaterZaznaczony().setG2B(true);
@@ -221,6 +232,9 @@ public class AwansScreen implements Screen {
         btnPoziom4A.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                GameStatus.a.buttonClick.play();
+
                 awans.czyscWyborKlasy();
                 awans.wybor4A = true;
                 gs.getBohaterZaznaczony().setG3B(false);
@@ -244,6 +258,9 @@ public class AwansScreen implements Screen {
         btnPoziom4B.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                GameStatus.a.buttonClick.play();
+
                 awans.czyscWyborKlasy();
                 awans.wybor4B = true;
                 gs.getBohaterZaznaczony().setG3B(true);
@@ -352,6 +369,7 @@ public class AwansScreen implements Screen {
         btn01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameStatus.a.buttonClick.play();
                 awans.zwiekszAtak();
                 reformatujTabele();
             }
@@ -360,6 +378,7 @@ public class AwansScreen implements Screen {
         btn02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameStatus.a.buttonClick.play();
                 awans.zwiekszObrone();
                 reformatujTabele();
             }
@@ -368,6 +387,7 @@ public class AwansScreen implements Screen {
         btn03.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameStatus.a.buttonClick.play();
                 awans.zwiekszSzybkosc();
                 reformatujTabele();
             }
@@ -376,6 +396,7 @@ public class AwansScreen implements Screen {
         btn04.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameStatus.a.buttonClick.play();
                 awans.zwiekszHp();
                 reformatujTabele();
             }
@@ -384,6 +405,7 @@ public class AwansScreen implements Screen {
         btn05.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameStatus.a.buttonClick.play();
                 awans.zwiekszMoc();
                 reformatujTabele();
             }
@@ -392,6 +414,7 @@ public class AwansScreen implements Screen {
         btn06.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameStatus.a.buttonClick.play();
                 awans.zwiekszWiedze();
                 reformatujTabele();
             }

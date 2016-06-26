@@ -34,9 +34,10 @@ public class SpellCaster {
 
         // Sprawdza czy czar działa tylko na bohatera castującego
         if (spell.isSpellWorksOnlyForCaster()) {
-            a.magicWand.play();
+
             spell.getSpellEffects().get(0).dzialanie(spell, bohaterCastujacy, bohaterCastujacy, a);
             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
+            bohaterCastujacy.setMoveInterfaceOn(false);
             Ruch.wylaczPrzyciski();
 
             // Sprawdzenie czarów przyjacielskich
@@ -49,6 +50,7 @@ public class SpellCaster {
                             CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
                             castButton.setPosition(i * 100, j * 100);
                             Assets.stage01MapScreen.addActor(castButton);
+                            bohaterCastujacy.setMoveInterfaceOn(false);
                             Ruch.wylaczPrzyciski();
                             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                         }
@@ -225,6 +227,7 @@ public class SpellCaster {
                     }
 
                     wylaczPrzyciski();
+                    bohaterCastujacy.setMoveInterfaceOn(false);
                 }
             });
         }
@@ -251,6 +254,7 @@ public class SpellCaster {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     SpellCaster.wylaczPrzyciski();
+                    bohaterCastujacy.setMoveInterfaceOn(false);
                 }
             });
         }

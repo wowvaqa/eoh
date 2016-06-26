@@ -6,7 +6,10 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Sound;
 import com.vs.enums.DostepneMoby;
+import com.vs.enums.KlasyPostaci;
+import com.vs.enums.Spells;
 import com.vs.network.Network;
 
 import java.util.Random;
@@ -61,6 +64,14 @@ public class Fight {
      * @return Zwraca ilość obrażeń
      */
     static public int getObrazenia(Bohater bohaterAtakujacy, Bohater bohaterBroniacy) {
+
+        if (GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            if (!GameStatus.gs.getGracze().get(bohaterBroniacy.getPrzynaleznoscDoGracza()).isAi()) {
+                GameStatus.a.swordSound.play();
+            }
+        } else if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            GameStatus.a.swordSound.play();
+        }
 
         System.out.println("----- BOHATER VS BOHATER -----");
         int atak = getAttack(bohaterAtakujacy);
@@ -121,6 +132,11 @@ public class Fight {
      * @return Ilosć obrażeń
      */
     static public int getObrazenia(Bohater bohaterAtakujacy, Castle castle) {
+
+        if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            GameStatus.a.swordSound.play();
+        }
+
         Random rnd = new Random();
         System.out.println("Nastąpił atak Bohater VS Zamek");
         int atak = getAttack(bohaterAtakujacy);
@@ -168,7 +184,13 @@ public class Fight {
      */
     static public int getObrazenia(Bohater bohaterAtakujacy, Mob mob) {
 
-        mob.mobZaatakowany(bohaterAtakujacy.getPozXnaMapie(), bohaterAtakujacy.getPozYnaMapie());
+        if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            GameStatus.a.swordSound.play();
+        }
+
+        if (!mob.isCzyZaatakowany()) {
+            mob.mobZaatakowany(bohaterAtakujacy.getPozXnaMapie(), bohaterAtakujacy.getPozYnaMapie());
+        }
 
         Random rnd = new Random();
         System.out.println("----- BOHATER VS MOB ------");
@@ -218,6 +240,14 @@ public class Fight {
             bohaterAtakujacy.setExp(bohaterAtakujacy.getExp() + mob.getExpReward());
         }
 
+        if (bohaterAtakujacy.getExp() >= bohaterAtakujacy.getExpToNextLevel() &&
+                bohaterAtakujacy.getKlasyPostaci() != KlasyPostaci.Summmon) {
+            Animation.animujLblLevelUp(bohaterAtakujacy.getX(), bohaterAtakujacy.getY());
+            if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+                GameStatus.a.levelUp.play();
+            }
+        }
+
         bohaterAtakujacy.setPozostaloRuchow(bohaterAtakujacy.getPozostaloRuchow() - 1);
 
         if (GameStatus.gs.getNetworkStatus() == 2) {
@@ -236,8 +266,10 @@ public class Fight {
      */
     static public int getObrazenia(Mob mob, Bohater bohaterBroniacy) {
 
-        if (mob.getTypMoba() == DostepneMoby.Wilk) {
-            GameStatus.a.wolfSnarl.play();
+        if (!GameStatus.gs.getGracze().get(bohaterBroniacy.getPrzynaleznoscDoGracza()).isAi()) {
+            if (getSoundOfAttack(mob) != null) {
+                getSoundOfAttack(mob).play();
+            }
         }
 
         Random rnd = new Random();
@@ -293,10 +325,16 @@ public class Fight {
         if (dmg > 0) {
             mob.setAktualneHp(mob.getAktualneHp() - dmg);
         }
-        if (mob.getAktualneHp() <= 0) {
+        if (mob.getAktualneHp() <= 0 && spell.getRodzajCzaru() != Spells.VampireTouch) {
             System.out.println("Śmierć moba.");
             mob.setAktualneHp(0);
             bohaterAtakujacy.setExp(bohaterAtakujacy.getExp() + mob.getExpReward());
+        }
+
+        if (bohaterAtakujacy.getExp() >= bohaterAtakujacy.getExpToNextLevel() &&
+                bohaterAtakujacy.getKlasyPostaci() != KlasyPostaci.Summmon) {
+            GameStatus.a.levelUp.play();
+            Animation.animujLblLevelUp(bohaterAtakujacy.getX(), bohaterAtakujacy.getY());
         }
 
         bohaterAtakujacy.setPozostaloRuchow(bohaterAtakujacy.getPozostaloRuchow() - 1);
@@ -316,7 +354,7 @@ public class Fight {
 
         Random rnd = new Random();
         System.out.println("Nastąpił sepll na zamek");
-        int damage = rnd.nextInt(bohaterAtakujacy.getMoc() + 1) + spell.getDmg();
+        int damage = rnd.nextInt(bohaterAtakujacy.getMoc() + 1 + Fight.getMocEkwipunkuBohatera(bohaterAtakujacy)) + spell.getDmg();
         int obrona = rnd.nextInt(castle.getObrona() + 1);
         System.out.println("Siła ataku:  " + damage);
         System.out.println("siła obrony: " + obrona);
@@ -343,7 +381,7 @@ public class Fight {
         System.out.println("Funkacja Fight.getObrazenia");
 
         Random rnd = new Random();
-        int damage = rnd.nextInt(bohaterAtakujacy.getMoc() + 1) + spell.getDmg();
+        int damage = rnd.nextInt(bohaterAtakujacy.getMoc() + 1 + Fight.getMocEkwipunkuBohatera(bohaterAtakujacy)) + spell.getDmg();
         int obrona = rnd.nextInt(bohaterBroniacy.getObrona() + getObronaEkwipunkuBohaterBroniacego(bohaterBroniacy)
                 + getObronaEfektyBohatera(bohaterBroniacy) + 1);
         System.out.println("Siła ataku:  " + damage);
@@ -357,7 +395,7 @@ public class Fight {
         if (dmg > 0) {
             bohaterBroniacy.setActualHp(bohaterBroniacy.getActualHp() - dmg);
         }
-        if (bohaterBroniacy.getActualHp() <= 0) {
+        if (bohaterBroniacy.getActualHp() <= 0 && spell.getRodzajCzaru() != Spells.VampireTouch) {
             bohaterBroniacy.remove();
             System.out.println("Smierc Bohatera broniacego się");
         }
@@ -572,6 +610,47 @@ public class Fight {
     }
 
     /**
+     * Zwraca sumę mocy dla wyszystkich itemków w które wyposażony jest bohater
+     * @param bohaterAtakujacy Referencja do obiketu bohatera dla którego ma zostać zsumowana
+     * ilość punktów mocy.
+     * @return Zwraca int z sumą mocy.
+     */
+    static public int getMocEkwipunkuBohatera(Bohater bohaterAtakujacy) {
+        int sumaMocy = 0;
+        sumaMocy += bohaterAtakujacy.getItemGlowa().getMoc();
+        sumaMocy += bohaterAtakujacy.getItemKorpus().getMoc();
+        sumaMocy += bohaterAtakujacy.getItemLewaReka().getMoc();
+        sumaMocy += bohaterAtakujacy.getItemPrawaReka().getMoc();
+        sumaMocy += bohaterAtakujacy.getItemNogi().getMoc();
+        sumaMocy += bohaterAtakujacy.getItemStopy().getMoc();
+
+        System.out.println("Suma zwiększenia szybkości: " + sumaMocy);
+
+        return sumaMocy;
+    }
+
+    /**
+     * Zwraca sumę punktów widzy dla wyszystkich itemków w które wyposażony jest bohater
+     *
+     * @param bohaterAtakujacy Referencja do obiketu bohatera dla którego ma zostać zsumowana
+     *                         ilość punktów wiedzy.
+     * @return Zwraca int z sumą punktów wiedzy..
+     */
+    static public int getWiedzaEkwipunkuBohatera(Bohater bohaterAtakujacy) {
+        int sumaWiedzy = 0;
+        sumaWiedzy += bohaterAtakujacy.getItemGlowa().getWiedza();
+        sumaWiedzy += bohaterAtakujacy.getItemKorpus().getWiedza();
+        sumaWiedzy += bohaterAtakujacy.getItemLewaReka().getWiedza();
+        sumaWiedzy += bohaterAtakujacy.getItemPrawaReka().getWiedza();
+        sumaWiedzy += bohaterAtakujacy.getItemNogi().getWiedza();
+        sumaWiedzy += bohaterAtakujacy.getItemStopy().getWiedza();
+
+        System.out.println("Suma zwiększenia szybkości: " + sumaWiedzy);
+
+        return sumaWiedzy;
+    }
+
+    /**
      * Zwraca sumę efektów obronnych dla Moba
      *
      * @param mob Referencja do obiektu moba.
@@ -632,5 +711,22 @@ public class Fight {
         damageMob.pozXmoba = pozXmoba;
         damageMob.pozYmoba = pozYMoba;
         GameStatus.client.getCnt().sendTCP(damageMob);
+    }
+
+    /**
+     * Zwraca dźwięk atakującego moba.
+     *
+     * @param mob Referencja do obiektu moba
+     * @return Dźwięk ataku moba.
+     */
+    static private Sound getSoundOfAttack(Mob mob) {
+        if (mob.getTypMoba() == DostepneMoby.Wilk) {
+            return GameStatus.a.wolfSnarl;
+        } else if (mob.getTypMoba() == DostepneMoby.Zombie) {
+            return GameStatus.a.zombieAttack;
+        } else if (mob.getTypMoba() == DostepneMoby.Szkielet) {
+            return GameStatus.a.skeletonAttack;
+        }
+        return null;
     }
 }

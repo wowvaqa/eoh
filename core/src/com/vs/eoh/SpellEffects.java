@@ -62,11 +62,11 @@ public class SpellEffects {
 
                     bohaterCastujacy.getGs().getMapa().getPola()[spell.getSpellX()][spell.getSpellY()].setBohater(summonBohater);
 
-                    summonBohater.setHp(8 + bohaterCastujacy.getMoc());
-                    summonBohater.setActualHp(summonBohater.getHp());
-                    summonBohater.setAtak(5 + bohaterCastujacy.getMoc());
-                    summonBohater.setObrona(3 + bohaterCastujacy.getMoc());
-                    summonBohater.setSzybkosc(2 + bohaterCastujacy.getMoc());
+                    summonBohater.setHp(8 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setActualHp(summonBohater.getHp() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setAtak(5 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setObrona(3 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setSzybkosc(2 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
                     summonBohater.setPozostaloRuchow(summonBohater.getSzybkosc());
                     summonBohater.setPozXnaMapie(spell.getSpellX());
                     summonBohater.setPozYnaMapie(spell.getSpellY());
@@ -95,11 +95,11 @@ public class SpellEffects {
 
                     bohaterCastujacy.getGs().getMapa().getPola()[spell.getSpellX()][spell.getSpellY()].setBohater(summonBohater);
 
-                    summonBohater.setHp(4 + bohaterCastujacy.getMoc());
-                    summonBohater.setActualHp(summonBohater.getHp());
-                    summonBohater.setAtak(3 + bohaterCastujacy.getMoc());
-                    summonBohater.setObrona(3 + bohaterCastujacy.getMoc());
-                    summonBohater.setSzybkosc(5 + bohaterCastujacy.getMoc());
+                    summonBohater.setHp(4 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setActualHp(summonBohater.getHp() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setAtak(3 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setObrona(3 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
+                    summonBohater.setSzybkosc(5 + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
                     summonBohater.setPozostaloRuchow(summonBohater.getSzybkosc());
                     summonBohater.setPozXnaMapie(spell.getSpellX());
                     summonBohater.setPozYnaMapie(spell.getSpellY());
@@ -117,6 +117,7 @@ public class SpellEffects {
             case FireBall:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    a.fireball.play();
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FireExplosionAnimation));
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
@@ -177,16 +178,35 @@ public class SpellEffects {
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), a);
-                        bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + spell.getDmg() / 2);
+
+                        int dmg = (Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell));
+                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + dmg, a);
+                        bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + dmg);
+                        if (bohaterCastujacy.getActualHp() > bohaterCastujacy.getHp()) {
+                            bohaterCastujacy.setActualHp(bohaterCastujacy.getHp());
+                        }
+                        tmpBoh.setActualHp(tmpBoh.getActualHp() - dmg);
+                        if (tmpBoh.getActualHp() < 1)
+                            tmpBoh.setActualHp(1);
+
                         bohaterCastujacy.aktualizujTeksture();
                         animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
+
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
-                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), a);
-                        bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + spell.getDmg() / 2);
+
+                        int dmg = (Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell));
+                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + dmg, a);
+                        bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + dmg);
+                        tmpMob.setAktualneHp(tmpMob.getAktualneHp() - dmg);
+                        if (tmpMob.getAktualneHp() > tmpMob.getHp()) {
+                            tmpMob.setAktualneHp(tmpMob.getHp());
+                        }
+                        if (tmpMob.getAktualneHp() < 1)
+                            tmpMob.setAktualneHp(1);
+
                         bohaterCastujacy.aktualizujTeksture();
                     }
                     Assets.stage01MapScreen.addActor(animActor);
@@ -200,6 +220,7 @@ public class SpellEffects {
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
+                    a.thuner.play();
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
                         Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), a);
@@ -255,12 +276,13 @@ public class SpellEffects {
                 Random rnd = new Random();
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
+                    a.freezSpell.play();
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation));
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
 
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        int modSzybkosci = 1 + rnd.nextInt(bohaterCastujacy.getMoc() + 1);
+                        int modSzybkosci = 1 + rnd.nextInt(bohaterCastujacy.getMoc() + 1 + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
                         this.dlugoscTrwaniaEfektu = modSzybkosci;
                         this.efektSzybkosc = -1 * modSzybkosci;
                         tmpBoh.setPozostaloRuchow(tmpBoh.getPozostaloRuchow() - modSzybkosci);
@@ -269,7 +291,7 @@ public class SpellEffects {
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
-                        int modSzybkosci = 1 + rnd.nextInt(bohaterCastujacy.getMoc() + 1);
+                        int modSzybkosci = 1 + rnd.nextInt(bohaterCastujacy.getMoc() + 1 + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
                         tmpMob.setAktualnaSzybkosc(tmpMob.getAktualnaSzybkosc() - modSzybkosci);
                         this.dlugoscTrwaniaEfektu = modSzybkosci;
                         this.efektSzybkosc = -1 * modSzybkosci;
@@ -286,8 +308,9 @@ public class SpellEffects {
             case Rage:
                 // Zwiększa atak o punkty mocy do końca tury.
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    a.rageSpell.play();
                     this.efektAtak = 1;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
@@ -303,9 +326,10 @@ public class SpellEffects {
             case Haste:
                 // Zwiększa aktualną szybkość o liczbę punktów mocy
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    a.magicWand.play();
                     System.out.println("Czar HASTE");
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
-                    bohaterCastujacy.setPozostaloRuchow(bohaterCastujacy.getPozostaloRuchow() + bohaterCastujacy.getMoc());
+                    bohaterCastujacy.setPozostaloRuchow(bohaterCastujacy.getPozostaloRuchow() + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
@@ -320,7 +344,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     System.out.println("Czar CURE");
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
-                    bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + bohaterCastujacy.getMoc() * 2);
+                    bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + (bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy)) * 2);
                     if (bohaterCastujacy.getActualHp() > bohaterCastujacy.getHp()) {
                         bohaterCastujacy.setActualHp(bohaterCastujacy.getHp());
                     }
@@ -339,7 +363,7 @@ public class SpellEffects {
                 System.out.println("Czar SONG OF GLORY");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     this.efektAtak = 1;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     Bohater tempBoh;
                     tempBoh = (Bohater) obiketBroniacy;
@@ -362,7 +386,7 @@ public class SpellEffects {
 
                     this.efektAtak = 5;
                     this.efektObrona = 5;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     Bohater tempBoh;
                     tempBoh = (Bohater) obiketBroniacy;
@@ -385,7 +409,7 @@ public class SpellEffects {
 
                     this.efektAtak = 7;
                     this.efektObrona = 7;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     Bohater tempBoh;
                     tempBoh = (Bohater) obiketBroniacy;
@@ -408,7 +432,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.DiscouragementEffect;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
@@ -429,12 +453,12 @@ public class SpellEffects {
 
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                        this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                         tmpBoh.getSpellEffects().add(this);
                         animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
-                        this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                        this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                         Mob tmpMob = (Mob) obiketBroniacy;
                         tmpMob.getSpellEffects().add(this);
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
@@ -451,7 +475,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.ChargeEffect;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
@@ -468,7 +492,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.FuryEffect;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
@@ -485,7 +509,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.FinalJudgeEffect;
-                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc();
+                    this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
@@ -517,7 +541,7 @@ public class SpellEffects {
 
                 SpellEffects tmpSpellEffects = new SpellEffects();
                 tmpSpellEffects.efektObrona = -1;
-                tmpSpellEffects.dlugoscTrwaniaEfektu = tmpBohaterAtakujacy.getMoc();
+                tmpSpellEffects.dlugoscTrwaniaEfektu = tmpBohaterAtakujacy.getMoc() + Fight.getMocEkwipunkuBohatera(tmpBohaterAtakujacy);
                 EffectActor tmpEffectActor = new EffectActor(tmpAssets.texSpellDiscouragement, 0, 0);
                 tmpSpellEffects.setIkona(tmpEffectActor);
                 tmpSpellEffects.getIkona().addListener(new ClickListener() {
@@ -565,7 +589,8 @@ public class SpellEffects {
 
                 SpellEffects tmpSpellEffects2 = new SpellEffects();
                 tmpSpellEffects2.efektObrona = -2;
-                tmpSpellEffects2.dlugoscTrwaniaEfektu = tmpBohaterAtakujacy.getMoc();
+                tmpSpellEffects2.dlugoscTrwaniaEfektu = tmpBohaterAtakujacy.getMoc() + Fight.getMocEkwipunkuBohatera(tmpBohaterAtakujacy);
+                ;
                 EffectActor tmpEffectActor2 = new EffectActor(tmpAssets.texSpellFinalJudgment, 0, 0);
                 tmpSpellEffects2.setIkona(tmpEffectActor2);
                 tmpSpellEffects2.getIkona().addListener(new ClickListener() {

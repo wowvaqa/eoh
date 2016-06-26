@@ -464,6 +464,7 @@ public class Mob extends Image {
         this.typMoba = typMoba;
     }
 
+
     /**
      * Zwraca listę efektów które działają na moba.
      *

@@ -1,3 +1,23 @@
+version 0.0079 26062016
+        NOWOSCI:
+DONE    1. Dodanie dźwięków: chodzenia, awansu, czaru fireball, thunder, frozen.
+DONE    2. Dodanie etykiety informującej o awansie.
+DONE    3. Dodano laskę mocy +1, kaptur wiedzy +1.
+DONE    4. Dodanie dźwięków interfejsu.
+        BUGFIXES:
+DONE    1. Poprawiono błąd powodujący, że dodatkowa szybkość z ekwipunku bohatera nie modyfikowała
+        szybkości bohatera.
+DONE    2. Poprawiono błąd powodujacy, że AI nie widziało bohatera gracza w lokacji początkowej.
+DONE    3. Poprawiono błąd w Screenie Nowej Gry i Screenie Kupowania nowego bohatera powodujący,
+        że gra generowała bohatera innego od tego, którego wybrał gracz.
+DONE    4. Poprawiono działanie czaru Vampiere Touch.
+DONE    5. Poprawiono błąd z nieaktualizującym się interfejsem ruchu bohatera.
+DONE    6. Poprawiono błąd powodujący, że dwóch bohaterów AI jednocześnie mogło wejść na pole ze
+        skrzynią.
+
+version 0.0078a
+DONE    1. Poprawiono błąd powodujący natychmiastowy atak moba po każdorazowym ataku bohatera.
+
 version 0.0078 25062016
 DONE    1. Dodano dźwięk otwierania skrzyni, ataku bohatera, ataku wilka.
 

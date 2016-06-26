@@ -31,4 +31,20 @@ public class Animation {
         label.addAction(Actions.moveBy(0, 175, 2.0f));
         label.act(Gdx.graphics.getDeltaTime());
     }
+
+
+    public static void animujLblLevelUp(float pozX, float pozY) {
+
+        Label label = new Label("", GameStatus.a.skin);
+
+        Assets.stage01MapScreen.addActor(label);
+
+        label.setText("Level UP");
+        label.setPosition(pozX, pozY);
+        label.setFontScale(1.8f);
+        label.addAction(Actions.alpha(1));
+        label.addAction(Actions.fadeOut(3.0f));
+        label.addAction(Actions.moveBy(0, 125, 3.0f));
+        label.act(Gdx.graphics.getDeltaTime());
+    }
 }
