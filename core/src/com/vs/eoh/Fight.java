@@ -65,12 +65,15 @@ public class Fight {
      */
     static public int getObrazenia(Bohater bohaterAtakujacy, Bohater bohaterBroniacy) {
 
-        if (GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
-            if (!GameStatus.gs.getGracze().get(bohaterBroniacy.getPrzynaleznoscDoGracza()).isAi()) {
-                GameStatus.a.swordSound.play();
+        GameStatus gs = bohaterAtakujacy.getGs();
+        Assets a = bohaterAtakujacy.getA();
+
+        if (gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            if (!gs.getGracze().get(bohaterBroniacy.getPrzynaleznoscDoGracza()).isAi()) {
+                a.swordSound.play();
             }
-        } else if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
-            GameStatus.a.swordSound.play();
+        } else if (!gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            a.swordSound.play();
         }
 
         System.out.println("----- BOHATER VS BOHATER -----");
@@ -118,7 +121,7 @@ public class Fight {
 
         bohaterBroniacy.aktualizujTeksture();
 
-        if (GameStatus.gs.getNetworkStatus() == 2) {
+        if (gs.getNetworkStatus() == 2) {
             networkHeroDamage(dmg, bohaterBroniacy);
         }
         return dmg;
@@ -133,8 +136,11 @@ public class Fight {
      */
     static public int getObrazenia(Bohater bohaterAtakujacy, Castle castle) {
 
-        if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
-            GameStatus.a.swordSound.play();
+        GameStatus gs = bohaterAtakujacy.getGs();
+        Assets a = bohaterAtakujacy.getA();
+
+        if (!gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            a.swordSound.play();
         }
 
         Random rnd = new Random();
@@ -184,8 +190,11 @@ public class Fight {
      */
     static public int getObrazenia(Bohater bohaterAtakujacy, Mob mob) {
 
-        if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
-            GameStatus.a.swordSound.play();
+        GameStatus gs = bohaterAtakujacy.getGs();
+        Assets a = bohaterAtakujacy.getA();
+
+        if (!gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+            a.swordSound.play();
         }
 
         if (!mob.isCzyZaatakowany()) {
@@ -242,15 +251,15 @@ public class Fight {
 
         if (bohaterAtakujacy.getExp() >= bohaterAtakujacy.getExpToNextLevel() &&
                 bohaterAtakujacy.getKlasyPostaci() != KlasyPostaci.Summmon) {
-            Animation.animujLblLevelUp(bohaterAtakujacy.getX(), bohaterAtakujacy.getY());
-            if (!GameStatus.gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
-                GameStatus.a.levelUp.play();
+            Animation.animujLblLevelUp(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(), bohaterAtakujacy.getV().getA());
+            if (!gs.getGracze().get(bohaterAtakujacy.getPrzynaleznoscDoGracza()).isAi()) {
+                a.levelUp.play();
             }
         }
 
         bohaterAtakujacy.setPozostaloRuchow(bohaterAtakujacy.getPozostaloRuchow() - 1);
 
-        if (GameStatus.gs.getNetworkStatus() == 2) {
+        if (gs.getNetworkStatus() == 2) {
             networkMobDamage(dmg, mob.getPozX(), mob.getPozY());
         }
 
@@ -266,7 +275,9 @@ public class Fight {
      */
     static public int getObrazenia(Mob mob, Bohater bohaterBroniacy) {
 
-        if (!GameStatus.gs.getGracze().get(bohaterBroniacy.getPrzynaleznoscDoGracza()).isAi()) {
+        GameStatus gs = bohaterBroniacy.getGs();
+
+        if (!gs.getGracze().get(bohaterBroniacy.getPrzynaleznoscDoGracza()).isAi()) {
             if (getSoundOfAttack(mob) != null) {
                 getSoundOfAttack(mob).play();
             }
@@ -293,7 +304,7 @@ public class Fight {
 
         bohaterBroniacy.aktualizujTeksture();
 
-        if (GameStatus.gs.getNetworkStatus() == 2) {
+        if (gs.getNetworkStatus() == 2) {
             networkHeroDamage(dmg, bohaterBroniacy);
         }
 
@@ -333,8 +344,8 @@ public class Fight {
 
         if (bohaterAtakujacy.getExp() >= bohaterAtakujacy.getExpToNextLevel() &&
                 bohaterAtakujacy.getKlasyPostaci() != KlasyPostaci.Summmon) {
-            GameStatus.a.levelUp.play();
-            Animation.animujLblLevelUp(bohaterAtakujacy.getX(), bohaterAtakujacy.getY());
+            bohaterAtakujacy.getA().levelUp.play();
+            Animation.animujLblLevelUp(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(), bohaterAtakujacy.getA());
         }
 
         bohaterAtakujacy.setPozostaloRuchow(bohaterAtakujacy.getPozostaloRuchow() - 1);
@@ -692,7 +703,7 @@ public class Fight {
         Network.DamageHero damageHero = new Network.DamageHero();
         damageHero.damage = dmg;
         damageHero.player = bohaterBroniacy.getPrzynaleznoscDoGracza();
-        damageHero.hero = Bohater.getHeroNumberInArrayList(bohaterBroniacy, GameStatus.gs.getGracze().get(
+        damageHero.hero = Bohater.getHeroNumberInArrayList(bohaterBroniacy, bohaterBroniacy.getGs().getGracze().get(
                 bohaterBroniacy.getPrzynaleznoscDoGracza()
         ));
         GameStatus.client.getCnt().sendTCP(damageHero);
@@ -721,11 +732,11 @@ public class Fight {
      */
     static private Sound getSoundOfAttack(Mob mob) {
         if (mob.getTypMoba() == DostepneMoby.Wilk) {
-            return GameStatus.a.wolfSnarl;
+            return mob.getV().getA().wolfSnarl;
         } else if (mob.getTypMoba() == DostepneMoby.Zombie) {
-            return GameStatus.a.zombieAttack;
+            return mob.getV().getA().zombieAttack;
         } else if (mob.getTypMoba() == DostepneMoby.Szkielet) {
-            return GameStatus.a.skeletonAttack;
+            return mob.getV().getA().skeletonAttack;
         }
         return null;
     }

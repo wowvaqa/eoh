@@ -21,7 +21,8 @@ import java.util.Random;
  */
 public class Bulding extends Image {
 
-    private Assets a;
+    //private Assets a;
+    private V v;
 
     private ArrayList<Bohater> visited;
 
@@ -42,9 +43,9 @@ public class Bulding extends Image {
 
     private Buldings typeOfBulding;
 
-    public Bulding(Assets a) {
+    public Bulding(V v) {
         super();
-        this.a = a;
+        this.v = v;
 
         visited = new ArrayList<Bohater>();
 
@@ -113,17 +114,17 @@ public class Bulding extends Image {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                new Dialog(name, a.skin) {
+                new Dialog(name, v.getA().skin) {
                     {
                         text(buldingDescription);
                         row();
 
                         boolean buldingVisited = false;
 
-                        if (GameStatus.gs.getBohaterZaznaczony() != null) {
+                        if (v.getGs().getBohaterZaznaczony() != null) {
 
                             for (int i = 0; i < visited.size(); i++) {
-                                if (visited.get(i).equals(GameStatus.gs.getBohaterZaznaczony())) {
+                                if (visited.get(i).equals(v.getGs().getBohaterZaznaczony())) {
                                     buldingVisited = true;
                                 }
                             }

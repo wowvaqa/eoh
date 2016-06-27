@@ -312,40 +312,37 @@ public class NewGame {
     }
 
     /**
-     * @param g
-     * @param gs
-     * @param a
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException
      */
-    static public void zakonczGenerowanieNowejGry(Game g, GameStatus gs, Assets a) throws IOException, ClassNotFoundException {
+    static public void zakonczGenerowanieNowejGry(V v) throws IOException, ClassNotFoundException {
 
 
-        if (gs.getNetworkStatus() != 2) {
-            gs.wczytajMape();
+        if (v.getGs().getNetworkStatus() != 2) {
+            v.getGs().wczytajMape();
         }
 
-        gs.setTuraGracza(0);
+        v.getGs().setTuraGracza(0);
 
-        //gs.setActualScreen(1);
-        gs.iloscGraczy = iloscGraczy;
+        //v.getGs().setActualScreen(1);
+        v.getGs().iloscGraczy = iloscGraczy;
         // Po kliknięciu w OK następuje przekazanie info, że mapa
         // została utworzona (wszystkie parametry zadane przez screen
         // nowej gry zostaną użyte do tworzenia nowej mapy).
-        gs.czyUtworzonoMape = true;
+        v.getGs().czyUtworzonoMape = true;
 
         // Sprawdzenie czy tablica gracz jest pusta i ewentualne wyczyszczenie jej
-        if (gs.gracze.size() > 0) {
-            gs.gracze.clear();
+        if (v.getGs().gracze.size() > 0) {
+            v.getGs().gracze.clear();
         }
 
         // Dodoaje nowych graczy wg. ilości zadeklarowanej
-        for (int i = 0; i < gs.iloscGraczy; i++) {
-            gs.gracze.add(new Gracz(i));
-            gs.gracze.get(i).setNumerGracza(i);
+        for (int i = 0; i < v.getGs().iloscGraczy; i++) {
+            v.getGs().gracze.add(new Gracz(i));
+            v.getGs().gracze.get(i).setNumerGracza(i);
         }
         // Dodanie dla każdego gracza bohatera
-        for (int i = 0; i < gs.gracze.size(); i++) {
+        for (int i = 0; i < v.getGs().gracze.size(); i++) {
             // tymczasowa tekstura przekazana do konstruktora nowego bohatera
             Texture tmpTex = null, tmpTexZazanaczony = null;
             KlasyPostaci tmpKlasaPostaci = null;
@@ -383,41 +380,41 @@ public class NewGame {
                     tmpKlasaPostaci = klasaPostaciGracz04;
                     break;
             }
-            gs.gracze.get(i).getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX, lokPoczatkowaY, a, 0, 0, gs, g, tmpKlasaPostaci));
+            v.getGs().gracze.get(i).getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX, lokPoczatkowaY, 0, 0, tmpKlasaPostaci, v));
             // Ustala do którego gracza z tablicy graczy należy bohater
-            gs.gracze.get(i).getBohaterowie().get(0).setPrzynaleznoscDoGracza(i);
-            gs.gracze.get(i).getBohaterowie().get(0).setKlasyPostaci(tmpKlasaPostaci);
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setPrzynaleznoscDoGracza(i);
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setKlasyPostaci(tmpKlasaPostaci);
             System.out.println(tmpKlasaPostaci.toString() + "Klasa postaci: ");
 
             //ustawPozycjeNaMapie(gs, i);
         }
 
-        podepnijStatystkiBohaterow(gs);
+        podepnijStatystkiBohaterow(v);
 
-        if (gs.getNetworkStatus() == 2) {
+        if (v.getGs().getNetworkStatus() == 2) {
             NetEngine.gameStarted = true;
             Network.StartMultiGame startMultiGame = new Network.StartMultiGame();
             GameStatus.client.getCnt().sendTCP(startMultiGame);
-            gs.setTuraGracza(NetEngine.playerNumber);
+            v.getGs().setTuraGracza(NetEngine.playerNumber);
         }
 
         ArrayList<AI> aiList = new ArrayList<AI>();
 
         if (ai0) {
-            gs.gracze.get(0).setAi(true);
-            aiList.add(new AI(gs.gracze.get(0)));
+            v.getGs().gracze.get(0).setAi(true);
+            aiList.add(new AI(v.getGs().gracze.get(0), v));
         }
         if (ai1) {
-            gs.gracze.get(1).setAi(true);
-            aiList.add(new AI(gs.gracze.get(1)));
+            v.getGs().gracze.get(1).setAi(true);
+            aiList.add(new AI(v.getGs().gracze.get(1), v));
         }
         if (ai2) {
-            gs.gracze.get(2).setAi(true);
-            aiList.add(new AI(gs.gracze.get(2)));
+            v.getGs().gracze.get(2).setAi(true);
+            aiList.add(new AI(v.getGs().gracze.get(2), v));
         }
         if (ai3) {
-            gs.gracze.get(3).setAi(true);
-            aiList.add(new AI(gs.gracze.get(3)));
+            v.getGs().gracze.get(3).setAi(true);
+            aiList.add(new AI(v.getGs().gracze.get(3), v));
         }
 
         if (AI.aiList != null) {
@@ -425,7 +422,7 @@ public class NewGame {
         }
         AI.aiList = aiList;
 
-        Assets.mapScreen = new MapScreen(g, a, gs);
+        v.setMapScreen(new MapScreen(v));
     }
 
     /**
@@ -469,9 +466,8 @@ public class NewGame {
      * Podpina odpowiednie statystyki pod poszczególnego bohatera każdego
      * gracza.
      *
-     * @param gs GameStatus
      */
-    private static void podepnijStatystkiBohaterow(GameStatus gs) {
+    private static void podepnijStatystkiBohaterow(V v) {
         for (int i = 0; i < iloscGraczy; i++) {
             KlasyPostaci tmpKp = null;
 
@@ -490,31 +486,31 @@ public class NewGame {
                     break;
             }
 
-            gs.gracze.get(i).getBohaterowie().get(0).setAtak(pobierzAtak(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setObrona(pobierzObrone(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setHp(pobierzHp(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setActualHp(pobierzHp(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setSzybkosc(pobierzSzybkosc(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setPozostaloRuchow(pobierzSzybkosc(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setMana(pobierzMane(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setActualMana(pobierzMane(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setMoc(pobierzMoc(tmpKp));
-            gs.gracze.get(i).getBohaterowie().get(0).setWiedza(pobierzWiedze(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setAtak(pobierzAtak(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setObrona(pobierzObrone(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setHp(pobierzHp(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setActualHp(pobierzHp(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setSzybkosc(pobierzSzybkosc(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setPozostaloRuchow(pobierzSzybkosc(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setMana(pobierzMane(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setActualMana(pobierzMane(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setMoc(pobierzMoc(tmpKp));
+            v.getGs().gracze.get(i).getBohaterowie().get(0).setWiedza(pobierzWiedze(tmpKp));
 
-            podepnijCzary(tmpKp, gs.gracze.get(i).getBohaterowie().get(0));
+            podepnijCzary(tmpKp, v.getGs().gracze.get(i).getBohaterowie().get(0));
 
             switch (i) {
                 case 0:
-                    gs.gracze.get(i).setColor(Color.RED);
+                    v.getGs().gracze.get(i).setColor(Color.RED);
                     break;
                 case 1:
-                    gs.gracze.get(i).setColor(Color.BLUE);
+                    v.getGs().gracze.get(i).setColor(Color.BLUE);
                     break;
                 case 2:
-                    gs.gracze.get(i).setColor(Color.YELLOW);
+                    v.getGs().gracze.get(i).setColor(Color.YELLOW);
                     break;
                 case 3:
-                    gs.gracze.get(i).setColor(Color.GREEN);
+                    v.getGs().gracze.get(i).setColor(Color.GREEN);
                     break;
             }
         }

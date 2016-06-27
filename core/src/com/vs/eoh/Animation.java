@@ -1,6 +1,7 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -33,9 +34,9 @@ public class Animation {
     }
 
 
-    public static void animujLblLevelUp(float pozX, float pozY) {
+    public static void animujLblLevelUp(float pozX, float pozY, Assets a) {
 
-        Label label = new Label("", GameStatus.a.skin);
+        Label label = new Label("", a.skin);
 
         Assets.stage01MapScreen.addActor(label);
 

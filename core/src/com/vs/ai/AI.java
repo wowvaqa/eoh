@@ -21,6 +21,7 @@ import com.vs.eoh.NewGame;
 import com.vs.eoh.Pole;
 import com.vs.eoh.Ruch;
 import com.vs.eoh.TresureBox;
+import com.vs.eoh.V;
 
 import java.util.ArrayList;
 
@@ -52,12 +53,15 @@ public class AI {
 
     private Gracz gracz;
 
+    private V v;
+
     /**
      * Tworzy AI dla gracza.
      *
      * @param gracz Referencja do obiektu gracza.
      */
-    public AI(Gracz gracz) {
+    public AI(Gracz gracz, V v) {
+        this.v = v;
         //actionMode = ActionModes.moveM;
         this.gracz = gracz;
         Gdx.app.log("AI START", "" + gracz.toString());
@@ -282,9 +286,9 @@ public class AI {
 
         switch (gracz.getNumerGracza()) {
             case 0:
-                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
-                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -292,9 +296,9 @@ public class AI {
                 }
                 break;
             case 1:
-                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
-                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -302,9 +306,9 @@ public class AI {
                 }
                 break;
             case 2:
-                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
-                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -312,9 +316,9 @@ public class AI {
                 }
                 break;
             case 3:
-                for (int i = 0; i < GameStatus.gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < GameStatus.gs.getMapa().getIloscPolY(); j++) {
-                        if (GameStatus.gs.getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -326,7 +330,7 @@ public class AI {
         tmpTex = NewGame.getTeksturaBohatera(klasaPostaciGracz01);
         tmpTexZazanaczony = NewGame.getTeksturaBohateraZaznaczonego(klasaPostaciGracz01);
 
-        gracz.getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX * 100, lokPoczatkowaY * 100, GameStatus.a, 0, 0, GameStatus.gs, GameStatus.g, klasaPostaciGracz01));
+        gracz.getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX * 100, lokPoczatkowaY * 100, 0, 0, klasaPostaciGracz01, v));
 
         int bohGracza = gracz.getNumerGracza();
         int wymTabBoh = gracz.getBohaterowie().size() - 1;
@@ -336,24 +340,24 @@ public class AI {
 
         switch (bohGracza) {
             case 0:
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 1:
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 2:
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 3:
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                GameStatus.gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gracz.getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
         }
 
@@ -503,7 +507,7 @@ public class AI {
         }
 
         bohater.getGs().usunMartweMoby();
-        Ruch.redrawMoveInterfaces();
+        Ruch.redrawMoveInterfaces(v);
     }
 
     /**
@@ -513,13 +517,13 @@ public class AI {
      */
     private void makeHeroMove(Bohater bohater, int x, int y) {
 
-        GameStatus.gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(null);
+        v.getGs().getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(null);
 
         bohater.addAction(Actions.moveBy(x * 100, y * 100, 0.25f));
         bohater.setPozXnaMapie(bohater.getPozXnaMapie() + x);
         bohater.setPozYnaMapie(bohater.getPozYnaMapie() + y);
 
-        GameStatus.gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
+        v.getGs().getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
 
         if (bohater.getFiled().getCastle() != null) {
             retakeCastle(bohater.getFiled());
@@ -527,7 +531,7 @@ public class AI {
 
         bohater.setPozostaloRuchow(bohater.getPozostaloRuchow() - 1);
 
-        Ruch.redrawMoveInterfaces();
+        Ruch.redrawMoveInterfaces(v);
     }
 
     /**

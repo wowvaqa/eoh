@@ -20,6 +20,7 @@ import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.NewGame;
+import com.vs.eoh.V;
 
 import static com.vs.eoh.NewGame.klasaPostaciGracz01;
 import static com.vs.eoh.NewGame.pobierzAtak;
@@ -38,28 +39,17 @@ public class NewBohaterScreen implements Screen {
 
     private final OrthographicCamera c;
     private final FitViewport viewPort;
-
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
     private final Stage stage01;
-
     private final Table tabela01 = new Table();
     private final Table tabelaNowyBohater = new Table();
-
+    private V v;
     private boolean tabelaUtworzona = false;
 
     /**
-     * @param g
-     * @param gs
-     * @param a
-     * @param stage
      */
-    public NewBohaterScreen(Game g, GameStatus gs, Assets a, Stage stage) {
+    public NewBohaterScreen(V v) {
 
-        this.a = a;
-        this.gs = gs;
-        this.g = g;
+        this.v = v;
 
         c = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), c);
@@ -71,11 +61,11 @@ public class NewBohaterScreen implements Screen {
         tabelaNowyBohater.pad(20);
 
         // Przycisk - przy wyborze ilosci graczy
-        TextButton g01B01 = new TextButton("Prev", a.skin);
+        TextButton g01B01 = new TextButton("Prev", v.getA().skin);
         g01B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaNowyBohater.clear();
                 formatujTabeleNowyBohater();
@@ -84,11 +74,11 @@ public class NewBohaterScreen implements Screen {
         tabelaNowyBohater.add(g01B01).pad(20);
 
         // Przycisk + przy wyborze ilośći graczy
-        TextButton tB02 = new TextButton("Next", a.skin);
+        TextButton tB02 = new TextButton("Next", v.getA().skin);
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaNowyBohater.clear();
                 formatujTabeleNowyBohater();
@@ -97,23 +87,23 @@ public class NewBohaterScreen implements Screen {
         tabelaNowyBohater.add(tB02).pad(20);
         tabelaNowyBohater.row();
 
-        tabelaNowyBohater.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns()).align(Align.center);
+        tabelaNowyBohater.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns()).align(Align.center);
         tabelaNowyBohater.row();
 
         tabelaNowyBohater.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz01)).align(Align.center).colspan(tabelaNowyBohater.getColumns());
 
         tabelaNowyBohater.row();
-        tabelaNowyBohater.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns());
+        tabelaNowyBohater.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns());
         tabelaNowyBohater.row();
-        tabelaNowyBohater.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns());
+        tabelaNowyBohater.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns());
         tabelaNowyBohater.row();
-        tabelaNowyBohater.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns());
+        tabelaNowyBohater.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns());
         tabelaNowyBohater.row();
-        tabelaNowyBohater.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns());
+        tabelaNowyBohater.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns());
         tabelaNowyBohater.row();
-        tabelaNowyBohater.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns());
+        tabelaNowyBohater.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns());
         tabelaNowyBohater.row();
-        tabelaNowyBohater.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaNowyBohater.getColumns());
+        tabelaNowyBohater.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaNowyBohater.getColumns());
         tabelaNowyBohater.row();
     }
 
@@ -125,35 +115,35 @@ public class NewBohaterScreen implements Screen {
         // włacza linie debugujące tabelę
         tabela01.setDebug(true);
 
-        tabela01.add(new Label("Nowy Bohater", a.skin)).align(Align.center).align(Align.top).expandX().colspan(tabela01.getColumns());
+        tabela01.add(new Label("Nowy Bohater", v.getA().skin)).align(Align.center).align(Align.top).expandX().colspan(tabela01.getColumns());
         tabela01.row();
 
         tabela01.add(tabelaNowyBohater).colspan(4);
         tabela01.row();
 
         // Przycisk Anuluj
-        TextButton btnAnuluj = new TextButton("ANULUJ", a.skin);
+        TextButton btnAnuluj = new TextButton("ANULUJ", v.getA().skin);
         btnAnuluj.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 System.out.println("Anuluj");
-                g.setScreen(Assets.mapScreen);
+                v.getG().setScreen(v.getMapScreen());
             }
         });
         tabela01.add(btnAnuluj).align(Align.left).colspan(2).pad(10);
 
         // Przycisk Zakończ
-        TextButton btnExit = new TextButton("ZAKONCZ", a.skin);
+        TextButton btnExit = new TextButton("ZAKONCZ", v.getA().skin);
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 System.out.println("EXIT");
                 zakonczGenerowanieNowegoBohatera();
-                gs.getGracze().get(gs.getTuraGracza()).setGold(
-                        gs.getGracze().get(gs.getTuraGracza()).getGold() - GameStatus.CostOfNewHero);
-                g.setScreen(Assets.mapScreen);
+                v.getGs().getGracze().get(v.getGs().getTuraGracza()).setGold(
+                        v.getGs().getGracze().get(v.getGs().getTuraGracza()).getGold() - GameStatus.CostOfNewHero);
+                v.getG().setScreen(v.getMapScreen());
             }
         });
         tabela01.add(btnExit).align(Align.right).colspan(2).pad(10);
@@ -173,11 +163,11 @@ public class NewBohaterScreen implements Screen {
         int lokPoczatkowaX = 0, lokPoczatkowaY = 0;
 
 
-        switch (gs.getTuraGracza()) {
+        switch (v.getGs().getTuraGracza()) {
             case 0:
-                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -185,9 +175,9 @@ public class NewBohaterScreen implements Screen {
                 }
                 break;
             case 1:
-                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -195,9 +185,9 @@ public class NewBohaterScreen implements Screen {
                 }
                 break;
             case 2:
-                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -205,9 +195,9 @@ public class NewBohaterScreen implements Screen {
                 }
                 break;
             case 3:
-                for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-                    for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                        if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
+                for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                    for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                        if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
                             lokPoczatkowaX = i;
                             lokPoczatkowaY = j;
                         }
@@ -219,58 +209,59 @@ public class NewBohaterScreen implements Screen {
         tmpTex = NewGame.getTeksturaBohatera(klasaPostaciGracz01);
         tmpTexZazanaczony = NewGame.getTeksturaBohateraZaznaczonego(klasaPostaciGracz01);
 
-        gs.gracze.get(gs.getTuraGracza()).getBohaterowie().add(new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX * 100, lokPoczatkowaY * 100, a, 0, 0, gs, g, klasaPostaciGracz01));
+        v.getGs().gracze.get(v.getGs().getTuraGracza()).getBohaterowie().add
+                (new Bohater(tmpTex, tmpTexZazanaczony, lokPoczatkowaX * 100, lokPoczatkowaY * 100, 0, 0, klasaPostaciGracz01, v));
 
-        int bohGracza = gs.getTuraGracza();
-        int wymTabBoh = gs.gracze.get(gs.getTuraGracza()).getBohaterowie().size() - 1;
+        int bohGracza = v.getGs().getTuraGracza();
+        int wymTabBoh = v.getGs().gracze.get(v.getGs().getTuraGracza()).getBohaterowie().size() - 1;
 
         // Ustala do którego gracza z tablicy graczy należy bohater
-        gs.gracze.get(gs.getTuraGracza()).getBohaterowie().get(wymTabBoh).setPrzynaleznoscDoGracza(gs.getTuraGracza());
+        v.getGs().gracze.get(v.getGs().getTuraGracza()).getBohaterowie().get(wymTabBoh).setPrzynaleznoscDoGracza(v.getGs().getTuraGracza());
 
         switch (bohGracza) {
             case 0:
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 1:
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 2:
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
             case 3:
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
-                gs.getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].setBohater(v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh));
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozXnaMapie(lokPoczatkowaX);
+                v.getGs().getMapa().pola[lokPoczatkowaX][lokPoczatkowaY].getBohater().setPozYnaMapie(lokPoczatkowaY);
                 break;
         }
 
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setAtak(pobierzAtak(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setObrona(pobierzObrone(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setHp(pobierzHp(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setActualHp(pobierzHp(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setSzybkosc(pobierzSzybkosc(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setPozostaloRuchow(pobierzSzybkosc(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setWiedza(pobierzWiedze(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setMoc(pobierzMoc(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setMana(pobierzWiedze(klasaPostaciGracz01));
-        gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setActualMana(pobierzWiedze(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setAtak(pobierzAtak(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setObrona(pobierzObrone(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setHp(pobierzHp(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setActualHp(pobierzHp(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setSzybkosc(pobierzSzybkosc(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setPozostaloRuchow(pobierzSzybkosc(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setWiedza(pobierzWiedze(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setMoc(pobierzMoc(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setMana(pobierzWiedze(klasaPostaciGracz01));
+        v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).setActualMana(pobierzWiedze(klasaPostaciGracz01));
 
         if (klasaPostaciGracz01.equals(KlasyPostaci.Lowca)) {
-            gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Haste);
+            v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Haste);
         } else if (klasaPostaciGracz01.equals(KlasyPostaci.Czarodziej)) {
-            gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.FireBall);
+            v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.FireBall);
         } else if (klasaPostaciGracz01.equals(KlasyPostaci.Wojownik)) {
-            gs.gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Rage);
+            v.getGs().gracze.get(bohGracza).getBohaterowie().get(wymTabBoh).getListOfSpells().add(Spells.Rage);
         }
 
 
-        Assets.stage01MapScreen.addActor(gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(wymTabBoh));
+        Assets.stage01MapScreen.addActor(v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(wymTabBoh));
 
     }
 

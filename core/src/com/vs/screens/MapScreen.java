@@ -45,6 +45,7 @@ import com.vs.eoh.Ruch;
 import com.vs.eoh.SpellActor;
 import com.vs.eoh.SpellCreator;
 import com.vs.eoh.TresureBox;
+import com.vs.eoh.V;
 import com.vs.network.NetEngine;
 import com.vs.network.Network;
 
@@ -55,15 +56,13 @@ public class MapScreen implements Screen {
     public static MapScreen mapScreen;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
     private final Stage stage01 = new Stage();  // wyświetla mapę i playera
     private final Stage stage02 = new Stage();  // zarządza przyciskami interfejsu
     private final Stage stage03 = new Stage();  // zarządza czarami
     private final ArrayList<Image> teren = new ArrayList<Image>();
     public Tables tables = new Tables();
     public Interface interfce;
+    private V v;
     private float w;
     private float h;
     private InputMultiplexer inputMultiPlexer = new InputMultiplexer();
@@ -75,19 +74,18 @@ public class MapScreen implements Screen {
     /**
      * Klasa definiująca wygląd, zachowanie Mapy na której odbywa się gra
      *
-     * @param g  Referencja do obiektu klasy Game
-     * @param a  Referencja do obiektu klasy Assets
-     * @param gs Referecja do obiektu klasy Game Status
      */
-    public MapScreen(final Game g, final Assets a, final GameStatus gs) {
-        this.a = a;
-        this.gs = gs;
-        this.g = g;
+    public MapScreen(V v) {
+        this.v = v;
 
         interfce = new Interface();
 
         myGL = new MyGestureListener(stage01);
         myGD = new MyGestureDetector(myGL);
+
+        v.setStage01MapScreen(this.stage01);
+        v.setStage02MapScreen(this.stage02);
+        v.setStage03MapScreen(this.stage03);
 
         Assets.stage01MapScreen = this.stage01;
         Assets.stage02MapScreen = this.stage02;
@@ -97,7 +95,7 @@ public class MapScreen implements Screen {
         generujGraczy();
         dodajDoStage01();
 
-        gs.czyUtworzonoMape = true;
+        v.getGs().czyUtworzonoMape = true;
 
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
@@ -116,7 +114,7 @@ public class MapScreen implements Screen {
      * Koniec Tury
      */
     private void koniecTuryClick() {
-        if (gs.getNetworkStatus() == 2) {
+        if (v.getGs().getNetworkStatus() == 2) {
             koniecTuryMuli();
         } else {
             koniecTurySingle();
@@ -130,24 +128,24 @@ public class MapScreen implements Screen {
         if (!sprawdzCzyGraczPosiadaZamek()) {
             // Jeżeli gracz nie będzie posiadał zamku wtedy zmianie ulegnie jego
             // status oraz zwiększona zostanie ilość tur bez zamku
-            gs.getGracze().get(gs.getTuraGracza()).setStatusBezZamku(true);
-            gs.getGracze().get(gs.getTuraGracza()).setTuryBezZamku(gs.getGracze().get(gs.getTuraGracza()).getTuryBezZamku() + 1);
-            if (gs.getGracze().get(gs.getTuraGracza()).getTuryBezZamku() >= 5) {
-                gs.getGracze().get(gs.getTuraGracza()).setStatusGameOver(true);
+            v.getGs().getGracze().get(v.getGs().getTuraGracza()).setStatusBezZamku(true);
+            v.getGs().getGracze().get(v.getGs().getTuraGracza()).setTuryBezZamku(v.getGs().getGracze().get(v.getGs().getTuraGracza()).getTuryBezZamku() + 1);
+            if (v.getGs().getGracze().get(v.getGs().getTuraGracza()).getTuryBezZamku() >= 5) {
+                v.getGs().getGracze().get(v.getGs().getTuraGracza()).setStatusGameOver(true);
             }
         }
         wylaczAktywnychBohaterow();
         sprawdzCzyKoniecTuryOgolnej();
         // Ustala turę następnego gracza
-        gs.setTuraGracza(gs.getTuraGracza() + 1);
-        if (gs.getTuraGracza() > gs.getGracze().size() - 1) {
-            gs.setTuraGracza(0);
+        v.getGs().setTuraGracza(v.getGs().getTuraGracza() + 1);
+        if (v.getGs().getTuraGracza() > v.getGs().getGracze().size() - 1) {
+            v.getGs().setTuraGracza(0);
         }
-        interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
+        interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(v.getGs().getTuraGracza()));
 
         // Przywrócenie wszystkich punktów ruchu dla bohaterów oraz aktualizacja czasu działania efektów
         // Regenereacja many
-        for (Bohater i : gs.getGracze().get(gs.getTuraGracza()).getBohaterowie()) {
+        for (Bohater i : v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie()) {
 
             i.setPozostaloRuchow(
                     i.getSzybkosc()
@@ -166,12 +164,12 @@ public class MapScreen implements Screen {
         }
 
         //  Aktualizuje działanie efektów czarów moba.
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                if (gs.getMapa().getPola()[i][j].getMob() != null) {
-                    gs.getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
-                    gs.getMapa().getPola()[i][j].getMob().setAktualnaSzybkosc(
-                            gs.getMapa().getPola()[i][j].getMob().getSzybkosc());
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].getMob() != null) {
+                    v.getGs().getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
+                    v.getGs().getMapa().getPola()[i][j].getMob().setAktualnaSzybkosc(
+                            v.getGs().getMapa().getPola()[i][j].getMob().getSzybkosc());
                 }
             }
         }
@@ -181,11 +179,11 @@ public class MapScreen implements Screen {
         przesunKamereNadBohatera();
 
         // zmiana ikony gracza na górnej belce
-        this.interfce.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
+        this.interfce.ikonaGracza.getSprite().setTexture(v.getGs().gracze.get(v.getGs().getTuraGracza()).getTeksturaIkonyGracza());
 
         Ruch.wylaczIkonyEfektow();
 
-        if (gs.getGracze().get(gs.getTuraGracza()).isAi()) {
+        if (v.getGs().getGracze().get(v.getGs().getTuraGracza()).isAi()) {
             koniecTurySingle();
         }
     }
@@ -200,18 +198,18 @@ public class MapScreen implements Screen {
         GameStatus.client.getCnt().sendTCP(endOfTurn);
 
         // Sprawdzenie czy wszyscy gracze zakończyli turę
-        if (NetEngine.playersEndTurn >= gs.getGracze().size()) {
+        if (NetEngine.playersEndTurn >= v.getGs().getGracze().size()) {
             NetEngine.playersEndTurn = 0;
 
             wylaczAktywnychBohaterow();
             sprawdzCzyKoniecTuryOgolnej();
             // Ustala turę następnego gracza
-            gs.setTuraGracza(NetEngine.playerNumber);
-            interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(gs.getTuraGracza()));
+            v.getGs().setTuraGracza(NetEngine.playerNumber);
+            interfce.lblTuraGracza.setText("Tura gracz: " + Integer.toString(v.getGs().getTuraGracza()));
 
             // Przywrócenie wszystkich punktów ruchu dla bohaterów oraz aktualizacja czasu działania efektów
             // Regenereacja many
-            for (Bohater i : gs.getGracze().get(gs.getTuraGracza()).getBohaterowie()) {
+            for (Bohater i : v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie()) {
                 i.setPozostaloRuchow(i.getSzybkosc()
                         + /**
                  * Fight.getSzybkoscEkwipunkuBohatera(i) + *
@@ -227,12 +225,12 @@ public class MapScreen implements Screen {
             }
 
             //  Aktualizuje działanie efektów czarów moba.
-            for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-                for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                    if (gs.getMapa().getPola()[i][j].getMob() != null) {
-                        gs.getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
-                        gs.getMapa().getPola()[i][j].getMob().setAktualnaSzybkosc(
-                                gs.getMapa().getPola()[i][j].getMob().getSzybkosc());
+            for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+                for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                    if (v.getGs().getMapa().getPola()[i][j].getMob() != null) {
+                        v.getGs().getMapa().getPola()[i][j].getMob().aktualizujDzialanieEfektow();
+                        v.getGs().getMapa().getPola()[i][j].getMob().setAktualnaSzybkosc(
+                                v.getGs().getMapa().getPola()[i][j].getMob().getSzybkosc());
                     }
                 }
             }
@@ -242,7 +240,7 @@ public class MapScreen implements Screen {
             przesunKamereNadBohatera();
 
             // zmiana ikony gracza na górnej belce
-            this.interfce.ikonaGracza.getSprite().setTexture(gs.gracze.get(gs.getTuraGracza()).getTeksturaIkonyGracza());
+            this.interfce.ikonaGracza.getSprite().setTexture(v.getGs().gracze.get(v.getGs().getTuraGracza()).getTeksturaIkonyGracza());
 
             Ruch.wylaczIkonyEfektow();
 
@@ -259,8 +257,8 @@ public class MapScreen implements Screen {
      */
     public void przesunKamereNadBohatera() {
         Camera cam = stage01.getCamera();
-        float xCord = gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(0).getX();
-        float yCord = gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().get(0).getY();
+        float xCord = v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(0).getX();
+        float yCord = v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(0).getY();
 
         cam.translate(xCord - cam.position.x + 200, yCord - cam.position.y + 100, 0);
     }
@@ -269,19 +267,19 @@ public class MapScreen implements Screen {
      * Usuwa bohaterów graczy którzy mają status Game Over
      */
     private void usunBohaterowGraczyGO() {
-        if (gs.getGracze().get(gs.getTuraGracza()).isStatusGameOver()) {
-            if (gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().size() > 0) {
-                for (int i = 0; i < gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().size(); i++) {
-                    gs.getGracze().get(gs.getTuraGracza()).getBohaterowie().remove(i);
+        if (v.getGs().getGracze().get(v.getGs().getTuraGracza()).isStatusGameOver()) {
+            if (v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().size() > 0) {
+                for (int i = 0; i < v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().size(); i++) {
+                    v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().remove(i);
 
                 }
             }
-            for (int x = 0; x < gs.getMapa().getIloscPolX(); x++) {
-                for (int y = 0; y < gs.getMapa().getIloscPolY(); y++) {
-                    if (gs.getMapa().getPola()[x][y].getBohater() != null
-                            && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() == gs.getTuraGracza()) {
-                        gs.getMapa().pola[x][y].getBohater().remove();
-                        gs.getMapa().pola[x][y].setBohater(null);
+            for (int x = 0; x < v.getGs().getMapa().getIloscPolX(); x++) {
+                for (int y = 0; y < v.getGs().getMapa().getIloscPolY(); y++) {
+                    if (v.getGs().getMapa().getPola()[x][y].getBohater() != null
+                            && v.getGs().getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() == v.getGs().getTuraGracza()) {
+                        v.getGs().getMapa().pola[x][y].getBohater().remove();
+                        v.getGs().getMapa().pola[x][y].setBohater(null);
                     }
                 }
             }
@@ -294,10 +292,10 @@ public class MapScreen implements Screen {
      * nie posiada
      */
     private boolean sprawdzCzyGraczPosiadaZamek() {
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                if (gs.getMapa().getPola()[i][j].getCastle() != null) {
-                    if (gs.getMapa().getPola()[i][j].getCastle().getPrzynaleznoscDoGracza() == gs.getTuraGracza()) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].getCastle() != null) {
+                    if (v.getGs().getMapa().getPola()[i][j].getCastle().getPrzynaleznoscDoGracza() == v.getGs().getTuraGracza()) {
                         return true;
                     }
                 }
@@ -310,16 +308,16 @@ public class MapScreen implements Screen {
      * Funkcja wyłącza aktywnych bohaterów
      */
     private void wylaczAktywnychBohaterow() {
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                if (gs.getMapa().getPola()[i][j].getBohater() != null) {
-                    gs.getMapa().getPola()[i][j].getBohater().setZaznaczony(false);
-                    gs.getMapa().getPola()[i][j].getBohater().getSprite().setTexture(gs.getMapa().getPola()[i][j].getBohater().getBohaterTex());
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].getBohater() != null) {
+                    v.getGs().getMapa().getPola()[i][j].getBohater().setZaznaczony(false);
+                    v.getGs().getMapa().getPola()[i][j].getBohater().getSprite().setTexture(v.getGs().getMapa().getPola()[i][j].getBohater().getBohaterTex());
                     Ruch.wylaczPrzyciski();
                 }
             }
         }
-        gs.setCzyZaznaczonoBohatera(false);
+        v.getGs().setCzyZaznaczonoBohatera(false);
     }
 
     /**
@@ -327,8 +325,8 @@ public class MapScreen implements Screen {
      * +1
      */
     private void sprawdzCzyKoniecTuryOgolnej() {
-        if (gs.getTuraGracza() == gs.iloscGraczy - 1) {
-            gs.setTuraGry(gs.getTuraGry() + 1);
+        if (v.getGs().getTuraGracza() == v.getGs().iloscGraczy - 1) {
+            v.getGs().setTuraGry(v.getGs().getTuraGry() + 1);
             odnowZdrowieZamkow();
             odnowZdrowieBohaterow();
         }
@@ -338,26 +336,26 @@ public class MapScreen implements Screen {
      * Odnawia co turę gry HP bohaterów + 1
      */
     private void odnowZdrowieBohaterow() {
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                if (gs.getMapa().getPola()[i][j].getBohater() != null
-                        && gs.getMapa().getPola()[i][j].getBohater().getActualHp()
-                        < gs.getMapa().getPola()[i][j].getBohater().getHp()) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].getBohater() != null
+                        && v.getGs().getMapa().getPola()[i][j].getBohater().getActualHp()
+                        < v.getGs().getMapa().getPola()[i][j].getBohater().getHp()) {
 
                     int hpRenew = 1;
 
-                    if (gs.getMapa().getPola()[i][j].getCastle() != null) {
+                    if (v.getGs().getMapa().getPola()[i][j].getCastle() != null) {
                         hpRenew = 3;
                     }
 
-                    gs.getMapa().getPola()[i][j].getBohater().setActualHp(
-                            gs.getMapa().getPola()[i][j].getBohater().getActualHp() + hpRenew);
+                    v.getGs().getMapa().getPola()[i][j].getBohater().setActualHp(
+                            v.getGs().getMapa().getPola()[i][j].getBohater().getActualHp() + hpRenew);
 
-                    if (gs.getMapa().getPola()[i][j].getBohater().getActualHp() > gs.getMapa().getPola()[i][j].getBohater().getHp()) {
-                        gs.getMapa().getPola()[i][j].getBohater().setActualHp(gs.getMapa().getPola()[i][j].getBohater().getHp());
+                    if (v.getGs().getMapa().getPola()[i][j].getBohater().getActualHp() > v.getGs().getMapa().getPola()[i][j].getBohater().getHp()) {
+                        v.getGs().getMapa().getPola()[i][j].getBohater().setActualHp(v.getGs().getMapa().getPola()[i][j].getBohater().getHp());
                     }
 
-                    gs.getMapa().getPola()[i][j].getBohater().aktualizujTeksture();
+                    v.getGs().getMapa().getPola()[i][j].getBohater().aktualizujTeksture();
                 }
             }
         }
@@ -367,20 +365,20 @@ public class MapScreen implements Screen {
      * Odnawia co turę gry HP zamków +1
      */
     private void odnowZdrowieZamkow() {
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                if (gs.getMapa().getPola()[i][j].getCastle() != null
-                        && gs.getMapa().getPola()[i][j].getCastle().getActualHp()
-                        < gs.getMapa().getPola()[i][j].getCastle().getMaxHp()) {
-                    gs.getMapa().getPola()[i][j].getCastle().setActualHp(
-                            gs.getMapa().getPola()[i][j].getCastle().getActualHp() + 1);
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].getCastle() != null
+                        && v.getGs().getMapa().getPola()[i][j].getCastle().getActualHp()
+                        < v.getGs().getMapa().getPola()[i][j].getCastle().getMaxHp()) {
+                    v.getGs().getMapa().getPola()[i][j].getCastle().setActualHp(
+                            v.getGs().getMapa().getPola()[i][j].getCastle().getActualHp() + 1);
                 }
             }
         }
     }
 
     private void aktualizujPanelBohatera() {
-        Bohater b = gs.getBohaterZaznaczony();
+        Bohater b = v.getGs().getBohaterZaznaczony();
         interfce.lblHp.setVisible(true);
         interfce.lblHp.setText("HP:" + b.getActualHp() + "/" + b.getHp());
         interfce.lblMove.setVisible(true);
@@ -398,76 +396,76 @@ public class MapScreen implements Screen {
     // Dodaj do stage 01 predefiniowane przyciski ruchu i ataku oraz przycisk cancel
     private void dodajDoStage01() {
         // Dodaje do planszy info window z assetów do wyświetlania info o skrzynce ze skarbem
-        stage01.addActor(a.getInfoWindow());
+        stage01.addActor(v.getA().getInfoWindow());
 
-        stage01.addActor(a.lblDmg);
+        stage01.addActor(v.getA().lblDmg);
     }
 
     // Gneruje graczy w konstruktorze klasy i dodaje ich do planszy 01
     private void generujGraczy() {
 
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolX(); j++) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolX(); j++) {
 
-                if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
+                if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP1()) {
 
-                    gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 0));
-                    gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
-                    gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
-                    stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
+                    v.getGs().getMapa().getPola()[i][j].setCastle(new Castle(v, i * 100, j * 100, 0));
+                    v.getGs().getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                    v.getGs().getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getCastle());
 
-                    gs.getGracze().get(0).getBohaterowie().get(0).setPozXnaMapie(i);
-                    gs.getGracze().get(0).getBohaterowie().get(0).setPozYnaMapie(j);
-                    gs.getGracze().get(0).getBohaterowie().get(0).setPosition(i * 100, j * 100);
-                    gs.getMapa().getPola()[i][j].setBohater(
-                            gs.getGracze().get(0).getBohaterowie().get(0));
-                    stage01.addActor(gs.getGracze().get(0).getBohaterowie().get(0));
+                    v.getGs().getGracze().get(0).getBohaterowie().get(0).setPozXnaMapie(i);
+                    v.getGs().getGracze().get(0).getBohaterowie().get(0).setPozYnaMapie(j);
+                    v.getGs().getGracze().get(0).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                    v.getGs().getMapa().getPola()[i][j].setBohater(
+                            v.getGs().getGracze().get(0).getBohaterowie().get(0));
+                    stage01.addActor(v.getGs().getGracze().get(0).getBohaterowie().get(0));
                 }
-                if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
+                if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP2()) {
 
-                    gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 1));
-                    gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
-                    gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
-                    stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
+                    v.getGs().getMapa().getPola()[i][j].setCastle(new Castle(v, i * 100, j * 100, 1));
+                    v.getGs().getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                    v.getGs().getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getCastle());
 
-                    gs.getGracze().get(1).getBohaterowie().get(0).setPozXnaMapie(i);
-                    gs.getGracze().get(1).getBohaterowie().get(0).setPozYnaMapie(j);
-                    gs.getGracze().get(1).getBohaterowie().get(0).setPosition(i * 100, j * 100);
-                    gs.getMapa().getPola()[i][j].setBohater(
-                            gs.getGracze().get(1).getBohaterowie().get(0));
-                    stage01.addActor(gs.getGracze().get(1).getBohaterowie().get(0));
+                    v.getGs().getGracze().get(1).getBohaterowie().get(0).setPozXnaMapie(i);
+                    v.getGs().getGracze().get(1).getBohaterowie().get(0).setPozYnaMapie(j);
+                    v.getGs().getGracze().get(1).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                    v.getGs().getMapa().getPola()[i][j].setBohater(
+                            v.getGs().getGracze().get(1).getBohaterowie().get(0));
+                    stage01.addActor(v.getGs().getGracze().get(1).getBohaterowie().get(0));
                 }
-                if (gs.getGracze().size() == 3 || gs.getGracze().size() == 4) {
+                if (v.getGs().getGracze().size() == 3 || v.getGs().getGracze().size() == 4) {
 
-                    if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
+                    if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP3()) {
 
-                        gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 2));
-                        gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
-                        gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
-                        stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
+                        v.getGs().getMapa().getPola()[i][j].setCastle(new Castle(v, i * 100, j * 100, 2));
+                        v.getGs().getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                        v.getGs().getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
+                        stage01.addActor(v.getGs().getMapa().getPola()[i][j].getCastle());
 
-                        gs.getGracze().get(2).getBohaterowie().get(0).setPozXnaMapie(i);
-                        gs.getGracze().get(2).getBohaterowie().get(0).setPozYnaMapie(j);
-                        gs.getGracze().get(2).getBohaterowie().get(0).setPosition(i * 100, j * 100);
-                        gs.getMapa().getPola()[i][j].setBohater(
-                                gs.getGracze().get(2).getBohaterowie().get(0));
-                        stage01.addActor(gs.getGracze().get(2).getBohaterowie().get(0));
+                        v.getGs().getGracze().get(2).getBohaterowie().get(0).setPozXnaMapie(i);
+                        v.getGs().getGracze().get(2).getBohaterowie().get(0).setPozYnaMapie(j);
+                        v.getGs().getGracze().get(2).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                        v.getGs().getMapa().getPola()[i][j].setBohater(
+                                v.getGs().getGracze().get(2).getBohaterowie().get(0));
+                        stage01.addActor(v.getGs().getGracze().get(2).getBohaterowie().get(0));
                     }
                 }
-                if (gs.getGracze().size() == 4) {
-                    if (gs.getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
+                if (v.getGs().getGracze().size() == 4) {
+                    if (v.getGs().getMapa().getPola()[i][j].isLokacjaStartowaP4()) {
 
-                        gs.getMapa().getPola()[i][j].setCastle(new Castle(a, i * 100, j * 100, 3));
-                        gs.getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
-                        gs.getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
-                        stage01.addActor(gs.getMapa().getPola()[i][j].getCastle());
+                        v.getGs().getMapa().getPola()[i][j].setCastle(new Castle(v, i * 100, j * 100, 3));
+                        v.getGs().getMapa().getPola()[i][j].getCastle().setLocXonMap(i);
+                        v.getGs().getMapa().getPola()[i][j].getCastle().setLocYonMap(j);
+                        stage01.addActor(v.getGs().getMapa().getPola()[i][j].getCastle());
 
-                        gs.getGracze().get(3).getBohaterowie().get(0).setPozXnaMapie(i);
-                        gs.getGracze().get(3).getBohaterowie().get(0).setPozYnaMapie(j);
-                        gs.getGracze().get(3).getBohaterowie().get(0).setPosition(i * 100, j * 100);
-                        gs.getMapa().getPola()[i][j].setBohater(
-                                gs.getGracze().get(3).getBohaterowie().get(0));
-                        stage01.addActor(gs.getGracze().get(3).getBohaterowie().get(0));
+                        v.getGs().getGracze().get(3).getBohaterowie().get(0).setPozXnaMapie(i);
+                        v.getGs().getGracze().get(3).getBohaterowie().get(0).setPozYnaMapie(j);
+                        v.getGs().getGracze().get(3).getBohaterowie().get(0).setPosition(i * 100, j * 100);
+                        v.getGs().getMapa().getPola()[i][j].setBohater(
+                                v.getGs().getGracze().get(3).getBohaterowie().get(0));
+                        stage01.addActor(v.getGs().getGracze().get(3).getBohaterowie().get(0));
                     }
                 }
             }
@@ -478,17 +476,17 @@ public class MapScreen implements Screen {
      * Generuje skrzynie ze skarbami.
      */
     private void tresureBoxGenerator() {
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolX(); j++) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolX(); j++) {
 
-                if (gs.getMapa().getPola()[i][j].isTresureBox1Location()) {
-                    TresureBox tb = new TresureBox(1, 2, this.a, this.gs, this.g, i * 100, j * 100);
-                    gs.getMapa().getPola()[i][j].setTresureBox(tb);
-                    stage01.addActor(gs.getMapa().getPola()[i][j].getTresureBox());
-                } else if (gs.getMapa().getPola()[i][j].isTresureBox2Location()) {
-                    TresureBox tb = new TresureBox(2, 1, this.a, this.gs, this.g, i * 100, j * 100);
-                    gs.getMapa().getPola()[i][j].setTresureBox(tb);
-                    stage01.addActor(gs.getMapa().getPola()[i][j].getTresureBox());
+                if (v.getGs().getMapa().getPola()[i][j].isTresureBox1Location()) {
+                    TresureBox tb = new TresureBox(1, 2, v, i * 100, j * 100);
+                    v.getGs().getMapa().getPola()[i][j].setTresureBox(tb);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getTresureBox());
+                } else if (v.getGs().getMapa().getPola()[i][j].isTresureBox2Location()) {
+                    TresureBox tb = new TresureBox(2, 1, v, i * 100, j * 100);
+                    v.getGs().getMapa().getPola()[i][j].setTresureBox(tb);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getTresureBox());
                 }
             }
         }
@@ -499,46 +497,46 @@ public class MapScreen implements Screen {
      */
     private void buldingsGenerator() {
 
-        BuldingCreator buldingCreator = new BuldingCreator(a);
+        BuldingCreator buldingCreator = new BuldingCreator(v);
 
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolX(); j++) {
-                if (gs.getMapa().getPola()[i][j].isAttackCamp()) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolX(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].isAttackCamp()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.traningCamp, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isDefenceCamp()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isDefenceCamp()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.defenceCamp, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isPowerCamp()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isPowerCamp()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.powerCamp, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isWisdomCamp()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isWisdomCamp()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.wisdomCamp, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isSpeedCamp()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isSpeedCamp()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.speedCamp, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isHpCamp()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isHpCamp()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.hpCamp, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isWell()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isWell()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.well, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isTemple()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isTemple()) {
                     Bulding bulding = buldingCreator.createBulding(Buldings.temple, i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
-                } else if (gs.getMapa().getPola()[i][j].isRandomBulding()) {
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
+                } else if (v.getGs().getMapa().getPola()[i][j].isRandomBulding()) {
                     Bulding bulding = buldingCreator.createBulding(Bulding.drawBulding(), i, j);
                     stage01.addActor(bulding);
-                    gs.getMapa().getPola()[i][j].setBulding(bulding);
+                    v.getGs().getMapa().getPola()[i][j].setBulding(bulding);
                 }
             }
         }
@@ -548,23 +546,23 @@ public class MapScreen implements Screen {
      * Generuje moby na mapie.
      */
     private void mobsGenerator() {
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolX(); j++) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolX(); j++) {
 
-                if (gs.getMapa().getPola()[i][j].isMob1Location()) {
+                if (v.getGs().getMapa().getPola()[i][j].isMob1Location()) {
 
-                    Mob mob = new Mob(g, gs, a, i * 100, j * 100, 1, Mob.losujMoba(1));
-                    gs.getMapa().getPola()[i][j].setMob(mob);
+                    Mob mob = new Mob(v, i * 100, j * 100, 1, Mob.losujMoba(1));
+                    v.getGs().getMapa().getPola()[i][j].setMob(mob);
                     mob.setPozX(i);
                     mob.setPozY(j);
-                    stage01.addActor(gs.getMapa().getPola()[i][j].getMob());
-                } else if (gs.getMapa().getPola()[i][j].isMob2Location()) {
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
+                } else if (v.getGs().getMapa().getPola()[i][j].isMob2Location()) {
 
-                    Mob mob = new Mob(g, gs, a, i * 100, j * 100, 2, Mob.losujMoba(2));
-                    gs.getMapa().getPola()[i][j].setMob(mob);
+                    Mob mob = new Mob(v, i * 100, j * 100, 2, Mob.losujMoba(2));
+                    v.getGs().getMapa().getPola()[i][j].setMob(mob);
                     mob.setPozX(i);
                     mob.setPozY(j);
-                    stage01.addActor(gs.getMapa().getPola()[i][j].getMob());
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
                 }
             }
         }
@@ -573,37 +571,37 @@ public class MapScreen implements Screen {
     private Texture teksturaTerenu(TypyTerenu tT) {
         switch (tT) {
             case Gory:
-                return a.trawaGoraTex;
+                return v.getA().trawaGoraTex;
             case Trawa:
-                return a.trawaTex;
+                return v.getA().trawaTex;
             case Drzewo:
-                return a.trawaDrzewoTex;
+                return v.getA().trawaDrzewoTex;
         }
-        return a.trawaTex;
+        return v.getA().trawaTex;
     }
 
     // wypełnia stage01 aktorami planszy
     private void generujPlansze() {
 
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
-                if (gs.getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Gory) {
-                    gs.getMapa().getPola()[i][j].setMovable(false);
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
+                if (v.getGs().getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Gory) {
+                    v.getGs().getMapa().getPola()[i][j].setMovable(false);
                 }
-                if (gs.getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Rzeka) {
-                    Image img = new Image(a.tAtals.findRegion(Mapa.getTextureRegion(i, j, gs.getMapa(), TypyTerenu.Rzeka)));
+                if (v.getGs().getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Rzeka) {
+                    Image img = new Image(v.getA().tAtals.findRegion(Mapa.getTextureRegion(i, j, v.getGs().getMapa(), TypyTerenu.Rzeka)));
                     img.setPosition(i * 100, j * 100);
                     teren.add(img);
-                } else if (gs.getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Drzewo) {
-                    Image img = new Image(a.tAtals.findRegion(Mapa.getTextureRegion(i, j, gs.getMapa(), TypyTerenu.Drzewo)));
+                } else if (v.getGs().getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Drzewo) {
+                    Image img = new Image(v.getA().tAtals.findRegion(Mapa.getTextureRegion(i, j, v.getGs().getMapa(), TypyTerenu.Drzewo)));
                     img.setPosition(i * 100, j * 100);
                     teren.add(img);
-                } else if (gs.getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Gory) {
-                    Image img = new Image(a.tAtals.findRegion(Mapa.getTextureRegion(i, j, gs.getMapa(), TypyTerenu.Gory)));
+                } else if (v.getGs().getMapa().getPola()[i][j].getTypTerenu() == TypyTerenu.Gory) {
+                    Image img = new Image(v.getA().tAtals.findRegion(Mapa.getTextureRegion(i, j, v.getGs().getMapa(), TypyTerenu.Gory)));
                     img.setPosition(i * 100, j * 100);
                     teren.add(img);
                 } else {
-                    Image img = new Image(teksturaTerenu(gs.getMapa().getPola()[i][j].getTypTerenu()));
+                    Image img = new Image(teksturaTerenu(v.getGs().getMapa().getPola()[i][j].getTypTerenu()));
                     img.setPosition(i * 100, j * 100);
                     teren.add(img);
                 }
@@ -638,17 +636,17 @@ public class MapScreen implements Screen {
             }
         }
 
-        if (NetEngine.playersEndTurn == gs.getGracze().size()) {
+        if (NetEngine.playersEndTurn == v.getGs().getGracze().size()) {
             koniecTuryMuli();
         }
 
         Gdx.input.setInputProcessor(inputMultiPlexer);
 
-        if (gs.getBohaterZaznaczony() != null) {
-            countMoveCost(gs.getBohaterZaznaczony());
+        if (v.getGs().getBohaterZaznaczony() != null) {
+            countMoveCost(v.getGs().getBohaterZaznaczony());
             aktualizujPanelBohatera();
-            if (gs.getBohaterZaznaczony().getExp() >= gs.getBohaterZaznaczony().getExpToNextLevel() &&
-                    gs.getBohaterZaznaczony().getKlasyPostaci() != KlasyPostaci.Summmon) {
+            if (v.getGs().getBohaterZaznaczony().getExp() >= v.getGs().getBohaterZaznaczony().getExpToNextLevel() &&
+                    v.getGs().getBohaterZaznaczony().getKlasyPostaci() != KlasyPostaci.Summmon) {
                 interfce.btnAwansujBohatera.setVisible(true);
             }
         } else {
@@ -666,7 +664,7 @@ public class MapScreen implements Screen {
 
         ruchKamery();
 
-        this.interfce.lblGold.setText(Integer.toString(gs.getZlotoAktualnegoGracza()));
+        this.interfce.lblGold.setText(Integer.toString(v.getGs().getZlotoAktualnegoGracza()));
 
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -686,8 +684,8 @@ public class MapScreen implements Screen {
         bohater.getPozXnaMapie();
         bohater.getPozYnaMapie();
 
-        for (int i = 0; i < gs.getMapa().getIloscPolX(); i++) {
-            for (int j = 0; j < gs.getMapa().getIloscPolY(); j++) {
+        for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
+            for (int j = 0; j < v.getGs().getMapa().getIloscPolY(); j++) {
 
             }
         }
@@ -696,8 +694,8 @@ public class MapScreen implements Screen {
     // Steruje ruchem kamery
     private void ruchKamery() {
 
-        int predkoscRuchuKamery = gs.getPredkoscScrollowaniaKamery();
-        int predkoscZoom = gs.getPredkoscZoomKamery();
+        int predkoscRuchuKamery = v.getGs().getPredkoscScrollowaniaKamery();
+        int predkoscZoom = v.getGs().getPredkoscZoomKamery();
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if (stage01.getCamera().position.x > 350) {
@@ -705,12 +703,12 @@ public class MapScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            if (stage01.getCamera().position.x < gs.getMapa().getIloscPolX() * 100) {
+            if (stage01.getCamera().position.x < v.getGs().getMapa().getIloscPolX() * 100) {
                 stage01.getCamera().translate(predkoscRuchuKamery, 0, 0);
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if (stage01.getCamera().position.y < gs.getMapa().getIloscPolY() * 100) {
+            if (stage01.getCamera().position.y < v.getGs().getMapa().getIloscPolY() * 100) {
                 stage01.getCamera().translate(0, predkoscRuchuKamery, 0);
             }
         }
@@ -796,7 +794,7 @@ public class MapScreen implements Screen {
 
     // Setters and Getters
     public GameStatus getGs() {
-        return gs;
+        return v.getGs();
     }
 
     @Override
@@ -900,12 +898,12 @@ public class MapScreen implements Screen {
                 stage01.getCamera().position.x = 350;
             }
 
-            if (stage01.getCamera().position.x > gs.getMapa().getIloscPolX() * 100) {
-                stage01.getCamera().position.x = gs.getMapa().getIloscPolX() * 100;
+            if (stage01.getCamera().position.x > v.getGs().getMapa().getIloscPolX() * 100) {
+                stage01.getCamera().position.x = v.getGs().getMapa().getIloscPolX() * 100;
             }
 
-            if (stage01.getCamera().position.y > gs.getMapa().getIloscPolY() * 100) {
-                stage01.getCamera().position.y = gs.getMapa().getIloscPolY() * 100;
+            if (stage01.getCamera().position.y > v.getGs().getMapa().getIloscPolY() * 100) {
+                stage01.getCamera().position.y = v.getGs().getMapa().getIloscPolY() * 100;
             }
 
             if (stage01.getCamera().position.y < 50) {
@@ -1025,7 +1023,7 @@ public class MapScreen implements Screen {
             tableEffectsBar.clear();
             tableEffectsBar.setDebug(true);
 
-            tableEffectsBar.add(new Label("Aktywne Efekty:", a.skin)).pad(2).colspan(5);
+            tableEffectsBar.add(new Label("Aktywne Efekty:", v.getA().skin)).pad(2).colspan(5);
             tableEffectsBar.row();
         }
 
@@ -1083,14 +1081,14 @@ public class MapScreen implements Screen {
 
             int indeksWiersza = 0;
             //if (gs.isCzyZaznaczonoBohatera()) {
-            if (gs.getBohaterZaznaczony() != null) {
-                gs.getBohaterZaznaczony().getSpells().clear();
-                SpellCreator spellCreator = new SpellCreator(a, gs);
-                for (Spells spl : gs.getBohaterZaznaczony().getListOfSpells()) {
-                    gs.getBohaterZaznaczony().getSpells().add(spellCreator.utworzSpell(spl, gs.getBohaterZaznaczony()));
+            if (v.getGs().getBohaterZaznaczony() != null) {
+                v.getGs().getBohaterZaznaczony().getSpells().clear();
+                SpellCreator spellCreator = new SpellCreator(v);
+                for (Spells spl : v.getGs().getBohaterZaznaczony().getListOfSpells()) {
+                    v.getGs().getBohaterZaznaczony().getSpells().add(spellCreator.utworzSpell(spl, v.getGs().getBohaterZaznaczony()));
 
                 }
-                for (SpellActor sA : gs.getBohaterZaznaczony().getSpells()) {
+                for (SpellActor sA : v.getGs().getBohaterZaznaczony().getSpells()) {
                     if (indeksWiersza > 4) {
                         tableSpells.row();
                         indeksWiersza = 0;
@@ -1110,27 +1108,27 @@ public class MapScreen implements Screen {
     public class Interface {
 
         // PRZYCISKI
-        public TextButton btnExit = new TextButton("EXIT", a.skin);
-        public TextButton btnKoniecTury = new TextButton("Koniec Tury", a.skin);
-        public TextButton btnKupBohatera = new TextButton("Kup Bohatera", a.skin);
-        public TextButton btnSpellBook = new TextButton("Spell Book", a.skin);
-        public TextButton btnSpellExit = new TextButton("EXIT", a.skin);
-        public TextButton btnBohater = new TextButton("Bohater", a.skin);
-        public TextButton btnAwansujBohatera = new TextButton("AWANSUJ BOHATERA", a.skin);
+        public TextButton btnExit = new TextButton("EXIT", v.getA().skin);
+        public TextButton btnKoniecTury = new TextButton("Koniec Tury", v.getA().skin);
+        public TextButton btnKupBohatera = new TextButton("Kup Bohatera", v.getA().skin);
+        public TextButton btnSpellBook = new TextButton("Spell Book", v.getA().skin);
+        public TextButton btnSpellExit = new TextButton("EXIT", v.getA().skin);
+        public TextButton btnBohater = new TextButton("Bohater", v.getA().skin);
+        public TextButton btnAwansujBohatera = new TextButton("AWANSUJ BOHATERA", v.getA().skin);
 
         // LABELKI
-        public Label lblHp = new Label("", a.skin);
-        public Label lblMove = new Label("", a.skin);
-        public Label lblMana = new Label("", a.skin);
-        public Label lblExp = new Label("", a.skin);
-        public Label lblEfekty = new Label("", a.skin);
-        public Label lblGold = new Label("", a.skin);
-        public Label lblTuraGracza = new Label("Tura Gracza: 0", a.skin);
+        public Label lblHp = new Label("", v.getA().skin);
+        public Label lblMove = new Label("", v.getA().skin);
+        public Label lblMana = new Label("", v.getA().skin);
+        public Label lblExp = new Label("", v.getA().skin);
+        public Label lblEfekty = new Label("", v.getA().skin);
+        public Label lblGold = new Label("", v.getA().skin);
+        public Label lblTuraGracza = new Label("Tura Gracza: 0", v.getA().skin);
 
         // POZOSTALE
-        public DefaultActor ikonaGracza = new DefaultActor(a.btnAttackTex, 0, 0);
+        public DefaultActor ikonaGracza = new DefaultActor(v.getA().btnAttackTex, 0, 0);
         ;
-        public DefaultActor ikonaGold = new DefaultActor(a.texGold, 165, Gdx.graphics.getHeight() - 25);
+        public DefaultActor ikonaGold = new DefaultActor(v.getA().texGold, 165, Gdx.graphics.getHeight() - 25);
 
         public Interface() {
             Listeners listeners = new Listeners();
@@ -1164,12 +1162,12 @@ public class MapScreen implements Screen {
                 btnExit.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
+                        v.getA().buttonClick.play();
                         NetEngine.gameStarted = false;
                         NetEngine.amountOfMultiPlayers = 0;
                         NetEngine.playerNumber = 0;
-                        g.setScreen(Assets.mainMenuScreen);
-                        gs.setActualScreen(0);
+                        v.getG().setScreen(v.getMainMenuScreen());
+                        v.getGs().setActualScreen(0);
                     }
                 });
             }
@@ -1181,7 +1179,7 @@ public class MapScreen implements Screen {
                 btnKoniecTury.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
+                        v.getA().buttonClick.play();
                         koniecTuryClick();
                     }
                 });
@@ -1194,11 +1192,11 @@ public class MapScreen implements Screen {
                 btnKupBohatera.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
-                        if (gs.getGracze().get(gs.getTuraGracza()).getGold() < GameStatus.CostOfNewHero) {
-                            DialogScreen dialogScreen = new DialogScreen("ERROR", a.skin, "Za malo zlota", stage01);
+                        v.getA().buttonClick.play();
+                        if (v.getGs().getGracze().get(v.getGs().getTuraGracza()).getGold() < GameStatus.CostOfNewHero) {
+                            DialogScreen dialogScreen = new DialogScreen("ERROR", v.getA().skin, "Za malo zlota", stage01);
                         } else {
-                            g.setScreen(Assets.newBohaterScreen);
+                            v.getG().setScreen(v.getNewBohaterScreen());
                         }
                     }
                 });
@@ -1211,10 +1209,10 @@ public class MapScreen implements Screen {
                 btnSpellExit.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
+                        v.getA().buttonClick.play();
                         tables.tableSpells.setVisible(false);
-                        if (gs.getBohaterZaznaczony() != null) {
-                            gs.getBohaterZaznaczony().getSpells().clear();
+                        if (v.getGs().getBohaterZaznaczony() != null) {
+                            v.getGs().getBohaterZaznaczony().getSpells().clear();
                         }
                     }
                 });
@@ -1227,7 +1225,7 @@ public class MapScreen implements Screen {
                 btnSpellBook.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
+                        v.getA().buttonClick.play();
                         tables.formatStage03MainTable();
                         tables.tableSpells.setVisible(true);
                     }
@@ -1241,10 +1239,10 @@ public class MapScreen implements Screen {
                 btnBohater.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
-                        if (gs.isCzyZaznaczonoBohatera()) {
-                            //gs.setActualScreen(5);
-                            g.setScreen(Assets.bohaterScreen);
+                        v.getA().buttonClick.play();
+                        if (v.getGs().isCzyZaznaczonoBohatera()) {
+                            //v.getGs().setActualScreen(5);
+                            v.getG().setScreen(v.getBohaterScreen());
                         } else {
                             System.out.println("Nie zaznaczono bohatera");
                         }
@@ -1259,9 +1257,9 @@ public class MapScreen implements Screen {
                 btnAwansujBohatera.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        a.buttonClick.play();
+                        v.getA().buttonClick.play();
                         btnAwansujBohatera.setVisible(false);
-                        g.setScreen(Assets.awansScreen);
+                        v.getG().setScreen(v.getAwansScreen());
                     }
                 });
             }

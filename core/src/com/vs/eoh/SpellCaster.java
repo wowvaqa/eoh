@@ -19,14 +19,12 @@ import com.vs.enums.TypyTerenu;
 public class SpellCaster {
 
     Bohater bohaterCastujacy;
-    Assets a;
-    GameStatus gs;
     SpellActor spell;
+    private V v;
 
-    public SpellCaster(Bohater bohaterCastujacy, Assets a, GameStatus gs, SpellActor spell) {
+    public SpellCaster(Bohater bohaterCastujacy, SpellActor spell, V v) {
+        this.v = v;
         this.bohaterCastujacy = bohaterCastujacy;
-        this.a = a;
-        this.gs = gs;
         this.spell = spell;
 
         int pozX = this.bohaterCastujacy.getPozXnaMapie();
@@ -35,7 +33,7 @@ public class SpellCaster {
         // Sprawdza czy czar działa tylko na bohatera castującego
         if (spell.isSpellWorksOnlyForCaster()) {
 
-            spell.getSpellEffects().get(0).dzialanie(spell, bohaterCastujacy, bohaterCastujacy, a);
+            spell.getSpellEffects().get(0).dzialanie(spell, bohaterCastujacy, bohaterCastujacy, v);
             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
             bohaterCastujacy.setMoveInterfaceOn(false);
             Ruch.wylaczPrzyciski();
@@ -45,9 +43,9 @@ public class SpellCaster {
             System.out.println("Zaklęcie działa tylko na bohaterów gracza.");
             for (int i = pozX - 1 - spell.getZasieg(); i < pozX + 1 + 1 + spell.getZasieg(); i++) {
                 for (int j = pozY - 1 - spell.getZasieg(); j < pozY + 1 + 1 + spell.getZasieg(); j++) {
-                    if (i >= 0 && j >= 0 && i < gs.getMapa().getIloscPolX() && j < gs.getMapa().getIloscPolY()) {
+                    if (i >= 0 && j >= 0 && i < v.getGs().getMapa().getIloscPolX() && j < v.getGs().getMapa().getIloscPolY()) {
                         if (sprawdzPrzyjaciela(i, j)) {
-                            CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
+                            CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(v.getA().spellIcon)), i, j);
                             castButton.setPosition(i * 100, j * 100);
                             Assets.stage01MapScreen.addActor(castButton);
                             bohaterCastujacy.setMoveInterfaceOn(false);
@@ -62,19 +60,19 @@ public class SpellCaster {
             for (int i = pozX - 1 - spell.getZasieg(); i < pozX + 1 + 1 + spell.getZasieg(); i++) {
                 for (int j = pozY - 1 - spell.getZasieg(); j < pozY + 1 + 1 + spell.getZasieg(); j++) {
                     if (bohaterCastujacy.getPozXnaMapie() == i && bohaterCastujacy.getPozYnaMapie() == j) {
-                        CastButtonCancel przyciskCancel = new CastButtonCancel(new TextureRegionDrawable(new TextureRegion(a.cancelIcon)));
+                        CastButtonCancel przyciskCancel = new CastButtonCancel(new TextureRegionDrawable(new TextureRegion(v.getA().cancelIcon)));
                         przyciskCancel.setPosition(i * 100, j * 100);
                         Assets.stage01MapScreen.addActor(przyciskCancel);
-                        gs.isSpellPanelActive = false;
+                        v.getGs().isSpellPanelActive = false;
                         Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                         Ruch.wylaczPrzyciski();
                     } else {
-                        if (i >= 0 && j >= 0 && i < gs.getMapa().getIloscPolX() && j < gs.getMapa().getIloscPolY()) {
-                            if (!sprawdzPrzeciwnika(i, j) && !sprawdzPrzyjaciela(i, j) && gs.getMapa().getPola()[i][j].getTypTerenu() != TypyTerenu.Gory) {
-                                CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
+                        if (i >= 0 && j >= 0 && i < v.getGs().getMapa().getIloscPolX() && j < v.getGs().getMapa().getIloscPolY()) {
+                            if (!sprawdzPrzeciwnika(i, j) && !sprawdzPrzyjaciela(i, j) && v.getGs().getMapa().getPola()[i][j].getTypTerenu() != TypyTerenu.Gory) {
+                                CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(v.getA().spellIcon)), i, j);
                                 castButton.setPosition(i * 100, j * 100);
                                 Assets.stage01MapScreen.addActor(castButton);
-                                gs.isSpellPanelActive = false;
+                                v.getGs().isSpellPanelActive = false;
                                 Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                             }
                         }
@@ -85,23 +83,23 @@ public class SpellCaster {
         } else {
             for (int i = pozX - 1 - spell.getZasieg(); i < pozX + 1 + 1 + spell.getZasieg(); i++) {
                 for (int j = pozY - 1 - spell.getZasieg(); j < pozY + 1 + 1 + spell.getZasieg(); j++) {
-                    if (i >= 0 && j >= 0 && i < gs.getMapa().getIloscPolX() && j < gs.getMapa().getIloscPolY()) {
+                    if (i >= 0 && j >= 0 && i < v.getGs().getMapa().getIloscPolX() && j < v.getGs().getMapa().getIloscPolY()) {
 
                         if (bohaterCastujacy.getPozXnaMapie() == i && bohaterCastujacy.getPozYnaMapie() == j) {
-                            CastButtonCancel przyciskCancel = new CastButtonCancel(new TextureRegionDrawable(new TextureRegion(a.cancelIcon)));
+                            CastButtonCancel przyciskCancel = new CastButtonCancel(new TextureRegionDrawable(new TextureRegion(v.getA().cancelIcon)));
                             przyciskCancel.setPosition(i * 100, j * 100);
                             Assets.stage01MapScreen.addActor(przyciskCancel);
-                            gs.isSpellPanelActive = false;
+                            v.getGs().isSpellPanelActive = false;
                             Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                             Ruch.wylaczPrzyciski();
                         } else {
                             if (sprawdzPrzeciwnika(i, j)) {
 
                                 // Potrzebny warunek sprawdzający czy w polu znajduje się przeciwnik
-                                CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(a.spellIcon)), i, j);
+                                CastButton castButton = new CastButton(new TextureRegionDrawable(new TextureRegion(v.getA().spellIcon)), i, j);
                                 castButton.setPosition(i * 100, j * 100);
                                 Assets.stage01MapScreen.addActor(castButton);
-                                gs.isSpellPanelActive = false;
+                                v.getGs().isSpellPanelActive = false;
                                 Gdx.input.setInputProcessor(Assets.stage01MapScreen);
                             }
                         }
@@ -155,20 +153,20 @@ public class SpellCaster {
      * @return
      */
     private boolean sprawdzPrzeciwnika(int x, int y) {
-        if (gs.getMapa().getPola()[x][y].getBohater() != null
-                && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() != gs.getTuraGracza()) {
+        if (v.getGs().getMapa().getPola()[x][y].getBohater() != null
+                && v.getGs().getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() != v.getGs().getTuraGracza()) {
             return true;
         }
         /**
          * Zwraca true jeżeli napotkany zamek nie należy do gracza i jego poziom
          * HP > 0
          */
-        if (gs.getMapa().getPola()[x][y].getCastle() != null
-                && gs.getMapa().getPola()[x][y].getCastle().getPrzynaleznoscDoGracza() != gs.getTuraGracza()
-                && gs.getMapa().getPola()[x][y].getCastle().getActualHp() > 0) {
+        if (v.getGs().getMapa().getPola()[x][y].getCastle() != null
+                && v.getGs().getMapa().getPola()[x][y].getCastle().getPrzynaleznoscDoGracza() != v.getGs().getTuraGracza()
+                && v.getGs().getMapa().getPola()[x][y].getCastle().getActualHp() > 0) {
             return true;
         }
-        return gs.getMapa().getPola()[x][y].getMob() != null;
+        return v.getGs().getMapa().getPola()[x][y].getMob() != null;
     }
 
     /**
@@ -180,8 +178,8 @@ public class SpellCaster {
      * @return
      */
     private boolean sprawdzPrzyjaciela(int x, int y) {
-        return gs.getMapa().getPola()[x][y].getBohater() != null
-                && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() == gs.getTuraGracza();
+        return v.getGs().getMapa().getPola()[x][y].getBohater() != null
+                && v.getGs().getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() == v.getGs().getTuraGracza();
     }
 
     /**
@@ -216,14 +214,14 @@ public class SpellCaster {
                     spell.setSpellX(locX);
                     spell.setSpellY(locY);
 
-                    if (gs.getMapa().getPola()[locX][locY].getBohater() != null) {
-                        spell.getSpellEffects().get(0).dzialanie(spell, gs.getMapa().getPola()[locX][locY].getBohater(), bohaterCastujacy, a);
-                    } else if (gs.getMapa().getPola()[locX][locY].getMob() != null) {
-                        spell.getSpellEffects().get(0).dzialanie(spell, gs.getMapa().getPola()[locX][locY].getMob(), bohaterCastujacy, a);
-                    } else if (gs.getMapa().getPola()[locX][locY].getCastle() != null){
-                        spell.getSpellEffects().get(0).dzialanie(spell, gs.getMapa().getPola()[locX][locY].getCastle(), bohaterCastujacy, a);
+                    if (v.getGs().getMapa().getPola()[locX][locY].getBohater() != null) {
+                        spell.getSpellEffects().get(0).dzialanie(spell, v.getGs().getMapa().getPola()[locX][locY].getBohater(), bohaterCastujacy, v);
+                    } else if (v.getGs().getMapa().getPola()[locX][locY].getMob() != null) {
+                        spell.getSpellEffects().get(0).dzialanie(spell, v.getGs().getMapa().getPola()[locX][locY].getMob(), bohaterCastujacy, v);
+                    } else if (v.getGs().getMapa().getPola()[locX][locY].getCastle() != null) {
+                        spell.getSpellEffects().get(0).dzialanie(spell, v.getGs().getMapa().getPola()[locX][locY].getCastle(), bohaterCastujacy, v);
                     } else {
-                        spell.getSpellEffects().get(0).dzialanie(spell, null, bohaterCastujacy, a);
+                        spell.getSpellEffects().get(0).dzialanie(spell, null, bohaterCastujacy, v);
                     }
 
                     wylaczPrzyciski();

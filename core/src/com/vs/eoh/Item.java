@@ -20,10 +20,8 @@ import java.util.ArrayList;
  */
 public class Item extends Actor {
     
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
     public ArrayList<Effect> dzialania;
+    private V v;
     private String nazwa;
     // ikona
     private Sprite sprite;
@@ -47,10 +45,8 @@ public class Item extends Actor {
     private String opis;
     private DostepneItemki itemNazwa;
 
-    public Item(Texture teksura, final Assets a, final GameStatus gs, final Game g) {
-        this.g = g;
-        this.a = a;
-        this.gs = gs;
+    public Item(Texture teksura, final V v) {
+        this.v = v;
         sprite = new Sprite(teksura);
         this.setSize(sprite.getWidth(), sprite.getHeight());  
         final Item qpa = this;
@@ -58,14 +54,14 @@ public class Item extends Actor {
         this.addListener(new ClickListener(){
             GameStatus tmpGs;
             {
-                this.tmpGs = gs;
+                this.tmpGs = v.getGs();
             }
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Assets.lastScreen = g.getScreen();
+                v.setLastScreen(v.getG().getScreen());
                 tmpGs.setItem(qpa);
-                g.setScreen(Assets.itemScreen);                
+                v.getG().setScreen(v.getItemScreen());
             }            
         });
     }
@@ -234,7 +230,7 @@ public class Item extends Actor {
     }
 
     public Assets getA() {
-        return a;
+        return v.getA();
     }
 
     public int getZasieg() {

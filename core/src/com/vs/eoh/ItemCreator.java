@@ -18,18 +18,15 @@ import java.util.ArrayList;
  */
 public class ItemCreator {
 
-    private final GameStatus gs;
-    private Game g;
-    private Assets a;
-    
-    public ItemCreator(GameStatus gs) {
-        this.gs = gs;
+    private V v;
+
+    public ItemCreator(V v) {
+        this.v = v;
     }
 
-    public Item utworzItem(DostepneItemki dostepneItemki, final Assets a, Game g) {
-        this.a = a;
-        this.g = g;
-        Item item = new Item(a.texFist, this.a, this.gs, this.g);
+    public Item utworzItem(DostepneItemki dostepneItemki, final V v) {
+        this.v = v;
+        Item item = new Item(v.getA().texFist, v);
 
         switch (dostepneItemki) {
 // GŁOWA ======================================================================         
@@ -41,7 +38,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.glowa);
-                item.getSprite().setTexture(a.texHead);
+                item.getSprite().setTexture(v.getA().texHead);
                 item.setTypItemu(TypItemu.Pancerz);
                 break;
             case LnianaCzapka:
@@ -53,7 +50,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(1);
                 item.setCzescCiala(CzesciCiala.glowa);
-                item.getSprite().setTexture(a.texLinenCap);
+                item.getSprite().setTexture(v.getA().texLinenCap);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.LnianaCzapka);
                 break;
@@ -66,7 +63,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(2);
                 item.setCzescCiala(CzesciCiala.glowa);
-                item.getSprite().setTexture(a.texLeatherCap);
+                item.getSprite().setTexture(v.getA().texLeatherCap);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.SkorzanaCzapka);
                 break;
@@ -80,7 +77,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(0);
                 item.setCzescCiala(CzesciCiala.korpus);
-                item.getSprite().setTexture(a.texLinenShirt);
+                item.getSprite().setTexture(v.getA().texLinenShirt);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.LnianaKoszula);
                 break;
@@ -93,7 +90,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(2);
                 item.setCzescCiala(CzesciCiala.korpus);
-                item.getSprite().setTexture(a.texLeatherShirt);
+                item.getSprite().setTexture(v.getA().texLeatherShirt);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.SkorzanyNapiersnik);
                 break;
@@ -106,7 +103,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texFist);
+                item.getSprite().setTexture(v.getA().texFist);
                 item.setTypItemu(TypItemu.Bron);
                 break;
             case Kij:
@@ -118,7 +115,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setDmg(1);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texStick);
+                item.getSprite().setTexture(v.getA().texStick);
                 item.setTypItemu(TypItemu.Bron);
                 item.setItemNazwa(DostepneItemki.Kij);
                 break;
@@ -131,7 +128,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setDmg(2);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texSword);
+                item.getSprite().setTexture(v.getA().texSword);
                 item.setTypItemu(TypItemu.Bron);
                 item.setItemNazwa(DostepneItemki.Miecz);
                 break;
@@ -144,7 +141,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(1);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texShield);
+                item.getSprite().setTexture(v.getA().texShield);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.Tarcza);
                 break;
@@ -158,7 +155,7 @@ public class ItemCreator {
                 item.setDmg(1);
                 item.setZasieg(1);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texBow);
+                item.getSprite().setTexture(v.getA().texBow);
                 item.setTypItemu(TypItemu.Bron);
                 item.setItemNazwa(DostepneItemki.Luk);
                 break;
@@ -172,7 +169,7 @@ public class ItemCreator {
                 item.setDmg(1);
                 item.setZasieg(1);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texLongBow);
+                item.getSprite().setTexture(v.getA().texLongBow);
                 item.setTypItemu(TypItemu.Bron);
                 item.setItemNazwa(DostepneItemki.DlugiLuk);
                 break;
@@ -187,7 +184,7 @@ public class ItemCreator {
                 item.setDmg(0);
                 item.setZasieg(0);
                 item.setCzescCiala(CzesciCiala.rece);
-                item.getSprite().setTexture(a.texStaff);
+                item.getSprite().setTexture(v.getA().texStaff);
                 item.setTypItemu(TypItemu.Bron);
                 item.setItemNazwa(DostepneItemki.Laska);
                 break;
@@ -203,7 +200,7 @@ public class ItemCreator {
                 item.setDmg(0);
                 item.setZasieg(0);
                 item.setCzescCiala(CzesciCiala.glowa);
-                item.getSprite().setTexture(a.texMagicHood);
+                item.getSprite().setTexture(v.getA().texMagicHood);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.MagicznyKaptur);
                 break;
@@ -216,7 +213,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.nogi);
-                item.getSprite().setTexture(a.texLegs);
+                item.getSprite().setTexture(v.getA().texLegs);
                 item.setTypItemu(TypItemu.Pancerz);
                 break;
             case LnianeSpodnie:
@@ -228,7 +225,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(1);
                 item.setCzescCiala(CzesciCiala.nogi);
-                item.getSprite().setTexture(a.texLinenTousers);
+                item.getSprite().setTexture(v.getA().texLinenTousers);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.LnianeSpodnie);
                 break;
@@ -241,7 +238,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(2);
                 item.setCzescCiala(CzesciCiala.nogi);
-                item.getSprite().setTexture(a.texLeatherTousers);
+                item.getSprite().setTexture(v.getA().texLeatherTousers);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.SkorzaneSpodnie);
                 break;
@@ -254,7 +251,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.stopy);
-                item.getSprite().setTexture(a.texLinenShoes);
+                item.getSprite().setTexture(v.getA().texLinenShoes);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.LnianeButy);
                 break;
@@ -266,7 +263,7 @@ public class ItemCreator {
                 item.setSzybkosc(1);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.stopy);
-                item.getSprite().setTexture(a.texLeatherShoes);
+                item.getSprite().setTexture(v.getA().texLeatherShoes);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.SkorzaneButy);
                 break;
@@ -279,7 +276,7 @@ public class ItemCreator {
                 item.setHp(0);
                 item.setArmor(1);
                 item.setCzescCiala(CzesciCiala.stopy);
-                item.getSprite().setTexture(a.texHardLeatherShoes);
+                item.getSprite().setTexture(v.getA().texHardLeatherShoes);
                 item.setTypItemu(TypItemu.Pancerz);
                 item.setItemNazwa(DostepneItemki.WzmocnioneSkorzaneButy);
                 break;
@@ -292,7 +289,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.gold);
-                item.getSprite().setTexture(a.texGold);
+                item.getSprite().setTexture(v.getA().texGold);
                 item.setTypItemu(TypItemu.Other);
                 item.setGold(10);
                 break;
@@ -305,7 +302,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.other);
-                item.getSprite().setTexture(a.texHelthPotion);
+                item.getSprite().setTexture(v.getA().texHelthPotion);
                 item.setTypItemu(TypItemu.Mikstura);
                 item.setOpis("Mikstura leczaca +5 HP.");
                 item.setItemNazwa(DostepneItemki.PotionZdrowie);
@@ -320,7 +317,7 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.other);
-                item.getSprite().setTexture(a.texSpeedPotion);
+                item.getSprite().setTexture(v.getA().texSpeedPotion);
                 item.setTypItemu(TypItemu.Mikstura);
                 item.setOpis("Mikstura odnawia 2 punkty akcji.");
                 item.setItemNazwa(DostepneItemki.PotionSzybkosc);
@@ -335,17 +332,17 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.other);
-                item.getSprite().setTexture(a.texAttackPotion);
+                item.getSprite().setTexture(v.getA().texAttackPotion);
                 item.setTypItemu(TypItemu.Mikstura);
                 item.setOpis("Mikstura dodaje +2 do ataku na 2 tury.");
                 item.setItemNazwa(DostepneItemki.PotionAttack);
                 item.dzialania = new ArrayList<Effect>();
                 item.dzialania.add(new Effect());
-                item.dzialania.get(0).setIkona(new EffectActor(a.texAttackPotion, 0, 0));
+                item.dzialania.get(0).setIkona(new EffectActor(v.getA().texAttackPotion, 0, 0));
                 item.dzialania.get(0).getIkona().addListener(new ClickListener() {
                     @Override
-                    public void clicked(InputEvent event, float x, float y) {                        
-                        DialogScreen dialogScreen = new DialogScreen("Gniew", a.skin, "Zwiększenie ataku +1 do końca tury", Assets.stage01MapScreen);
+                    public void clicked(InputEvent event, float x, float y) {
+                        DialogScreen dialogScreen = new DialogScreen("Gniew", v.getA().skin, "Zwiększenie ataku +1 do końca tury", Assets.stage01MapScreen);
                     }
                 });
                 break;
@@ -357,13 +354,13 @@ public class ItemCreator {
                 item.setSzybkosc(0);
                 item.setHp(0);
                 item.setCzescCiala(CzesciCiala.other);
-                item.getSprite().setTexture(a.texDefencePotion);
+                item.getSprite().setTexture(v.getA().texDefencePotion);
                 item.setTypItemu(TypItemu.Mikstura);
                 item.setOpis("Mikstura dodaje +2 do obrony na 2 tury.");
                 item.setItemNazwa(DostepneItemki.PotionDefence);
                 item.dzialania = new ArrayList<Effect>();
                 item.dzialania.add(new Effect());
-                item.dzialania.get(0).setIkona(new EffectActor(a.texDefencePotion, 0, 0));
+                item.dzialania.get(0).setIkona(new EffectActor(v.getA().texDefencePotion, 0, 0));
                 break;
         }
 

@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class Castle extends Actor {
 
     private final Sprite sprite;
-    private final Assets a;
+    private V v;
 
     private int maxHp = 5;
     private int actualHp = 5;
@@ -31,17 +31,17 @@ public class Castle extends Actor {
 
     /**
      *
-     * @param a
      * @param x
      * @param y
      * @param wlascicielZamku
      */
-    public Castle(Assets a, int x, int y, int wlascicielZamku) {
+    public Castle(V v, int x, int y, int wlascicielZamku) {
+        this.v = v;
+
         this.przynaleznoscDoGracza = wlascicielZamku;
-        this.sprite = new Sprite(a.trawaZamekTex);
+        this.sprite = new Sprite(v.getA().trawaZamekTex);
         this.setSize(sprite.getWidth(), sprite.getHeight());
         this.setPosition(x, y);
-        this.a = a;
 
         this.dodajListnera();
 
@@ -95,7 +95,7 @@ public class Castle extends Actor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Zamek został kliknięty");
-                new Dialog("Zamek", a.skin) {
+                new Dialog("Zamek", v.getA().skin) {
                     {
                         text("Wlasciciel: " + przynaleznoscDoGracza);
                         this.row();
@@ -123,7 +123,7 @@ public class Castle extends Actor {
      * @return Obiekt klasy Pole
      */
     public Pole getField() {
-        return GameStatus.gs.getMapa().getPola()[locXonMap][locYonMap];
+        return v.getGs().getMapa().getPola()[locXonMap][locYonMap];
     }
 
     @Override

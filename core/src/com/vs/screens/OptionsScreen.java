@@ -13,26 +13,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.vs.eoh.Assets;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.V;
 
 // Odpowiada za wyświetlanie opcji z gry.
 public class OptionsScreen implements Screen {
 
-    private final GameStatus gs;
-    private final Assets a;
     private final Stage stage01 = new Stage();                                  // scena najniższa
-
+    // Tabela
+    private final Table tabela = new Table();
+    private V v;
     // Label
     private Label lblOpcje;
-
     // Przycisk wyjścia z menu opcji
     private TextButton btnExit;
 
-    // Tabela
-    private final Table tabela = new Table();
-
-    public OptionsScreen(GameStatus gs, Assets a) {
-        this.gs = gs;
-        this.a = a;
+    public OptionsScreen(V v) {
+        this.v = v;
 
         formatujTabele();
         dodajPrzyciski();
@@ -48,7 +44,7 @@ public class OptionsScreen implements Screen {
         //tabela.setDebug(true);
         
         // dodaje label do tabeli
-        lblOpcje = new Label("OPCJE", a.skin);
+        lblOpcje = new Label("OPCJE", v.getA().skin);
         tabela.add(lblOpcje).expand().align(Align.top);
         tabela.row();
         
@@ -56,14 +52,14 @@ public class OptionsScreen implements Screen {
     }
     
     private void dodajPrzyciski() {
-        btnExit = new TextButton("EXIT", a.skin);
+        btnExit = new TextButton("EXIT", v.getA().skin);
         btnExit.setSize(100, 50);
         //btnExit.setPosition(Gdx.graphics.getWidth() - btnExit.getWidth() - 25, 25);
 
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gs.setActualScreen(0);
+                v.getGs().setActualScreen(0);
             }
         });
 

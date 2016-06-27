@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.eoh.Assets;
+import com.vs.eoh.V;
 import com.vs.network.NetEngine;
 
 /**
@@ -24,9 +25,11 @@ public class GameOverScreen implements Screen {
     public Stage mainStage;
     public Tables tables;
     public Interface interfce;
+    private V v;
 
-    public GameOverScreen(NetEngine ne) {
+    public GameOverScreen(NetEngine ne, V v) {
         this.ne = ne;
+        this.v = v;
 
         c = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), c);
@@ -84,7 +87,7 @@ public class GameOverScreen implements Screen {
     }
 
     public class Interface {
-        public TextButton btnExit = new TextButton("EXIT", ne.a.skin);
+        public TextButton btnExit = new TextButton("EXIT", v.getA().skin);
 
         public Interface() {
             Listeners listeners = new Listeners();
@@ -112,7 +115,7 @@ public class GameOverScreen implements Screen {
                 btnExit.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        ne.g.setScreen(Assets.mainMenuScreen);
+                        v.getG().setScreen(v.getMainMenuScreen());
                     }
                 });
             }

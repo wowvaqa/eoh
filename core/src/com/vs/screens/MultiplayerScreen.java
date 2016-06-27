@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.eoh.Assets;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.V;
 import com.vs.network.NetEngine;
 import com.vs.network.RunClient;
 import com.vs.network.RunServer;
@@ -30,20 +31,16 @@ import static com.vs.eoh.Assets.server;
  */
 public class MultiplayerScreen implements Screen {
 
-    private final Game g;
     private final OrthographicCamera c;
     private final FitViewport viewPort;
     public Stage mainStage;
     public Tables tables;
     public Interface interfce;
-    private Assets a;
-    private GameStatus gs;
+    private V v;
     private NetEngine ne;
 
-    public MultiplayerScreen(Game g, Assets a, final GameStatus gs, NetEngine ne) {
-        this.a = a;
-        this.g = g;
-        this.gs = gs;
+    public MultiplayerScreen(V v, NetEngine ne) {
+        this.v = v;
         this.ne = ne;
         GameStatus.mS = this;
 
@@ -101,11 +98,11 @@ public class MultiplayerScreen implements Screen {
     }
 
     public Assets getA() {
-        return a;
+        return v.getA();
     }
 
     public GameStatus getGs() {
-        return gs;
+        return v.getGs();
     }
 
     /**
@@ -135,7 +132,7 @@ public class MultiplayerScreen implements Screen {
             formatTable02();
 
             tableMain.add(table01);
-            if (gs.getNetworkStatus() == 1 || gs.getNetworkStatus() == 2) {
+            if (v.getGs().getNetworkStatus() == 1 || v.getGs().getNetworkStatus() == 2) {
                 tableMain.add(tableLog);
                 tableMain.add(tableChat);
             }
@@ -166,7 +163,7 @@ public class MultiplayerScreen implements Screen {
             tableChat.clear();
             tableChat.setDebug(true);
 
-            tableChat.add(new Label("Chat", a.skin)).pad(5).colspan(2);
+            tableChat.add(new Label("Chat", v.getA().skin)).pad(5).colspan(2);
             tableChat.row();
             tableChat.add(interfce.lstChatPlayers).pad(5).size(100, 200);
             tableChat.add(interfce.lstChatList).pad(5).size(200, 200);
@@ -216,31 +213,31 @@ public class MultiplayerScreen implements Screen {
     public class Interface {
 
         // Etykieta wyświetla ilość połączeń do serwera.
-        public Label lblServerConnections = new Label("Ilosc polaczen: 0", a.skin);
+        public Label lblServerConnections = new Label("Ilosc polaczen: 0", v.getA().skin);
 
         // Etykieta wyświetla status gry (STAND ALONE, SERWER, KLIENT)
-        public Label lblnetworkStatus = new Label("STAND ALONE", a.skin);
+        public Label lblnetworkStatus = new Label("STAND ALONE", v.getA().skin);
 
-        public TextButton btnServerStart = new TextButton("Server START", a.skin);
-        public TextButton btnServerStop = new TextButton("Server STOP", a.skin);
-        public TextButton btnClientStart = new TextButton("Client START", a.skin);
-        public TextButton btnClientStop = new TextButton("Client STOP", a.skin);
-        public TextButton btnGetConnections = new TextButton("Polaczenia", a.skin);
-        public TextButton btnSendMessage = new TextButton("Send", a.skin);
+        public TextButton btnServerStart = new TextButton("Server START", v.getA().skin);
+        public TextButton btnServerStop = new TextButton("Server STOP", v.getA().skin);
+        public TextButton btnClientStart = new TextButton("Client START", v.getA().skin);
+        public TextButton btnClientStop = new TextButton("Client STOP", v.getA().skin);
+        public TextButton btnGetConnections = new TextButton("Polaczenia", v.getA().skin);
+        public TextButton btnSendMessage = new TextButton("Send", v.getA().skin);
 
-        public TextButton btnDiagnoseConnection = new TextButton("DC", a.skin);
+        public TextButton btnDiagnoseConnection = new TextButton("DC", v.getA().skin);
 
-        public TextField tfIpAdress = new TextField("192.168.2.3", a.skin);
-        public TextField tfTcpPort = new TextField("54556", a.skin);
-        public TextField tfUdpPort = new TextField("54777", a.skin);
-        public TextField tfPlayerName = new TextField("", a.skin);
-        public TextField tfChatMessage = new TextField("", a.skin);
+        public TextField tfIpAdress = new TextField("192.168.2.3", v.getA().skin);
+        public TextField tfTcpPort = new TextField("54556", v.getA().skin);
+        public TextField tfUdpPort = new TextField("54777", v.getA().skin);
+        public TextField tfPlayerName = new TextField("", v.getA().skin);
+        public TextField tfChatMessage = new TextField("", v.getA().skin);
 
-        public List lstChatList = new List(a.skin);
-        public List lstChatPlayers = new List(a.skin);
-        public List lstLogList = new List(a.skin);
+        public List lstChatList = new List(v.getA().skin);
+        public List lstChatPlayers = new List(v.getA().skin);
+        public List lstLogList = new List(v.getA().skin);
 
-        public TextButton btnExit = new TextButton("EXIT", a.skin);
+        public TextButton btnExit = new TextButton("EXIT", v.getA().skin);
 
         public Interface() {
             Listeners listeners = new Listeners();
@@ -260,18 +257,18 @@ public class MultiplayerScreen implements Screen {
          * Uaktalnia etykietę wyświetlającą ilość połączeń do serwera.
          */
         public void updateLabelConnection() {
-            lblServerConnections.setText("Ilosc polaczen: " + gs.server.getSrv().getConnections().length);
+            lblServerConnections.setText("Ilosc polaczen: " + v.getGs().server.getSrv().getConnections().length);
         }
 
         /**
          * Uaktualnia etykietę statusu sieciowego gry.
          */
         public void updateLabelNetworkStatus() {
-            if (gs.getNetworkStatus() == 0) {
+            if (v.getGs().getNetworkStatus() == 0) {
                 lblnetworkStatus.setText("STAND ALONE");
-            } else if (gs.getNetworkStatus() == 1) {
+            } else if (v.getGs().getNetworkStatus() == 1) {
                 lblnetworkStatus.setText("SERWER");
-            } else if (gs.getNetworkStatus() == 2) {
+            } else if (v.getGs().getNetworkStatus() == 2) {
                 lblnetworkStatus.setText("KLIENT");
             }
         }
@@ -342,8 +339,8 @@ public class MultiplayerScreen implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         Gdx.app.log("Button Pressed: ", "Client STOP");
-                        gs.client.stopClient();
-                        gs.setNetworkStatus(0);
+                        v.getGs().client.stopClient();
+                        v.getGs().setNetworkStatus(0);
                         tables.formatMainTable();
                         updateLabelNetworkStatus();
                     }
@@ -367,7 +364,7 @@ public class MultiplayerScreen implements Screen {
                         //RunClient rc = new RunClient(name, "192.168.2.3", 54556, 54777, ne);
                         RunClient rc = new RunClient(name, interfce.tfIpAdress.getText(), 54556, 54777, ne);
                         rc.startClient();
-                        gs.setNetworkStatus(2);
+                        v.getGs().setNetworkStatus(2);
                         tables.formatMainTable();
                         updateLabelNetworkStatus();
                     }
@@ -381,8 +378,8 @@ public class MultiplayerScreen implements Screen {
                 btnServerStop.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        gs.server.serverStop();
-                        gs.setNetworkStatus(0);
+                        v.getGs().server.serverStop();
+                        v.getGs().setNetworkStatus(0);
                         updateLabelNetworkStatus();
                         tables.formatMainTable();
                     }
@@ -399,12 +396,12 @@ public class MultiplayerScreen implements Screen {
                         try {
                             new RunServer(Integer.parseInt(tfTcpPort.getText()),
                                     Integer.parseInt(tfUdpPort.getText()), GameStatus.mS);
-                            gs.setNetworkStatus(1);
+                            v.getGs().setNetworkStatus(1);
                             tables.formatMainTable();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        gs.server.startServer();
+                        v.getGs().server.startServer();
                         updateLabelNetworkStatus();
                     }
                 });
@@ -430,7 +427,7 @@ public class MultiplayerScreen implements Screen {
                 btnExit.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        g.setScreen(Assets.mainMenuScreen);
+                        v.getG().setScreen(v.getMainMenuScreen());
                     }
                 });
             }

@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.vs.eoh.Assets;
 import com.vs.eoh.GameStatus;
+import com.vs.eoh.V;
 
 /**
  * Klasa odpowiada za wyświetlanie Screenu z informacjami o itemkach
@@ -26,48 +27,39 @@ import com.vs.eoh.GameStatus;
  */
 public class ItemScreen implements Screen {
 
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
-
     private final Stage stage01 = new Stage();
-
     private final Table tabela;
-
     private final TextButton btnExit;
-
+    private V v;
     private boolean itemScreenShow = false;
 
     /**
      *
-     * @param a Assety
-     * @param gs Status gry
-     * @param g
      */
-    public ItemScreen(Assets a, final GameStatus gs, final Game g) {
-        this.g = g;
-        this.a = a;
-        this.gs = gs;
-        this.tabela = new Table(a.skin);
+    //public ItemScreen(Assets a, final GameStatus gs, final Game g) {
+    public ItemScreen(final V v) {
+        this.v = v;
+        //this.g = g;
+        //this.a = a;
+        //this.gs = gs;
+        this.tabela = new Table(v.getA().skin);
 
-        btnExit = new TextButton("Exit", this.a.skin);
+        btnExit = new TextButton("Exit", this.v.getA().skin);
         btnExit.addListener(
                 new ClickListener() {
-                    GameStatus tmpGs = gs;
 
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        //tmpGs.setActualScreen(tmpGs.getLastScreen());                        
                         itemScreenShow = false;
                         tabela.clear();
-                        g.setScreen(Assets.lastScreen);
+                        v.getG().setScreen(v.getLastScreen());
                     }
                 }
         );
     }
 
     private void formatujTabele() {
-        Label label = new Label(gs.getItem().getNazwa(), a.skin);
+        Label label = new Label(v.getGs().getItem().getNazwa(), v.getA().skin);
 
         tabela.setFillParent(true);
         // ustawia odstęp od krawędzi tabeli
@@ -76,40 +68,40 @@ public class ItemScreen implements Screen {
         tabela.setDebug(true);
         tabela.add(label).colspan(3);
         tabela.row();
-        tabela.add(new Image(a.texAtcIcon)).size(25, 25);
-        tabela.add(new Label("Atak:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getAtak()), a.skin)).expandX();
+        tabela.add(new Image(v.getA().texAtcIcon)).size(25, 25);
+        tabela.add(new Label("Atak:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getAtak()), v.getA().skin)).expandX();
         tabela.row();
-        tabela.add(new Image(a.texDefIcon)).size(25, 25);
-        tabela.add(new Label("Obrona:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getObrona()), a.skin)).expandX();
+        tabela.add(new Image(v.getA().texDefIcon)).size(25, 25);
+        tabela.add(new Label("Obrona:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getObrona()), v.getA().skin)).expandX();
         tabela.row();
-        tabela.add(new Image(a.texSpdIcon)).size(25, 25);
-        tabela.add(new Label("Szybkosc:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getSzybkosc()), a.skin)).expandX();
+        tabela.add(new Image(v.getA().texSpdIcon)).size(25, 25);
+        tabela.add(new Label("Szybkosc:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getSzybkosc()), v.getA().skin)).expandX();
         tabela.row();
-        tabela.add(new Image(a.texHpIcon)).size(25, 25);
-        tabela.add(new Label("HP:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getHp()), a.skin)).expandX();
+        tabela.add(new Image(v.getA().texHpIcon)).size(25, 25);
+        tabela.add(new Label("HP:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getHp()), v.getA().skin)).expandX();
         tabela.row();
-        tabela.add(new Image(a.texDmgIcon)).size(25, 25);
-        tabela.add(new Label("Obrazenia:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getDmg()), a.skin)).expandX();
+        tabela.add(new Image(v.getA().texDmgIcon)).size(25, 25);
+        tabela.add(new Label("Obrazenia:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getDmg()), v.getA().skin)).expandX();
         tabela.row();
-        tabela.add(new Image(a.texArmIcon)).size(25, 25);
-        tabela.add(new Label("Pancerz:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getArmor()), a.skin)).expandX();
+        tabela.add(new Image(v.getA().texArmIcon)).size(25, 25);
+        tabela.add(new Label("Pancerz:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getArmor()), v.getA().skin)).expandX();
         tabela.row();
-        
 
-        if (gs.getItem().getZasieg() > 0) {
-            tabela.add(new Label("Zasieg:", a.skin)).expandX();
-            tabela.add(new Label((CharSequence) Integer.toString(gs.getItem().getZasieg()), a.skin)).expandX();
+
+        if (v.getGs().getItem().getZasieg() > 0) {
+            tabela.add(new Label("Zasieg:", v.getA().skin)).expandX();
+            tabela.add(new Label((CharSequence) Integer.toString(v.getGs().getItem().getZasieg()), v.getA().skin)).expandX();
             tabela.row();
         }
-        
-        tabela.add(new Label("Opis:", a.skin)).expandX();
-        tabela.add(new Label((CharSequence) gs.getItem().getOpis(), a.skin)).expandX();
+
+        tabela.add(new Label("Opis:", v.getA().skin)).expandX();
+        tabela.add(new Label((CharSequence) v.getGs().getItem().getOpis(), v.getA().skin)).expandX();
         tabela.row();
 
         tabela.add(btnExit).colspan(2);

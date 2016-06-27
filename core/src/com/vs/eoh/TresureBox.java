@@ -19,13 +19,12 @@ import java.util.Random;
 public class TresureBox extends Actor {
 
     private final Sprite sprite;
-    // assety
-    private final Assets a;
-    private final GameStatus gs;
     // array list przechowujący itemy.
     private final ArrayList<Item> dostepneItemy = new ArrayList<Item>();
     // obiekt do generowania itemów.
     private final ItemCreator itemCreator;
+    // assety
+    private V v;
     // wygląd
     private Texture icon;
     private Game g;
@@ -37,23 +36,18 @@ public class TresureBox extends Actor {
      *
      * @param poziomItemow Poziom itemów
      * @param iloscItemow Ilość itemów
-     * @param a Referencja do obikektu Assets
-     * @param gs Referencja do obiektu GameStatus
-     * @param g Referencja do obiektu Game
      * @param pozXstage Pozycja X na stage
      * @param pozYstage Pozycja Y na stage
      */
-    public TresureBox(int poziomItemow, int iloscItemow, Assets a, GameStatus gs, Game g, int pozXstage, int pozYstage) {
-        this.a = a;
-        this.gs = gs;
-        this.g = g;
+    public TresureBox(int poziomItemow, int iloscItemow, V v, int pozXstage, int pozYstage) {
+        this.v = v;
 
         this.pozX = pozXstage / 100;
         this.pozY = pozYstage / 100;
 
-        itemCreator = new ItemCreator(gs);
+        itemCreator = new ItemCreator(v);
 
-        sprite = new Sprite(a.texTresureBox);
+        sprite = new Sprite(v.getA().texTresureBox);
         this.setSize(100, 100);
         this.setPosition(pozXstage, pozYstage);
 
@@ -102,12 +96,12 @@ public class TresureBox extends Actor {
         switch (poziomItemow) {
             case 1:
                 for (int i = 0; i < iloscItemow; i++) {
-                    dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel1(), a, g));
+                    dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel1(), v));
                 }
                 break;
             case 2:
                 for (int i = 0; i < iloscItemow; i++) {
-                    dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel2(), a, g));
+                    dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel2(), v));
                 }
                 break;
         }
@@ -115,7 +109,7 @@ public class TresureBox extends Actor {
         //dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel1(), a, g));
         // dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel1(), a, g));
         //dostepneItemy.add(itemCreator.utworzItem(losujDowolnyItemLevel1(), a, g));
-        dostepneItemy.add(itemCreator.utworzItem(DostepneItemki.Gold, a, g));
+        dostepneItemy.add(itemCreator.utworzItem(DostepneItemki.Gold, v));
 
 //        dostepneItemy.add(itemCreator.utworzItem(DostepneItemki.SkorzanaCzapka, a, g));
 //        //dostepneItemy.add(itemCreator.utworzItem(DostepneItemki.LnianaKoszula, a, g));
@@ -158,7 +152,7 @@ public class TresureBox extends Actor {
      * @return Obiket klasy Pole
      */
     public Pole getField() {
-        return gs.getMapa().getPola()[this.pozX][this.pozY];
+        return v.getGs().getMapa().getPola()[this.pozX][this.pozY];
     }
 
     /**

@@ -17,9 +17,11 @@ import com.vs.testing.TestingScreen;
 
 public class Eoh extends Game {
 
-	private final GameStatus gs = new GameStatus();
+	//private final GameStatus gs = new GameStatus();
+	private GameStatus gs;
 	private Assets a;
 	private NetEngine ne;
+	private V v;
 
 	private MainScreen mainScreen;
 	private MapScreen mapScreen;
@@ -36,35 +38,50 @@ public class Eoh extends Game {
 
 	@Override
 	public void create () {
+		gs = new GameStatus(this);
 		a = new Assets();
-		ne = new NetEngine(this.gs, this.a, this);
-		mainScreen = new MainScreen(this, a, gs);
-		newGameScreen = new NewGameScreen(this, this.a, this.gs);
-		optionsScreen = new OptionsScreen(this.gs, this.a);
-		bohaterScreen = new BohaterScreen(this, this.a, this.gs);
-		itemScreen = new ItemScreen(this.a, this.gs, this);
-		testScreen = new TestingScreen(this, this.a, this.gs);
-		newBohaterScreen = new NewBohaterScreen(this, this.gs, this.a, Assets.stage01MapScreen);
-		mapEditor = new MapEditor(this, this.a);
-		awansScreen = new AwansScreen(this, this.a, this.gs);
-		multiplayerScreen = new MultiplayerScreen(this, this.a, this.gs, this.ne);
-		gameOverScreen = new GameOverScreen(ne);
+		v = new V(this, gs, a);
 
-		Assets.testScreen = testScreen;
-		Assets.mainMenuScreen = mainScreen;
-		Assets.newGameScreen = newGameScreen;
-		Assets.mapScreen = mapScreen;
-		Assets.bohaterScreen = bohaterScreen;
-		Assets.itemScreen = itemScreen;
-		Assets.newBohaterScreen = newBohaterScreen;
-		Assets.mapEditor = mapEditor;
-		Assets.awansScreen = awansScreen;
-		Assets.multiplayerScreen = multiplayerScreen;
-		Assets.gameOverScreen = gameOverScreen;
+		ne = new NetEngine(v);
+		mainScreen = new MainScreen(v);
+		newGameScreen = new NewGameScreen(v);
+		optionsScreen = new OptionsScreen(v);
+		bohaterScreen = new BohaterScreen(v);
+		itemScreen = new ItemScreen(v);
+		testScreen = new TestingScreen(v);
+		newBohaterScreen = new NewBohaterScreen(v);
+		mapEditor = new MapEditor(v);
+		awansScreen = new AwansScreen(v);
+		multiplayerScreen = new MultiplayerScreen(v, this.ne);
+		gameOverScreen = new GameOverScreen(ne, v);
 
-		GameStatus.a = a;
-		GameStatus.gs = gs;
-		GameStatus.g = this;
+		v.setTestScreen(testScreen);
+		v.setMainMenuScreen(mainScreen);
+		v.setNewGameScreen(newGameScreen);
+		v.setMapScreen(mapScreen);
+		v.setBohaterScreen(bohaterScreen);
+		v.setItemScreen(itemScreen);
+		v.setNewBohaterScreen(newBohaterScreen);
+		v.setMapEditor(mapEditor);
+		v.setAwansScreen(awansScreen);
+		v.setMultiplayerScreen(multiplayerScreen);
+		v.setGameOverScreen(gameOverScreen);
+
+		//Assets.testScreen = testScreen;
+		//Assets.mainMenuScreen = mainScreen;
+		//Assets.newGameScreen = newGameScreen;
+		//Assets.mapScreen = mapScreen;
+		//Assets.bohaterScreen = bohaterScreen;
+		//Assets.itemScreen = itemScreen;
+		//Assets.newBohaterScreen = newBohaterScreen;
+		//Assets.mapEditor = mapEditor;
+		//Assets.awansScreen = awansScreen;
+		//Assets.multiplayerScreen = multiplayerScreen;
+		//Assets.gameOverScreen = gameOverScreen;
+
+		//GameStatus.a = a;
+		//GameStatus.gs = gs;
+		//GameStatus.g = this;
 
 		this.setScreen(mainScreen);
 	}

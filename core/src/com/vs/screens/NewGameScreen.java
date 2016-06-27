@@ -29,6 +29,7 @@ import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.NewGame;
+import com.vs.eoh.V;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -41,23 +42,21 @@ import java.util.logging.Logger;
  */
 public class NewGameScreen implements Screen {
 
-    private final OrthographicCamera c;
+    protected final OrthographicCamera c;
     private final FitViewport viewPort;
 
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
-
+    //private final Assets a;
+    //private final GameStatus gs;
+    //private final Game g;
     private final Table tabela01 = new Table();
-
     private final Table tabelaIlosciGraczy = new Table();
-
     private final Table tabelaGracz01 = new Table();
     private final Table tabelaGracz02 = new Table();
     private final Table tabelaGracz03 = new Table();
     private final Table tabelaGracz04 = new Table();
     private final Stage stage01;
     private final Label lblIloscGraczy;
+    private V v;
     private CheckBox cbAI0;
     private CheckBox cbAI1;
     private CheckBox cbAI2;
@@ -65,16 +64,18 @@ public class NewGameScreen implements Screen {
     //private int iloscGraczy = 2;
     private boolean tabelaUtworzona = false;
 
-    public NewGameScreen(Game g, Assets a, GameStatus gs) {
+    //public NewGameScreen(Game g, Assets a, GameStatus gs) {
+    public NewGameScreen(V v) {
 
         // referencje do obiektów assetów i gamestatusu
-        this.a = a;
-        this.gs = gs;
-        this.g = g;
+        this.v = v;
+        //this.a = a;
+        //this.gs = gs;
+        //this.g = g;
 
         stage01 = new Stage();
 
-        lblIloscGraczy = new Label(Integer.toString(NewGame.iloscGraczy), a.skin);
+        lblIloscGraczy = new Label(Integer.toString(NewGame.iloscGraczy), v.getA().skin);
 
         c = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), c);
@@ -88,10 +89,10 @@ public class NewGameScreen implements Screen {
         NewGame.pixmapGreen.setColor(Color.GREEN);
         NewGame.pixmapGreen.fillRectangle(0, 0, 50, 25);
 
-        cbAI0 = new CheckBox("CPU", a.skin);
-        cbAI1 = new CheckBox("CPU", a.skin);
-        cbAI2 = new CheckBox("CPU", a.skin);
-        cbAI3 = new CheckBox("CPU", a.skin);
+        cbAI0 = new CheckBox("CPU", v.getA().skin);
+        cbAI1 = new CheckBox("CPU", v.getA().skin);
+        cbAI2 = new CheckBox("CPU", v.getA().skin);
+        cbAI3 = new CheckBox("CPU", v.getA().skin);
     }
 
     private void dodajDoStage01() {
@@ -109,10 +110,10 @@ public class NewGameScreen implements Screen {
         // włacza linie debugujące tabelę
         tabela01.setDebug(false);
 
-        Image img = new Image(a.texNewGamePic);
+        Image img = new Image(v.getA().texNewGamePic);
         tabela01.setBackground(img.getDrawable());
 
-        tabela01.add(new Label("Nowa Gra", a.skin)).align(Align.center).align(Align.top).expandX().colspan(tabela01.getColumns());
+        tabela01.add(new Label("Nowa Gra", v.getA().skin)).align(Align.center).align(Align.top).expandX().colspan(tabela01.getColumns());
         tabela01.add(getBtnWybierzMape()).size(200, 50).spaceRight(5);
         tabela01.row();
 
@@ -137,23 +138,23 @@ public class NewGameScreen implements Screen {
         }
 
         // Przycisk Anuluj
-        TextButton btnAnuluj = new TextButton("ANULUJ", a.skin);
+        TextButton btnAnuluj = new TextButton("ANULUJ", v.getA().skin);
         btnAnuluj.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
-                g.setScreen(Assets.mainMenuScreen);
+                v.getA().buttonClick.play();
+                v.getG().setScreen(v.getMainMenuScreen());
             }
         });
         tabela01.add(btnAnuluj).align(Align.left);
 
 
         // Przycisk Zakończ
-        TextButton btnExit = new TextButton("ZAKONCZ", a.skin);
+        TextButton btnExit = new TextButton("ZAKONCZ", v.getA().skin);
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
 
                 if (GameStatus.nazwaMapy != "brak" || !GameStatus.nazwaMapy.equals("mapa z serwera")) {
                     try {
@@ -175,16 +176,16 @@ public class NewGameScreen implements Screen {
                             NewGame.ai3 = true;
                         }
 
-                        NewGame.zakonczGenerowanieNowejGry(g, gs, a);
+                        NewGame.zakonczGenerowanieNowejGry(v);
                     } catch (IOException ex) {
                         Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(NewGameScreen.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     GameStatus.gameStart = true;
-                    g.setScreen(Assets.mapScreen);
+                    v.getG().setScreen(v.getMapScreen());
                 } else {
-                    new Dialog("Nie wybrano mapy", a.skin) {
+                    new Dialog("Nie wybrano mapy", v.getA().skin) {
                         {
                             button("Zamknij", "zamknij");
                         }
@@ -211,15 +212,15 @@ public class NewGameScreen implements Screen {
     private void formatujTabeleIlosciGraczy() {
         //tabelaIlosciGraczy.setFillParent(true);
         tabelaIlosciGraczy.pad(10);
-        tabelaIlosciGraczy.add(new Label("Ilosc graczy: ", a.skin)).expandX();
+        tabelaIlosciGraczy.add(new Label("Ilosc graczy: ", v.getA().skin)).expandX();
         tabelaIlosciGraczy.add(lblIloscGraczy);
 
         // Przycisk - przy wyborze ilosci graczy
-        TextButton tB01 = new TextButton("-", a.skin);
+        TextButton tB01 = new TextButton("-", v.getA().skin);
         tB01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.iloscGraczy = NewGame.odejmijGracza(NewGame.iloscGraczy);
                 lblIloscGraczy.setText(Integer.toString(NewGame.iloscGraczy));
                 tabela01.reset();
@@ -231,11 +232,11 @@ public class NewGameScreen implements Screen {
         tabelaIlosciGraczy.add(tB01).pad(5);
 
         // Przycisk + przy wyborze ilośći graczy
-        TextButton tB02 = new TextButton("+", a.skin);
+        TextButton tB02 = new TextButton("+", v.getA().skin);
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.iloscGraczy = NewGame.dodajGracza(NewGame.iloscGraczy);
                 lblIloscGraczy.setText(Integer.toString(NewGame.iloscGraczy));
                 tabela01.reset();
@@ -251,20 +252,20 @@ public class NewGameScreen implements Screen {
      * Formatuje tabelę gracza 1
      */
     private void formatujTabeleGracza01() {
-        Image img = new Image(a.texNewGamePlayerTabPic);
+        Image img = new Image(v.getA().texNewGamePlayerTabPic);
         tabelaGracz01.setBackground(img.getDrawable());
 
         tabelaGracz01.pad(10);
-        tabelaGracz01.add(new Label("Gracz 1", a.skin)).padTop(10);
+        tabelaGracz01.add(new Label("Gracz 1", v.getA().skin)).padTop(10);
         tabelaGracz01.add(cbAI0).padTop(10);
         tabelaGracz01.row();
 
         // Przycisk - przy wyborze ilosci graczy
-        TextButton g01B01 = new TextButton("Prev", a.skin);
+        TextButton g01B01 = new TextButton("Prev", v.getA().skin);
         g01B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaGracz01.clear();
                 formatujTabeleGracza01();
@@ -273,11 +274,11 @@ public class NewGameScreen implements Screen {
         tabelaGracz01.add(g01B01).pad(10);
 
         // Przycisk + przy wyborze ilośći graczy
-        TextButton tB02 = new TextButton("Next", a.skin);
+        TextButton tB02 = new TextButton("Next", v.getA().skin);
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz01 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz01);
                 tabelaGracz01.clear();
                 formatujTabeleGracza01();
@@ -286,31 +287,31 @@ public class NewGameScreen implements Screen {
         tabelaGracz01.add(tB02).pad(10);
         tabelaGracz01.row();
 
-        tabelaGracz01.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).align(Align.center);
+        tabelaGracz01.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).align(Align.center);
         tabelaGracz01.row();
 
         tabelaGracz01.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz01)).align(Align.center).colspan(tabelaGracz01.getColumns());
 
         tabelaGracz01.row();
-        tabelaGracz01.add(new Image(a.texAtcIcon)).size(25, 25);
-        tabelaGracz01.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
+        tabelaGracz01.add(new Image(v.getA().texAtcIcon)).size(25, 25);
+        tabelaGracz01.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
         tabelaGracz01.row();
-        tabelaGracz01.add(new Image(a.texDefIcon)).size(25, 25);
-        tabelaGracz01.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
+        tabelaGracz01.add(new Image(v.getA().texDefIcon)).size(25, 25);
+        tabelaGracz01.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
         tabelaGracz01.row();
-        tabelaGracz01.add(new Image(a.texHpIcon)).size(25, 25);
-        tabelaGracz01.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
+        tabelaGracz01.add(new Image(v.getA().texHpIcon)).size(25, 25);
+        tabelaGracz01.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
         tabelaGracz01.row();
-        tabelaGracz01.add(new Image(a.texSpdIcon)).size(25, 25);
-        tabelaGracz01.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
+        tabelaGracz01.add(new Image(v.getA().texSpdIcon)).size(25, 25);
+        tabelaGracz01.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
         tabelaGracz01.row();
-        tabelaGracz01.add(new Image(a.texPwrIcon)).size(25, 25);
-        tabelaGracz01.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
+        tabelaGracz01.add(new Image(v.getA().texPwrIcon)).size(25, 25);
+        tabelaGracz01.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
         tabelaGracz01.row();
-        tabelaGracz01.add(new Image(a.texWsdIcon)).size(25, 25);
-        tabelaGracz01.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz01), a.skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
+        tabelaGracz01.add(new Image(v.getA().texWsdIcon)).size(25, 25);
+        tabelaGracz01.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz01), v.getA().skin)).colspan(tabelaGracz01.getColumns()).padRight(10);
         tabelaGracz01.row();
-        tabelaGracz01.add(new Label("Kolor: ", a.skin));
+        tabelaGracz01.add(new Label("Kolor: ", v.getA().skin));
         tabelaGracz01.add(new DefaultActor(new Texture(NewGame.pixmapRed), 0, 0)).colspan(tabelaGracz01.getColumns()).padRight(10).padBottom(10);
     }
 
@@ -319,20 +320,20 @@ public class NewGameScreen implements Screen {
      */
     private void formatujTabeleGracza02() {
 
-        Image img = new Image(a.texNewGamePlayerTabPic);
+        Image img = new Image(v.getA().texNewGamePlayerTabPic);
         tabelaGracz02.setBackground(img.getDrawable());
 
         tabelaGracz02.pad(10);
-        tabelaGracz02.add(new Label("Gracz 2", a.skin)).padTop(10);
+        tabelaGracz02.add(new Label("Gracz 2", v.getA().skin)).padTop(10);
         tabelaGracz02.add(cbAI1).padTop(10);
         tabelaGracz02.row();
 
         // Przycisk - przy wyborze ilosci graczy
-        TextButton g02B01 = new TextButton("Prev", a.skin);
+        TextButton g02B01 = new TextButton("Prev", v.getA().skin);
         g02B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz02 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz02);
                 tabelaGracz02.clear();
                 formatujTabeleGracza02();
@@ -341,11 +342,11 @@ public class NewGameScreen implements Screen {
         tabelaGracz02.add(g02B01).pad(10);
 
         // Przycisk + przy wyborze ilośći graczy
-        TextButton tB02 = new TextButton("Next", a.skin);
+        TextButton tB02 = new TextButton("Next", v.getA().skin);
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz02 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz02);
                 tabelaGracz02.clear();
                 formatujTabeleGracza02();
@@ -354,31 +355,31 @@ public class NewGameScreen implements Screen {
         tabelaGracz02.add(tB02).pad(10);
         tabelaGracz02.row();
 
-        tabelaGracz02.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).align(Align.center);
+        tabelaGracz02.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).align(Align.center);
         tabelaGracz02.row();
 
         tabelaGracz02.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz02)).align(Align.center).colspan(tabelaGracz02.getColumns());
 
         tabelaGracz02.row();
-        tabelaGracz02.add(new Image(a.texAtcIcon)).size(25, 25);
-        tabelaGracz02.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
+        tabelaGracz02.add(new Image(v.getA().texAtcIcon)).size(25, 25);
+        tabelaGracz02.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
         tabelaGracz02.row();
-        tabelaGracz02.add(new Image(a.texDefIcon)).size(25, 25);
-        tabelaGracz02.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
+        tabelaGracz02.add(new Image(v.getA().texDefIcon)).size(25, 25);
+        tabelaGracz02.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
         tabelaGracz02.row();
-        tabelaGracz02.add(new Image(a.texHpIcon)).size(25, 25);
-        tabelaGracz02.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
+        tabelaGracz02.add(new Image(v.getA().texHpIcon)).size(25, 25);
+        tabelaGracz02.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
         tabelaGracz02.row();
-        tabelaGracz02.add(new Image(a.texSpdIcon)).size(25, 25);
-        tabelaGracz02.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
+        tabelaGracz02.add(new Image(v.getA().texSpdIcon)).size(25, 25);
+        tabelaGracz02.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
         tabelaGracz02.row();
-        tabelaGracz02.add(new Image(a.texPwrIcon)).size(25, 25);
-        tabelaGracz02.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
+        tabelaGracz02.add(new Image(v.getA().texPwrIcon)).size(25, 25);
+        tabelaGracz02.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
         tabelaGracz02.row();
-        tabelaGracz02.add(new Image(a.texWsdIcon)).size(25, 25);
-        tabelaGracz02.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz02), a.skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
+        tabelaGracz02.add(new Image(v.getA().texWsdIcon)).size(25, 25);
+        tabelaGracz02.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz02), v.getA().skin)).colspan(tabelaGracz02.getColumns()).padRight(10);
         tabelaGracz02.row();
-        tabelaGracz02.add(new Label("Kolor: ", a.skin));
+        tabelaGracz02.add(new Label("Kolor: ", v.getA().skin));
         tabelaGracz02.add(new DefaultActor(new Texture(NewGame.pixmapBlue), 0, 0)).colspan(tabelaGracz02.getColumns()).padBottom(10);
     }
 
@@ -387,16 +388,16 @@ public class NewGameScreen implements Screen {
      */
     private void formatujTabeleGracza03() {
         tabelaGracz03.pad(10);
-        tabelaGracz03.add(new Label("Gracz 3", a.skin)).padTop(10);
+        tabelaGracz03.add(new Label("Gracz 3", v.getA().skin)).padTop(10);
         tabelaGracz03.add(cbAI2).padTop(10);
         tabelaGracz03.row();
 
         // Przycisk - przy wyborze ilosci graczy
-        TextButton g02B01 = new TextButton("Prev", a.skin);
+        TextButton g02B01 = new TextButton("Prev", v.getA().skin);
         g02B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz03 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz03);
                 tabelaGracz03.clear();
                 formatujTabeleGracza03();
@@ -405,11 +406,11 @@ public class NewGameScreen implements Screen {
         tabelaGracz03.add(g02B01).pad(10);
 
         // Przycisk + przy wyborze ilośći graczy
-        TextButton tB02 = new TextButton("Next", a.skin);
+        TextButton tB02 = new TextButton("Next", v.getA().skin);
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz03 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz03);
                 tabelaGracz03.clear();
                 formatujTabeleGracza03();
@@ -418,32 +419,32 @@ public class NewGameScreen implements Screen {
         tabelaGracz03.add(tB02).pad(10);
         tabelaGracz03.row();
 
-        tabelaGracz03.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns()).align(Align.center);
+        tabelaGracz03.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns()).align(Align.center);
         tabelaGracz03.row();
 
         tabelaGracz03.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz03)).align(Align.center).colspan(tabelaGracz03.getColumns());
 
         tabelaGracz03.row();
-        tabelaGracz03.add(new Image(a.texAtcIcon)).size(25, 25);
-        tabelaGracz03.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
+        tabelaGracz03.add(new Image(v.getA().texAtcIcon)).size(25, 25);
+        tabelaGracz03.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
-        tabelaGracz03.add(new Image(a.texDefIcon)).size(25, 25);
-        tabelaGracz03.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
+        tabelaGracz03.add(new Image(v.getA().texDefIcon)).size(25, 25);
+        tabelaGracz03.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
-        tabelaGracz03.add(new Image(a.texHpIcon)).size(25, 25);
-        tabelaGracz03.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
+        tabelaGracz03.add(new Image(v.getA().texHpIcon)).size(25, 25);
+        tabelaGracz03.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
-        tabelaGracz03.add(new Image(a.texSpdIcon)).size(25, 25);
-        tabelaGracz03.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
+        tabelaGracz03.add(new Image(v.getA().texSpdIcon)).size(25, 25);
+        tabelaGracz03.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
-        tabelaGracz03.add(new Image(a.texPwrIcon)).size(25, 25);
-        tabelaGracz03.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
+        tabelaGracz03.add(new Image(v.getA().texPwrIcon)).size(25, 25);
+        tabelaGracz03.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
-        tabelaGracz03.add(new Image(a.texWsdIcon)).size(25, 25);
-        tabelaGracz03.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz03), a.skin)).colspan(tabelaGracz03.getColumns());
+        tabelaGracz03.add(new Image(v.getA().texWsdIcon)).size(25, 25);
+        tabelaGracz03.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz03), v.getA().skin)).colspan(tabelaGracz03.getColumns());
         tabelaGracz03.row();
 
-        tabelaGracz03.add(new Label("Kolor: ", a.skin));
+        tabelaGracz03.add(new Label("Kolor: ", v.getA().skin));
         tabelaGracz03.add(new DefaultActor(new Texture(NewGame.pixmapYellow), 0, 0)).colspan(tabelaGracz03.getColumns());
     }
 
@@ -453,16 +454,16 @@ public class NewGameScreen implements Screen {
     private void formatujTabeleGracza04() {
 
         tabelaGracz04.pad(10);
-        tabelaGracz04.add(new Label("Gracz 3", a.skin)).padTop(10);
+        tabelaGracz04.add(new Label("Gracz 3", v.getA().skin)).padTop(10);
         tabelaGracz04.add(cbAI3).padTop(10);
         tabelaGracz04.row();
 
         // Przycisk - przy wyborze ilosci graczy
-        TextButton g02B01 = new TextButton("Prev", a.skin);
+        TextButton g02B01 = new TextButton("Prev", v.getA().skin);
         g02B01.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz04 = NewGame.poprzedniaKlasaPostaci(NewGame.klasaPostaciGracz04);
                 tabelaGracz04.clear();
                 formatujTabeleGracza04();
@@ -471,11 +472,11 @@ public class NewGameScreen implements Screen {
         tabelaGracz04.add(g02B01).pad(10);
 
         // Przycisk + przy wyborze ilośći graczy
-        TextButton tB02 = new TextButton("Next", a.skin);
+        TextButton tB02 = new TextButton("Next", v.getA().skin);
         tB02.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 NewGame.klasaPostaciGracz04 = NewGame.nastepnaKlasaPostaci(NewGame.klasaPostaciGracz04);
                 tabelaGracz04.clear();
                 formatujTabeleGracza04();
@@ -484,31 +485,31 @@ public class NewGameScreen implements Screen {
         tabelaGracz04.add(tB02).pad(10);
         tabelaGracz04.row();
 
-        tabelaGracz04.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns()).align(Align.center);
+        tabelaGracz04.add(new Label(NewGame.pobierzTytul(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns()).align(Align.center);
         tabelaGracz04.row();
 
         tabelaGracz04.add(NewGame.pobierzPortret(NewGame.klasaPostaciGracz04)).align(Align.center).colspan(tabelaGracz04.getColumns());
 
         tabelaGracz04.row();
-        tabelaGracz04.add(new Image(a.texAtcIcon)).size(25, 25);
-        tabelaGracz04.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
+        tabelaGracz04.add(new Image(v.getA().texAtcIcon)).size(25, 25);
+        tabelaGracz04.add(new Label("Atak: " + NewGame.pobierzAtak(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
-        tabelaGracz04.add(new Image(a.texDefIcon)).size(25, 25);
-        tabelaGracz04.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
+        tabelaGracz04.add(new Image(v.getA().texDefIcon)).size(25, 25);
+        tabelaGracz04.add(new Label("Obrona: " + NewGame.pobierzObrone(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
-        tabelaGracz04.add(new Image(a.texHpIcon)).size(25, 25);
-        tabelaGracz04.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
+        tabelaGracz04.add(new Image(v.getA().texHpIcon)).size(25, 25);
+        tabelaGracz04.add(new Label("Hp: " + NewGame.pobierzHp(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
-        tabelaGracz04.add(new Image(a.texSpdIcon)).size(25, 25);
-        tabelaGracz04.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
+        tabelaGracz04.add(new Image(v.getA().texSpdIcon)).size(25, 25);
+        tabelaGracz04.add(new Label("Szybkosc: " + NewGame.pobierzSzybkosc(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
-        tabelaGracz04.add(new Image(a.texPwrIcon)).size(25, 25);
-        tabelaGracz04.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
+        tabelaGracz04.add(new Image(v.getA().texPwrIcon)).size(25, 25);
+        tabelaGracz04.add(new Label("Moc: " + NewGame.pobierzMoc(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
-        tabelaGracz04.add(new Image(a.texWsdIcon)).size(25, 25);
-        tabelaGracz04.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz04), a.skin)).colspan(tabelaGracz04.getColumns());
+        tabelaGracz04.add(new Image(v.getA().texWsdIcon)).size(25, 25);
+        tabelaGracz04.add(new Label("Wiedza: " + NewGame.pobierzWiedze(NewGame.klasaPostaciGracz04), v.getA().skin)).colspan(tabelaGracz04.getColumns());
         tabelaGracz04.row();
-        tabelaGracz04.add(new Label("Kolor: ", a.skin));
+        tabelaGracz04.add(new Label("Kolor: ", v.getA().skin));
         tabelaGracz04.add(new DefaultActor(new Texture(NewGame.pixmapGreen), 0, 0)).colspan(tabelaGracz04.getColumns());
     }
 
@@ -518,11 +519,11 @@ public class NewGameScreen implements Screen {
      * @return Window
      */
     private Window getLoadMapWindow() {
-        final Window window = new Window("Wybierz Mape", a.skin);
+        final Window window = new Window("Wybierz Mape", v.getA().skin);
         window.setSize(600, 400);
         window.align(Align.center);
 
-        final List listOfMap = new List(a.skin);
+        final List listOfMap = new List(v.getA().skin);
 
         FileHandle[] files = Gdx.files.local("").list();
         for (FileHandle file : files) {
@@ -531,20 +532,20 @@ public class NewGameScreen implements Screen {
             }
         }
 
-        TextButton btnExitWindow = new TextButton("EXIT", a.skin);
+        TextButton btnExitWindow = new TextButton("EXIT", v.getA().skin);
         btnExitWindow.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 window.remove();
             }
         });
 
-        TextButton btnWybierzWindow = new TextButton("Wybieram", a.skin);
+        TextButton btnWybierzWindow = new TextButton("Wybieram", v.getA().skin);
         btnWybierzWindow.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 FileHandle file = (FileHandle) listOfMap.getSelected();
                 Gdx.app.log("Nazwa Pliku", file.name());
                 GameStatus.nazwaMapy = file.name();
@@ -568,11 +569,11 @@ public class NewGameScreen implements Screen {
      * @return Przycisk
      */
     private TextButton getBtnWybierzMape() {
-        TextButton btnWybierzMape = new TextButton("Wybierz Mape", a.skin);
+        TextButton btnWybierzMape = new TextButton("Wybierz Mape", v.getA().skin);
         btnWybierzMape.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                a.buttonClick.play();
+                v.getA().buttonClick.play();
                 stage01.addActor(getLoadMapWindow());
             }
         });

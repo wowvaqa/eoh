@@ -21,8 +21,6 @@ public class RunClient {
 
     private final int portTCP;
     private final int portUDP;
-    private GameStatus gs;
-    private Assets a;
     private NetEngine ne;
     private Client cnt;
     private String name;
@@ -37,8 +35,6 @@ public class RunClient {
      */
     public RunClient(String name, String adresIP, int portTCP, int portUDP, NetEngine ne) {
         this.ne = ne;
-        this.a = ne.a;
-        this.gs = ne.gs;
         this.name = name;
         this.adresIP = adresIP;
         this.portTCP = portTCP;

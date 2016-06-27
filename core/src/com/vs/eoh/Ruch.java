@@ -21,37 +21,32 @@ import com.vs.screens.MapScreen;
 public class Ruch {
 
     private final Bohater bohater;
-    private final Assets a;
-    private final GameStatus gs;
-
+    private V v;
     /**
      *
      * @param bohater Referencja do obiektu klasy Bohater, którego dot. ruch.
-     * @param a Referencja do obiketu klasy Assets
-     * @param gs Refernecja do obiektu klasy GameStatus
      */
-    public Ruch(Bohater bohater, Assets a, GameStatus gs) {
+    public Ruch(Bohater bohater, V v) {
         this.bohater = bohater;
-        this.a = a;
-        this.gs = gs;
+        this.v = v;
 
         int pozX = this.bohater.getPozXnaMapie();
         int pozY = this.bohater.getPozYnaMapie();
 
         for (int i = pozX - 1; i < pozX + 1 + 1; i++) {
             for (int j = pozY - 1; j < pozY + 1 + 1; j++) {
-                if (i >= 0 && j >= 0 && i < gs.getMapa().getIloscPolX() && j < gs.getMapa().getIloscPolY()) {
+                if (i >= 0 && j >= 0 && i < v.getGs().getMapa().getIloscPolX() && j < v.getGs().getMapa().getIloscPolY()) {
 
                     if (bohater.getPozXnaMapie() == i && bohater.getPozYnaMapie() == j) {
-                        przyciskCancel przyciskCancel = new przyciskCancel(new TextureRegionDrawable(new TextureRegion(a.cancelIcon)), bohater);
+                        przyciskCancel przyciskCancel = new przyciskCancel(new TextureRegionDrawable(new TextureRegion(v.getA().cancelIcon)), bohater);
                         przyciskCancel.setPosition(i * 100, j * 100);
                         Assets.stage01MapScreen.addActor(przyciskCancel);
                     } else {
-                        if (gs.getMapa().getPola()[i][j].isMovable()) {
+                        if (v.getGs().getMapa().getPola()[i][j].isMovable()) {
                             if (sprawdzPrzeciwnika(i, j) == false) {
                                 // Warunek sprawdza czy na polu znajduje się inny bohater gracza. Jeżeli TRUE wtedy na tym polu nie zostanie utworzony przycisk ruchu.
-                                if (!(gs.getMapa().getPola()[i][j].getBohater() != null && gs.getMapa().getPola()[i][j].getBohater().getPrzynaleznoscDoGracza() == gs.getTuraGracza())) {
-                                    PrzyciskRuchu przyciskRuchu = new PrzyciskRuchu(new TextureRegionDrawable(new TextureRegion(a.moveIcon)), i, j, bohater, this);
+                                if (!(v.getGs().getMapa().getPola()[i][j].getBohater() != null && v.getGs().getMapa().getPola()[i][j].getBohater().getPrzynaleznoscDoGracza() == v.getGs().getTuraGracza())) {
+                                    PrzyciskRuchu przyciskRuchu = new PrzyciskRuchu(new TextureRegionDrawable(new TextureRegion(v.getA().moveIcon)), i, j, bohater, this);
                                     przyciskRuchu.setPosition(i * 100, j * 100);
                                     Assets.stage01MapScreen.addActor(przyciskRuchu);
 
@@ -74,10 +69,10 @@ public class Ruch {
 
         for (int i = pozX - 1 - zasieg; i < pozX + 1 + 1 + zasieg; i++) {
             for (int j = pozY - 1 - zasieg; j < pozY + 1 + 1 + zasieg; j++) {
-                if (i >= 0 && j >= 0 && i < gs.getMapa().getIloscPolX() && j < gs.getMapa().getIloscPolY()) {
+                if (i >= 0 && j >= 0 && i < v.getGs().getMapa().getIloscPolX() && j < v.getGs().getMapa().getIloscPolY()) {
 
                     if (sprawdzPrzeciwnika(i, j)) {
-                        przyciskAtaku przyciskAtaku = new przyciskAtaku(new TextureRegionDrawable(new TextureRegion(a.attackIcon)), i, j, bohater, this.a);
+                        przyciskAtaku przyciskAtaku = new przyciskAtaku(new TextureRegionDrawable(new TextureRegion(v.getA().attackIcon)), i, j, bohater, v.getA());
                         przyciskAtaku.setPosition(i * 100, j * 100);
                         Assets.stage01MapScreen.addActor(przyciskAtaku);
                     }
@@ -89,12 +84,12 @@ public class Ruch {
     /**
      * Przerysowuje interfejs ruchu dla bohaterów.
      */
-    public static void redrawMoveInterfaces() {
-        for (Gracz gracz : GameStatus.gs.getGracze()) {
+    public static void redrawMoveInterfaces(V v) {
+        for (Gracz gracz : v.getGs().getGracze()) {
             for (Bohater bohater : gracz.getBohaterowie()) {
                 if (bohater.isMoveInterfaceOn()) {
                     Ruch.wylaczPrzyciski();
-                    new Ruch(bohater, GameStatus.a, GameStatus.gs);
+                    new Ruch(bohater, v);
                 }
             }
         }
@@ -184,16 +179,15 @@ public class Ruch {
      * Wykonuje ruch otrzymany z sieci
      *
      * @param b  Referencja do obiektu bohatera
-     * @param gs Referencja do obiektu Game Status
      */
-    public static void makeNetworkMove(Bohater b, GameStatus gs, int ruchX, int ruchY) {
-        gs.getMapa().pola[b.getPozXnaMapie()][b.getPozYnaMapie()].setBohater(null);
+    public static void makeNetworkMove(Bohater b, V v, int ruchX, int ruchY) {
+        v.getGs().getMapa().pola[b.getPozXnaMapie()][b.getPozYnaMapie()].setBohater(null);
 
         b.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));
         b.setPozXnaMapie(b.getPozXnaMapie() + ruchX);
         b.setPozYnaMapie(b.getPozYnaMapie() + ruchY);
 
-        gs.getMapa().pola[b.getPozXnaMapie()][b.getPozYnaMapie()].setBohater(b);
+        v.getGs().getMapa().pola[b.getPozXnaMapie()][b.getPozYnaMapie()].setBohater(b);
     }
 
     /**
@@ -205,31 +199,31 @@ public class Ruch {
      * @return
      */
     private boolean sprawdzPrzeciwnika(int x, int y) {
-        if (gs.getMapa().getPola()[x][y].getBohater() != null
-                && gs.getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() != gs.getTuraGracza()) {
+        if (v.getGs().getMapa().getPola()[x][y].getBohater() != null
+                && v.getGs().getMapa().getPola()[x][y].getBohater().getPrzynaleznoscDoGracza() != v.getGs().getTuraGracza()) {
             return true;
         }
         /**
          * Zwraca true jeżeli napotkany zamek nie należy do gracza i jego poziom
          * HP > 0
          */
-        if (gs.getMapa().getPola()[x][y].getCastle() != null
-                && gs.getMapa().getPola()[x][y].getCastle().getPrzynaleznoscDoGracza() != gs.getTuraGracza()
-                && gs.getMapa().getPola()[x][y].getCastle().getActualHp() > 0) {
+        if (v.getGs().getMapa().getPola()[x][y].getCastle() != null
+                && v.getGs().getMapa().getPola()[x][y].getCastle().getPrzynaleznoscDoGracza() != v.getGs().getTuraGracza()
+                && v.getGs().getMapa().getPola()[x][y].getCastle().getActualHp() > 0) {
             return true;
         }
-        return gs.getMapa().getPola()[x][y].getMob() != null;
+        return v.getGs().getMapa().getPola()[x][y].getMob() != null;
     }
 
     /**
      * Sprawdza czy nadepnięto na skrzynię ze skarbem.
      */
     public void checkTresureBox() {
-        if (gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getTresureBox() != null) {
+        if (v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getTresureBox() != null) {
             System.out.println("Nadepnięto na skrzynkę ze skarbem");
-            Assets.stage03MapScreen.addActor(Dialog.getTresureBoxWindow("test", a, gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getTresureBox(), this.gs, bohater));
+            Assets.stage03MapScreen.addActor(Dialog.getTresureBoxWindow("test", v.getA(), v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getTresureBox(), v.getGs(), bohater));
             bohater.setOtwartaSkrzyniaZeSkarbem(true);
-            a.chestSqueek.play();
+            v.getA().chestSqueek.play();
         }
     }
 
@@ -237,10 +231,10 @@ public class Ruch {
      * Sprawdza czy nadepnięto na zamek.
      */
     private void checkCastle() {
-        if (gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getCastle() != null) {
-            System.out.println(gs.getTuraGracza() + " Nadepnięto na zamek :-)");
-            gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getCastle().setPrzynaleznoscDoGracza(bohater.getPrzynaleznoscDoGracza());
-            gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getCastle().aktualizujIkoneZamku();
+        if (v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getCastle() != null) {
+            System.out.println(v.getGs().getTuraGracza() + " Nadepnięto na zamek :-)");
+            v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getCastle().setPrzynaleznoscDoGracza(bohater.getPrzynaleznoscDoGracza());
+            v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getCastle().aktualizujIkoneZamku();
 
             System.out.println("Zamek zmienił włąsciciela");
         }
@@ -251,9 +245,9 @@ public class Ruch {
      */
     private void checkBulding() {
         boolean buldingVisited = false;
-        if (gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding() != null) {
+        if (v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding() != null) {
 
-            Bulding bulding = gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding();
+            Bulding bulding = v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding();
 
             for (int i = 0; i < bulding.getVisited().size(); i++) {
                 if (bulding.getVisited().get(i).equals(bohater)) {
@@ -263,11 +257,11 @@ public class Ruch {
 
             System.out.println("Nadepnięto na budynek");
             if (!buldingVisited) {
-                a.statisticUp.play();
-                Bulding.modyfiAttributes(bohater, gs.getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding());
+                v.getA().statisticUp.play();
+                Bulding.modyfiAttributes(bohater, v.getGs().getMapa().getPola()[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].getBulding());
             } else {
                 //a.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone");
-                Animation.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone", a);
+                Animation.animujLblDamage(bulding.getX(), bulding.getY(), "Odwiedzone", v.getA());
             }
         }
     }
@@ -310,7 +304,7 @@ public class Ruch {
             return super.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    a.buttonClick.play();
+                    v.getA().buttonClick.play();
                     wykonajRuch();
                     if (!bohater.getKlasyPostaci().equals(KlasyPostaci.Summmon)) {
                         ruch.checkTresureBox();
@@ -326,43 +320,43 @@ public class Ruch {
          */
         private void wykonajRuch() {
 
-            if (gs.getBohaterZaznaczony().getSpellEffects().size() > 0) {
-                if (gs.getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
+            if (v.getGs().getBohaterZaznaczony().getSpellEffects().size() > 0) {
+                if (v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
                     Gdx.app.log("Wykryto Poison Effect", "ot co");
-                    int damage = gs.getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
-                    gs.getBohaterZaznaczony().setActualHp(gs.getBohaterZaznaczony().getActualHp() - damage);
-                    Animation.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
+                    int damage = v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
+                    v.getGs().getBohaterZaznaczony().setActualHp(v.getGs().getBohaterZaznaczony().getActualHp() - damage);
+                    Animation.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), v.getA());
                 }
             }
 
             // polecenia wykonają się tylko jeżeli gra jest klientem
-            if (gs.getNetworkStatus() == 2) {
+            if (v.getGs().getNetworkStatus() == 2) {
                 Network.Move networkMove = new Network.Move();
                 networkMove.ruchX = (int) ruchX;
                 networkMove.ruchY = (int) ruchY;
                 networkMove.player = bohater.getPrzynaleznoscDoGracza();
-                networkMove.hero = Bohater.getHeroNumberInArrayList(bohater, gs.getGracze().get(
+                networkMove.hero = Bohater.getHeroNumberInArrayList(bohater, v.getGs().getGracze().get(
                         bohater.getPrzynaleznoscDoGracza()
                 ));
                 GameStatus.client.getCnt().sendTCP(networkMove);
                 Gdx.app.log("wykonajRuch", "wysyłam networkMove");
             }
 
-            gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(null);
+            v.getGs().getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(null);
 
             bohater.addAction(Actions.moveBy(ruchX * 100, ruchY * 100, 0.25f));
             bohater.setPozXnaMapie(bohater.getPozXnaMapie() + (int) ruchX);
             bohater.setPozYnaMapie(bohater.getPozYnaMapie() + (int) ruchY);
 
-            gs.getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
+            v.getGs().getMapa().pola[bohater.getPozXnaMapie()][bohater.getPozYnaMapie()].setBohater(bohater);
 
             bohater.getSprite().setTexture(bohater.getBohaterTex());
             bohater.setZaznaczony(false);
             bohater.setPozostaloRuchow(bohater.getPozostaloRuchow() - 1);
 
-            gs.setCzyZaznaczonoBohatera(false);
+            v.getGs().setCzyZaznaczonoBohatera(false);
 
-            a.walk.play();
+            v.getA().walk.play();
 
             bohater.setMoveInterfaceOn(false);
 
@@ -404,13 +398,13 @@ public class Ruch {
          */
         private void wykonajAtak() {
 
-            if (gs.getBohaterZaznaczony().getSpellEffects().size() > 0) {
-                if (gs.getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
+            if (v.getGs().getBohaterZaznaczony().getSpellEffects().size() > 0) {
+                if (v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
                     Gdx.app.log("Wykryto Poison Effect", "ot co");
-                    int damage = gs.getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
-                    gs.getBohaterZaznaczony().setActualHp(gs.getBohaterZaznaczony().getActualHp() - damage);
-                    //a.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
-                    Animation.animujLblDamage(gs.getBohaterZaznaczony().getX() + 50, gs.getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
+                    int damage = v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
+                    v.getGs().getBohaterZaznaczony().setActualHp(v.getGs().getBohaterZaznaczony().getActualHp() - damage);
+                    //a.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                    Animation.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
                 }
             }
 
@@ -418,26 +412,26 @@ public class Ruch {
                 System.out.println("Atak na moba");
 
                 Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
-                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getMob())), a);
+                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getMob())), a);
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Bohater.class) {
                 System.out.println("Atak na Bohatera");
 
-                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100, "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getBohater())), a);
+                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100, "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getBohater())), a);
 
-                //Fight.getObrazenia(this.bohater,  gs.getMapa().getPola()[locX][locY].getBohater())
+                //Fight.getObrazenia(this.bohater,  v.getGs().getMapa().getPola()[locX][locY].getBohater())
 
             } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Castle.class) {
                 System.out.println("Atak na Zamek");
                 Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
-                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, gs.getMapa().getPola()[locX][locY].getCastle())), a);
+                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getCastle())), a);
             }
 
             this.bohater.getSprite().setTexture(bohater.getBohaterTex());
             this.bohater.setZaznaczony(false);
 
-            gs.setCzyZaznaczonoBohatera(false);
+            v.getGs().setCzyZaznaczonoBohatera(false);
 
-            gs.usunMartweMoby();
+            v.getGs().usunMartweMoby();
             bohater.setMoveInterfaceOn(false);
             Ruch.wylaczIkonyEfektow();
             Ruch.wylaczPrzyciski();
@@ -452,17 +446,17 @@ public class Ruch {
          * @return
          */
         private Object sprawdzPrzeciwnika(int x, int y) {
-            if (gs.getMapa().getPola()[x][y].getMob() != null) {
+            if (v.getGs().getMapa().getPola()[x][y].getMob() != null) {
                 System.out.println("Wykryto moba");
-                return gs.getMapa().getPola()[x][y].getMob();
+                return v.getGs().getMapa().getPola()[x][y].getMob();
             }
-            if (gs.getMapa().getPola()[x][y].getBohater() != null) {
+            if (v.getGs().getMapa().getPola()[x][y].getBohater() != null) {
                 System.out.println("Wykryto Bohatera");
-                return gs.getMapa().getPola()[x][y].getBohater();
+                return v.getGs().getMapa().getPola()[x][y].getBohater();
             }
-            if (gs.getMapa().getPola()[x][y].getCastle() != null) {
+            if (v.getGs().getMapa().getPola()[x][y].getCastle() != null) {
                 System.out.println("Wykryto Bohatera");
-                return gs.getMapa().getPola()[x][y].getCastle();
+                return v.getGs().getMapa().getPola()[x][y].getCastle();
             }
             return null;
         }
@@ -506,7 +500,7 @@ public class Ruch {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    a.buttonClick.play();
+                    v.getA().buttonClick.play();
                     wykonajRuchCancel();
                 }
             });

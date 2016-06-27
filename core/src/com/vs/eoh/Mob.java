@@ -16,12 +16,10 @@ import java.util.Random;
 
 public class Mob extends Image {
 
-    private final GameStatus gs;
-    private final Assets a;
-    private final Game g;
     // Zmienne sieciowe
     public boolean animujCiecieNetwork = false;
     public int damageNetwork = -99;
+    private V v;
     private DostepneMoby typMoba;
     private Sprite sprite;    // wygląd
     private Texture icon;
@@ -50,21 +48,15 @@ public class Mob extends Image {
     private ArrayList<SpellEffects> spellEffects;
 
     /**
-     * @param g                   Referenca do boiektu Game
-     * @param gs                  Referencja do obiketu Game Status
-     * @param a                   Referencja do obiektu Assets
      * @param lokaczjaPoczatkowaX Lokacja początkowa X w Stage
      * @param lokaczjaPoczatkowaY Lokacja początkowa Y w Stage
      * @param mobLevel            Poziom moba.
      * @param typMoba
      */
-    public Mob(Game g, GameStatus gs, Assets a,
-               int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
+    public Mob(V v, int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
                DostepneMoby typMoba) {
         this.spellEffects = new ArrayList<SpellEffects>();
-        this.gs = gs;
-        this.a = a;
-        this.g = g;
+        this.v = v;
         //this.icon = textureIcon;
         this.icon = zwrocTeksture(typMoba);
         this.mobLevel = mobLevel;
@@ -116,15 +108,15 @@ public class Mob extends Image {
     private Texture zwrocTeksture(DostepneMoby typMoba) {
         switch (typMoba) {
             case Szkielet:
-                return a.texSzkieletMob;
+                return v.getA().texSzkieletMob;
             case Wilk:
-                return a.texWilkMob;
+                return v.getA().texWilkMob;
             case Pajak:
-                return a.texSpiderMob;
+                return v.getA().texSpiderMob;
             case Zombie:
-                return a.texZombieMob;
+                return v.getA().texZombieMob;
         }
-        return a.btnAttackTex;
+        return v.getA().btnAttackTex;
     }
 
     // Dodaje ClickListnera do obiektu Zamku
@@ -133,7 +125,7 @@ public class Mob extends Image {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Mob został kliknięty");
-                new Dialog("Mob", a.skin) {
+                new Dialog("Mob", v.getA().skin) {
                     {
                         text("Atak: " + atak);
                         row();
@@ -215,19 +207,19 @@ public class Mob extends Image {
                     int damage = this.getSpellEffects().get(0).getEfektDmg();
                     this.aktualneHp = aktualneHp - damage;
                     //a.animujLblDamage(this.getX() + 50, this.getY() + 50, Integer.toString(damage));
-                    Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damage), a);
+                    Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damage), v.getA());
                 }
             }
 
             nastepnyAtakMoba += 2;
             System.out.println("TERAZ NASTEPUJE ATAK MOBA");
-            if (gs.getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater() != null
+            if (v.getGs().getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater() != null
                     && this.aktualnaSzybkosc > 0) {
-                Bohater bohaterAtakujacy = gs.getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater();
+                Bohater bohaterAtakujacy = v.getGs().getMapa().getPola()[this.pozXatakujacego][this.pozYatakujacego].getBohater();
                 //a.animujLblDmg(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(), this, bohaterAtakujacy);
 
                 Animation.animujLblDamage(bohaterAtakujacy.getX(), bohaterAtakujacy.getY(),
-                        "Dmg: " + Integer.toString(Fight.getObrazenia(this, bohaterAtakujacy)), a);
+                        "Dmg: " + Integer.toString(Fight.getObrazenia(this, bohaterAtakujacy)), v.getA());
                 this.aktualnaSzybkosc -= 1;
             } else {
                 System.out.println("Bohater dał szusa, lub Mob zmęczył się.");
@@ -235,7 +227,7 @@ public class Mob extends Image {
                 //this.aktualnaSzybkosc = this.szybkosc;
             }
         }
-        gs.usunMartweMoby();
+        v.getGs().usunMartweMoby();
     }
 
     /**
@@ -272,10 +264,11 @@ public class Mob extends Image {
      */
     public void generujTresureBoxPoSmierciMoba(int pozXTB, int pozYTB, int mobLevel){
         System.out.println("Dodaje skrzynie po zabiciu  przeciwnika");
-        TresureBox tb = new TresureBox(mobLevel, 1, this.a, this.gs, this.g, pozXTB * 100, pozYTB * 100);;
-        gs.getMapa().getPola()[pozXTB][pozYTB].setTresureBox(tb);
+        TresureBox tb = new TresureBox(mobLevel, 1, v, pozXTB * 100, pozYTB * 100);
+        ;
+        v.getGs().getMapa().getPola()[pozXTB][pozYTB].setTresureBox(tb);
 
-        Assets.stage01MapScreen.addActor(gs.getMapa().getPola()[pozXTB][pozYTB].getTresureBox());
+        Assets.stage01MapScreen.addActor(v.getGs().getMapa().getPola()[pozXTB][pozYTB].getTresureBox());
     }
 
     /**
@@ -284,7 +277,7 @@ public class Mob extends Image {
      * @return Obiekt klasy Pole
      */
     public Pole getField() {
-        return gs.getMapa().getPola()[getPozX()][getPozY()];
+        return v.getGs().getMapa().getPola()[getPozX()][getPozY()];
     }
 
     @Override
@@ -302,8 +295,8 @@ public class Mob extends Image {
         batch.draw(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         if (this.animujCiecieNetwork) {
-            a.animujCiecie((int) this.getX(), (int) this.getY());
-            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), a);
+            v.getA().animujCiecie((int) this.getX(), (int) this.getY());
+            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), v.getA());
             this.animujCiecieNetwork = false;
         }
     }
@@ -483,4 +476,11 @@ public class Mob extends Image {
         this.spellEffects = spellEffects;
     }
 
+    public V getV() {
+        return v;
+    }
+
+    public void setV(V v) {
+        this.v = v;
+    }
 }

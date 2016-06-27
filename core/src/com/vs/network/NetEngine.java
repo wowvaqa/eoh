@@ -10,6 +10,7 @@ import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
 import com.vs.eoh.Ruch;
 import com.vs.eoh.TresureBox;
+import com.vs.eoh.V;
 
 /**
  * Created by v on 2016-04-14.
@@ -22,14 +23,10 @@ public class NetEngine {
     // Którym graczem Multi jest gracz.
     public static int playerNumber = 0;
     public static boolean gameStarted = false;
-    public GameStatus gs;
-    public Assets a;
-    public Game g;
+    private V v;
 
-    public NetEngine(GameStatus gs, Assets a, Game g) {
-        this.gs = gs;
-        this.a = a;
-        this.g = g;
+    public NetEngine(V v) {
+        this.v = v;
     }
 
     /**
@@ -44,8 +41,8 @@ public class NetEngine {
         Gdx.app.log("Indeks Gracza  ", "" + nm.player);
         Gdx.app.log("Indeks Bohatera", "" + nm.hero);
 
-        Ruch.makeNetworkMove(gs.getGracze().get(nm.player).getBohaterowie().get(nm.hero)
-                , gs, nm.ruchX, nm.ruchY);
+        Ruch.makeNetworkMove(v.getGs().getGracze().get(nm.player).getBohaterowie().get(nm.hero)
+                , v, nm.ruchX, nm.ruchY);
     }
 
     /**
@@ -61,7 +58,7 @@ public class NetEngine {
 
         Bohater tmpBohater;
 
-        tmpBohater = gs.getGracze().get(dh.player).getBohaterowie().get(dh.hero);
+        tmpBohater = v.getGs().getGracze().get(dh.player).getBohaterowie().get(dh.hero);
         tmpBohater.setActualHp(tmpBohater.getActualHp() - dh.damage);
         tmpBohater.teksturaZaktualizowana = false;
         tmpBohater.animujCiecieNetwork = true;
@@ -85,12 +82,12 @@ public class NetEngine {
 
         Mob tmpMob;
 
-        tmpMob = gs.getMapa().getPola()[dm.pozXmoba][dm.pozYmoba].getMob();
+        tmpMob = v.getGs().getMapa().getPola()[dm.pozXmoba][dm.pozYmoba].getMob();
         tmpMob.setAktualneHp(tmpMob.getAktualneHp() - dm.damage);
         tmpMob.animujCiecieNetwork = true;
         tmpMob.damageNetwork = dm.damage;
 
-        gs.usunMartweMoby();
+        v.getGs().usunMartweMoby();
     }
 
     /**
@@ -105,8 +102,8 @@ public class NetEngine {
 
         TresureBox tmpTresureBox;
 
-        tmpTresureBox = gs.getMapa().getPola()[rtb.pozX][rtb.pozY].getTresureBox();
-        TresureBox.removeTresureBox(tmpTresureBox, gs.getMapa());
+        tmpTresureBox = v.getGs().getMapa().getPola()[rtb.pozX][rtb.pozY].getTresureBox();
+        TresureBox.removeTresureBox(tmpTresureBox, v.getGs().getMapa());
     }
 
     /**
@@ -127,29 +124,29 @@ public class NetEngine {
         Gdx.app.log("Część ciała", "" + aie.czescCiala);
 
 
-        ItemCreator itemCreator = new ItemCreator(gs);
+        ItemCreator itemCreator = new ItemCreator(v);
 
         Bohater tmpHero;
-        tmpHero = gs.getGracze().get(aie.player).getBohaterowie().get(aie.hero);
+        tmpHero = v.getGs().getGracze().get(aie.player).getBohaterowie().get(aie.hero);
 
         switch (aie.czescCiala) {
             case 0:
-                tmpHero.setItemGlowa(itemCreator.utworzItem(aie.item, a, g));
+                tmpHero.setItemGlowa(itemCreator.utworzItem(aie.item, v));
                 break;
             case 1:
-                tmpHero.setItemKorpus(itemCreator.utworzItem(aie.item, a, g));
+                tmpHero.setItemKorpus(itemCreator.utworzItem(aie.item, v));
                 break;
             case 2:
-                tmpHero.setItemPrawaReka(itemCreator.utworzItem(aie.item, a, g));
+                tmpHero.setItemPrawaReka(itemCreator.utworzItem(aie.item, v));
                 break;
             case 3:
-                tmpHero.setItemLewaReka(itemCreator.utworzItem(aie.item, a, g));
+                tmpHero.setItemLewaReka(itemCreator.utworzItem(aie.item, v));
                 break;
             case 4:
-                tmpHero.setItemNogi(itemCreator.utworzItem(aie.item, a, g));
+                tmpHero.setItemNogi(itemCreator.utworzItem(aie.item, v));
                 break;
             case 5:
-                tmpHero.setItemStopy(itemCreator.utworzItem(aie.item, a, g));
+                tmpHero.setItemStopy(itemCreator.utworzItem(aie.item, v));
                 break;
         }
     }
@@ -183,6 +180,6 @@ public class NetEngine {
         Gdx.app.log("Odebrano mape", "");
         Mapa mapa = new Mapa(networkMap.amountX, networkMap.amountY);
         Mapa.convertTokMap(mapa, networkMap);
-        gs.setMapa(mapa);
+        v.getGs().setMapa(mapa);
     }
 }

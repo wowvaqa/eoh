@@ -20,12 +20,10 @@ import java.util.ArrayList;
  */
 public class SpellCreator {
 
-    private final Assets a;
-    private final GameStatus gs;
+    private V v;
 
-    public SpellCreator(Assets a, GameStatus gs) {
-        this.a = a;
-        this.gs = gs;
+    public SpellCreator(V v) {
+        this.v = v;
     }
 
     /**
@@ -37,31 +35,31 @@ public class SpellCreator {
      */
     public SpellActor utworzSpell(Spells spells, Bohater bohater) {
 
-        SpellActor spell = new SpellActor(a.texFist, 0, 0, bohater, a, gs);
+        SpellActor spell = new SpellActor(v.getA().texFist, 0, 0, bohater, v);
 
         switch (spells) {
 
             case Poison:
-                spell.getSprite().setTexture(a.texSpellPoison);
+                spell.getSprite().setTexture(v.getA().texSpellPoison);
                 spell.setDmg(1);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
                 spell.getSpellEffects().get(0).setEfektDmg(1);
                 spell.getSpellEffects().get(0).setPosionEffect(true);
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellPoison, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellPoison, 0, 0));
                 spell.getSpellEffects().get(0).setOpis("Po zadaja obrazenia po kazdym ruchu bohatera");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Trucizna", a.skin, "Trucizna", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Trucizna", v.getA().skin, "Trucizna", Assets.stage01MapScreen);
                     }
                 });
                 spell.setRodzajCzaru(spells);
                 break;
 
             case VampireTouch:
-                spell.getSprite().setTexture(a.texSpellVampireTouch);
+                spell.getSprite().setTexture(v.getA().texSpellVampireTouch);
                 spell.setDmg(2 + bohater.getMoc() * 2);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
@@ -72,7 +70,7 @@ public class SpellCreator {
                 break;
 
             case FireBall:
-                spell.getSprite().setTexture(a.texSpellFireBall);
+                spell.getSprite().setTexture(v.getA().texSpellFireBall);
                 spell.setDmg(3);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
@@ -82,7 +80,7 @@ public class SpellCreator {
                 break;
 
             case LongShot:
-                spell.getSprite().setTexture(a.texSpellLongShot);
+                spell.getSprite().setTexture(v.getA().texSpellLongShot);
                 spell.setDmg(5 + bohater.getMoc());
                 spell.setKoszt(1);
                 spell.setZasieg(bohater.getMoc());
@@ -95,7 +93,7 @@ public class SpellCreator {
 
             case SummonBear:
                 spell.setSpellSummonSpell(true);
-                spell.getSprite().setTexture(a.texSpellSummonBear);
+                spell.getSprite().setTexture(v.getA().texSpellSummonBear);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
@@ -105,7 +103,7 @@ public class SpellCreator {
 
             case SummonWolf:
                 spell.setSpellSummonSpell(true);
-                spell.getSprite().setTexture(a.texSpellSummonWolf);
+                spell.getSprite().setTexture(v.getA().texSpellSummonWolf);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
@@ -114,7 +112,7 @@ public class SpellCreator {
                 break;
 
             case Thunder:
-                spell.getSprite().setTexture(a.texSpellThunder);
+                spell.getSprite().setTexture(v.getA().texSpellThunder);
                 spell.setDmg(7);
                 spell.setKoszt(2);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
@@ -125,7 +123,7 @@ public class SpellCreator {
                 break;
 
             case MeteorShower:
-                spell.getSprite().setTexture(a.texSpellMeteorShower);
+                spell.getSprite().setTexture(v.getA().texSpellMeteorShower);
                 spell.setDmg(12);
                 spell.setKoszt(3);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
@@ -137,17 +135,17 @@ public class SpellCreator {
                 break;
 
             case Frozen:
-                spell.getSprite().setTexture(a.texSpellFreez);
+                spell.getSprite().setTexture(v.getA().texSpellFreez);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellFreez, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellFreez, 0, 0));
                 spell.setRodzajCzaru(spells);
                 spell.setKoszt(1);
                 spell.getSpellEffects().get(0).setOpis("Spowolnienie spowodowane schłodzeniem");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Chlod", a.skin, "Spowolnienie spowodowane schłodzeniem", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Chlod", v.getA().skin, "Spowolnienie spowodowane schłodzeniem", Assets.stage01MapScreen);
                     }
                 });
                 break;
@@ -155,24 +153,24 @@ public class SpellCreator {
 
             case Rage:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellRage);
+                spell.getSprite().setTexture(v.getA().texSpellRage);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellRage, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellRage, 0, 0));
                 spell.setRodzajCzaru(spells);
                 spell.setKoszt(1);
                 spell.getSpellEffects().get(0).setOpis("Zwiększenie ataku +1 do końca tury");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Gniew", a.skin, "Zwiększenie ataku +1 do końca tury", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Gniew", v.getA().skin, "Zwiększenie ataku +1 do końca tury", Assets.stage01MapScreen);
                     }
                 });
                 break;
 
             case Haste:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellHaste);
+                spell.getSprite().setTexture(v.getA().texSpellHaste);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
@@ -182,7 +180,7 @@ public class SpellCreator {
 
             case Cure:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellCure);
+                spell.getSprite().setTexture(v.getA().texSpellCure);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
@@ -191,7 +189,7 @@ public class SpellCreator {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         DialogScreen dialogScreen = new DialogScreen("Leczenie",
-                                a.skin, "Przywrocenie punktow HP", Assets.stage01MapScreen);
+                                v.getA().skin, "Przywrocenie punktow HP", Assets.stage01MapScreen);
                     }
                 });
                 spell.setRodzajCzaru(spells);
@@ -199,54 +197,54 @@ public class SpellCreator {
 
             case SongOfGlory:
                 spell.setSpellWorksOnlyForPlayersHeroes(true);
-                spell.getSprite().setTexture(a.texSpellSongOfGlory);
+                spell.getSprite().setTexture(v.getA().texSpellSongOfGlory);
                 spell.setKoszt(1);
                 spell.setZasieg(5);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellSongOfGlory, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellSongOfGlory, 0, 0));
                 spell.setRodzajCzaru(spells);
                 spell.getSpellEffects().get(0).setOpis("Zwiększenie ataku +1 do końca tury");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Piesn Chwaly", a.skin, "Zwiększenie ataku +1 do końca tury", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Piesn Chwaly", v.getA().skin, "Zwiększenie ataku +1 do końca tury", Assets.stage01MapScreen);
                     }
                 });
                 break;
 
             case Bless:
                 spell.setSpellWorksOnlyForPlayersHeroes(true);
-                spell.getSprite().setTexture(a.texSpellBless);
+                spell.getSprite().setTexture(v.getA().texSpellBless);
                 spell.setKoszt(1);
                 spell.setZasieg(5);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellBless, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellBless, 0, 0));
                 spell.setRodzajCzaru(spells);
                 spell.getSpellEffects().get(0).setOpis("Zwiększa atak i obronę o 5");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Blogoslawienstwo", a.skin, "Zwiększa atak i obronę o 5", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Blogoslawienstwo", v.getA().skin, "Zwiększa atak i obronę o 5", Assets.stage01MapScreen);
                     }
                 });
                 break;
 
             case Prayer:
                 spell.setSpellWorksOnlyForPlayersHeroes(true);
-                spell.getSprite().setTexture(a.texSpellPrayer);
+                spell.getSprite().setTexture(v.getA().texSpellPrayer);
                 spell.setKoszt(1);
                 spell.setZasieg(5);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellPrayer, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellPrayer, 0, 0));
                 spell.setRodzajCzaru(spells);
                 spell.getSpellEffects().get(0).setOpis("Zwiększa atak i obronę o 7, przywracając szybkość i punkty HP");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Modlitwa", a.skin, "Zwiększa atak i obronę o 7, przywracając szybkość i punkty HP", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Modlitwa", v.getA().skin, "Zwiększa atak i obronę o 7, przywracając szybkość i punkty HP", Assets.stage01MapScreen);
                     }
                 });
                 break;
@@ -254,16 +252,16 @@ public class SpellCreator {
 
             case Discouragement:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellDiscouragement);
+                spell.getSprite().setTexture(v.getA().texSpellDiscouragement);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellDiscouragement, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellDiscouragement, 0, 0));
                 spell.getSpellEffects().get(0).setOpis("Zmniejsza obrone przeciwnika -1 za kazdy udany atak");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Zniechecenie", a.skin, "Zmniejsza obrone przeciwnika -1 za kazdy udany atak", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Zniechecenie", v.getA().skin, "Zmniejsza obrone przeciwnika -1 za kazdy udany atak", Assets.stage01MapScreen);
                     }
                 });
                 spell.setRodzajCzaru(spells);
@@ -271,17 +269,17 @@ public class SpellCreator {
 
             case Charge:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellCharge);
+                spell.getSprite().setTexture(v.getA().texSpellCharge);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
 
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellCharge, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellCharge, 0, 0));
                 spell.getSpellEffects().get(0).setOpis("Kazdy udany atak zadaje dodatkowo +1 do obrazen.");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Szarza", a.skin, "Kazdy udany atak zadaje dodatkowo +1 do obrazen.", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Szarza", v.getA().skin, "Kazdy udany atak zadaje dodatkowo +1 do obrazen.", Assets.stage01MapScreen);
                     }
                 });
 
@@ -290,16 +288,16 @@ public class SpellCreator {
 
             case Fury:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellFury);
+                spell.getSprite().setTexture(v.getA().texSpellFury);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellFury, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellFury, 0, 0));
                 spell.getSpellEffects().get(0).setOpis("Kazdy udany atak zwiększa atak bohatera +2 redukując obronę -1.");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Furia", a.skin, "Kazdy udany atak zwiększa atak bohatera +2 redukując obronę -1.", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Furia", v.getA().skin, "Kazdy udany atak zwiększa atak bohatera +2 redukując obronę -1.", Assets.stage01MapScreen);
                     }
                 });
                 spell.setRodzajCzaru(spells);
@@ -307,17 +305,17 @@ public class SpellCreator {
 
             case FinalJudgment:
                 spell.setSpellWorksOnlyForCaster(true);
-                spell.getSprite().setTexture(a.texSpellFinalJudgment);
+                spell.getSprite().setTexture(v.getA().texSpellFinalJudgment);
                 spell.setKoszt(1);
                 spell.setSpellEffects(new ArrayList<SpellEffects>());
                 spell.getSpellEffects().add(new SpellEffects());
 
-                spell.getSpellEffects().get(0).setIkona(new EffectActor(a.texSpellFinalJudgment, 0, 0));
+                spell.getSpellEffects().get(0).setIkona(new EffectActor(v.getA().texSpellFinalJudgment, 0, 0));
                 spell.getSpellEffects().get(0).setOpis("Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak bohatera o +1.");
                 spell.getSpellEffects().get(0).getIkona().addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        DialogScreen dialogScreen = new DialogScreen("Final Judgment", a.skin, "Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak bohatera o +1.", Assets.stage01MapScreen);
+                        DialogScreen dialogScreen = new DialogScreen("Final Judgment", v.getA().skin, "Kazdy udany atak zmniejsza Obronę przeciwnika -2 i zwiększa Atak bohatera o +1.", Assets.stage01MapScreen);
                     }
                 });
 
@@ -339,45 +337,45 @@ public class SpellCreator {
     public Texture getSpellTexture(Spells spellKind) {
         switch (spellKind) {
             case Fury:
-                return a.texSpellFury;
+                return v.getA().texSpellFury;
             case Charge:
-                return a.texSpellCharge;
+                return v.getA().texSpellCharge;
             case Discouragement:
-                return a.texSpellDiscouragement;
+                return v.getA().texSpellDiscouragement;
             case Cure:
-                return a.texSpellCure;
+                return v.getA().texSpellCure;
             case FinalJudgment:
-                return a.texSpellFinalJudgment;
+                return v.getA().texSpellFinalJudgment;
             case FireBall:
-                return a.texSpellFireBall;
+                return v.getA().texSpellFireBall;
             case Thunder:
-                return a.texSpellThunder;
+                return v.getA().texSpellThunder;
             case MeteorShower:
-                return a.texSpellMeteorShower;
+                return v.getA().texSpellMeteorShower;
             case Bless:
-                return a.texSpellBless;
+                return v.getA().texSpellBless;
             case Prayer:
-                return a.texSpellPrayer;
+                return v.getA().texSpellPrayer;
             case Frozen:
-                return a.texSpellFreez;
+                return v.getA().texSpellFreez;
             case Haste:
-                return a.texSpellHaste;
+                return v.getA().texSpellHaste;
             case Rage:
-                return a.texSpellRage;
+                return v.getA().texSpellRage;
             case SongOfGlory:
-                return a.texSpellSongOfGlory;
+                return v.getA().texSpellSongOfGlory;
             case Poison:
-                return a.texSpellPoison;
+                return v.getA().texSpellPoison;
             case SummonWolf:
-                return a.texSpellSummonWolf;
+                return v.getA().texSpellSummonWolf;
             case SummonBear:
-                return a.texSpellSummonBear;
+                return v.getA().texSpellSummonBear;
             case LongShot:
-                return a.texSpellLongShot;
+                return v.getA().texSpellLongShot;
             case VampireTouch:
-                return a.texSpellVampireTouch;
+                return v.getA().texSpellVampireTouch;
         }
-        return a.texStick;
+        return v.getA().texStick;
     }
 
     public String getSpellDescription(Spells spellKind) {

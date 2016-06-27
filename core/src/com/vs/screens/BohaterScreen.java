@@ -27,6 +27,7 @@ import com.vs.eoh.GameStatus;
 import com.vs.eoh.Gracz;
 import com.vs.eoh.Item;
 import com.vs.eoh.SpellCreator;
+import com.vs.eoh.V;
 import com.vs.network.Network;
 
 import java.util.ArrayList;
@@ -42,17 +43,20 @@ public class BohaterScreen implements Screen {
 
     private final OrthographicCamera c;
     private final FitViewport viewPort;
-    private final Assets a;
-    private final GameStatus gs;
-    private final Game g;
     private final Stage stage01 = new Stage();
+    //private final Assets a;
+    //private final GameStatus gs;
+    //private final Game g;
+    private V v;
     private Tables tables;
     private Interface interfce;
 
-    public BohaterScreen(Game g, Assets a, GameStatus gs) {
-        this.a = a;
-        this.gs = gs;
-        this.g = g;
+    //public BohaterScreen(Game g, Assets a, GameStatus gs) {
+    public BohaterScreen(V v) {
+        this.v = v;
+        //this.a = a;
+        //this.gs = gs;
+        //this.g = g;
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -76,20 +80,20 @@ public class BohaterScreen implements Screen {
 
         if (sprawdzBohatera().getEquipment().get(i).getTypItemu().equals(TypItemu.Mikstura)) {
             for (Effect dzialanieItema : sprawdzBohatera().getEquipment().get(i).dzialania) {
-                dzialanieItema.dzialanie(sprawdzBohatera().getEquipment().get(i).getItemNazwa(), gs.getBohaterZaznaczony());
+                dzialanieItema.dzialanie(sprawdzBohatera().getEquipment().get(i).getItemNazwa(), v.getGs().getBohaterZaznaczony());
             }
             sprawdzBohatera().aktualizujEfektyBohatera();
             sprawdzBohatera().getEquipment().remove(i);
 
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.glowa)) {
 
-            if (gs.getNetworkStatus() == 2) {
+            if (v.getGs().getNetworkStatus() == 2) {
                 Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
                 addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
                 addItemEquip.czescCiala = 0;
                 addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
                 addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
-                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                        v.getGs().getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
                 GameStatus.client.getCnt().sendTCP(addItemEquip);
             }
 
@@ -101,13 +105,13 @@ public class BohaterScreen implements Screen {
             }
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.korpus)) {
 
-            if (gs.getNetworkStatus() == 2) {
+            if (v.getGs().getNetworkStatus() == 2) {
                 Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
                 addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
                 addItemEquip.czescCiala = 1;
                 addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
                 addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
-                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                        v.getGs().getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
                 GameStatus.client.getCnt().sendTCP(addItemEquip);
             }
 
@@ -119,13 +123,13 @@ public class BohaterScreen implements Screen {
             }
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.nogi)) {
 
-            if (gs.getNetworkStatus() == 2) {
+            if (v.getGs().getNetworkStatus() == 2) {
                 Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
                 addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
                 addItemEquip.czescCiala = 4;
                 addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
                 addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
-                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                        v.getGs().getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
                 GameStatus.client.getCnt().sendTCP(addItemEquip);
             }
 
@@ -137,13 +141,13 @@ public class BohaterScreen implements Screen {
             }
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.stopy)) {
 
-            if (gs.getNetworkStatus() == 2) {
+            if (v.getGs().getNetworkStatus() == 2) {
                 Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
                 addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
                 addItemEquip.czescCiala = 5;
                 addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
                 addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
-                        gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                        v.getGs().getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
                 GameStatus.client.getCnt().sendTCP(addItemEquip);
             }
 
@@ -152,7 +156,7 @@ public class BohaterScreen implements Screen {
             sprawdzBohatera().getEquipment().remove(i);
             sprawdzBohatera().getEquipment().add(tmpItem);
         } else if (sprawdzBohatera().getEquipment().get(i).getCzescCiala().equals(CzesciCiala.rece)) {
-            new Dialog("Ktora reka?", a.skin) {
+            new Dialog("Ktora reka?", v.getA().skin) {
                 {
                     text("Ktora reka?");
                     button("Lewa", "lewa");
@@ -164,13 +168,13 @@ public class BohaterScreen implements Screen {
                     Item tmpItem2;
                     if (object.equals("lewa")) {
 
-                        if (gs.getNetworkStatus() == 2) {
+                        if (v.getGs().getNetworkStatus() == 2) {
                             Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
                             addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
                             addItemEquip.czescCiala = 3;
                             addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
                             addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
-                                    gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                                    v.getGs().getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
                             GameStatus.client.getCnt().sendTCP(addItemEquip);
                         }
 
@@ -185,13 +189,13 @@ public class BohaterScreen implements Screen {
 
                     } else if (object.equals("prawa")) {
 
-                        if (gs.getNetworkStatus() == 2) {
+                        if (v.getGs().getNetworkStatus() == 2) {
                             Network.AddItemEquip addItemEquip = new Network.AddItemEquip();
                             addItemEquip.item = sprawdzBohatera().getEquipment().get(i).getItemNazwa();
                             addItemEquip.czescCiala = 2;
                             addItemEquip.player = sprawdzBohatera().getPrzynaleznoscDoGracza();
                             addItemEquip.hero = Bohater.getHeroNumberInArrayList(sprawdzBohatera(),
-                                    gs.getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
+                                    v.getGs().getGracze().get(sprawdzBohatera().getPrzynaleznoscDoGracza()));
                             GameStatus.client.getCnt().sendTCP(addItemEquip);
                         }
 
@@ -215,7 +219,7 @@ public class BohaterScreen implements Screen {
     private void dodajDoStage01() {
         //stage01.addActor(tabela);
         stage01.addActor(tables.tableMain);
-        this.stage01.addActor(a.getInfoWindow());
+        this.stage01.addActor(v.getA().getInfoWindow());
     }
 
     /**
@@ -226,7 +230,7 @@ public class BohaterScreen implements Screen {
      */
     private Bohater sprawdzBohatera() {
         Bohater bohater = null;
-        for (Gracz gracz : gs.getGracze()) {
+        for (Gracz gracz : v.getGs().getGracze()) {
             for (Bohater b : gracz.getBohaterowie()) {
                 if (b.isZaznaczony()) {
                     return b;
@@ -351,12 +355,12 @@ public class BohaterScreen implements Screen {
             tableStats.clear();
             tableStats.setDebug(true);
 
-            tableStats.add(new Label("Statystyki", a.skin)).pad(3).colspan(3);
+            tableStats.add(new Label("Statystyki", v.getA().skin)).pad(3).colspan(3);
             tableStats.row();
 
-            tableStats.add(new Image(a.texAtcIcon)).size(50, 50).pad(2);
-            tableStats.add(new Image(a.texDefIcon)).size(50, 50).pad(2);
-            tableStats.add(new Image(a.texHpIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(v.getA().texAtcIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(v.getA().texDefIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(v.getA().texHpIcon)).size(50, 50).pad(2);
             tableStats.row();
 
             tableStats.add(interfce.lblAttack).size(150, 30).pad(2);
@@ -364,9 +368,9 @@ public class BohaterScreen implements Screen {
             tableStats.add(interfce.lblHp).size(150, 30).pad(5);
             tableStats.row();
 
-            tableStats.add(new Image(a.texSpdIcon)).size(50, 50).pad(2);
-            tableStats.add(new Image(a.texPwrIcon)).size(50, 50).pad(2);
-            tableStats.add(new Image(a.texWsdIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(v.getA().texSpdIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(v.getA().texPwrIcon)).size(50, 50).pad(2);
+            tableStats.add(new Image(v.getA().texWsdIcon)).size(50, 50).pad(2);
             tableStats.row();
 
             tableStats.add(interfce.lblSpeed).size(150, 30).pad(2);
@@ -384,7 +388,7 @@ public class BohaterScreen implements Screen {
             tableEquip.clear();
             tableEquip.setDebug(true);
 
-            tableEquip.add(new Label("Ekwipunek", a.skin)).pad(3).colspan(3);
+            tableEquip.add(new Label("Ekwipunek", v.getA().skin)).pad(3).colspan(3);
             tableEquip.row();
 
             tableEquip.add(interfce.lblHead).colspan(3);
@@ -421,13 +425,13 @@ public class BohaterScreen implements Screen {
             tableBackPack.clear();
             tableBackPack.setDebug(true);
 
-            tableBackPack.add(new Label("Plecak", a.skin)).pad(5).colspan(10);
+            tableBackPack.add(new Label("Plecak", v.getA().skin)).pad(5).colspan(10);
             tableBackPack.row();
 
             for (int i = 0; i < sprawdzBohatera().getEquipment().size(); i++) {
                 tableBackPack.add(sprawdzBohatera().getEquipment().get(i)).size(40).pad(2);
-                tmpButtonRemove.add(new TextButton("Usun" + i, a.skin));
-                tmpButtonSetUp.add(new TextButton("Zaloz" + i, a.skin));
+                tmpButtonRemove.add(new TextButton("Usun" + i, v.getA().skin));
+                tmpButtonSetUp.add(new TextButton("Zaloz" + i, v.getA().skin));
 
                 tmpButtonRemove.get(i).addListener(new ClickListener() {
                     @Override
@@ -491,22 +495,22 @@ public class BohaterScreen implements Screen {
             tableSpells.clear();
             tableSpells.setDebug(true);
 
-            tableSpells.add(new Label("Czary", a.skin)).pad(2).colspan(10);
+            tableSpells.add(new Label("Czary", v.getA().skin)).pad(2).colspan(10);
             tableSpells.row();
 
             for (int i = 0; i < sprawdzBohatera().getListOfSpells().size(); i++) {
-                final SpellCreator sC = new SpellCreator(a, gs);
+                final SpellCreator sC = new SpellCreator(v);
                 DefaultActor dA = new DefaultActor(sC.getSpellTexture(
-                        gs.getBohaterZaznaczony().getListOfSpells().get(i)), i, i);
+                        v.getGs().getBohaterZaznaczony().getListOfSpells().get(i)), i, i);
 
                 final int tempI = i;
 
                 dA.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        new Dialog("Lokacja Startowa", a.skin) {
+                        new Dialog("Lokacja Startowa", v.getA().skin) {
                             {
-                                text(sC.getSpellDescription(gs.getBohaterZaznaczony().getListOfSpells().get(tempI)));
+                                text(sC.getSpellDescription(v.getGs().getBohaterZaznaczony().getListOfSpells().get(tempI)));
                                 button("anuluj", "anuluj");
                             }
 
@@ -552,28 +556,28 @@ public class BohaterScreen implements Screen {
 
         public Interface() {
             // współczynniki
-            lblAttack = new Label("", a.skin);
-            lblDefence = new Label("", a.skin);
-            lblHp = new Label("", a.skin);
-            lblSpeed = new Label("", a.skin);
-            lblPower = new Label("", a.skin);
-            lblWisdom = new Label("", a.skin);
+            lblAttack = new Label("", v.getA().skin);
+            lblDefence = new Label("", v.getA().skin);
+            lblHp = new Label("", v.getA().skin);
+            lblSpeed = new Label("", v.getA().skin);
+            lblPower = new Label("", v.getA().skin);
+            lblWisdom = new Label("", v.getA().skin);
 
-            lblHeroClass = new Label("", a.skin);
-            lblLevel = new Label("", a.skin);
-            lblActualHp = new Label("", a.skin);
-            lblExp = new Label("", a.skin);
+            lblHeroClass = new Label("", v.getA().skin);
+            lblLevel = new Label("", v.getA().skin);
+            lblActualHp = new Label("", v.getA().skin);
+            lblExp = new Label("", v.getA().skin);
 
             // ekwipunek
-            lblHead = new Label("", a.skin);
-            lblBody = new Label("", a.skin);
-            lblLHand = new Label("", a.skin);
-            lblRHand = new Label("", a.skin);
-            lblLegs = new Label("", a.skin);
-            lblFoots = new Label("", a.skin);
+            lblHead = new Label("", v.getA().skin);
+            lblBody = new Label("", v.getA().skin);
+            lblLHand = new Label("", v.getA().skin);
+            lblRHand = new Label("", v.getA().skin);
+            lblLegs = new Label("", v.getA().skin);
+            lblFoots = new Label("", v.getA().skin);
 
             // przycisk wyjścia
-            btnExit = new TextButton("EXIT", a.skin);
+            btnExit = new TextButton("EXIT", v.getA().skin);
 
             addListeners();
         }
@@ -585,8 +589,8 @@ public class BohaterScreen implements Screen {
             btnExit.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    //gs.setActualScreen(1);
-                    g.setScreen(Assets.mapScreen);
+                    //v.getGs().setActualScreen(1);
+                    v.getG().setScreen(v.getMapScreen());
                     tables.tableMain.clear();
                     ;
                     tables.tableStats.clear();
@@ -605,22 +609,22 @@ public class BohaterScreen implements Screen {
              * Update statystyk
              */
             lblAttack.setText("Atak: " + sprawdzBohatera().getAtak()
-                            + " (" + Fight.getAtakEkwipunkuBohaterAtakujacego(gs.getBohaterZaznaczony()) + ")"
+                    + " (" + Fight.getAtakEkwipunkuBohaterAtakujacego(v.getGs().getBohaterZaznaczony()) + ")"
                             + " (" + sprawdzBohatera().getAtakEfekt() + ")"
             );
             lblDefence.setText("Obrona: " + sprawdzBohatera().getObrona()
-                            + " (" + Fight.getObronaEkwipunkuBohaterBroniacego(gs.getBohaterZaznaczony()) + ")"
+                    + " (" + Fight.getObronaEkwipunkuBohaterBroniacego(v.getGs().getBohaterZaznaczony()) + ")"
                             + " (" + sprawdzBohatera().getObronaEfekt() + ")"
             );
             lblHp.setText("HP: " + sprawdzBohatera().getHp());
             lblSpeed.setText("Szybkosc: " + sprawdzBohatera().getSzybkosc()
-                            + " (" + Fight.getSzybkoscEkwipunkuBohatera(gs.getBohaterZaznaczony()) + ")"
+                    + " (" + Fight.getSzybkoscEkwipunkuBohatera(v.getGs().getBohaterZaznaczony()) + ")"
             );
             lblPower.setText("Moc: " + sprawdzBohatera().getMoc()
-                    + " (" + Fight.getMocEkwipunkuBohatera(gs.getBohaterZaznaczony()) + ")"
+                    + " (" + Fight.getMocEkwipunkuBohatera(v.getGs().getBohaterZaznaczony()) + ")"
             );
             lblWisdom.setText("Wiedza: " + sprawdzBohatera().getWiedza()
-                    + " (" + Fight.getWiedzaEkwipunkuBohatera(gs.getBohaterZaznaczony()) + ")"
+                    + " (" + Fight.getWiedzaEkwipunkuBohatera(v.getGs().getBohaterZaznaczony()) + ")"
             );
 
             lblActualHp.setText("Hit Points: " + sprawdzBohatera().getActualHp());

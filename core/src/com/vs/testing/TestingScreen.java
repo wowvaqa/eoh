@@ -26,6 +26,7 @@ import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Mapa;
+import com.vs.eoh.V;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,7 +50,8 @@ public class TestingScreen implements Screen {
     private final FitViewport viewPort;
 
     private final Stage stage01 = new Stage();
-
+    private final float rotationSpeed;
+    Pixmap pm;
     private TextButton btnMapEditor;
     private TextButton btnExit;
     private TextButton btnSerylizacja;
@@ -58,19 +60,11 @@ public class TestingScreen implements Screen {
     private TextButton btnGetConnections;
     private TextButton btnPathInfo;
     private TextButton btnOdczytSerylizacji;
-
-    private Table tabela = new Table();
-    private final Assets a;
-    private final Game g;
-    private final GameStatus gs;
-    
     //private Server server;
+    private Table tabela = new Table();
+    private V v;
 
-    Pixmap pm;
-
-    private final float rotationSpeed;
-
-    public TestingScreen(Game g, Assets a, GameStatus gs) {
+    public TestingScreen(V v) {
 
         pm = new Pixmap(Gdx.files.internal("mobElfTex.png"));
 
@@ -90,11 +84,9 @@ public class TestingScreen implements Screen {
         c = new OrthographicCamera(w, h);
         viewPort = new FitViewport(w, h, c);
 
-        this.a = a;
-        this.gs = gs;
-        this.g = g;
+        this.v = v;
 
-        tabela = new Table(a.skin);
+        tabela = new Table(v.getA().skin);
 
         makeSprites(pmTex);
 
@@ -128,15 +120,15 @@ public class TestingScreen implements Screen {
     }
 
     private void makeButtons() {
-        btnMapEditor = new TextButton("MapEditor", a.skin);
+        btnMapEditor = new TextButton("MapEditor", v.getA().skin);
         btnMapEditor.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                g.setScreen(Assets.mapEditor);
+                v.getG().setScreen(v.getMapEditor());
             }
         });
 
-        btnServer = new TextButton("Run Server", a.skin);
+        btnServer = new TextButton("Run Server", v.getA().skin);
         btnServer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -172,7 +164,7 @@ public class TestingScreen implements Screen {
         }
         );
 
-        btnClient = new TextButton("Run Client", a.skin);
+        btnClient = new TextButton("Run Client", v.getA().skin);
 
         btnClient.addListener(
                 new ClickListener() {
@@ -218,8 +210,8 @@ public class TestingScreen implements Screen {
                     }
                 }
         );
-        
-        btnGetConnections = new TextButton("Get Connections", a.skin);
+
+        btnGetConnections = new TextButton("Get Connections", v.getA().skin);
         btnGetConnections.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -227,7 +219,7 @@ public class TestingScreen implements Screen {
             }
         });
 
-        btnPathInfo = new TextButton("Path Info", a.skin);
+        btnPathInfo = new TextButton("Path Info", v.getA().skin);
         btnPathInfo.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -252,7 +244,7 @@ public class TestingScreen implements Screen {
                 }
         });
 
-        btnExit = new TextButton("EXIT", a.skin);
+        btnExit = new TextButton("EXIT", v.getA().skin);
 
         btnExit.setPosition(
                 1, 1);
@@ -263,12 +255,12 @@ public class TestingScreen implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y
                     ) {
-                        g.setScreen(Assets.mainMenuScreen);
+                        v.getG().setScreen(v.getMainMenuScreen());
                     }
                 }
         );
 
-        btnSerylizacja = new TextButton("Serylizacja", a.skin);
+        btnSerylizacja = new TextButton("Serylizacja", v.getA().skin);
 
         btnSerylizacja.addListener(
                 new ClickListener() {
@@ -290,7 +282,7 @@ public class TestingScreen implements Screen {
                 }
         );
 
-        btnOdczytSerylizacji = new TextButton("Odczyt Serylizacji", a.skin);
+        btnOdczytSerylizacji = new TextButton("Odczyt Serylizacji", v.getA().skin);
 
         btnOdczytSerylizacji.addListener(
                 new ClickListener() {
@@ -323,7 +315,7 @@ public class TestingScreen implements Screen {
         tabela.setFillParent(true);
         tabela.pad(10);
 
-        tabela.add(new Label("Testowanie funkcji", a.skin)).expand().align(Align.top);
+        tabela.add(new Label("Testowanie funkcji", v.getA().skin)).expand().align(Align.top);
         tabela.row();
         tabela.add(btnSerylizacja);
         tabela.add(btnOdczytSerylizacji);

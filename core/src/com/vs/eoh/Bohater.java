@@ -37,9 +37,7 @@ public class Bohater extends Actor {
     public int damageNetwork = 0;   // do rysowania labelki z ilością obrażeń
     // Statystyki
     private int aiDistance = 0;
-    private Assets a;
-    private GameStatus gs;
-    private Game g;
+    private V v;
     private Sprite sprite;    // wygląd
     private Image image;
     private Texture bohaterTex;
@@ -108,16 +106,15 @@ public class Bohater extends Actor {
      *                              zostanie kliknięty
      * @param lokaczjaPoczatkowaX   Lokacja X początkowa bohatera na mapie
      * @param lokaczjaPoczatkowaY   Lokacja Y początkowa bohatera na mapie
-     * @param a                     Referencja do obiektu przechowującego Assety
      * @param pozycjaXnaMapie       definiuje pozycje X w obiekcie klasy Mapa
      * @param pozycjaYnaMapie       definiuje pozycje Y w obiekcie klasy Mapa
-     * @param gs                    Referencja do obiektu klasy GameStatus
-     * @param g                     Referencja do obiektu kalsy Game
      * @param kp                    Klasa postaci
      */
     public Bohater(Texture textureIcon, Texture textureIconZaznaczona,
-                   int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, Assets a,
-                   int pozycjaXnaMapie, int pozycjaYnaMapie, GameStatus gs, Game g, KlasyPostaci kp) {
+                   int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY,
+                   int pozycjaXnaMapie, int pozycjaYnaMapie, KlasyPostaci kp, V v) {
+
+        this.v = v;
 
         aiDistance = 0;
         this.efekty = new ArrayList<Effect>();
@@ -129,13 +126,10 @@ public class Bohater extends Actor {
 
         this.equipment = new ArrayList<Item>();
         this.spells = new ArrayList<SpellActor>();
-        this.gs = gs;
         this.pozXnaMapie = pozycjaXnaMapie;
         this.pozYnaMapie = pozycjaYnaMapie;
         this.bohaterTex = textureIcon;
         this.bohaterCheckTex = textureIconZaznaczona;
-        this.a = a;
-        this.g = g;
         this.pozX = lokaczjaPoczatkowaX;
         this.pozY = lokaczjaPoczatkowaY;
         this.klasyPostaci = kp;
@@ -146,15 +140,15 @@ public class Bohater extends Actor {
 
         this.dodajListnera();
 
-        ItemCreator ic = new ItemCreator(this.gs);
+        ItemCreator ic = new ItemCreator(v);
 
         // Utworzenie pdst. zestawu itemków i przypisanie do ekwipunku bohatera
-        itemLewaReka = ic.utworzItem(DostepneItemki.Piesci, this.a, this.g);
-        itemPrawaReka = ic.utworzItem(DostepneItemki.Piesci, this.a, this.g);
-        itemNogi = ic.utworzItem(DostepneItemki.Nogi, this.a, this.g);
-        itemStopy = ic.utworzItem(DostepneItemki.LnianeButy, this.a, this.g);
-        itemGlowa = ic.utworzItem(DostepneItemki.Glowa, this.a, this.g);
-        itemKorpus = ic.utworzItem(DostepneItemki.LnianaKoszula, this.a, this.g);
+        itemLewaReka = ic.utworzItem(DostepneItemki.Piesci, v);
+        itemPrawaReka = ic.utworzItem(DostepneItemki.Piesci, v);
+        itemNogi = ic.utworzItem(DostepneItemki.Nogi, v);
+        itemStopy = ic.utworzItem(DostepneItemki.LnianeButy, v);
+        itemGlowa = ic.utworzItem(DostepneItemki.Glowa, v);
+        itemKorpus = ic.utworzItem(DostepneItemki.LnianaKoszula, v);
 
         // Tymczasowa regeneracja many
         this.manaRegeneration = 1;
@@ -199,7 +193,7 @@ public class Bohater extends Actor {
             public void clicked(InputEvent event, float x, float y) {
                 boolean bohaterZaznaczony = false;
                 // Sprawdza czy któryś z bohaterów na mapie nie jest już zaznaczony
-                for (Gracz i : gs.getGracze()) {
+                for (Gracz i : v.getGs().getGracze()) {
                     for (Bohater j : i.getBohaterowie()) {
                         if (j.zaznaczony) {
                             j.setZaznaczony(false);
@@ -210,12 +204,12 @@ public class Bohater extends Actor {
                 }
                 // Jeżeli TRUE wtedy uniemozliwia jego zaznaczenie
                 if (bohaterZaznaczony) {
-                    DialogScreen dS = new DialogScreen("Blad", a.skin, "Nie moge zaznaczyc dwoch bohaterow", Assets.stage01MapScreen);
+                    DialogScreen dS = new DialogScreen("Blad", v.getA().skin, "Nie moge zaznaczyc dwoch bohaterow", Assets.stage01MapScreen);
                     System.out.println("Nie mogę zaznaczyc dwóch bohaterów");
                     // Jeżeli FALSE wtedy uruchamia reszte procedur dla bohatera
                 } else {
                     // Sprawdza czy bohater gracza porusza się w sowjej turze.
-                    if (przynaleznoscDoGracza != gs.getTuraGracza()) {
+                    if (przynaleznoscDoGracza != v.getGs().getTuraGracza()) {
                         System.out.println("Ten Gracz teraz nie ma swojej tury");
                     } else {
                         // Sprawdza czy bohater posiada jeszcze punkty ruchu.
@@ -223,7 +217,7 @@ public class Bohater extends Actor {
                             System.out.println("Bohater nie posiada już ruchu!");
                             sprite.setTexture(bohaterCheckTex);
                             zaznaczony = true;
-                            gs.setCzyZaznaczonoBohatera(true);
+                            v.getGs().setCzyZaznaczonoBohatera(true);
                             // jeżeli posiada punkty ruchu.
                             aktualizujEfektyBohatera();
                         } else {
@@ -234,11 +228,11 @@ public class Bohater extends Actor {
                                 moveable = true;
                                 sprite.setTexture(bohaterCheckTex);
                                 zaznaczony = true;
-                                gs.setCzyZaznaczonoBohatera(true);
+                                v.getGs().setCzyZaznaczonoBohatera(true);
 
                                 moveInterfaceOn = true;
 
-                                Ruch ruch = new Ruch(gs.getBohaterZaznaczony(), a, gs);
+                                Ruch ruch = new Ruch(v.getGs().getBohaterZaznaczony(), v);
                             }
                         }
                     }
@@ -358,7 +352,7 @@ public class Bohater extends Actor {
      * @return obiekt klasy pole.
      */
     public Pole getFiled() {
-        return gs.getMapa().getPola()[getPozXnaMapie()][getPozYnaMapie()];
+        return v.getGs().getMapa().getPola()[getPozXnaMapie()][getPozYnaMapie()];
     }
 
     /**
@@ -387,9 +381,9 @@ public class Bohater extends Actor {
         }
 
         if (this.animujCiecieNetwork) {
-            a.animujCiecie((int) this.getX(), (int) this.getY());
+            v.getA().animujCiecie((int) this.getX(), (int) this.getY());
             //a.animujLblDmgNetwork(this.getX() + 50, this.getY() + 50, damageNetwork);
-            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), a);
+            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), v.getA());
             this.animujCiecieNetwork = false;
         }
 
@@ -1072,15 +1066,19 @@ public class Bohater extends Actor {
     }
 
     public Assets getA() {
-        return a;
+        return v.getA();
     }
 
     public GameStatus getGs() {
-        return gs;
+        return v.getGs();
     }
 
     public Game getG() {
-        return g;
+        return v.getG();
+    }
+
+    public V getV() {
+        return v;
     }
 
     /**

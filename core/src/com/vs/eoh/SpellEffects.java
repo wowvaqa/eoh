@@ -40,12 +40,11 @@ public class SpellEffects {
 
     /**
      * @param spell            Referencja do obiketu czaru
-     * @param a                Referencja do obiketu Assts
      * @param bohaterCastujacy Referencja do obiketu bohatera rzucającego czar
      * @param obiketBroniacy   Referencja do obiektu na którego czar jest rzucany
      *                         (bohater/mob)
      */
-    public void dzialanie(SpellActor spell, Object obiketBroniacy, Bohater bohaterCastujacy, Assets a) {
+    public void dzialanie(SpellActor spell, Object obiketBroniacy, Bohater bohaterCastujacy, V v) {
         switch (spell.getRodzajCzaru()) {
 
             case SummonBear:
@@ -57,8 +56,8 @@ public class SpellEffects {
                     Texture texSummon = new Texture("moby/summons/bear.png");
                     Texture texSummonZ = new Texture("moby/summons/bearZ.png");
 
-                    Bohater summonBohater = new Bohater(texSummon, texSummonZ, spell.getSpellX() * 100, spell.getSpellY() * 100, bohaterCastujacy.getA(), spell.getSpellX()
-                            , spell.getSpellY(), bohaterCastujacy.getGs(), bohaterCastujacy.getG(), KlasyPostaci.Summmon);
+                    Bohater summonBohater = new Bohater(texSummon, texSummonZ, spell.getSpellX() * 100, spell.getSpellY() * 100, spell.getSpellX()
+                            , spell.getSpellY(), KlasyPostaci.Summmon, v);
 
                     bohaterCastujacy.getGs().getMapa().getPola()[spell.getSpellX()][spell.getSpellY()].setBohater(summonBohater);
 
@@ -90,8 +89,8 @@ public class SpellEffects {
                     Texture texSummon = new Texture("moby/summons/wolf.png");
                     Texture texSummonZ = new Texture("moby/summons/wolfZ.png");
 
-                    Bohater summonBohater = new Bohater(texSummon, texSummonZ, spell.getSpellX() * 100, spell.getSpellY() * 100, bohaterCastujacy.getA(), spell.getSpellX()
-                            , spell.getSpellY(), bohaterCastujacy.getGs(), bohaterCastujacy.getG(), KlasyPostaci.Summmon);
+                    Bohater summonBohater = new Bohater(texSummon, texSummonZ, spell.getSpellX() * 100, spell.getSpellY() * 100, spell.getSpellX()
+                            , spell.getSpellY(), KlasyPostaci.Summmon, v);
 
                     bohaterCastujacy.getGs().getMapa().getPola()[spell.getSpellX()][spell.getSpellY()].setBohater(summonBohater);
 
@@ -117,17 +116,17 @@ public class SpellEffects {
             case FireBall:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
-                    a.fireball.play();
+                    v.getA().fireball.play();
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FireExplosionAnimation));
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), a);
+                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
                         animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
-                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), a);
+                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), v.getA());
                     } else if (obiketBroniacy.getClass() == Castle.class){
                         Gdx.app.log("Typ przeciwnika:", "Zamek");
                         Castle tmpCastle = (Castle) obiketBroniacy;
@@ -135,7 +134,7 @@ public class SpellEffects {
                         //a.animujSpellLblDmg(tmpCastle.getX(), tmpCastle.getY(), bohaterCastujacy, tmpCastle, spell);
 
                         Animation.animujLblDamage(tmpCastle.getX(), tmpCastle.getY(),
-                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), a);
+                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), v.getA());
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -150,20 +149,20 @@ public class SpellEffects {
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.SlashAnimation));
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), a);
+                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
                         animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
-                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), a);
+                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), v.getA());
 
                     }  else if (obiketBroniacy.getClass() == Castle.class){
                         Gdx.app.log("Typ przeciwnika:", "Zamek");
                         Castle tmpCastle = (Castle) obiketBroniacy;
                         animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
                         Animation.animujLblDamage(tmpCastle.getX(), tmpCastle.getY(),
-                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), a);
+                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), v.getA());
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -180,7 +179,7 @@ public class SpellEffects {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
 
                         int dmg = (Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell));
-                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + dmg, a);
+                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + dmg, v.getA());
                         bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + dmg);
                         if (bohaterCastujacy.getActualHp() > bohaterCastujacy.getHp()) {
                             bohaterCastujacy.setActualHp(bohaterCastujacy.getHp());
@@ -198,7 +197,7 @@ public class SpellEffects {
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
 
                         int dmg = (Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell));
-                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + dmg, a);
+                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + dmg, v.getA());
                         bohaterCastujacy.setActualHp(bohaterCastujacy.getActualHp() + dmg);
                         tmpMob.setAktualneHp(tmpMob.getAktualneHp() - dmg);
                         if (tmpMob.getAktualneHp() > tmpMob.getHp()) {
@@ -220,22 +219,22 @@ public class SpellEffects {
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
-                    a.thuner.play();
+                    v.getA().thuner.play();
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), a);
+                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
                         animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
-                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), a);
+                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), v.getA());
                     }  else if (obiketBroniacy.getClass() == Castle.class){
                         Gdx.app.log("Typ przeciwnika:", "Zamek");
                         Castle tmpCastle = (Castle) obiketBroniacy;
                         animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
                         Animation.animujLblDamage(tmpCastle.getX(), tmpCastle.getY(),
-                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), a);
+                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), v.getA());
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -250,19 +249,19 @@ public class SpellEffects {
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
-                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), a);
+                        Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
                         animActor.setPosition(tmpBoh.getX(), tmpBoh.getY());
                     } else if (obiketBroniacy.getClass() == Mob.class) {
                         System.out.println("przeciwnik jest mobem");
                         Mob tmpMob = (Mob) obiketBroniacy;
                         animActor.setPosition(tmpMob.getX(), tmpMob.getY());
-                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), a);
+                        Animation.animujLblDamage(tmpMob.getX(), tmpMob.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpMob, spell)), v.getA());
                     }  else if (obiketBroniacy.getClass() == Castle.class){
                         Gdx.app.log("Typ przeciwnika:", "Zamek");
                         Castle tmpCastle = (Castle) obiketBroniacy;
                         animActor.setPosition(tmpCastle.getX(), tmpCastle.getY());
                         Animation.animujLblDamage(tmpCastle.getX(), tmpCastle.getY(),
-                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), a);
+                                "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpCastle, spell)), v.getA());
                     }
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -276,7 +275,7 @@ public class SpellEffects {
                 Random rnd = new Random();
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
-                    a.freezSpell.play();
+                    v.getA().freezSpell.play();
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation));
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
 
@@ -308,7 +307,7 @@ public class SpellEffects {
             case Rage:
                 // Zwiększa atak o punkty mocy do końca tury.
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
-                    a.rageSpell.play();
+                    v.getA().rageSpell.play();
                     this.efektAtak = 1;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
@@ -326,7 +325,7 @@ public class SpellEffects {
             case Haste:
                 // Zwiększa aktualną szybkość o liczbę punktów mocy
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
-                    a.magicWand.play();
+                    v.getA().magicWand.play();
                     System.out.println("Czar HASTE");
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.setPozostaloRuchow(bohaterCastujacy.getPozostaloRuchow() + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));

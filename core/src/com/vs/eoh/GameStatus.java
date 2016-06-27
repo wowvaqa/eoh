@@ -25,9 +25,9 @@ public class GameStatus {
     // Listy zawierają wszystkie dostępne itemy danych poziomów.
     public static ArrayList<DostepneItemki> itemyPoziom1 = new ArrayList<DostepneItemki>();
     public static ArrayList<DostepneItemki> itemyPoziom2 = new ArrayList<DostepneItemki>();
-    public static GameStatus gs;
-    public static Assets a;
-    public static Game g;
+    //    public static GameStatus gs;
+//    public static Assets a;
+//    public static Game g;
     public static boolean gameStart = false;
     public static int CostOfNewHero = 20;
     public float xDlaInterfejsuRuchu = 0;
@@ -57,8 +57,9 @@ public class GameStatus {
     // Do uniemożliweinia ruchu podczas penetrowania skrzyni ze skarbem
     private Item item;
 
-    public GameStatus() {
-        gs = this;
+    public GameStatus(Game g) {
+
+        //gs = this;
         wczytajItemy();
 //        try {
 //            wczytajMape();

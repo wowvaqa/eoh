@@ -14,8 +14,7 @@ import java.util.ArrayList;
  */
 public class SpellActor extends DefaultActor {
 
-    private Assets a;
-    private GameStatus gs;
+    private V v;
     private Bohater bohater;
     private Spells rodzajCzaru;
     private ArrayList<SpellEffects> spellEffects;
@@ -51,15 +50,12 @@ public class SpellActor extends DefaultActor {
      * @param x Pozycja X czaru
      * @param y Pozycja Y czaru
      * @param bohater Ref. do obikektu bohatera
-     * @param a Referencja do obiketu Assets
-     * @param gs Referencja do obiketu Game Status
      */
-    public SpellActor(Texture tekstura, int x, int y, Bohater bohater, Assets a, GameStatus gs) {
+    public SpellActor(Texture tekstura, int x, int y, Bohater bohater, V v) {
         super(tekstura, x, y);
         this.bohater = bohater;
         this.dodajListnera();
-        this.a = a;
-        this.gs = gs;
+        this.v = v;
         //this.spellEffects = new ArrayList<SpellEffects>();
     }
 
@@ -76,7 +72,7 @@ public class SpellActor extends DefaultActor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Kliknięto w czar");
-                SpellCaster spellCaster = new SpellCaster(bohater, a, gs, sA);
+                SpellCaster spellCaster = new SpellCaster(bohater, sA, v);
             }
         });
     }

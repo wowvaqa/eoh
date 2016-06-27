@@ -23,6 +23,7 @@ import com.vs.enums.TypyTerenu;
 import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.Mapa;
+import com.vs.eoh.V;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,9 +43,6 @@ import java.util.logging.Logger;
  */
 public class MapEditor implements Screen {
 
-    private final Game g;
-    private final Assets a;
-
     private final Stage stage01 = new Stage();
     private final Table tabela = new Table();
     private final Table tabela01 = new Table();
@@ -52,6 +50,7 @@ public class MapEditor implements Screen {
     private final Array array = new Array();
     // Przechowuje typy terenu
     private final ArrayList listaPol = new ArrayList();
+    private V v;
     private TextButton btnExit;
     private int iloscPolX = 10;
     private int iloscPolY = 10;
@@ -68,15 +67,14 @@ public class MapEditor implements Screen {
     private TextButton btnMinus;
     private TextButton btnZapiszMape;
 
-    public MapEditor(Game g, Assets a) {
-        this.g = g;
-        this.a = a;
+    public MapEditor(V v) {
+        this.v = v;
 
         array.add(TypyTerenu.Trawa);
         array.add(TypyTerenu.Gory);
         array.add(TypyTerenu.Drzewo);
 
-        lblP1 = new Label("P1", a.skin);
+        lblP1 = new Label("P1", v.getA().skin);
 
         generujNowaMape();
 
@@ -123,7 +121,7 @@ public class MapEditor implements Screen {
 //                SelectBox sb = new SelectBox(a.skin);
                 //               sb.setItems(array);
                 //listaPol.add(sb);
-                listaPol.add(new poleEdytora(a.trawaTex, 1, 1, this.stage01, i, j));
+                listaPol.add(new poleEdytora(v.getA().trawaTex, 1, 1, this.stage01, i, j));
             }
         }
     }
@@ -133,7 +131,7 @@ public class MapEditor implements Screen {
      */
     private void makeButtons() {
 
-        btnZapiszMape = new TextButton("Zapisz Mape", a.skin);
+        btnZapiszMape = new TextButton("Zapisz Mape", v.getA().skin);
         btnZapiszMape.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -145,15 +143,15 @@ public class MapEditor implements Screen {
             }
         });
 
-        btnExit = new TextButton("EXIT", a.skin);
+        btnExit = new TextButton("EXIT", v.getA().skin);
         btnExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                g.setScreen(Assets.mainMenuScreen);
+                v.getG().setScreen(v.getMainMenuScreen());
             }
         });
 
-        btnPlus = new TextButton("+", a.skin);
+        btnPlus = new TextButton("+", v.getA().skin);
         btnPlus.setPosition(1, 1);
         btnPlus.setSize(200, 100);
         btnPlus.addListener(new ClickListener() {
@@ -168,7 +166,7 @@ public class MapEditor implements Screen {
             }
         });
 
-        btnMinus = new TextButton("-", a.skin);
+        btnMinus = new TextButton("-", v.getA().skin);
         btnMinus.setPosition(1, 1);
         btnMinus.setSize(200, 100);
         btnMinus.addListener(new ClickListener() {
@@ -183,8 +181,8 @@ public class MapEditor implements Screen {
             }
         });
 
-        lblIloscPolX = new Label("Ilosc pol X: " + iloscPolX, a.skin);
-        lblIloscPolY = new Label("Ilosc pol Y: " + iloscPolY, a.skin);
+        lblIloscPolX = new Label("Ilosc pol X: " + iloscPolX, v.getA().skin);
+        lblIloscPolY = new Label("Ilosc pol Y: " + iloscPolY, v.getA().skin);
     }
 
     private void aktualizacjaPol() {
@@ -199,7 +197,7 @@ public class MapEditor implements Screen {
         tabela.setDebug(true);
         tabela.pad(10);
 
-        tabela.add(new Label("Map Editor", a.skin)).expandX().colspan(100).align(Align.top);
+        tabela.add(new Label("Map Editor", v.getA().skin)).expandX().colspan(100).align(Align.top);
         tabela.row();
         tabela.add(lblIloscPolX);
         tabela.add(btnMinus);
@@ -237,7 +235,7 @@ public class MapEditor implements Screen {
         }
 
         poleEdytora tmpPE = (poleEdytora) tabela01.getCells().get(99).getActor();
-        tmpPE.getSprite().setTexture(a.mobDwarfTex);
+        tmpPE.getSprite().setTexture(v.getA().mobDwarfTex);
 
 //        for (Object listaPol1 : listaPol) {
 //            tabela01.add((poleEdytora) listaPol1);
@@ -300,10 +298,10 @@ public class MapEditor implements Screen {
      * @return Window
      */
     private Window getWindowOfSaveMap() {
-        final Window window = new Window("Zapisz Mape", a.skin);
-        final TextField txtFldNazwaMapy = new TextField("nazwa", a.skin);
+        final Window window = new Window("Zapisz Mape", v.getA().skin);
+        final TextField txtFldNazwaMapy = new TextField("nazwa", v.getA().skin);
 
-        TextButton btnExitWindow = new TextButton("EXIT", a.skin);
+        TextButton btnExitWindow = new TextButton("EXIT", v.getA().skin);
         btnExitWindow.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -311,7 +309,7 @@ public class MapEditor implements Screen {
             }
         });
 
-        TextButton btnSaveWindow = new TextButton("SAVE", a.skin);
+        TextButton btnSaveWindow = new TextButton("SAVE", v.getA().skin);
         btnSaveWindow.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -346,7 +344,7 @@ public class MapEditor implements Screen {
 
         for (int i = 0; i < mapa.getIloscPolX(); i++)
             for (int j = 0; j < mapa.getIloscPolY(); j++)
-                this.mapaPolEdycyjncyh[i][j] = new poleEdytora(a.trawaTex, 0, 0, stage01, i, j);
+                this.mapaPolEdycyjncyh[i][j] = new poleEdytora(v.getA().trawaTex, 0, 0, stage01, i, j);
     }
 
     /**
@@ -454,7 +452,7 @@ public class MapEditor implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    new Dialog("Edycja Pola", a.skin) {
+                    new Dialog("Edycja Pola", v.getA().skin) {
                         {
                             button("Lokacja Startowa", "ls");
                             button("Teren", "teren");
@@ -468,7 +466,7 @@ public class MapEditor implements Screen {
                         protected void result(Object object) {
 
                             if (object.equals("ls")) {
-                                new Dialog("Lokacja Startowa", a.skin) {
+                                new Dialog("Lokacja Startowa", v.getA().skin) {
                                     {
                                         button("Player 1", "p1");
                                         button("Player 2", "p2");
@@ -481,19 +479,19 @@ public class MapEditor implements Screen {
                                     protected void result(Object object) {
                                         if (object.equals("p1")) {
                                             lokacjaStartowaP1 = true;
-                                            getSprite().setTexture(a.mobWizardTex);
+                                            getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("p2")) {
                                             lokacjaStartowaP2 = true;
-                                            getSprite().setTexture(a.mobWizardTex);
+                                            getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("p3")) {
                                             lokacjaStartowaP3 = true;
-                                            getSprite().setTexture(a.mobWizardTex);
+                                            getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("p4")) {
                                             lokacjaStartowaP4 = true;
-                                            getSprite().setTexture(a.mobWizardTex);
+                                            getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("anuluj")) {
                                             this.remove();
@@ -502,7 +500,7 @@ public class MapEditor implements Screen {
                                 }.show(stage);
                                 // --- SKRZYNIA ZE SKARBEM ---------------------
                             } else if (object.equals("skrzynia")) {
-                                new Dialog("Lokacja Startowa skrzyni", a.skin) {
+                                new Dialog("Lokacja Startowa skrzyni", v.getA().skin) {
                                     {
                                         button("Lvl 1", "1");
                                         button("Lvl 2", "2");
@@ -515,11 +513,11 @@ public class MapEditor implements Screen {
                                     protected void result(Object object) {
                                         if (object.equals("1")) {
                                             tresureBox1Location = true;
-                                            getSprite().setTexture(a.texTresureBox);
+                                            getSprite().setTexture(v.getA().texTresureBox);
                                             this.remove();
                                         } else if (object.equals("2")) {
                                             tresureBox2Location = true;
-                                            getSprite().setTexture(a.texTresureBox);
+                                            getSprite().setTexture(v.getA().texTresureBox);
                                             this.remove();
 //                                        } else if (object.equals("3")) {
 //                                            this.remove();
@@ -528,14 +526,14 @@ public class MapEditor implements Screen {
                                         } else if (object.equals("anuluj")) {
                                             tresureBox1Location = false;
                                             tresureBox2Location = false;
-                                            getSprite().setTexture(a.trawaTex);
+                                            getSprite().setTexture(v.getA().trawaTex);
                                             this.remove();
                                         }
                                     }
                                 }.show(stage);
                                 // --- LOKACJA STARTOWA MOBÓW ------------------
                             } else if (object.equals("mobs")) {
-                                new Dialog("Lokacja Startowa mobów", a.skin) {
+                                new Dialog("Lokacja Startowa mobów", v.getA().skin) {
                                     {
                                         button("Lvl 1", "1");
                                         button("Lvl 2", "2");
@@ -548,11 +546,11 @@ public class MapEditor implements Screen {
                                     protected void result(Object object) {
                                         if (object.equals("1")) {
                                             mob1Location = true;
-                                            getSprite().setTexture(a.texSzkieletMob);
+                                            getSprite().setTexture(v.getA().texSzkieletMob);
                                             this.remove();
                                         } else if (object.equals("2")) {
                                             mob2Location = true;
-                                            getSprite().setTexture(a.texSpiderMob);
+                                            getSprite().setTexture(v.getA().texSpiderMob);
                                             this.remove();
 
 //                                        } else if (object.equals("3")) {
@@ -562,7 +560,7 @@ public class MapEditor implements Screen {
                                         } else if (object.equals("anuluj")) {
                                             mob1Location = false;
                                             mob2Location = false;
-                                            getSprite().setTexture(a.trawaTex);
+                                            getSprite().setTexture(v.getA().trawaTex);
                                             this.remove();
                                         }
                                     }
@@ -570,7 +568,7 @@ public class MapEditor implements Screen {
 
                                 // BUDYNKI
                             } else if (object.equals("budynki")) {
-                                new Dialog("Budynki", a.skin) {
+                                new Dialog("Budynki", v.getA().skin) {
                                     {
                                         button("Atak", "atak");
                                         button("Obrona", "obrona");
@@ -589,49 +587,49 @@ public class MapEditor implements Screen {
                                     protected void result(Object object) {
                                         if (object.equals("atak")) {
                                             locTreningCamp = true;
-                                            getSprite().setTexture(a.texTreningCamp);
+                                            getSprite().setTexture(v.getA().texTreningCamp);
                                             this.remove();
                                         } else if (object.equals("obrona")) {
                                             locDefenceCamp = true;
-                                            getSprite().setTexture(a.texDefenceCamp);
+                                            getSprite().setTexture(v.getA().texDefenceCamp);
                                             this.remove();
                                         } else if (object.equals("moc")) {
                                             locPowerCamp = true;
-                                            getSprite().setTexture(a.texPowerCamp);
+                                            getSprite().setTexture(v.getA().texPowerCamp);
                                             this.remove();
                                         } else if (object.equals("wiedza")) {
                                             locWisdomCamp = true;
-                                            getSprite().setTexture(a.texWisdomCamp);
+                                            getSprite().setTexture(v.getA().texWisdomCamp);
                                             this.remove();
                                         } else if (object.equals("speed")) {
                                             locSpeedCamp = true;
-                                            getSprite().setTexture(a.texSpeedCamp);
+                                            getSprite().setTexture(v.getA().texSpeedCamp);
                                             this.remove();
                                         } else if (object.equals("hp")) {
                                             locHpCamp = true;
-                                            getSprite().setTexture(a.texHpCamp);
+                                            getSprite().setTexture(v.getA().texHpCamp);
                                             this.remove();
                                         } else if (object.equals("well")) {
                                             locWell = true;
-                                            getSprite().setTexture(a.texWell);
+                                            getSprite().setTexture(v.getA().texWell);
                                             this.remove();
                                         } else if (object.equals("temple")) {
                                             locTemple = true;
-                                            getSprite().setTexture(a.texTemple);
+                                            getSprite().setTexture(v.getA().texTemple);
                                             this.remove();
                                         } else if (object.equals("rnd")) {
                                             locRandomBulding = true;
-                                            getSprite().setTexture(a.texRandomBulding);
+                                            getSprite().setTexture(v.getA().texRandomBulding);
                                             this.remove();
                                         } else if (object.equals("anuluj")) {
-                                            getSprite().setTexture(a.trawaTex);
+                                            getSprite().setTexture(v.getA().trawaTex);
                                             this.remove();
                                         }
                                     }
                                 }.show(stage);
                                 // --- TEREN -----------------------------------
                             } else if (object.equals("teren")) {
-                                new Dialog("Typy Terenu", a.skin) {
+                                new Dialog("Typy Terenu", v.getA().skin) {
                                     {
                                         button("Las", "las");
                                         button("Gory", "gory");
@@ -643,20 +641,20 @@ public class MapEditor implements Screen {
                                     protected void result(Object object) {
                                         if (object.equals("las")) {
                                             typTerenu = TypyTerenu.Drzewo;
-                                            getSprite().setTexture(a.trawaDrzewoTex);
+                                            getSprite().setTexture(v.getA().trawaDrzewoTex);
                                             //formatujTeabele02();
                                             this.remove();
                                         } else if (object.equals("gory")) {
                                             typTerenu = TypyTerenu.Gory;
-                                            getSprite().setTexture(a.trawaGoraTex);
+                                            getSprite().setTexture(v.getA().trawaGoraTex);
                                             this.remove();
                                         } else if (object.equals("trawa")) {
                                             typTerenu = TypyTerenu.Trawa;
-                                            getSprite().setTexture(a.trawaTex);
+                                            getSprite().setTexture(v.getA().trawaTex);
                                             this.remove();
                                         } else if (object.equals("rzeka")) {
                                             typTerenu = TypyTerenu.Rzeka;
-                                            AtlasRegion region = a.tAtals.findRegion("riverES");
+                                            AtlasRegion region = v.getA().tAtals.findRegion("riverES");
                                             getSprite().setTexture(region.getTexture());
                                             this.remove();
                                         }
