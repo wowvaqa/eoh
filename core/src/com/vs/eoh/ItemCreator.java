@@ -1,13 +1,11 @@
 package com.vs.eoh;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.vs.screens.DialogScreen;
-
-import com.vs.enums.DostepneItemki;
 import com.vs.enums.CzesciCiala;
+import com.vs.enums.DostepneItemki;
 import com.vs.enums.TypItemu;
+import com.vs.screens.DialogScreen;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,5 @@
 package com.vs.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,12 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.enums.CzesciCiala;
 import com.vs.enums.TypItemu;
-import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.Effect;
@@ -31,8 +27,6 @@ import com.vs.eoh.V;
 import com.vs.network.Network;
 
 import java.util.ArrayList;
-
-import javax.xml.soap.Text;
 
 /**
  * Wyświetla screen z statystykami oraz ekwipunkiem bohatera

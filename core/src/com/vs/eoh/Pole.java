@@ -1,11 +1,10 @@
 package com.vs.eoh;
 
 // Klasa Pole jest wirtualnym polem przechowującym referencje do obiektu bohatera
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
 
 import com.vs.enums.TypyTerenu;
+
+import java.io.Serializable;
 
 public class Pole implements Serializable {
 

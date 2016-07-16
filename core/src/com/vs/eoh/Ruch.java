@@ -87,7 +87,7 @@ public class Ruch {
     public static void redrawMoveInterfaces(V v) {
         for (Gracz gracz : v.getGs().getGracze()) {
             for (Bohater bohater : gracz.getBohaterowie()) {
-                if (bohater.isMoveInterfaceOn()) {
+                if (bohater.isMoveInterfaceOn() && bohater.isZaznaczony()) {
                     Ruch.wylaczPrzyciski();
                     new Ruch(bohater, v);
                 }
@@ -398,43 +398,48 @@ public class Ruch {
          */
         private void wykonajAtak() {
 
-            if (v.getGs().getBohaterZaznaczony().getSpellEffects().size() > 0) {
-                if (v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
-                    Gdx.app.log("Wykryto Poison Effect", "ot co");
-                    int damage = v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
-                    v.getGs().getBohaterZaznaczony().setActualHp(v.getGs().getBohaterZaznaczony().getActualHp() - damage);
-                    //a.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
-                    Animation.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
+            Pole pole = v.getGs().getMapa().getPola()[locX][locY];
+
+            if (pole.getBohater() != null || pole.getMob() != null || pole.getCastle() != null) {
+
+                if (v.getGs().getBohaterZaznaczony().getSpellEffects().size() > 0) {
+                    if (v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).isPosionEffect()) {
+                        Gdx.app.log("Wykryto Poison Effect", "ot co");
+                        int damage = v.getGs().getBohaterZaznaczony().getSpellEffects().get(0).getEfektDmg();
+                        v.getGs().getBohaterZaznaczony().setActualHp(v.getGs().getBohaterZaznaczony().getActualHp() - damage);
+                        //a.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, Integer.toString(damage));
+                        Animation.animujLblDamage(v.getGs().getBohaterZaznaczony().getX() + 50, v.getGs().getBohaterZaznaczony().getY() + 50, "Dmg: " + Integer.toString(damage), a);
+                    }
                 }
+
+                if (sprawdzPrzeciwnika(locX, locY).getClass() == Mob.class) {
+                    System.out.println("Atak na moba");
+
+                    Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
+                            "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getMob())), a);
+                } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Bohater.class) {
+                    System.out.println("Atak na Bohatera");
+
+                    Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100, "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getBohater())), a);
+
+                    //Fight.getObrazenia(this.bohater,  v.getGs().getMapa().getPola()[locX][locY].getBohater())
+
+                } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Castle.class) {
+                    System.out.println("Atak na Zamek");
+                    Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
+                            "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getCastle())), a);
+                }
+
+                this.bohater.getSprite().setTexture(bohater.getBohaterTex());
+                this.bohater.setZaznaczony(false);
+
+                v.getGs().setCzyZaznaczonoBohatera(false);
+
+                v.getGs().usunMartweMoby();
+                bohater.setMoveInterfaceOn(false);
+                Ruch.wylaczIkonyEfektow();
+                Ruch.wylaczPrzyciski();
             }
-
-            if (sprawdzPrzeciwnika(locX, locY).getClass() == Mob.class) {
-                System.out.println("Atak na moba");
-
-                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
-                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getMob())), a);
-            } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Bohater.class) {
-                System.out.println("Atak na Bohatera");
-
-                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100, "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getBohater())), a);
-
-                //Fight.getObrazenia(this.bohater,  v.getGs().getMapa().getPola()[locX][locY].getBohater())
-
-            } else if (sprawdzPrzeciwnika(locX, locY).getClass() == Castle.class) {
-                System.out.println("Atak na Zamek");
-                Animation.animujLblDamage(this.locX * 100 + 50, this.locY * 100,
-                        "Dmg: " + Integer.toString(Fight.getObrazenia(this.bohater, v.getGs().getMapa().getPola()[locX][locY].getCastle())), a);
-            }
-
-            this.bohater.getSprite().setTexture(bohater.getBohaterTex());
-            this.bohater.setZaznaczony(false);
-
-            v.getGs().setCzyZaznaczonoBohatera(false);
-
-            v.getGs().usunMartweMoby();
-            bohater.setMoveInterfaceOn(false);
-            Ruch.wylaczIkonyEfektow();
-            Ruch.wylaczPrzyciski();
         }
 
         /**

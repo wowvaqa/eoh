@@ -24,6 +24,7 @@ import com.vs.eoh.TresureBox;
 import com.vs.eoh.V;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.vs.eoh.NewGame.klasaPostaciGracz01;
 import static com.vs.eoh.NewGame.pobierzAtak;
@@ -255,7 +256,168 @@ public class AI {
     /**
      * Metoda odpowiada za awans bohatera AI
      */
-    private void heroPromotion() {
+    private void heroPromotion(Bohater bohater) {
+
+        Random rnd = new Random();
+        int draw;
+
+        switch (bohater.getKlasyPostaci()) {
+            case Wojownik:
+                bohater.setAtak(bohater.getAtak() + 1);
+                break;
+            case Lowca:
+                bohater.setSzybkosc(bohater.getSzybkosc() + 1);
+                break;
+            case Czarodziej:
+                bohater.setMoc(bohater.getMoc() + 1);
+                break;
+        }
+
+        switch (bohater.getKlasyPostaci()) {
+            case Wojownik:
+                switch (bohater.getLevelOfExp()) {
+                    case 1:
+                        bohater.getListOfSpells().add(Spells.SongOfGlory);
+                        bohater.setBohaterTex(new Texture("moby/warrior/1.png"));
+                        bohater.setBohaterCheckTex(new Texture("moby/warrior/1z.png"));
+                        bohater.aktualizujTeksture();
+                        break;
+                    case 2:
+                        draw = rnd.nextInt(2);
+                        if (draw == 1) {
+                            bohater.getListOfSpells().add(Spells.Charge);
+                            bohater.setBohaterTex(new Texture("moby/warrior/2A.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/warrior/2Az.png"));
+                            bohater.aktualizujTeksture();
+                        } else {
+                            bohater.getListOfSpells().add(Spells.Discouragement);
+                            bohater.setBohaterTex(new Texture("moby/warrior/2B.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/warrior/2Bz.png"));
+                            bohater.aktualizujTeksture();
+                        }
+                        break;
+                    case 3:
+                        draw = rnd.nextInt(2);
+                        if (draw == 1) {
+                            bohater.getListOfSpells().add(Spells.Fury);
+                            bohater.setBohaterTex(new Texture("moby/warrior/3A.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/warrior/3Az.png"));
+                        } else {
+                            bohater.getListOfSpells().add(Spells.FinalJudgment);
+                            bohater.setBohaterTex(new Texture("moby/warrior/3B.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/warrior/3Bz.png"));
+                            bohater.aktualizujTeksture();
+                        }
+                        break;
+                }
+                break;
+            case Lowca:
+                switch (bohater.getLevelOfExp()) {
+                    case 1:
+                        bohater.getListOfSpells().add(Spells.Poison);
+                        bohater.setBohaterTex(new Texture("moby/hunter/1.png"));
+                        bohater.setBohaterCheckTex(new Texture("moby/hunter/1z.png"));
+                        bohater.aktualizujTeksture();
+                        break;
+                    case 2:
+                        draw = rnd.nextInt(2);
+                        if (draw == 1) {
+                            bohater.getListOfSpells().add(Spells.SummonWolf);
+                            bohater.setBohaterTex(new Texture("moby/hunter/2A.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/hunter/2Az.png"));
+                            bohater.aktualizujTeksture();
+                        } else {
+                            bohater.getListOfSpells().add(Spells.SummonBear);
+                            bohater.setBohaterTex(new Texture("moby/hunter/2B.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/hunter/2Bz.png"));
+                            bohater.aktualizujTeksture();
+                        }
+                        break;
+                    case 3:
+                        draw = rnd.nextInt(2);
+                        if (draw == 1) {
+                            bohater.getListOfSpells().add(Spells.LongShot);
+                            bohater.setBohaterTex(new Texture("moby/hunter/3A.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/hunter/3Az.png"));
+                        } else {
+                            bohater.getListOfSpells().add(Spells.VampireTouch);
+                            bohater.setBohaterTex(new Texture("moby/hunter/3B.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/hunter/3Bz.png"));
+                            bohater.aktualizujTeksture();
+                        }
+                        break;
+                }
+                break;
+            case Czarodziej:
+                switch (bohater.getLevelOfExp()) {
+                    case 1:
+                        bohater.getListOfSpells().add(Spells.Frozen);
+                        bohater.setBohaterTex(new Texture("moby/wizard/1.png"));
+                        bohater.setBohaterCheckTex(new Texture("moby/wizard/1z.png"));
+                        bohater.aktualizujTeksture();
+                        break;
+                    case 2:
+                        draw = rnd.nextInt(2 + 1);
+                        if (draw == 1) {
+                            bohater.getListOfSpells().add(Spells.Bless);
+                            bohater.setBohaterTex(new Texture("moby/wizard/2A.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/wizard/2Az.png"));
+                            bohater.aktualizujTeksture();
+                        } else if (draw == 2) {
+                            bohater.getListOfSpells().add(Spells.Thunder);
+                            bohater.setBohaterTex(new Texture("moby/wizard/2B.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/wizard/2Bz.png"));
+                            bohater.aktualizujTeksture();
+                        }
+                        break;
+                    case 3:
+                        draw = rnd.nextInt(2 + 1);
+                        if (draw == 1) {
+                            bohater.getListOfSpells().add(Spells.Prayer);
+                            bohater.setBohaterTex(new Texture("moby/wizard/3A.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/wizard/3Az.png"));
+                        } else if (draw == 2) {
+                            bohater.getListOfSpells().add(Spells.MeteorShower);
+                            bohater.setBohaterTex(new Texture("moby/wizard/3B.png"));
+                            bohater.setBohaterCheckTex(new Texture("moby/wizard/3Bz.png"));
+                            bohater.aktualizujTeksture();
+                        }
+                        break;
+                }
+                break;
+
+        }
+
+        draw = rnd.nextInt(6 + 1);
+
+        Gdx.app.log("DRAW: ", " " + draw);
+
+        switch (draw) {
+            case 1:
+                bohater.setAtak(bohater.getAtak() + 1);
+                break;
+            case 2:
+                bohater.setObrona(bohater.getObrona() + 1);
+                break;
+            case 3:
+                bohater.setSzybkosc(bohater.getSzybkosc() + 1);
+                break;
+            case 4:
+                bohater.setMoc(bohater.getMoc() + 1);
+                break;
+            case 5:
+                bohater.setWiedza(bohater.getWiedza() + 1);
+                break;
+            case 6:
+                bohater.setHp(bohater.getHp() + 5);
+                break;
+        }
+
+        bohater.setExpToNextLevel(bohater.getExpToNextLevel() + 100);
+        bohater.setLevelOfExp(bohater.getLevelOfExp() + 1);
+
+        bohater.setMana(bohater.getWiedza());
+        bohater.setActualMana(bohater.getWiedza());
 
     }
 
@@ -504,6 +666,10 @@ public class AI {
             Animation.animujLblDamage(locXofField * 100 + 50, locYofField * 100,
                     "Dmg: " + Integer.toString(Fight.getObrazenia(bohater, bohater.getGs().getMapa().getPola()[locXofField][locYofField].getCastle())),
                     bohater.getA());
+        }
+
+        if (checkNextLevel(bohater)) {
+            heroPromotion(bohater);
         }
 
         bohater.getGs().usunMartweMoby();

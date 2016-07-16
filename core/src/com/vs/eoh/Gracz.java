@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class Gracz {
 
     //public ArrayList<Player> bohaterowieOld = new ArrayList<Player>();
+
+    private Bohater lastSelectedHero;
     
     private ArrayList<Bohater> bohaterowie = new ArrayList<Bohater>();
 
@@ -231,6 +233,24 @@ public class Gracz {
      */
     public void setCameraPositionX(float cameraPositionX) {
         this.cameraPositionX = cameraPositionX;
+    }
+
+    /**
+     * Zwraca referencję do ostatnio zaznaczonego bohatera
+     *
+     * @return
+     */
+    public Bohater getLastSelectedHero() {
+        return lastSelectedHero;
+    }
+
+    /**
+     * Ustala ostatnio zaznaczonego bohatera.
+     *
+     * @param lastSelectedHero
+     */
+    public void setLastSelectedHero(Bohater lastSelectedHero) {
+        this.lastSelectedHero = lastSelectedHero;
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -162,6 +161,7 @@ public class Assets {
     public Sound freezSpell;
     public Sound zombieAttack;
     public Sound skeletonAttack;
+    public Sound meteorShower;
 
     // predefiniowane okno ifnoramcyjne
     private Window infoWindow;
@@ -355,6 +355,7 @@ public class Assets {
         freezSpell = Gdx.audio.newSound(Gdx.files.internal("sounds/frost_01.wav"));
         zombieAttack = Gdx.audio.newSound(Gdx.files.internal("sounds/zombieAttack_01.wav"));
         skeletonAttack = Gdx.audio.newSound(Gdx.files.internal("sounds/skeletonAttack_01.wav"));
+        meteorShower = Gdx.audio.newSound(Gdx.files.internal("sounds/meteorShower.mp3"));
     }
 
     private void makeSpellTextures() {

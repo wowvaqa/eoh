@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.vs.ai.PathFinder;
-import com.vs.ai.PathMoves;
 import com.vs.enums.DostepneItemki;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
@@ -209,14 +207,15 @@ public class Bohater extends Actor {
                     // Jeżeli FALSE wtedy uruchamia reszte procedur dla bohatera
                 } else {
                     // Sprawdza czy bohater gracza porusza się w sowjej turze.
-                    if (przynaleznoscDoGracza != v.getGs().getTuraGracza()) {
-                        System.out.println("Ten Gracz teraz nie ma swojej tury");
-                    } else {
+                    //if (przynaleznoscDoGracza != v.getGs().getTuraGracza()) {
+                    //    System.out.println("Ten Gracz teraz nie ma swojej tury");
+                    //} else {
                         // Sprawdza czy bohater posiada jeszcze punkty ruchu.
                         if (pozostaloRuchow < 1) {
                             System.out.println("Bohater nie posiada już ruchu!");
                             sprite.setTexture(bohaterCheckTex);
                             zaznaczony = true;
+
                             v.getGs().setCzyZaznaczonoBohatera(true);
                             // jeżeli posiada punkty ruchu.
                             aktualizujEfektyBohatera();
@@ -236,7 +235,7 @@ public class Bohater extends Actor {
                             }
                         }
                     }
-                }
+                // }
             }
         });
     }

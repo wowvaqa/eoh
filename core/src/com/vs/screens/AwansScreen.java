@@ -1,6 +1,5 @@
 package com.vs.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
-import com.vs.eoh.Assets;
 import com.vs.eoh.Bohater;
 import com.vs.eoh.ButtonActor;
 import com.vs.eoh.DefaultActor;
@@ -59,7 +57,7 @@ public class AwansScreen implements Screen {
 
                         v.getA().buttonClick.play();
 
-                        awans.zakonczAwans(v.getGs());
+                        awans.zakonczAwans();
 
                         awansScreenShow = false;
                         mainTable.clear();
@@ -858,7 +856,7 @@ public class AwansScreen implements Screen {
             return null;
         }
 
-        public void zakonczAwans(GameStatus gs) {
+        public void zakonczAwans() {
             Bohater b = v.getGs().getBohaterZaznaczony();
 
             b.setAtak(b.getAtak() + this.tmpAtak + this.atrKlasowyAtak);

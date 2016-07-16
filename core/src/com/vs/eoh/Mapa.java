@@ -1,13 +1,13 @@
 package com.vs.eoh;
 
 // Klasa Mapa przechowuje obiekty Klasy Pole
-import java.io.Serializable;
-import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.vs.ai.PathFinder;
 import com.vs.enums.TypyTerenu;
 import com.vs.network.Network;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public final class Mapa implements Serializable {
 

@@ -246,6 +246,7 @@ public class SpellEffects {
             case MeteorShower:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    v.getA().meteorShower.play();
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;

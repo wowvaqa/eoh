@@ -1,5 +1,14 @@
-version 0.0080 27062016
-DONE    1. Optymalizacja kodu.
+version 0.0081
+TODO    2. Dodanie rzucania czarów przez bohaterów AI.
+TODO    2. Poprawa zachowania się kamery.
+
+version 0.0080 17072016
+        NOWOSCI:
+DONE    1. Dodanie awansu bohatera AI
+        BUGFIXES:
+DONE    1. Refaktoryzacja kodu.
+DONE    2. Poprawiono błąd powodujący zawieszanie się gry w momencie ataku bohatera sterowanego
+        przez gracza na bohatera AI.
 
 version 0.0079 26062016
         NOWOSCI:

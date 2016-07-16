@@ -1,6 +1,5 @@
 package com.vs.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -9,8 +8,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
@@ -21,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.ai.AI;
@@ -260,7 +255,10 @@ public class MapScreen implements Screen {
         float xCord = v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(0).getX();
         float yCord = v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(0).getY();
 
-        cam.translate(xCord - cam.position.x + 200, yCord - cam.position.y + 100, 0);
+        cam.position.x = v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(0).getX() + 150;
+        cam.position.y = v.getGs().getGracze().get(v.getGs().getTuraGracza()).getBohaterowie().get(0).getY() + 100;
+
+        //cam.translate(xCord - cam.position.x + 200, yCord - cam.position.y + 100, 0);
     }
 
     /**
@@ -824,6 +822,8 @@ public class MapScreen implements Screen {
     @Override
     public void show() {
         System.gc();
+
+        przesunKamereNadBohatera();
 
         curTime = System.currentTimeMillis() / 1000;
         AI.nextMove = curTime + 2;

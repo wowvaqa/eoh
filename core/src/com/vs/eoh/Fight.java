@@ -5,7 +5,6 @@
  */
 package com.vs.eoh;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Sound;
 import com.vs.enums.DostepneMoby;
 import com.vs.enums.KlasyPostaci;

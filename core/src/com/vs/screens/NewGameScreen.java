@@ -1,6 +1,5 @@
 package com.vs.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -8,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -22,10 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.vs.ai.AI;
 import com.vs.enums.KlasyPostaci;
-import com.vs.enums.TypyTerenu;
-import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.NewGame;
@@ -45,9 +40,6 @@ public class NewGameScreen implements Screen {
     protected final OrthographicCamera c;
     private final FitViewport viewPort;
 
-    //private final Assets a;
-    //private final GameStatus gs;
-    //private final Game g;
     private final Table tabela01 = new Table();
     private final Table tabelaIlosciGraczy = new Table();
     private final Table tabelaGracz01 = new Table();
@@ -61,7 +53,6 @@ public class NewGameScreen implements Screen {
     private CheckBox cbAI1;
     private CheckBox cbAI2;
     private CheckBox cbAI3;
-    //private int iloscGraczy = 2;
     private boolean tabelaUtworzona = false;
 
     //public NewGameScreen(Game g, Assets a, GameStatus gs) {
@@ -69,9 +60,6 @@ public class NewGameScreen implements Screen {
 
         // referencje do obiektów assetów i gamestatusu
         this.v = v;
-        //this.a = a;
-        //this.gs = gs;
-        //this.g = g;
 
         stage01 = new Stage();
 
