@@ -22,6 +22,7 @@ public class V {
     private Screen lastScreen;
     private Screen newBohaterScreen;
     private Screen mapEditor;
+    private Screen mapEditScreen;
     private Screen awansScreen;
     private Screen multiplayerScreen;
     private Screen gameOverScreen;
@@ -130,6 +131,14 @@ public class V {
 
     public void setMapEditor(Screen mapEditor) {
         this.mapEditor = mapEditor;
+    }
+
+    public Screen getMapEditScreen() {
+        return mapEditScreen;
+    }
+
+    public void setMapEditScreen(Screen mapEditScreen) {
+        this.mapEditScreen = mapEditScreen;
     }
 
     public Screen getAwansScreen() {

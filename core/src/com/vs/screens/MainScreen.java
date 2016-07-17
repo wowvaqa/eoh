@@ -20,9 +20,6 @@ public class MainScreen implements Screen {
     private final FitViewport viewPort;
     // deklaracja tabeli
     private final Table tabela = new Table();
-    //private final Game g;                                                       // referencja do instancji gry
-    //private final Assets a;                                                     // obiekt assetów
-    //private final GameStatus gs;                                                // status gry
     private V v;
     // deklaracja przycisków
     private TextButton btnNowaGra;
@@ -37,9 +34,6 @@ public class MainScreen implements Screen {
     //public MainScreen(Game g, Assets a, GameStatus gs) {
     public MainScreen(V v) {
         this.v = v;
-        //this.g = g;
-        //this.a = a;
-        //this.gs = gs;
 
         OrthographicCamera c = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), c);
@@ -94,13 +88,13 @@ public class MainScreen implements Screen {
             }
         });
         // Dodaje przycisk opcje
-        btnOptions = new TextButton("OPCJE", v.getA().skin);
+        btnOptions = new TextButton("Map Editor", v.getA().skin);
         //btnOptions.setPosition(1, 200);
         btnOptions.setSize(200, 100);
         btnOptions.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                v.getGs().setActualScreen(4);
+                v.getG().setScreen(v.getMapEditScreen());
             }
         });
 

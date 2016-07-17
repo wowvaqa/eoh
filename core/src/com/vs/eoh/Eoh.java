@@ -1,6 +1,8 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.vs.mapEditor.MapEdit;
+import com.vs.mapEditor.MapEditScreen;
 import com.vs.network.NetEngine;
 import com.vs.screens.AwansScreen;
 import com.vs.screens.BohaterScreen;
@@ -17,7 +19,6 @@ import com.vs.testing.TestingScreen;
 
 public class Eoh extends Game {
 
-	//private final GameStatus gs = new GameStatus();
 	private GameStatus gs;
 	private Assets a;
 	private NetEngine ne;
@@ -32,6 +33,7 @@ public class Eoh extends Game {
 	private TestingScreen testScreen;
 	private NewBohaterScreen newBohaterScreen;
 	private MapEditor mapEditor;
+	private MapEditScreen mapEditScreen;
 	private AwansScreen awansScreen;
 	private MultiplayerScreen multiplayerScreen;
 	private GameOverScreen gameOverScreen;
@@ -51,6 +53,7 @@ public class Eoh extends Game {
 		testScreen = new TestingScreen(v);
 		newBohaterScreen = new NewBohaterScreen(v);
 		mapEditor = new MapEditor(v);
+		mapEditScreen = new MapEditScreen(v);
 		awansScreen = new AwansScreen(v);
 		multiplayerScreen = new MultiplayerScreen(v, this.ne);
 		gameOverScreen = new GameOverScreen(ne, v);
@@ -63,25 +66,10 @@ public class Eoh extends Game {
 		v.setItemScreen(itemScreen);
 		v.setNewBohaterScreen(newBohaterScreen);
 		v.setMapEditor(mapEditor);
+		v.setMapEditScreen(mapEditScreen);
 		v.setAwansScreen(awansScreen);
 		v.setMultiplayerScreen(multiplayerScreen);
 		v.setGameOverScreen(gameOverScreen);
-
-		//Assets.testScreen = testScreen;
-		//Assets.mainMenuScreen = mainScreen;
-		//Assets.newGameScreen = newGameScreen;
-		//Assets.mapScreen = mapScreen;
-		//Assets.bohaterScreen = bohaterScreen;
-		//Assets.itemScreen = itemScreen;
-		//Assets.newBohaterScreen = newBohaterScreen;
-		//Assets.mapEditor = mapEditor;
-		//Assets.awansScreen = awansScreen;
-		//Assets.multiplayerScreen = multiplayerScreen;
-		//Assets.gameOverScreen = gameOverScreen;
-
-		//GameStatus.a = a;
-		//GameStatus.gs = gs;
-		//GameStatus.g = this;
 
 		this.setScreen(mainScreen);
 	}

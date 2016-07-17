@@ -1,9 +1,12 @@
 version 0.0082
 TODO    2. Poprawa zachowania się kamery.
 
+version 0.0082
+        1. Rozpoczęcie budowy nowego map editora.
+
 version 0.0081 17072016
         NOWOSCI
-        1. Dodanie rzucania czarów dla wojownika i czarodzieja sterowanych przez AI.
+DONE    1. Dodanie rzucania czarów dla wojownika i czarodzieja sterowanych przez AI.
 
 version 0.0080 17072016
         NOWOSCI:
