@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.vs.enums.ActionModes;
 import com.vs.enums.CzesciCiala;
 import com.vs.enums.KlasyPostaci;
+import com.vs.enums.SpellEffects;
 import com.vs.enums.Spells;
 import com.vs.eoh.Animation;
 import com.vs.eoh.Assets;
@@ -20,6 +21,9 @@ import com.vs.eoh.Mob;
 import com.vs.eoh.NewGame;
 import com.vs.eoh.Pole;
 import com.vs.eoh.Ruch;
+import com.vs.eoh.SpellActor;
+import com.vs.eoh.SpellCaster;
+import com.vs.eoh.SpellCreator;
 import com.vs.eoh.TresureBox;
 import com.vs.eoh.V;
 
@@ -618,7 +622,8 @@ public class AI {
 
     /**
      * Metoda zwraca pole wg zadanych parametrów
-     * @param bohater Referencja do obiektu bohatera od którego ma rozpocząć się poszukiwanie ścieżki
+     *
+     * @param bohater    Referencja do obiektu bohatera od którego ma rozpocząć się poszukiwanie ścieżki
      * @param actionMode Tryb akcji dla którego ma odbyć się poszukiwanie.
      * @return Referencja do obiektu pole
      */
@@ -651,7 +656,16 @@ public class AI {
 
     }
 
+    /**
+     * Wykonuje atak bohatera AI
+     *
+     * @param bohater     Referencja do obiektu bohatera
+     * @param locXofField Lokacja X przeciwnika
+     * @param locYofField Lokacja Y przeciwnika
+     */
     private void makeHeroAttack(Bohater bohater, int locXofField, int locYofField) {
+
+        castSpell(bohater, locXofField, locYofField);
 
         if (bohater.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
             Animation.animujLblDamage(locXofField * 100 + 50, locYofField * 100,
@@ -698,6 +712,128 @@ public class AI {
         bohater.setPozostaloRuchow(bohater.getPozostaloRuchow() - 1);
 
         Ruch.redrawMoveInterfaces(v);
+    }
+
+    /**
+     * Rzuca czar przez bohatera AI
+     *
+     * @param bohater     Referencja do obiektu bohatera rzucającego czar
+     * @param locXofField lokacja X przeciwnika.
+     * @param locYofField lokacja Y przeciwnika.
+     */
+    private void castSpell(Bohater bohater, int locXofField, int locYofField) {
+        for (Spells spl : bohater.getListOfSpells()) {
+
+            boolean checkFinalJudgment = false;
+            for (com.vs.eoh.SpellEffects se : bohater.getSpellEffects()) {
+                if (se.getSpellEffect().equals(SpellEffects.FinalJudgment)) {
+                    checkFinalJudgment = true;
+                }
+            }
+            if (!checkFinalJudgment) {
+                if (spl.equals(Spells.FinalJudgment)) {
+                    SpellCreator sc = new SpellCreator(v);
+                    SpellActor sa = sc.utworzSpell(spl, bohater);
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            boolean checkFury = false;
+            for (com.vs.eoh.SpellEffects se : bohater.getSpellEffects()) {
+                if (se.getSpellEffect().equals(SpellEffects.Fury)) {
+                    checkFury = true;
+                }
+            }
+            if (!checkFury) {
+                if (spl.equals(Spells.Fury)) {
+                    SpellCreator sc = new SpellCreator(v);
+                    SpellActor sa = sc.utworzSpell(spl, bohater);
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            boolean checkDiscouragement = false;
+            for (com.vs.eoh.SpellEffects se : bohater.getSpellEffects()) {
+                if (se.getSpellEffect().equals(SpellEffects.Discouragement)) {
+                    checkDiscouragement = true;
+                }
+            }
+            if (!checkDiscouragement) {
+                if (spl.equals(Spells.Discouragement)) {
+                    SpellCreator sc = new SpellCreator(v);
+                    SpellActor sa = sc.utworzSpell(spl, bohater);
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            boolean checkCharge = false;
+            for (com.vs.eoh.SpellEffects se : bohater.getSpellEffects()) {
+                if (se.getSpellEffect().equals(SpellEffects.Charge)) {
+                    checkCharge = true;
+                }
+            }
+            if (!checkCharge) {
+                if (spl.equals(Spells.Charge)) {
+                    SpellCreator sc = new SpellCreator(v);
+                    SpellActor sa = sc.utworzSpell(spl, bohater);
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            boolean checkRage = false;
+            for (com.vs.eoh.SpellEffects se : bohater.getSpellEffects()) {
+                if (se.getSpellEffect().equals(SpellEffects.Rage)) {
+                    checkRage = true;
+                }
+            }
+            if (!checkRage) {
+                if (spl.equals(Spells.Rage)) {
+                    SpellCreator sc = new SpellCreator(v);
+                    SpellActor sa = sc.utworzSpell(spl, bohater);
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            if (spl.equals(Spells.MeteorShower)) {
+                SpellCreator sc = new SpellCreator(v);
+                SpellActor sa = sc.utworzSpell(spl, bohater);
+                if (v.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
+                    sa.getSpellEffects().get(0).dzialanie(sa, v.getGs().getMapa().getPola()[locXofField][locYofField].getMob(), bohater, v);
+                }
+            }
+
+            if (spl.equals(Spells.Prayer)) {
+                SpellCreator sc = new SpellCreator(v);
+                SpellActor sa = sc.utworzSpell(spl, bohater);
+                if (v.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            if (spl.equals(Spells.Thunder)) {
+                SpellCreator sc = new SpellCreator(v);
+                SpellActor sa = sc.utworzSpell(spl, bohater);
+                if (v.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
+                    sa.getSpellEffects().get(0).dzialanie(sa, v.getGs().getMapa().getPola()[locXofField][locYofField].getMob(), bohater, v);
+                }
+            }
+
+            if (spl.equals(Spells.Bless)) {
+                SpellCreator sc = new SpellCreator(v);
+                SpellActor sa = sc.utworzSpell(spl, bohater);
+                if (v.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
+                    sa.getSpellEffects().get(0).dzialanie(sa, bohater, bohater, v);
+                }
+            }
+
+            if (spl.equals(Spells.FireBall)) {
+                SpellCreator sc = new SpellCreator(v);
+                SpellActor sa = sc.utworzSpell(spl, bohater);
+                if (v.getGs().getMapa().getPola()[locXofField][locYofField].getMob() != null) {
+                    sa.getSpellEffects().get(0).dzialanie(sa, v.getGs().getMapa().getPola()[locXofField][locYofField].getMob(), bohater, v);
+                }
+            }
+        }
     }
 
     /**

@@ -1,6 +1,9 @@
-version 0.0081
-TODO    2. Dodanie rzucania czarów przez bohaterów AI.
+version 0.0082
 TODO    2. Poprawa zachowania się kamery.
+
+version 0.0081 17072016
+        NOWOSCI
+        1. Dodanie rzucania czarów dla wojownika i czarodzieja sterowanych przez AI.
 
 version 0.0080 17072016
         NOWOSCI:

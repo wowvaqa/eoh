@@ -25,6 +25,8 @@ public class SpellEffects {
 
     private int dlugoscTrwaniaEfektu = 0;
 
+    private com.vs.enums.SpellEffects spellEffect;
+
     private int efektAtak = 0;
     private int efektObrona = 0;
     private int efektSzybkosc = 0;
@@ -279,6 +281,7 @@ public class SpellEffects {
                     v.getA().freezSpell.play();
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation));
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+                    spellEffect = com.vs.enums.SpellEffects.Frozen;
 
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
@@ -308,6 +311,7 @@ public class SpellEffects {
             case Rage:
                 // Zwiększa atak o punkty mocy do końca tury.
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    spellEffect = com.vs.enums.SpellEffects.Rage;
                     v.getA().rageSpell.play();
                     this.efektAtak = 1;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
@@ -362,6 +366,7 @@ public class SpellEffects {
             case SongOfGlory:
                 System.out.println("Czar SONG OF GLORY");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    spellEffect = com.vs.enums.SpellEffects.SongOfGlory;
                     this.efektAtak = 1;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
@@ -383,6 +388,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+                    spellEffect = com.vs.enums.SpellEffects.Bless;
 
                     this.efektAtak = 5;
                     this.efektObrona = 5;
@@ -406,6 +412,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+                    spellEffect = com.vs.enums.SpellEffects.Prayer;
 
                     this.efektAtak = 7;
                     this.efektObrona = 7;
@@ -430,6 +437,7 @@ public class SpellEffects {
             case Discouragement:
                 System.out.println("Czar DISCOURAGEMENT");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    spellEffect = com.vs.enums.SpellEffects.Discouragement;
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.DiscouragementEffect;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
@@ -450,6 +458,7 @@ public class SpellEffects {
 
                     AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
+                    spellEffect = com.vs.enums.SpellEffects.Poison;
 
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
@@ -473,6 +482,7 @@ public class SpellEffects {
             case Charge:
                 System.out.println("Czar CHARGE");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    spellEffect = com.vs.enums.SpellEffects.Charge;
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.ChargeEffect;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
@@ -490,6 +500,7 @@ public class SpellEffects {
             case Fury:
                 System.out.println("Czar FURY");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    spellEffect = com.vs.enums.SpellEffects.Fury;
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.FuryEffect;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
@@ -507,6 +518,7 @@ public class SpellEffects {
             case FinalJudgment:
                 System.out.println("Czar FinalJudgment");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
+                    spellEffect = com.vs.enums.SpellEffects.FinalJudgment;
                     this.fightEffect = true;
                     this.fightEffects = FightEffects.FinalJudgeEffect;
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
@@ -840,5 +852,23 @@ public class SpellEffects {
      */
     public void setPosionEffect(boolean posionEffect) {
         this.posionEffect = posionEffect;
+    }
+
+    /**
+     * Zwraca działający efekt czaru
+     *
+     * @return
+     */
+    public com.vs.enums.SpellEffects getSpellEffect() {
+        return spellEffect;
+    }
+
+    /**
+     * Ustala działający efekt czaru
+     *
+     * @param spellEffect
+     */
+    public void setSpellEffect(com.vs.enums.SpellEffects spellEffect) {
+        this.spellEffect = spellEffect;
     }
 }
