@@ -2,7 +2,11 @@ version 0.0082
 TODO    2. Poprawa zachowania się kamery.
 
 version 0.0082
+        NOWOSCI
         1. Rozpoczęcie budowy nowego map editora.
+        2. Dodanie przycisków interfejsu edytora map.
+        3. Podmiana grafik terenu.
+        4. Dodanie animowanego modelu szklieta.
 
 version 0.0081 17072016
         NOWOSCI

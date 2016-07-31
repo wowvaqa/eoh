@@ -8,12 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.vs.enums.AnimsTypes;
 import com.vs.enums.DostepneMoby;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Mob extends Image {
+public class Mob extends AnimActor {
 
     // Zmienne sieciowe
     public boolean animujCiecieNetwork = false;
@@ -54,19 +55,43 @@ public class Mob extends Image {
      */
     public Mob(V v, int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
                DostepneMoby typMoba) {
+
+        super(new AnimationCreator().makeAniamtion(AnimsTypes.SkeletonAnimation));
+
         this.spellEffects = new ArrayList<SpellEffects>();
         this.v = v;
         //this.icon = textureIcon;
-        this.icon = zwrocTeksture(typMoba);
+        //this.icon = zwrocTeksture(typMoba);
+        //sprite = new Sprite(this.icon);
+
+        //this.setSize(sprite.getWidth(), sprite.getHeight());
+        //this.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
+
         this.mobLevel = mobLevel;
-        sprite = new Sprite(this.icon);
-        this.setSize(sprite.getWidth(), sprite.getHeight());
-        this.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
+        super.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
         this.typMoba = typMoba;
 
         wygenerujStatystykiMoba(this.mobLevel);
         this.dodajListnera();
     }
+
+//    public Mob(V v, int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
+//               DostepneMoby typMoba) {
+//        super(new AnimationCreator().makeAniamtion(AnimsTypes.SkeletonAnimation));
+//        this.spellEffects = new ArrayList<SpellEffects>();
+//        this.v = v;
+//        //this.icon = textureIcon;
+//        this.icon = zwrocTeksture(typMoba);
+//        this.mobLevel = mobLevel;
+//        sprite = new Sprite(this.icon);
+//
+//        this.setSize(sprite.getWidth(), sprite.getHeight());
+//        this.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
+//        this.typMoba = typMoba;
+//
+//        wygenerujStatystykiMoba(this.mobLevel);
+//        this.dodajListnera();
+//    }
 
     /**
      * Losuje wg. zadanego poziomu odpowiedniego moba.
@@ -283,22 +308,30 @@ public class Mob extends Image {
     public void act(float delta) {
         super.act(delta);
 
+        if (this.animujCiecieNetwork) {
+            v.getA().animujCiecie((int) this.getX(), (int) this.getY());
+            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), v.getA());
+            this.animujCiecieNetwork = false;
+        }
+
         if (czyZaatakowany) {
             this.atakMoba();
         }
 
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        batch.draw(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-
-        if (this.animujCiecieNetwork) {
-            v.getA().animujCiecie((int) this.getX(), (int) this.getY());
-            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), v.getA());
-            this.animujCiecieNetwork = false;
-        }
-    }
+//    @Override
+//    public void draw(Batch batch, float parentAlpha) {
+//        //super.draw(batch,parentAlpha);
+//        //batch.draw(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+//
+//
+//        if (this.animujCiecieNetwork) {
+//            v.getA().animujCiecie((int) this.getX(), (int) this.getY());
+//            Animation.animujLblDamage(this.getX() + 50, this.getY() + 50, "Dmg: " + Integer.toString(damageNetwork), v.getA());
+//            this.animujCiecieNetwork = false;
+//        }
+//    }
 
     /**
      * *************************************************************************

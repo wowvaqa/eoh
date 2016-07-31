@@ -22,10 +22,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.vs.enums.DostepneMoby;
 import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.GameStatus;
 import com.vs.eoh.Mapa;
+import com.vs.eoh.Mob;
 import com.vs.eoh.V;
 
 import java.io.FileInputStream;
@@ -111,6 +113,9 @@ public class TestingScreen implements Screen {
 
         AnimatedImage animatedImage = new AnimatedImage(walkAnimation);
         stage01.addActor(animatedImage);
+
+        Mob mob = new Mob(v, 200, 200, 1, DostepneMoby.Pajak);
+        stage01.addActor(mob);
     }
 
     private void makeSprites(Texture tex) {

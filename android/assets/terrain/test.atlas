@@ -1,270 +1,340 @@
 
-test.png
+terrain1.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-forestC
+riverWE
   rotate: false
-  xy: 1, 409
+  xy: 2, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-forestE
+riverW
   rotate: false
-  xy: 1, 307
+  xy: 104, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-forestES
+riverSWE
   rotate: false
-  xy: 103, 409
+  xy: 206, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-forestN
+riverSW
   rotate: false
-  xy: 1, 205
+  xy: 308, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-forestNE
+riverSE
   rotate: false
-  xy: 103, 307
+  xy: 410, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-forestNS
+riverS
   rotate: false
-  xy: 205, 409
+  xy: 2, 104
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-forestNSE
+riverNWE
   rotate: false
-  xy: 1, 103
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestNSW
-  rotate: false
-  xy: 103, 205
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestNSWE
-  rotate: false
-  xy: 205, 307
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestNW
-  rotate: false
-  xy: 307, 409
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestNWE
-  rotate: false
-  xy: 1, 1
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestS
-  rotate: false
-  xy: 103, 103
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestW
-  rotate: false
-  xy: 205, 205
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestWE
-  rotate: false
-  xy: 307, 307
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestWES
-  rotate: false
-  xy: 409, 409
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-forestWS
-  rotate: false
-  xy: 103, 1
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainC
-  rotate: false
-  xy: 205, 103
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainE
-  rotate: false
-  xy: 307, 205
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainES
-  rotate: false
-  xy: 409, 307
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainN
-  rotate: false
-  xy: 511, 409
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNE
-  rotate: false
-  xy: 205, 1
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNS
-  rotate: false
-  xy: 307, 103
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNSE
-  rotate: false
-  xy: 409, 205
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNSW
-  rotate: false
-  xy: 511, 307
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNSWE
-  rotate: false
-  xy: 613, 409
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNW
-  rotate: false
-  xy: 307, 1
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainNWE
-  rotate: false
-  xy: 409, 103
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainS
-  rotate: false
-  xy: 511, 205
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainW
-  rotate: false
-  xy: 613, 307
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainWE
-  rotate: false
-  xy: 715, 409
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainWES
-  rotate: false
-  xy: 409, 1
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-mountainWS
-  rotate: false
-  xy: 511, 103
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-riverES
-  rotate: false
-  xy: 613, 205
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-riverNE
-  rotate: false
-  xy: 715, 307
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-riverNS
-  rotate: false
-  xy: 817, 409
+  xy: 104, 104
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 riverNW
   rotate: false
-  xy: 511, 1
+  xy: 206, 104
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-riverWE
+riverNSWE
   rotate: false
-  xy: 613, 103
+  xy: 308, 104
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
-riverWS
+riverNSW
   rotate: false
-  xy: 715, 205
+  xy: 410, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+riverNSE
+  rotate: false
+  xy: 2, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+riverNS
+  rotate: false
+  xy: 104, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+riverNE
+  rotate: false
+  xy: 206, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+riverN
+  rotate: false
+  xy: 308, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+riverE
+  rotate: false
+  xy: 410, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+riverC
+  rotate: false
+  xy: 2, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainWE
+  rotate: false
+  xy: 104, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainW
+  rotate: false
+  xy: 206, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainSWE
+  rotate: false
+  xy: 308, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainSW
+  rotate: false
+  xy: 410, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainSE
+  rotate: false
+  xy: 2, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainS
+  rotate: false
+  xy: 104, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNWE
+  rotate: false
+  xy: 206, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNW
+  rotate: false
+  xy: 308, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNSWE
+  rotate: false
+  xy: 410, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNSW
+  rotate: false
+  xy: 2, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNSE
+  rotate: false
+  xy: 104, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNS
+  rotate: false
+  xy: 206, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainNE
+  rotate: false
+  xy: 308, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainN
+  rotate: false
+  xy: 410, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainE
+  rotate: false
+  xy: 2, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+mountainC
+  rotate: false
+  xy: 2, 716
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestWE
+  rotate: false
+  xy: 2, 818
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestW
+  rotate: false
+  xy: 2, 920
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestSWE
+  rotate: false
+  xy: 104, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestSW
+  rotate: false
+  xy: 206, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestSE
+  rotate: false
+  xy: 308, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestS
+  rotate: false
+  xy: 410, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNWE
+  rotate: false
+  xy: 104, 716
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNW
+  rotate: false
+  xy: 104, 818
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNSWE
+  rotate: false
+  xy: 104, 920
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNSW
+  rotate: false
+  xy: 206, 716
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNSE
+  rotate: false
+  xy: 308, 716
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNS
+  rotate: false
+  xy: 410, 716
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestNE
+  rotate: false
+  xy: 206, 818
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestN
+  rotate: false
+  xy: 206, 920
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestE
+  rotate: false
+  xy: 308, 818
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+forestC
+  rotate: false
+  xy: 410, 818
   size: 100, 100
   orig: 100, 100
   offset: 0, 0

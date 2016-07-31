@@ -1,0 +1,131 @@
+
+wizard1.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+3Az
+  rotate: false
+  xy: 2, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+3A
+  rotate: false
+  xy: 104, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+3A-bw
+  rotate: false
+  xy: 2, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+2Bz
+  rotate: false
+  xy: 104, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+2B
+  rotate: false
+  xy: 2, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+2B-bw
+  rotate: false
+  xy: 104, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+2Az
+  rotate: false
+  xy: 2, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+2A
+  rotate: false
+  xy: 104, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+2A-bw
+  rotate: false
+  xy: 2, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1z
+  rotate: false
+  xy: 104, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1
+  rotate: false
+  xy: 2, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+1-bw
+  rotate: false
+  xy: 104, 512
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+0z
+  rotate: false
+  xy: 2, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+0
+  rotate: false
+  xy: 104, 614
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+0-bw
+  rotate: false
+  xy: 2, 716
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+3Bz
+  rotate: false
+  xy: 104, 716
+  size: 96, 100
+  orig: 96, 100
+  offset: 0, 0
+  index: -1
+3B
+  rotate: false
+  xy: 2, 818
+  size: 96, 100
+  orig: 96, 100
+  offset: 0, 0
+  index: -1
+3B-bw
+  rotate: false
+  xy: 2, 920
+  size: 96, 100
+  orig: 96, 100
+  offset: 0, 0
+  index: -1

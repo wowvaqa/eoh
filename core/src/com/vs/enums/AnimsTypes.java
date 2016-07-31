@@ -8,5 +8,6 @@ public enum AnimsTypes {
     GoodSpellAnimation,
     BadSpellAnimation,
     FrozenSpellAnimation,
-    ThunderSpellAnimation;
+    ThunderSpellAnimation,
+    SkeletonAnimation;
 }

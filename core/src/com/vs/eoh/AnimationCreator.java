@@ -19,12 +19,26 @@ public class AnimationCreator {
 
     public Animation makeAniamtion(AnimsTypes animations) {
 
+        float animationSpeed = 0.05f;
+
         Texture texture;
         TextureRegion[][] tmp;
         TextureRegion[] walkFrames = null;
         int index = 0;
 
         switch (animations) {
+
+            case SkeletonAnimation:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/skeleton.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
 
             case ThunderSpellAnimation:
                 texture = new Texture(Gdx.files.internal("animation/texThunderExplosion.png"));
@@ -107,7 +121,7 @@ public class AnimationCreator {
                 break;
         }
 
-        Animation animation = new Animation(0.05f, walkFrames);
+        Animation animation = new Animation(animationSpeed, walkFrames);
         return animation;
     }
 }

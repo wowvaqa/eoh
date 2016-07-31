@@ -20,18 +20,7 @@ public class Assets {
     public static Stage stage01MapScreen;
     public static Stage stage02MapScreen;
     public static Stage stage03MapScreen;
-    //    public static Screen testScreen;
-//    public static Screen mainMenuScreen;
-//    public static Screen newGameScreen;
-//    public static Screen mapScreen;
-//    public static Screen bohaterScreen;
-//    public static Screen itemScreen;
-//    public static Screen lastScreen;
-//    public static Screen newBohaterScreen;
-//    public static Screen mapEditor;
-//    public static Screen awansScreen;
-//    public static Screen multiplayerScreen;
-//    public static Screen gameOverScreen;
+
     public static Server server;
     public static Client client;
     // Tekstury budynków
@@ -175,7 +164,6 @@ public class Assets {
         tAtlasHunter = new TextureAtlas(Gdx.files.internal("moby/hunter/hunter.atlas"));
         
         aM = new AssetManager();
-        //aM.load("mapa.dat", Mapa.class);
         aM.load("terrain/test.atlas", TextureAtlas.class);
         aM.finishLoading();
 
@@ -196,8 +184,6 @@ public class Assets {
         mobOrkTexZaznaczony = new Texture("mobOrkTexZaznaczony.png");
         mobDwarfTex = new Texture("mobDwarfTex.png");
         mobDwarfTexZaznaczony = new Texture("mobDwarfTexZaznaczony.png");
-        //mobHumanTex = new Texture("mobHumanTex.png");
-        //mobHumanTexZaznaczony = new Texture("mobHumanTexZaznaczony.png");
         mobHumanTex = new Texture("moby/warrior/0.png");
         mobHumanTexZaznaczony = new Texture("moby/warrior/0z.png");
         mobWizardTex = new Texture("moby/wizard/0.png");
