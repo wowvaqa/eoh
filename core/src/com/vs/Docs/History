@@ -1,12 +1,10 @@
-version 0.0082
-TODO    2. Poprawa zachowania się kamery.
-
-version 0.0082
+version 0.0082 11082016
         NOWOSCI
-        1. Rozpoczęcie budowy nowego map editora.
-        2. Dodanie przycisków interfejsu edytora map.
-        3. Podmiana grafik terenu.
-        4. Dodanie animowanego modelu szklieta.
+DONE    1. Rozpoczęcie budowy nowego map editora.
+DONE    2. Dodanie przycisków interfejsu edytora map.
+DONE    3. Dodanie nowych grafik terenu.
+DONE    4. Dodanie animowanego modelu szklieta, pająka, zombie, wilka.
+DONE    5. Dodanie animowanych modeli budynków.
 
 version 0.0081 17072016
         NOWOSCI

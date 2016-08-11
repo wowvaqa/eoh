@@ -233,7 +233,7 @@ public class Assets {
      * @param locY
      */
     public void animujCiecie(int locX, int locY) {
-        AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.SlashAnimation));
+        AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.SlashAnimation), false);
         animActor.setPosition(locX, locY);
         Assets.stage01MapScreen.addActor(animActor);
     }

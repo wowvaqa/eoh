@@ -21,7 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.ai.AI;
+import com.vs.enums.AnimsTypes;
 import com.vs.enums.Buldings;
+import com.vs.enums.DostepneMoby;
 import com.vs.enums.KlasyPostaci;
 import com.vs.enums.Spells;
 import com.vs.enums.TypyTerenu;
@@ -549,14 +551,35 @@ public class MapScreen implements Screen {
 
                 if (v.getGs().getMapa().getPola()[i][j].isMob1Location()) {
 
-                    Mob mob = new Mob(v, i * 100, j * 100, 1, Mob.losujMoba(1));
+                    //Mob mob = new Mob(v, i * 100, j * 100, 1, Mob.losujMoba(1));
+
+                    DostepneMoby dostepneMoby = Mob.losujMoba(1);
+
+                    Mob mob;
+
+                    if (dostepneMoby.equals(DostepneMoby.Szkielet)) {
+                        mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.SkeletonAnimation, dostepneMoby);
+                    } else {
+                        mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.WolfAnimation, dostepneMoby);
+                    }
+
                     v.getGs().getMapa().getPola()[i][j].setMob(mob);
                     mob.setPozX(i);
                     mob.setPozY(j);
                     stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
                 } else if (v.getGs().getMapa().getPola()[i][j].isMob2Location()) {
 
-                    Mob mob = new Mob(v, i * 100, j * 100, 2, Mob.losujMoba(2));
+                    DostepneMoby dostepneMoby = Mob.losujMoba(2);
+
+                    Mob mob;
+
+                    if (dostepneMoby.equals(DostepneMoby.Pajak)) {
+                        mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.SpiderAnimation, dostepneMoby);
+                    } else {
+                        mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.ZombieAnimation, dostepneMoby);
+                    }
+
+                    //Mob mob = new Mob(v, i * 100, j * 100, 2, Mob.losujMoba(2));
                     v.getGs().getMapa().getPola()[i][j].setMob(mob);
                     mob.setPozX(i);
                     mob.setPozY(j);

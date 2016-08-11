@@ -56,7 +56,7 @@ public class Mob extends AnimActor {
     public Mob(V v, int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
                DostepneMoby typMoba) {
 
-        super(new AnimationCreator().makeAniamtion(AnimsTypes.SkeletonAnimation));
+        super(new AnimationCreator().makeAniamtion(AnimsTypes.WolfAnimation), true);
 
         this.spellEffects = new ArrayList<SpellEffects>();
         this.v = v;
@@ -66,6 +66,29 @@ public class Mob extends AnimActor {
 
         //this.setSize(sprite.getWidth(), sprite.getHeight());
         //this.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
+
+        this.mobLevel = mobLevel;
+        super.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);
+        this.typMoba = typMoba;
+
+        wygenerujStatystykiMoba(this.mobLevel);
+        this.dodajListnera();
+    }
+
+    /**
+     * @param v
+     * @param lokaczjaPoczatkowaX
+     * @param lokaczjaPoczatkowaY
+     * @param mobLevel
+     * @param typAnimacji
+     */
+    public Mob(V v, int lokaczjaPoczatkowaX, int lokaczjaPoczatkowaY, int mobLevel,
+               AnimsTypes typAnimacji, DostepneMoby typMoba) {
+
+        super(new AnimationCreator().makeAniamtion(typAnimacji), true);
+
+        this.spellEffects = new ArrayList<SpellEffects>();
+        this.v = v;
 
         this.mobLevel = mobLevel;
         super.setPosition(lokaczjaPoczatkowaX, lokaczjaPoczatkowaY);

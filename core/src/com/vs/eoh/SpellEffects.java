@@ -119,7 +119,7 @@ public class SpellEffects {
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     v.getA().fireball.play();
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FireExplosionAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FireExplosionAnimation), false);
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
                         Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
@@ -148,7 +148,7 @@ public class SpellEffects {
             case LongShot:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.SlashAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.SlashAnimation), false);
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
                         Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
@@ -176,7 +176,7 @@ public class SpellEffects {
             case VampireTouch:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation), false);
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
 
@@ -220,7 +220,7 @@ public class SpellEffects {
             case Thunder:
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation), false);
                     v.getA().thuner.play();
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
@@ -249,7 +249,7 @@ public class SpellEffects {
                 // Zadaje obrażenia
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
                     v.getA().meteorShower.play();
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.ThunderSpellAnimation), false);
                     if (obiketBroniacy.getClass() == Bohater.class) {
                         Bohater tmpBoh = (Bohater) obiketBroniacy;
                         Animation.animujLblDamage(tmpBoh.getX(), tmpBoh.getY(), "Dmg: " + Integer.toString(Fight.getSpellObrazenia(bohaterCastujacy, tmpBoh, spell)), v.getA());
@@ -279,7 +279,7 @@ public class SpellEffects {
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
                     v.getA().freezSpell.play();
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.FrozenSpellAnimation), false);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     spellEffect = com.vs.enums.SpellEffects.Frozen;
 
@@ -317,7 +317,7 @@ public class SpellEffects {
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -334,7 +334,7 @@ public class SpellEffects {
                     System.out.println("Czar HASTE");
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.setPozostaloRuchow(bohaterCastujacy.getPozostaloRuchow() + bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy));
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -353,7 +353,7 @@ public class SpellEffects {
                         bohaterCastujacy.setActualHp(bohaterCastujacy.getHp());
                     }
                     bohaterCastujacy.aktualizujTeksture();
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
 
@@ -373,7 +373,7 @@ public class SpellEffects {
                     Bohater tempBoh;
                     tempBoh = (Bohater) obiketBroniacy;
                     tempBoh.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(tempBoh.getX(), tempBoh.getY());
                     Assets.stage01MapScreen.addActor(animActor);
 
@@ -397,7 +397,7 @@ public class SpellEffects {
                     Bohater tempBoh;
                     tempBoh = (Bohater) obiketBroniacy;
                     tempBoh.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(tempBoh.getX(), tempBoh.getY());
                     Assets.stage01MapScreen.addActor(animActor);
 
@@ -423,7 +423,7 @@ public class SpellEffects {
                     tempBoh.getSpellEffects().add(this);
                     tempBoh.setActualHp(tempBoh.getHp());
                     tempBoh.setPozostaloRuchow(tempBoh.getSzybkosc() + getEfektSzybkosc());
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(tempBoh.getX(), tempBoh.getY());
                     tempBoh.aktualizujTeksture();
                     Assets.stage01MapScreen.addActor(animActor);
@@ -443,7 +443,7 @@ public class SpellEffects {
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -456,7 +456,7 @@ public class SpellEffects {
                 System.out.println("Czar POISON");
                 if (spell.getKoszt() <= bohaterCastujacy.getActualMana()) {
 
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation), false);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     spellEffect = com.vs.enums.SpellEffects.Poison;
 
@@ -488,7 +488,7 @@ public class SpellEffects {
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -506,7 +506,7 @@ public class SpellEffects {
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -524,7 +524,7 @@ public class SpellEffects {
                     this.dlugoscTrwaniaEfektu = bohaterCastujacy.getMoc() + Fight.getMocEkwipunkuBohatera(bohaterCastujacy);
                     bohaterCastujacy.setActualMana(bohaterCastujacy.getActualMana() - spell.getKoszt());
                     bohaterCastujacy.getSpellEffects().add(this);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.GoodSpellAnimation), false);
                     animActor.setPosition(bohaterCastujacy.getX(), bohaterCastujacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 } else {
@@ -567,7 +567,7 @@ public class SpellEffects {
                     Bohater tmpBohaterBroniacy;
                     tmpBohaterBroniacy = (Bohater) obiektBroniacy;
                     tmpBohaterBroniacy.getSpellEffects().add(tmpSpellEffects);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation), false);
                     animActor.setPosition(tmpBohaterBroniacy.getX(), tmpBohaterBroniacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
 
@@ -576,7 +576,7 @@ public class SpellEffects {
                     Mob tmpBohaterBroniacy;
                     tmpBohaterBroniacy = (Mob) obiektBroniacy;
                     tmpBohaterBroniacy.getSpellEffects().add(tmpSpellEffects);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation), false);
                     animActor.setPosition(tmpBohaterBroniacy.getX(), tmpBohaterBroniacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
 
@@ -616,7 +616,7 @@ public class SpellEffects {
                     Bohater tmpBohaterBroniacy;
                     tmpBohaterBroniacy = (Bohater) obiektBroniacy;
                     tmpBohaterBroniacy.getSpellEffects().add(tmpSpellEffects2);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation), false);
                     animActor.setPosition(tmpBohaterBroniacy.getX(), tmpBohaterBroniacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
 
@@ -625,7 +625,7 @@ public class SpellEffects {
                     Mob tmpBohaterBroniacy;
                     tmpBohaterBroniacy = (Mob) obiektBroniacy;
                     tmpBohaterBroniacy.getSpellEffects().add(tmpSpellEffects2);
-                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation));
+                    AnimActor animActor = new AnimActor(new AnimationCreator().makeAniamtion(AnimsTypes.BadSpellAnimation), false);
                     animActor.setPosition(tmpBohaterBroniacy.getX(), tmpBohaterBroniacy.getY());
                     Assets.stage01MapScreen.addActor(animActor);
                 }

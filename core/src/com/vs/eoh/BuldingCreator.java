@@ -3,6 +3,7 @@ package com.vs.eoh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.vs.enums.AnimsTypes;
 import com.vs.enums.Buldings;
 
 /**
@@ -59,7 +60,7 @@ public class BuldingCreator {
      */
     private Bulding createTraningCamp() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.TreningCamp);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texTreningCamp.png"))));
@@ -78,7 +79,7 @@ public class BuldingCreator {
      */
     private Bulding createDefenceTower() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.DefenceTower);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texDefenceTower.png"))));
@@ -97,7 +98,7 @@ public class BuldingCreator {
      */
     private Bulding createPowerTower() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.TowerOfMagicPower);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texPowerCamp.png"))));
@@ -116,7 +117,7 @@ public class BuldingCreator {
      */
     private Bulding createWisdomTower() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texWisdomCamp.png"))));
@@ -135,7 +136,7 @@ public class BuldingCreator {
      */
     private Bulding createSpeedTower() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.SpeedTower);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texSpeedCamp.png"))));
@@ -154,7 +155,7 @@ public class BuldingCreator {
      */
     private Bulding createHpTower() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texHpCamp.png"))));
@@ -173,7 +174,7 @@ public class BuldingCreator {
      */
     private Bulding createWell() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texWell.png"))));
@@ -193,7 +194,7 @@ public class BuldingCreator {
      */
     private Bulding createTemple() {
 
-        Bulding bulding = new Bulding(v);
+        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texTemple.png"))));

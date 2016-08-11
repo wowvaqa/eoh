@@ -9,5 +9,13 @@ public enum AnimsTypes {
     BadSpellAnimation,
     FrozenSpellAnimation,
     ThunderSpellAnimation,
-    SkeletonAnimation;
+    SkeletonAnimation,
+    WolfAnimation,
+    SpiderAnimation,
+    ZombieAnimation,
+    ObeliskOfWisdomAnimation,
+    TowerOfMagicPower,
+    SpeedTower,
+    TreningCamp,
+    DefenceTower;
 }

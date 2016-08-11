@@ -28,9 +28,105 @@ public class AnimationCreator {
 
         switch (animations) {
 
+            case DefenceTower:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/defenceTower.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case TreningCamp:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/treningCamp.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case SpeedTower:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/speedTower.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case TowerOfMagicPower:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/towerOfMagicPower.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case ObeliskOfWisdomAnimation:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/obeliskOfWisdom.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case ZombieAnimation:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/zombie.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case SpiderAnimation:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/spider.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
             case SkeletonAnimation:
                 animationSpeed = 0.1f;
                 texture = new Texture(Gdx.files.internal("animation/skeleton.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
+            case WolfAnimation:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/wolf.png"));
                 tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
                 walkFrames = new TextureRegion[6 * 4];
                 for (int i = 0; i < 4; i++) {

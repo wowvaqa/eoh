@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.vs.enums.AnimsTypes;
 import com.vs.enums.Buldings;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.Random;
  * Created by v on 2016-05-17.
  * Klasa odpowiada za obsługę bunynków na mapie.
  */
-public class Bulding extends Image {
+public class Bulding extends AnimActor {
 
     //private Assets a;
     private V v;
@@ -43,8 +44,9 @@ public class Bulding extends Image {
 
     private Buldings typeOfBulding;
 
-    public Bulding(V v) {
-        super();
+    public Bulding(V v, AnimsTypes animsTypes) {
+        super(new AnimationCreator().makeAniamtion(animsTypes), true);
+        //super();
         this.v = v;
 
         visited = new ArrayList<Bohater>();
@@ -91,7 +93,7 @@ public class Bulding extends Image {
     public static Buldings drawBulding() {
 
         Random random = new Random();
-        int index = random.nextInt(6);
+        int index = random.nextInt(7);
 
         switch (index) {
             case 1:
