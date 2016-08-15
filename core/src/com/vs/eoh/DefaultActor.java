@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class DefaultActor extends Actor{
 
-    private Sprite sprite;
     TextureRegion region;
+    private Sprite sprite;
 
     /**
      *
@@ -21,6 +21,10 @@ public class DefaultActor extends Actor{
         sprite = new Sprite(tekstura);
         this.setSize(sprite.getWidth(), sprite.getHeight());
         this.setPosition(x, y);
+    }
+
+    public DefaultActor() {
+
     }
 
     public Sprite getSprite() {
