@@ -1,7 +1,9 @@
 package com.vs.eoh;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.vs.enums.DostepneItemki;
+import com.vs.mapEditor.MapEdit;
 import com.vs.network.RunClient;
 import com.vs.network.RunServer;
 import com.vs.screens.MultiplayerScreen;
@@ -23,6 +25,8 @@ public class GameStatus {
     //    public static GameStatus gs;
 //    public static Assets a;
 //    public static Game g;
+    public static List mapV2;
+    public static boolean mavWersion2 = false;
     public static boolean gameStart = false;
     public static int CostOfNewHero = 20;
     public float xDlaInterfejsuRuchu = 0;
@@ -70,7 +74,16 @@ public class GameStatus {
         //mapa = (Mapa) we.readObject();
 
         if (!nazwaMapy.equals("mapa z serwera")) {
-            mapa = MapEditor.readMap(nazwaMapy);
+            if (GameStatus.mavWersion2) {
+                MapEdit mapEdit = new MapEdit();
+                mapEdit = mapEdit.loadMap(mapV2);
+                if (mapa == null) {
+                    mapa = new Mapa(mapEdit.mapColumns, mapEdit.mapRows);
+                }
+                Mapa.convertMap(mapEdit.loadMap(mapV2), mapa);
+            } else {
+                mapa = MapEditor.readMap(nazwaMapy);
+            }
         }
     }
 

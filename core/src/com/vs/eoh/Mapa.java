@@ -4,6 +4,7 @@ package com.vs.eoh;
 
 import com.vs.ai.PathFinder;
 import com.vs.enums.TypyTerenu;
+import com.vs.mapEditor.MapEdit;
 import com.vs.network.Network;
 
 import java.io.Serializable;
@@ -410,6 +411,31 @@ public final class Mapa implements Serializable {
                     netMap.networkPole[i][j].isTerrainType3 = true;
                 } else if (mapa.getPola()[i][j].getTypTerenu().equals(TypyTerenu.Rzeka)) {
                     netMap.networkPole[i][j].isTerrainType4 = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Converts loaded map to object of class Mapa.
+     *
+     * @param loadedMap Map loaded from file.
+     * @param map       Object of Mapa class used in game.
+     */
+    public static void convertMap(MapEdit loadedMap, Mapa map) {
+        for (int i = 0; i < loadedMap.mapColumns; i++) {
+            for (int j = 0; j < loadedMap.mapRows; j++) {
+
+                if (loadedMap.fields[i][j].typyTerenu.equals(TypyTerenu.Drzewo)) {
+                    map.getPola()[i][j].setTypTerenu(TypyTerenu.Drzewo);
+                } else {
+                    map.getPola()[i][j].setTypTerenu(TypyTerenu.Trawa);
+                }
+
+                if (loadedMap.fields[i][j].player1StartLocation) {
+                    map.getPola()[i][j].setLokacjaStartowaP1(true);
+                } else if (loadedMap.fields[i][j].player2StartLocation) {
+                    map.getPola()[i][j].setLokacjaStartowaP2(true);
                 }
             }
         }

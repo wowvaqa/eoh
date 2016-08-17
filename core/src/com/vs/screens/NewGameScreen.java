@@ -517,6 +517,8 @@ public class NewGameScreen implements Screen {
         for (FileHandle file : files) {
             if (file.extension().equals("dat")) {
                 listOfMap.getItems().add(file);
+            } else if (file.extension().equals("map")) {
+                listOfMap.getItems().add(file);
             }
         }
 
@@ -529,6 +531,23 @@ public class NewGameScreen implements Screen {
             }
         });
 
+        TextButton btnWybierzWindowNewMap = new TextButton("Wybieram v2", v.getA().skin);
+        btnWybierzWindowNewMap.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                v.getA().buttonClick.play();
+
+                GameStatus.mapV2 = listOfMap;
+                GameStatus.mavWersion2 = true;
+
+                FileHandle file = (FileHandle) listOfMap.getSelected();
+                Gdx.app.log("Nazwa Pliku", file.name());
+                GameStatus.nazwaMapy = file.name();
+
+                window.remove();
+            }
+        });
+
         TextButton btnWybierzWindow = new TextButton("Wybieram", v.getA().skin);
         btnWybierzWindow.addListener(new ClickListener() {
             @Override
@@ -537,6 +556,7 @@ public class NewGameScreen implements Screen {
                 FileHandle file = (FileHandle) listOfMap.getSelected();
                 Gdx.app.log("Nazwa Pliku", file.name());
                 GameStatus.nazwaMapy = file.name();
+                GameStatus.mavWersion2 = false;
 
                 window.remove();
             }
@@ -547,6 +567,7 @@ public class NewGameScreen implements Screen {
         window.row();
         window.add(btnExitWindow).size(100, 50).spaceRight(5);
         window.add(btnWybierzWindow).size(100, 50);
+        window.add(btnWybierzWindowNewMap).size(100, 50);
 
         return window;
     }

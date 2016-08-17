@@ -3,6 +3,7 @@ package com.vs.mapEditor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,17 +13,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.XmlWriter;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.eoh.V;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 /**
  * Created by v on 17.07.16.
@@ -147,7 +149,82 @@ public class MapEditScreen implements Screen {
          * @return Window
          */
         public Window getLoadMapWindow() {
-            return null;
+            final Window window = new Window("Wczytaj mape", v.getA().skin);
+            final List listOfMap = new List(v.getA().skin);
+            ScrollPane scrollPane = new ScrollPane(listOfMap, v.getA().skin);
+            scrollPane.setSize(300, 200);
+
+
+            window.setSize(600, 400);
+
+            FileHandle[] files = Gdx.files.local("").list();
+            for (FileHandle file : files) {
+                if (file.extension().equals("map")) {
+                    listOfMap.getItems().add(file);
+                }
+            }
+
+            TextButton tbOk = new TextButton("OK", v.getA().skin);
+            TextButton tbCancel = new TextButton("Cancel", v.getA().skin);
+            tbOk.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (listOfMap.getSelected() != null) {
+                        mapEdit = mapEdit.loadMap(listOfMap);
+                        if (mapStage == null) {
+                            mapStage = new Stage();
+                        }
+
+                        mapStage.clear();
+
+                        for (int i = 0; i < mapEdit.mapColumns; i++) {
+                            for (int j = 0; j < mapEdit.mapRows; j++) {
+                                mapEdit.fillField(mapEdit.fields[i][j]);
+                                mapEdit.fields[i][j].addListeners(mapEdit.fields[i][j]);
+                                mapStage.addActor(mapEdit.fields[i][j]);
+                            }
+                        }
+                        window.remove();
+                    } else {
+                        //window.remove();
+                        final Window windowError = new Window("Wybierz mape", v.getA().skin);
+                        windowError.setMovable(false);
+                        windowError.setSize(300, 200);
+                        windowError.add(new Label("Nie wybrano mapy", v.getA().skin));
+                        windowError.row();
+                        TextButton btnOK = new TextButton("OK", v.getA().skin);
+                        btnOK.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                window.setVisible(true);
+                                windowError.remove();
+                            }
+                        });
+                        windowError.add(btnOK).size(100, 50).align(Align.center);
+                        windowError.setPosition(
+                                Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - windowError.getWidth() / 2,
+                                Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - windowError.getHeight() / 2);
+                        window.setVisible(false);
+
+                        interfaceStage.addActor(windowError);
+                    }
+                }
+
+            });
+            tbCancel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    window.remove();
+                }
+            });
+
+            window.add(scrollPane).size(300, 200).colspan(2);
+            window.row();
+            window.add(tbOk).pad(5).size(100, 50);
+            window.add(tbCancel).pad(5).size(100, 50);
+            window.row();
+
+            return window;
         }
 
         /**
@@ -158,14 +235,14 @@ public class MapEditScreen implements Screen {
         public Window getSaveMapWindow() {
             final Window window = new Window("Zapisz mape", v.getA().skin);
             window.setSize(600, 400);
-            TextField tfNameofMap = new TextField("", v.getA().skin);
+            final TextField tfNameofMap = new TextField("", v.getA().skin);
             TextButton tbOk = new TextButton("OK", v.getA().skin);
             TextButton tbCancel = new TextButton("Cancel", v.getA().skin);
             tbOk.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     try {
-                        mapEdit.saveMap();
+                        mapEdit.saveMap(tfNameofMap.getText());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -547,6 +624,20 @@ public class MapEditScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Window window = getSaveMapWindow();
+                    window.setMovable(false);
+                    window.setModal(true);
+                    window.setPosition(
+                            Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
+                            Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
+                    );
+                    interfaceStage.addActor(window);
+                }
+            });
+
+            imageButtonLoad.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Window window = getLoadMapWindow();
                     window.setMovable(false);
                     window.setModal(true);
                     window.setPosition(
