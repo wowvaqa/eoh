@@ -543,7 +543,7 @@ public class NewGame {
             case Czarodziej:
                 //return a.mobWizardTex;
                 //return a.tAtlasWizard.findRegion("0").getTexture();
-                return new Texture("mogy/wizard/0.png");
+                return new Texture("moby/wizard/0.png");
         }
         return null;
     }
