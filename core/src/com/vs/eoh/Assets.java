@@ -39,12 +39,12 @@ public class Assets {
     public Texture trawaGoraTex;
     public Texture trawaZamekTex;
     public Texture btnGoTex, btnAttackTex;
-    public Texture btnPlus, btnMinus, btnOK, btnRight, btnLeft;
-    public Texture mobElfTex, mobElfTexZaznaczony;
-    public Texture mobOrkTex, mobOrkTexZaznaczony;
-    public Texture mobDwarfTex, mobDwarfTexZaznaczony;
-    public Texture mobHumanTex, mobHumanTexZaznaczony;
-    public Texture mobWizardTex, mobWizardTexZaznaczony;
+    //public Texture btnPlus, btnMinus, btnOK, btnRight, btnLeft;
+//    public Texture mobElfTex, mobElfTexZaznaczony;
+//    public Texture mobOrkTex, mobOrkTexZaznaczony;
+//    public Texture mobDwarfTex, mobDwarfTexZaznaczony;
+//    public Texture mobHumanTex, mobHumanTexZaznaczony;
+//    public Texture mobWizardTex, mobWizardTexZaznaczony;
     public Texture cancelTex;
     public Skin skin;
     // obiekty na mapie
@@ -173,21 +173,21 @@ public class Assets {
         trawaZamekTex = new Texture("grassCastle100x100.png");
         btnGoTex = new Texture("goBtt.png");
         btnAttackTex = new Texture("attackBtt.png");
-        btnPlus = new Texture("bttPlus.png");
-        btnMinus = new Texture("bttMinus.png");
-        btnOK = new Texture("btnOK.png");
-        btnRight = new Texture("btnRight.png");
-        btnLeft = new Texture("btnLeft.png");
-        mobElfTex = new Texture("moby/hunter/0.png");
-        mobElfTexZaznaczony = new Texture("moby/hunter/0z.png");
-        mobOrkTex = new Texture("mobOrkTex.png");
-        mobOrkTexZaznaczony = new Texture("mobOrkTexZaznaczony.png");
-        mobDwarfTex = new Texture("mobDwarfTex.png");
-        mobDwarfTexZaznaczony = new Texture("mobDwarfTexZaznaczony.png");
-        mobHumanTex = new Texture("moby/warrior/0.png");
-        mobHumanTexZaznaczony = new Texture("moby/warrior/0z.png");
-        mobWizardTex = new Texture("moby/wizard/0.png");
-        mobWizardTexZaznaczony = new Texture("moby/wizard/0z.png");
+        //btnPlus = new Texture("bttPlus.png");
+        //btnMinus = new Texture("bttMinus.png");
+        //btnOK = new Texture("btnOK.png");
+        //btnRight = new Texture("btnRight.png");
+        //btnLeft = new Texture("btnLeft.png");
+        //mobElfTex = new Texture("moby/hunter/0.png");
+        //mobElfTexZaznaczony = new Texture("moby/hunter/0z.png");
+        //mobOrkTex = new Texture("mobOrkTex.png");
+        //mobOrkTexZaznaczony = new Texture("mobOrkTexZaznaczony.png");
+        //mobDwarfTex = new Texture("mobDwarfTex.png");
+        //mobDwarfTexZaznaczony = new Texture("mobDwarfTexZaznaczony.png");
+        //mobHumanTex = new Texture("moby/warrior/0.png");
+        //mobHumanTexZaznaczony = new Texture("moby/warrior/0z.png");
+        //mobWizardTex = new Texture("moby/wizard/0.png");
+        //mobWizardTexZaznaczony = new Texture("moby/wizard/0z.png");
 
         cancelTex = new Texture("cancelBtt.png");
 

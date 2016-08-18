@@ -1,13 +1,10 @@
 package com.vs.testing;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,9 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.vs.enums.DostepneMoby;
-import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
-import com.vs.eoh.GameStatus;
 import com.vs.eoh.Mapa;
 import com.vs.eoh.Mob;
 import com.vs.eoh.V;
@@ -53,7 +48,7 @@ public class TestingScreen implements Screen {
 
     private final Stage stage01 = new Stage();
     private final float rotationSpeed;
-    Pixmap pm;
+    //Pixmap pm;
     private TextButton btnMapEditor;
     private TextButton btnExit;
     private TextButton btnSerylizacja;
@@ -68,15 +63,15 @@ public class TestingScreen implements Screen {
 
     public TestingScreen(V v) {
 
-        pm = new Pixmap(Gdx.files.internal("mobElfTex.png"));
+        //pm = new Pixmap(Gdx.files.internal("mobElfTex.png"));
 
-        pm.setColor(Color.RED);
-        pm.fillRectangle(0, 0, 10, 100);
-        pm.setColor(Color.WHITE);
-        pm.fillRectangle(1, 1, 8, 90);
+        //pm.setColor(Color.RED);
+        //pm.fillRectangle(0, 0, 10, 100);
+        //pm.setColor(Color.WHITE);
+        //pm.fillRectangle(1, 1, 8, 90);
 
-        Texture pmTex = new Texture(pm);
-        pm.dispose();
+        //Texture pmTex = new Texture(pm);
+        //pm.dispose();
 
         rotationSpeed = 0.5f;
 
@@ -90,7 +85,7 @@ public class TestingScreen implements Screen {
 
         tabela = new Table(v.getA().skin);
 
-        makeSprites(pmTex);
+        //makeSprites(pmTex);
 
         makeButtons();
 

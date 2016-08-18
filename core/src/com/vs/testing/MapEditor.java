@@ -1,6 +1,5 @@
 package com.vs.testing;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.vs.enums.TypyTerenu;
-import com.vs.eoh.Assets;
 import com.vs.eoh.DefaultActor;
 import com.vs.eoh.Mapa;
 import com.vs.eoh.V;
@@ -235,7 +233,7 @@ public class MapEditor implements Screen {
         }
 
         poleEdytora tmpPE = (poleEdytora) tabela01.getCells().get(99).getActor();
-        tmpPE.getSprite().setTexture(v.getA().mobDwarfTex);
+        //tmpPE.getSprite().setTexture(v.getA().mobDwarfTex);
 
 //        for (Object listaPol1 : listaPol) {
 //            tabela01.add((poleEdytora) listaPol1);
@@ -479,19 +477,19 @@ public class MapEditor implements Screen {
                                     protected void result(Object object) {
                                         if (object.equals("p1")) {
                                             lokacjaStartowaP1 = true;
-                                            getSprite().setTexture(v.getA().mobWizardTex);
+                                            //getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("p2")) {
                                             lokacjaStartowaP2 = true;
-                                            getSprite().setTexture(v.getA().mobWizardTex);
+                                            //getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("p3")) {
                                             lokacjaStartowaP3 = true;
-                                            getSprite().setTexture(v.getA().mobWizardTex);
+                                            //getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("p4")) {
                                             lokacjaStartowaP4 = true;
-                                            getSprite().setTexture(v.getA().mobWizardTex);
+                                            //getSprite().setTexture(v.getA().mobWizardTex);
                                             this.remove();
                                         } else if (object.equals("anuluj")) {
                                             this.remove();

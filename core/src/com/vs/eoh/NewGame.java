@@ -124,15 +124,19 @@ public class NewGame {
     static public DefaultActor pobierzPortret(KlasyPostaci kP) {
         switch (kP) {
             case Wojownik:
-                return new DefaultActor(a.mobHumanTex, 0, 0);
+                //return new DefaultActor(a.mobHumanTex, 0, 0);
+                //return new DefaultActor(a.tAtlasWarrior.findRegion("0").getTexture(), 0, 0);
+                return new DefaultActor(new Texture("moby/warrior/0.png"), 0, 0);
             case Lowca:
-                return new DefaultActor(a.mobElfTex, 0, 0);
-            case Giermek:
-                return new DefaultActor(a.mobDwarfTex, 0, 0);
-            case Twierdza:
-                return new DefaultActor(a.mobOrkTex, 0, 0);
+                return new DefaultActor(new Texture("moby/hunter/0.png"), 0, 0);
+            //return new DefaultActor(a.mobElfTex, 0, 0);
+            //case Giermek:
+            //    return new DefaultActor(a.mobDwarfTex, 0, 0);
+            //case Twierdza:
+            //    return new DefaultActor(a.mobOrkTex, 0, 0);
             case Czarodziej:
-                return new DefaultActor(a.mobWizardTex, 0, 0);
+                //return new DefaultActor(a.mobWizardTex, 0, 0);
+                return new DefaultActor(new Texture("moby/wizard/0.png"), 0, 0);
         }
         return null;
     }
@@ -147,12 +151,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return "Wojownik";
-            case Giermek:
-                return "Giermek";
+            //case Giermek:
+            //    return "Giermek";
             case Lowca:
                 return "Lowca";
-            case Twierdza:
-                return "Twierdza";
+            //case Twierdza:
+            //    return "Twierdza";
             case Czarodziej:
                 return "Czarodziej";
         }
@@ -169,12 +173,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 6;
-            case Giermek:
-                return 5;
+            //case Giermek:
+            //    return 5;
             case Lowca:
                 return 5;
-            case Twierdza:
-                return 5;
+            //case Twierdza:
+            //    return 5;
             case Czarodziej:
                 return 3;
         }
@@ -191,12 +195,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 5;
-            case Giermek:
-                return 6;
+//            case Giermek:
+//                return 6;
             case Lowca:
                 return 5;
-            case Twierdza:
-                return 5;
+//            case Twierdza:
+//                return 5;
             case Czarodziej:
                 return 5;
         }
@@ -213,12 +217,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 5;
-            case Giermek:
-                return 5;
+//            case Giermek:
+//                return 5;
             case Lowca:
                 return 6;
-            case Twierdza:
-                return 5;
+//            case Twierdza:
+//                return 5;
             case Czarodziej:
                 return 5;
         }
@@ -235,12 +239,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 10;
-            case Giermek:
-                return 10;
+//            case Giermek:
+//                return 10;
             case Lowca:
                 return 10;
-            case Twierdza:
-                return 15;
+//            case Twierdza:
+//                return 15;
             case Czarodziej:
                 return 10;
         }
@@ -255,12 +259,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 1;
-            case Giermek:
-                return 1;
+//            case Giermek:
+//                return 1;
             case Lowca:
                 return 1;
-            case Twierdza:
-                return 1;
+//            case Twierdza:
+//                return 1;
             case Czarodziej:
                 return 3;
         }
@@ -277,12 +281,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 1;
-            case Giermek:
-                return 1;
+//            case Giermek:
+//                return 1;
             case Lowca:
                 return 1;
-            case Twierdza:
-                return 1;
+//            case Twierdza:
+//                return 1;
             case Czarodziej:
                 return 3;
         }
@@ -297,12 +301,12 @@ public class NewGame {
         switch (kP) {
             case Wojownik:
                 return 1;
-            case Giermek:
-                return 1;
+//            case Giermek:
+//                return 1;
             case Lowca:
                 return 1;
-            case Twierdza:
-                return 1;
+//            case Twierdza:
+//                return 1;
             case Czarodziej:
                 return 3;
         }
@@ -523,15 +527,23 @@ public class NewGame {
     public static Texture getTeksturaBohatera(KlasyPostaci kP) {
         switch (kP) {
             case Wojownik:
-                return a.mobHumanTex;
+                //return a.mobHumanTex;
+                //TextureRegion texReg = a.tAtlasWarrior.findRegion("0");
+                //Texture tex = new Texture(texReg.getTexture().getTextureData());
+                return new Texture("moby/warrior/0.png");
+            //return a.tAtlasWarrior.findRegion("0").getTexture();
             case Lowca:
-                return a.mobElfTex;
-            case Giermek:
-                return a.mobDwarfTex;
-            case Twierdza:
-                return a.mobOrkTex;
+                //return a.mobElfTex;
+                //return a.tAtlasHunter.findRegion("0").getTexture();
+                return new Texture("moby/hunter/0.png");
+//            case Giermek:
+//                return a.mobDwarfTex;
+//            case Twierdza:
+//                return a.mobOrkTex;
             case Czarodziej:
-                return a.mobWizardTex;
+                //return a.mobWizardTex;
+                //return a.tAtlasWizard.findRegion("0").getTexture();
+                return new Texture("mogy/wizard/0.png");
         }
         return null;
     }
@@ -545,15 +557,28 @@ public class NewGame {
     public static Texture getTeksturaBohateraZaznaczonego(KlasyPostaci kP) {
         switch (kP) {
             case Wojownik:
-                return a.mobHumanTexZaznaczony;
+                //return a.mobHumanTex;
+                return new Texture("moby/warrior/0z.png");
             case Lowca:
-                return a.mobElfTexZaznaczony;
-            case Giermek:
-                return a.mobDwarfTexZaznaczony;
-            case Twierdza:
-                return a.mobOrkTexZaznaczony;
+                //return a.mobElfTex;
+                return new Texture("moby/hunter/0z.png");
+//            case Giermek:
+//                return a.mobDwarfTex;
+//            case Twierdza:
+//                return a.mobOrkTex;
             case Czarodziej:
-                return a.mobWizardTexZaznaczony;
+                //return a.mobWizardTex;
+                return new Texture("moby/wizard/0z.png");
+//            case Wojownik:
+//                return a.mobHumanTexZaznaczony;
+//            case Lowca:
+//                return a.mobElfTexZaznaczony;
+//            case Giermek:
+//                return a.mobDwarfTexZaznaczony;
+//            case Twierdza:
+//                return a.mobOrkTexZaznaczony;
+//            case Czarodziej:
+//                return a.mobWizardTexZaznaczony;
         }
         return null;
     }
