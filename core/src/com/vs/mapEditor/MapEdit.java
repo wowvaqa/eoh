@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -78,10 +77,16 @@ public class MapEdit implements Serializable {
      */
     public void fillField(FieldOfEditor field) {
         if (field.typyTerenu.equals(TypyTerenu.Trawa)) {
-            field.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("grass100x100.png"))));
+            field.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("interface/mapEditor/terrains/grass.png"))));
             field.setPosition(field.posX * 100, field.posY * 100);
         } else if (field.typyTerenu.equals(TypyTerenu.Drzewo)) {
             field.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("interface/mapEditor/terrains/forestC.png"))));
+            field.setPosition(field.posX * 100, field.posY * 100);
+        } else if (field.typyTerenu.equals(TypyTerenu.Gory)) {
+            field.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("interface/mapEditor/terrains/mountainC.png"))));
+            field.setPosition(field.posX * 100, field.posY * 100);
+        } else if (field.typyTerenu.equals(TypyTerenu.Rzeka)) {
+            field.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("interface/mapEditor/terrains/river.png"))));
             field.setPosition(field.posX * 100, field.posY * 100);
         }
 
@@ -90,6 +95,35 @@ public class MapEdit implements Serializable {
         } else if (field.player2StartLocation) {
             field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/players/player2.png"));
         }
+
+        if (field.tresureBoxLvl1) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/boxes/texTresureBoxLvl1.png"));
+        } else if (field.tresureBoxLvl2) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/boxes/texTresureBoxLvl2.png"));
+        }
+
+        if (field.towerMagic) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfMagic.png"));
+        } else if (field.towerWisdom) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfWisdom.png"));
+        } else if (field.towerDefence) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfDefence.png"));
+        }
+
+        if (field.mobSkeletonLocation) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "moby/mobSzkieletfTex.png"));
+        } else if (field.mobWolfLocation) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "moby/mobWolfTex.png"));
+        } else if (field.mobRandomLevel1) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "moby/mobRandomLevel1.png"));
+        } else if (field.mobSpiderLocation) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "moby/mobSpiderTex.png"));
+        } else if (field.mobZombieLocation) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "moby/mobZombieTex.png"));
+        } else if (field.mobRandomLevel2) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "moby/mobRandomLevel2.png"));
+        }
+
         field.setWidth(100);
         field.setHeight(100);
     }
@@ -163,9 +197,23 @@ public class MapEdit implements Serializable {
      */
     public enum DrawingType {
         forestDraw,
+        mountainDraw,
+        riverDraw,
         rubberDraw,
         player1Draw,
         player2Draw,
+        mobSkeletonDraw,
+        mobWolfDraw,
+        mobRandomLvl1Draw,
+        mobSpiederDraw,
+        mobZombieDraw,
+        mobRandomLvl2Draw,
+        tresureBox1Draw,
+        tresureBox2Draw,
+        towerMagicDraw,
+        towerWisdomDraw,
+        towerDefenceDraw,
+
         none;
     }
 
@@ -194,8 +242,21 @@ public class MapEdit implements Serializable {
 
         public boolean player1StartLocation = false;
         public boolean player2StartLocation = false;
+        public boolean mobSkeletonLocation = false;
+        public boolean mobWolfLocation = false;
+        public boolean mobZombieLocation = false;
+        public boolean mobSpiderLocation = false;
+        public boolean mobRandomLevel1 = false;
+        public boolean mobRandomLevel2 = false;
         public boolean terrainForest = false;
+        public boolean terrainMountain = false;
+        public boolean terrainRiver = false;
         public boolean terrainGrass = false;
+        public boolean tresureBoxLvl1 = false;
+        public boolean tresureBoxLvl2 = false;
+        public boolean towerMagic = false;
+        public boolean towerWisdom = false;
+        public boolean towerDefence = false;
         public TypyTerenu typyTerenu;
         public int posX;
         public int posY;
@@ -214,11 +275,29 @@ public class MapEdit implements Serializable {
                         field.terrainForest = true;
                         field.typyTerenu = TypyTerenu.Drzewo;
                         fillField(field);
+                    } else if (drawingType.equals(DrawingType.mountainDraw)) {
+                        field.terrainMountain = true;
+                        field.typyTerenu = TypyTerenu.Gory;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.riverDraw)) {
+                        field.terrainRiver = true;
+                        field.typyTerenu = TypyTerenu.Rzeka;
+                        fillField(field);
                     } else if (drawingType.equals(DrawingType.rubberDraw)) {
                         field.terrainForest = false;
+                        field.terrainMountain = false;
+                        field.terrainRiver = false;
                         field.terrainGrass = true;
                         field.player1StartLocation = false;
                         field.player2StartLocation = false;
+                        field.mobRandomLevel1 = false;
+                        field.mobSkeletonLocation = false;
+                        field.mobWolfLocation = false;
+                        field.mobSpiderLocation = false;
+                        field.mobZombieLocation = false;
+                        field.mobRandomLevel2 = false;
+                        field.tresureBoxLvl1 = false;
+                        field.tresureBoxLvl2 = false;
                         field.typyTerenu = TypyTerenu.Trawa;
                         fillField(field);
                     } else if (drawingType.equals(DrawingType.player1Draw)) {
@@ -243,7 +322,41 @@ public class MapEdit implements Serializable {
                         }
                         field.player2StartLocation = true;
                         fillField(field);
+                    } else if (drawingType.equals(DrawingType.mobSkeletonDraw)) {
+                        field.mobSkeletonLocation = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.mobWolfDraw)) {
+                        field.mobWolfLocation = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.mobRandomLvl1Draw)) {
+                        field.mobRandomLevel1 = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.mobSpiederDraw)) {
+                        field.mobSpiderLocation = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.mobZombieDraw)) {
+                        field.mobZombieLocation = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.mobRandomLvl2Draw)) {
+                        field.mobRandomLevel2 = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.tresureBox1Draw)) {
+                        field.tresureBoxLvl1 = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.tresureBox2Draw)) {
+                        field.tresureBoxLvl2 = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.towerMagicDraw)) {
+                        field.towerMagic = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.towerWisdomDraw)) {
+                        field.towerWisdom = true;
+                        fillField(field);
+                    } else if (drawingType.equals(DrawingType.towerDefenceDraw)) {
+                        field.towerDefence = true;
+                        fillField(field);
                     }
+
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });

@@ -428,14 +428,44 @@ public final class Mapa implements Serializable {
 
                 if (loadedMap.fields[i][j].typyTerenu.equals(TypyTerenu.Drzewo)) {
                     map.getPola()[i][j].setTypTerenu(TypyTerenu.Drzewo);
+                } else if (loadedMap.fields[i][j].typyTerenu.equals(TypyTerenu.Gory)) {
+                    map.getPola()[i][j].setTypTerenu(TypyTerenu.Gory);
+                } else if (loadedMap.fields[i][j].typyTerenu.equals(TypyTerenu.Rzeka)) {
+                    map.getPola()[i][j].setTypTerenu(TypyTerenu.Rzeka);
                 } else {
                     map.getPola()[i][j].setTypTerenu(TypyTerenu.Trawa);
+                }
+
+                if (loadedMap.fields[i][j].tresureBoxLvl1) {
+                    map.getPola()[i][j].setTresureBox1Location(true);
+                } else if (loadedMap.fields[i][j].tresureBoxLvl2) {
+                    map.getPola()[i][j].setTresureBox2Location(true);
                 }
 
                 if (loadedMap.fields[i][j].player1StartLocation) {
                     map.getPola()[i][j].setLokacjaStartowaP1(true);
                 } else if (loadedMap.fields[i][j].player2StartLocation) {
                     map.getPola()[i][j].setLokacjaStartowaP2(true);
+                }
+
+                if (loadedMap.fields[i][j].towerMagic) {
+                    map.getPola()[i][j].setPowerCamp(true);
+                } else if (loadedMap.fields[i][j].towerWisdom) {
+                    map.getPola()[i][j].setWisdomCamp(true);
+                } else if (loadedMap.fields[i][j].towerDefence) {
+                    map.getPola()[i][j].setDefenceCamp(true);
+                }
+
+                if (loadedMap.fields[i][j].mobRandomLevel1) {
+                    map.getPola()[i][j].setMob1Location(true);
+                } else if (loadedMap.fields[i][j].mobSkeletonLocation) {
+                    map.getPola()[i][j].setMobSkeletion(true);
+                } else if (loadedMap.fields[i][j].mobWolfLocation) {
+                    map.getPola()[i][j].setMobWolf(true);
+                } else if (loadedMap.fields[i][j].mobSpiderLocation) {
+                    map.getPola()[i][j].setMobSpider(true);
+                } else if (loadedMap.fields[i][j].mobZombieLocation) {
+                    map.getPola()[i][j].setMobZombie(true);
                 }
             }
         }

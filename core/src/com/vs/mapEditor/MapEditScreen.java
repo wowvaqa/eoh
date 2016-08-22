@@ -137,6 +137,7 @@ public class MapEditScreen implements Screen {
 
         public ImageButton imageButtonTerrainBrush;
         public ImageButton imageButtonPlayerBrush;
+        public ImageButton imageButtonMobsBrush;
 
         public ImageButton imageButtonForestBrush;
 
@@ -274,38 +275,65 @@ public class MapEditScreen implements Screen {
          */
         public Window getBrushWindow() {
             final Window window = new Window("Pedzel", v.getA().skin);
-            window.setSize(600, 400);
+            window.setSize(1000, 600);
 
             final ImageButton.ImageButtonStyle imageButtonStyleTerrainBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMobsBrush = new ImageButton.ImageButtonStyle();
             final ImageButton.ImageButtonStyle imageButtonStylePlayerBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleBuldingBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleTresureBoxBrush = new ImageButton.ImageButtonStyle();
             final ImageButton.ImageButtonStyle imageButtonStyleRubberBrush = new ImageButton.ImageButtonStyle();
 
-            Texture terrainBrushUp = new Texture("interface/mapEditor/terrainBrushUp.png");
-            Texture terrainBrushDown = new Texture("interface/mapEditor/terrainBrushDown.png");
+            Texture terrainBrushUp = new Texture("interface/mapEditor/terrains/terrainBrushUp.png");
+            Texture terrainBrushDown = new Texture("interface/mapEditor/terrains/terrainBrushDown.png");
+            Texture mobsBrushUp = new Texture("interface/mapEditor/mobsBrushUp.png");
+            Texture mobsBrushDown = new Texture("interface/mapEditor/mobsBrushDown.png");
             Texture playerBrushUp = new Texture("interface/mapEditor/PlayerBrushUp.png");
             Texture plyerBrushDown = new Texture("interface/mapEditor/PlayerBrushDown.png");
+            Texture buldingBrushUp = new Texture("interface/mapEditor/buldings/buldingBrushUp.png");
+            Texture buldingBrushDown = new Texture("interface/mapEditor/buldings/buldingBrushDown.png");
+            Texture tresureBoxBrushUp = new Texture("interface/mapEditor/boxes/tresureBoxBrushUp.png");
+            Texture tresureBoxBrushDown = new Texture("interface/mapEditor/boxes/tresureBoxBrushDown.png");
             Texture rubberBrushUp = new Texture("interface/mapEditor/rubberButtonUp.png");
             Texture rubberBrushDown = new Texture("interface/mapEditor/rubberButtonDown.png");
 
             imageButtonStyleTerrainBrush.imageUp = new TextureRegionDrawable(new TextureRegion(terrainBrushUp));
             imageButtonStyleTerrainBrush.imageDown = new TextureRegionDrawable(new TextureRegion(terrainBrushDown));
+            imageButtonStyleMobsBrush.imageUp = new TextureRegionDrawable(new TextureRegion(mobsBrushUp));
+            imageButtonStyleMobsBrush.imageDown = new TextureRegionDrawable(new TextureRegion(mobsBrushDown));
             imageButtonStylePlayerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(playerBrushUp));
             imageButtonStylePlayerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(plyerBrushDown));
+            imageButtonStyleBuldingBrush.imageUp = new TextureRegionDrawable(new TextureRegion(buldingBrushUp));
+            imageButtonStyleBuldingBrush.imageDown = new TextureRegionDrawable(new TextureRegion(buldingBrushDown));
+            imageButtonStyleTresureBoxBrush.imageUp = new TextureRegionDrawable(new TextureRegion(tresureBoxBrushUp));
+            imageButtonStyleTresureBoxBrush.imageDown = new TextureRegionDrawable(new TextureRegion(tresureBoxBrushDown));
             imageButtonStyleRubberBrush.imageUp = new TextureRegionDrawable(new TextureRegion(rubberBrushUp));
             imageButtonStyleRubberBrush.imageDown = new TextureRegionDrawable(new TextureRegion(rubberBrushDown));
 
             imageButtonTerrainBrush = new ImageButton(imageButtonStyleTerrainBrush);
             imageButtonPlayerBrush = new ImageButton(imageButtonStylePlayerBrush);
+            imageButtonMobsBrush = new ImageButton(imageButtonStyleMobsBrush);
+            ImageButton imageButtonTresureBoxBrush = new ImageButton(imageButtonStyleTresureBoxBrush);
+            ImageButton imageButtonBuldingBrush = new ImageButton(imageButtonStyleBuldingBrush);
+
             ImageButton imageButtonRubberBrush = new ImageButton(imageButtonStyleRubberBrush);
+
+            imageButtonMobsBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    interfaceStage.addActor(getMobsBrushWindow());
+                    window.remove();
+                }
+            });
 
             imageButtonTerrainBrush.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     interfaceStage.addActor(getTerrainBrushWindow());
                     window.remove();
-
                 }
             });
+
             imageButtonPlayerBrush.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -313,6 +341,23 @@ public class MapEditScreen implements Screen {
                     window.remove();
                 }
             });
+
+            imageButtonBuldingBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    interfaceStage.addActor(getBuldingBrushWindow());
+                    window.remove();
+                }
+            });
+
+            imageButtonTresureBoxBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    interfaceStage.addActor(getTresureBoxBrushWindow());
+                    window.remove();
+                }
+            });
+
             imageButtonRubberBrush.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -324,6 +369,10 @@ public class MapEditScreen implements Screen {
 
             window.add(imageButtonTerrainBrush);
             window.add(imageButtonPlayerBrush);
+            window.add(imageButtonMobsBrush);
+            window.row();
+            window.add(imageButtonTresureBoxBrush);
+            window.add(imageButtonBuldingBrush);
             window.add(imageButtonRubberBrush);
 
             return window;
@@ -399,28 +448,274 @@ public class MapEditScreen implements Screen {
          *
          * @return Window
          */
-        public Window getTerrainBrushWindow() {
-            final Window window = new Window("Teren", v.getA().skin);
+        public Window getMobsBrushWindow() {
+            final Window window = new Window("Moby", v.getA().skin);
             window.setSize(600, 400);
             window.setPosition(
                     Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
                     Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
             );
 
-            final ImageButton.ImageButtonStyle imageButtonStyleForestBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMobLvl1Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMobLvl2Brush = new ImageButton.ImageButtonStyle();
             final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
 
-            Texture forestBrushUp = new Texture("interface/mapEditor/forestBrushUp.png");
-            Texture forestBrushDown = new Texture("interface/mapEditor/forestBrushDown.png");
+            Texture mobsLvl1Up = new Texture("interface/mapEditor/mobs/mobsBrushLvl1Up.png");
+            Texture mobsLvl1Down = new Texture("interface/mapEditor/mobs/mobsBrushLvl1Down.png");
+            Texture mobsLvl2Up = new Texture("interface/mapEditor/mobs/mobsBrushLvl2Up.png");
+            Texture mobsLvl2Down = new Texture("interface/mapEditor/mobs/mobsBrushLvl2Down.png");
+            Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
+            Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
+
+            imageButtonStyleMobLvl1Brush.imageUp = new TextureRegionDrawable(new TextureRegion(mobsLvl1Up));
+            imageButtonStyleMobLvl1Brush.imageDown = new TextureRegionDrawable(new TextureRegion(mobsLvl1Down));
+            imageButtonStyleMobLvl2Brush.imageUp = new TextureRegionDrawable(new TextureRegion(mobsLvl2Up));
+            imageButtonStyleMobLvl2Brush.imageDown = new TextureRegionDrawable(new TextureRegion(mobsLvl2Down));
+            imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
+            imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
+
+            ImageButton imageButtonMobsLvl1 = new ImageButton(imageButtonStyleMobLvl1Brush);
+            ImageButton imageButtonMobsLvl2 = new ImageButton(imageButtonStyleMobLvl2Brush);
+            ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
+
+            imageButtonMobsLvl1.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    interfaceStage.addActor(getMobsLvl1BrushWindow());
+                    window.remove();
+                }
+            });
+
+            imageButtonMobsLvl2.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    interfaceStage.addActor(getMobsLvl2BrushWindow());
+                    window.remove();
+                }
+            });
+
+            imageButtonCancel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = null;
+                    window.remove();
+                }
+            });
+
+            window.add(imageButtonMobsLvl1);
+            window.add(imageButtonMobsLvl2);
+            window.add(imageButtonCancel);
+
+            return window;
+        }
+
+        /**
+         * Return terrain brush window
+         *
+         * @return Window
+         */
+        public Window getMobsLvl1BrushWindow() {
+            final Window window = new Window("Mobs level 1", v.getA().skin);
+            window.setSize(1000, 400);
+            window.setPosition(
+                    Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
+                    Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
+            );
+
+            final ImageButton.ImageButtonStyle imageButtonStyleMob01Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMob02Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMobRandomBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
+
+            Texture mob01Up = new Texture("interface/mapEditor/mobs/mobsBrushSkeletonUp.png");
+            Texture mob01Down = new Texture("interface/mapEditor/mobs/mobsBrushSkeletonDown.png");
+            Texture mob02Up = new Texture("interface/mapEditor/mobs/mobsBrushWolfUp.png");
+            Texture mob02Down = new Texture("interface/mapEditor/mobs/mobsBrushWolfDown.png");
+            Texture mobRandomUp = new Texture("interface/mapEditor/mobs/mobsBrushRandomUp.png");
+            Texture mobRandomDown = new Texture("interface/mapEditor/mobs/mobsBrushRandomDown.png");
+            Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
+            Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
+
+            imageButtonStyleMob01Brush.imageUp = new TextureRegionDrawable(new TextureRegion(mob01Up));
+            imageButtonStyleMob01Brush.imageDown = new TextureRegionDrawable(new TextureRegion(mob01Down));
+            imageButtonStyleMob02Brush.imageUp = new TextureRegionDrawable(new TextureRegion(mob02Up));
+            imageButtonStyleMob02Brush.imageDown = new TextureRegionDrawable(new TextureRegion(mob02Down));
+            imageButtonStyleMobRandomBrush.imageUp = new TextureRegionDrawable(new TextureRegion(mobRandomUp));
+            imageButtonStyleMobRandomBrush.imageDown = new TextureRegionDrawable(new TextureRegion(mobRandomDown));
+            imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
+            imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
+
+            ImageButton imageButtonMob01 = new ImageButton(imageButtonStyleMob01Brush);
+            ImageButton imageButtonMob02 = new ImageButton(imageButtonStyleMob02Brush);
+            ImageButton imageButtonMobRandom = new ImageButton(imageButtonStyleMobRandomBrush);
+            ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
+
+            imageButtonMob01.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.mobSkeletonDraw;
+                    imageButtonBrush.setStyle(imageButtonStyleMob01Brush);
+                    window.remove();
+                }
+            });
+
+            imageButtonMob02.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.mobWolfDraw;
+                    imageButtonBrush.setStyle(imageButtonStyleMob02Brush);
+                    window.remove();
+                }
+            });
+
+            imageButtonMobRandom.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.mobRandomLvl1Draw;
+                    imageButtonBrush.setStyle(imageButtonStyleMobRandomBrush);
+                    window.remove();
+                }
+            });
+
+            imageButtonCancel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = null;
+                    window.remove();
+                }
+            });
+
+            window.add(imageButtonMob01);
+            window.add(imageButtonMob02);
+            window.add(imageButtonMobRandom);
+            window.add(imageButtonCancel);
+
+            return window;
+        }
+
+        /**
+         * Return terrain brush window
+         *
+         * @return Window
+         */
+        public Window getMobsLvl2BrushWindow() {
+            final Window window = new Window("Mobs level 2", v.getA().skin);
+            window.setSize(1000, 400);
+            window.setPosition(
+                    Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
+                    Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
+            );
+
+            final ImageButton.ImageButtonStyle imageButtonStyleMob01Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMob02Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMobRandomBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
+
+            Texture mob01Up = new Texture("interface/mapEditor/mobs/mobsBrushSpiderUp.png");
+            Texture mob01Down = new Texture("interface/mapEditor/mobs/mobsBrushSpiderDown.png");
+            Texture mob02Up = new Texture("interface/mapEditor/mobs/mobsBrushZombieUp.png");
+            Texture mob02Down = new Texture("interface/mapEditor/mobs/mobsBrushZombieDown.png");
+            Texture mobRandomUp = new Texture("interface/mapEditor/mobs/mobsBrushRandomUp.png");
+            Texture mobRandomDown = new Texture("interface/mapEditor/mobs/mobsBrushRandomDown.png");
+            Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
+            Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
+
+            imageButtonStyleMob01Brush.imageUp = new TextureRegionDrawable(new TextureRegion(mob01Up));
+            imageButtonStyleMob01Brush.imageDown = new TextureRegionDrawable(new TextureRegion(mob01Down));
+            imageButtonStyleMob02Brush.imageUp = new TextureRegionDrawable(new TextureRegion(mob02Up));
+            imageButtonStyleMob02Brush.imageDown = new TextureRegionDrawable(new TextureRegion(mob02Down));
+            imageButtonStyleMobRandomBrush.imageUp = new TextureRegionDrawable(new TextureRegion(mobRandomUp));
+            imageButtonStyleMobRandomBrush.imageDown = new TextureRegionDrawable(new TextureRegion(mobRandomDown));
+            imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
+            imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
+
+            ImageButton imageButtonMob01 = new ImageButton(imageButtonStyleMob01Brush);
+            ImageButton imageButtonMob02 = new ImageButton(imageButtonStyleMob02Brush);
+            ImageButton imageButtonMobRandom = new ImageButton(imageButtonStyleMobRandomBrush);
+            ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
+
+            imageButtonMob01.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.mobSpiederDraw;
+                    imageButtonBrush.setStyle(imageButtonStyleMob01Brush);
+                    window.remove();
+                }
+            });
+
+            imageButtonMob02.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.mobZombieDraw;
+                    imageButtonBrush.setStyle(imageButtonStyleMob02Brush);
+                    window.remove();
+                }
+            });
+
+            imageButtonMobRandom.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.mobRandomLvl2Draw;
+                    imageButtonBrush.setStyle(imageButtonStyleMobRandomBrush);
+                    window.remove();
+                }
+            });
+
+            imageButtonCancel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = null;
+                    window.remove();
+                }
+            });
+
+            window.add(imageButtonMob01);
+            window.add(imageButtonMob02);
+            window.add(imageButtonMobRandom);
+            window.add(imageButtonCancel);
+
+            return window;
+        }
+
+        /**
+         * Return terrain brush window
+         *
+         * @return Window
+         */
+        public Window getTerrainBrushWindow() {
+            final Window window = new Window("Teren", v.getA().skin);
+            window.setSize(1000, 400);
+            window.setPosition(
+                    Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
+                    Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
+            );
+
+            final ImageButton.ImageButtonStyle imageButtonStyleForestBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleMountainBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleRiverBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
+
+            Texture forestBrushUp = new Texture("interface/mapEditor/terrains/forestBrushUp.png");
+            Texture forestBrushDown = new Texture("interface/mapEditor/terrains/forestBrushDown.png");
+            Texture mountainBrushUp = new Texture("interface/mapEditor/terrains/mountainBrushUp.png");
+            Texture mountainBrushDown = new Texture("interface/mapEditor/terrains/mountainBrushDown.png");
+            Texture riverBrushUp = new Texture("interface/mapEditor/terrains/riverBrushUp.png");
+            Texture riverBrushDown = new Texture("interface/mapEditor/terrains/riverBrushDown.png");
             Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
             Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
 
             imageButtonStyleForestBrush.imageUp = new TextureRegionDrawable(new TextureRegion(forestBrushUp));
             imageButtonStyleForestBrush.imageDown = new TextureRegionDrawable(new TextureRegion(forestBrushDown));
+            imageButtonStyleMountainBrush.imageUp = new TextureRegionDrawable(new TextureRegion(mountainBrushUp));
+            imageButtonStyleMountainBrush.imageDown = new TextureRegionDrawable(new TextureRegion(mountainBrushDown));
+            imageButtonStyleRiverBrush.imageUp = new TextureRegionDrawable(new TextureRegion(riverBrushUp));
+            imageButtonStyleRiverBrush.imageDown = new TextureRegionDrawable(new TextureRegion(riverBrushDown));
             imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
             imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
 
             imageButtonForestBrush = new ImageButton(imageButtonStyleForestBrush);
+            ImageButton imageButtonMountainBrush = new ImageButton(imageButtonStyleMountainBrush);
+            ImageButton imageButtonRiverBrush = new ImageButton(imageButtonStyleRiverBrush);
             ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
 
             imageButtonForestBrush.addListener(new ClickListener() {
@@ -428,6 +723,24 @@ public class MapEditScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     imageButtonBrush.setStyle(imageButtonStyleForestBrush);
                     mapEdit.drawingType = MapEdit.DrawingType.forestDraw;
+                    window.remove();
+                }
+            });
+
+            imageButtonMountainBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleMountainBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.mountainDraw;
+                    window.remove();
+                }
+            });
+
+            imageButtonRiverBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleRiverBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.riverDraw;
                     window.remove();
                 }
             });
@@ -441,6 +754,160 @@ public class MapEditScreen implements Screen {
             });
 
             window.add(imageButtonForestBrush);
+            window.add(imageButtonMountainBrush);
+            window.add(imageButtonRiverBrush);
+            window.add(imageButtonCancel);
+
+            return window;
+        }
+
+        /**
+         * Return terrain brush window
+         *
+         * @return Window
+         */
+        public Window getBuldingBrushWindow() {
+            final Window window = new Window("Budynki", v.getA().skin);
+            window.setSize(1000, 600);
+            window.setPosition(
+                    Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
+                    Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
+            );
+
+            final ImageButton.ImageButtonStyle imageButtonStyleMagicTowerBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleWisdomTowerBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleDefenceTowerBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
+
+            Texture magicTowerBrushUp = new Texture("interface/mapEditor/buldings/magicTowerBrushUp.png");
+            Texture magicTowerBrushDown = new Texture("interface/mapEditor/buldings/magicTowerBrushDown.png");
+            Texture wisdomTowerBrushUp = new Texture("interface/mapEditor/buldings/wisdomTowerBrushUp.png");
+            Texture wisdomTowerBrushDown = new Texture("interface/mapEditor/buldings/wisdomTowerBrushDown.png");
+            Texture defenceTowerBrushUp = new Texture("interface/mapEditor/buldings/defenceTowerBrushUp.png");
+            Texture defenceTowerBrushDown = new Texture("interface/mapEditor/buldings/defenceTowerBrushDown.png");
+            Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
+            Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
+
+            imageButtonStyleMagicTowerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(magicTowerBrushUp));
+            imageButtonStyleMagicTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(magicTowerBrushDown));
+            imageButtonStyleWisdomTowerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(wisdomTowerBrushUp));
+            imageButtonStyleWisdomTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(wisdomTowerBrushDown));
+            imageButtonStyleDefenceTowerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(defenceTowerBrushUp));
+            imageButtonStyleDefenceTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(defenceTowerBrushDown));
+            imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
+            imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
+
+            ImageButton imageButtonMagicTowerBrush = new ImageButton(imageButtonStyleMagicTowerBrush);
+            ImageButton imageButtonWisdomTowerBrush = new ImageButton(imageButtonStyleWisdomTowerBrush);
+            ImageButton imageButtonDefenceTowerBrush = new ImageButton(imageButtonStyleDefenceTowerBrush);
+            ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
+
+            imageButtonMagicTowerBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleMagicTowerBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.towerMagicDraw;
+                    window.remove();
+                }
+            });
+
+            imageButtonWisdomTowerBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleWisdomTowerBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.towerWisdomDraw;
+                    window.remove();
+                }
+            });
+
+            imageButtonDefenceTowerBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleDefenceTowerBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.towerDefenceDraw;
+                    window.remove();
+                }
+            });
+
+            imageButtonCancel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = null;
+                    window.remove();
+                }
+            });
+
+            window.add(imageButtonMagicTowerBrush);
+            window.add(imageButtonWisdomTowerBrush);
+            window.add(imageButtonDefenceTowerBrush);
+            window.add(imageButtonCancel);
+
+            return window;
+        }
+
+        /**
+         * Return terrain brush window
+         *
+         * @return Window
+         */
+        public Window getTresureBoxBrushWindow() {
+            final Window window = new Window("Skrzynie ze skarbem", v.getA().skin);
+            window.setSize(600, 400);
+            window.setPosition(
+                    Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 2 - window.getWidth() / 2,
+                    Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 2 - window.getHeight() / 2
+            );
+
+            final ImageButton.ImageButtonStyle imageButtonStyleTresureBoxLvl01Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleTresureBoxLvl02Brush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
+
+            Texture tresureBoxLvl1Up = new Texture("interface/mapEditor/boxes/tresureBoxLvl1BrushUp.png");
+            Texture tresureBoxLvl1Down = new Texture("interface/mapEditor/boxes/tresureBoxLvl1BrushDown.png");
+            Texture tresureBoxLvl2Up = new Texture("interface/mapEditor/boxes/tresureBoxLvl2BrushUp.png");
+            Texture tresureBoxLvl2Down = new Texture("interface/mapEditor/boxes/tresureBoxLvl2BrushDown.png");
+            Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
+            Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
+
+            imageButtonStyleTresureBoxLvl01Brush.imageUp = new TextureRegionDrawable(new TextureRegion(tresureBoxLvl1Up));
+            imageButtonStyleTresureBoxLvl01Brush.imageDown = new TextureRegionDrawable(new TextureRegion(tresureBoxLvl1Down));
+            imageButtonStyleTresureBoxLvl02Brush.imageUp = new TextureRegionDrawable(new TextureRegion(tresureBoxLvl2Up));
+            imageButtonStyleTresureBoxLvl02Brush.imageDown = new TextureRegionDrawable(new TextureRegion(tresureBoxLvl2Down));
+            imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
+            imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
+
+            ImageButton imageButtonMob01 = new ImageButton(imageButtonStyleTresureBoxLvl01Brush);
+            ImageButton imageButtonMob02 = new ImageButton(imageButtonStyleTresureBoxLvl02Brush);
+            ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
+
+            imageButtonMob01.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.tresureBox1Draw;
+                    imageButtonBrush.setStyle(imageButtonStyleTresureBoxLvl01Brush);
+                    window.remove();
+                }
+            });
+
+            imageButtonMob02.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = MapEdit.DrawingType.tresureBox2Draw;
+                    imageButtonBrush.setStyle(imageButtonStyleTresureBoxLvl02Brush);
+                    window.remove();
+                }
+            });
+
+            imageButtonCancel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    mapEdit.drawingType = null;
+                    window.remove();
+                }
+            });
+
+            window.add(imageButtonMob01);
+            window.add(imageButtonMob02);
             window.add(imageButtonCancel);
 
             return window;

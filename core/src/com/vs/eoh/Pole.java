@@ -50,6 +50,10 @@ public class Pole implements Serializable {
     // Zmienne określają czy pole w polu ma zostać wygenerowany Mob
     private boolean mob1Location = false;
     private boolean mob2Location = false;
+    private boolean mobSkeletion = false;
+    private boolean mobWolf = false;
+    private boolean mobSpider = false;
+    private boolean mobZombie = false;
     // Zmienne określające czy w polu jest budynek
     private boolean attackCamp = false;
     private boolean defenceCamp = false;
@@ -293,4 +297,35 @@ public class Pole implements Serializable {
     }
 
 
+    public boolean isMobSkeletion() {
+        return mobSkeletion;
+    }
+
+    public void setMobSkeletion(boolean mobSkeletion) {
+        this.mobSkeletion = mobSkeletion;
+    }
+
+    public boolean isMobWolf() {
+        return mobWolf;
+    }
+
+    public void setMobWolf(boolean mobWolf) {
+        this.mobWolf = mobWolf;
+    }
+
+    public boolean isMobSpider() {
+        return mobSpider;
+    }
+
+    public void setMobSpider(boolean mobSpider) {
+        this.mobSpider = mobSpider;
+    }
+
+    public boolean isMobZombie() {
+        return mobZombie;
+    }
+
+    public void setMobZombie(boolean mobZombie) {
+        this.mobZombie = mobZombie;
+    }
 }

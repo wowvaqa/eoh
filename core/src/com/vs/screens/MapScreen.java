@@ -549,7 +549,43 @@ public class MapScreen implements Screen {
         for (int i = 0; i < v.getGs().getMapa().getIloscPolX(); i++) {
             for (int j = 0; j < v.getGs().getMapa().getIloscPolX(); j++) {
 
-                if (v.getGs().getMapa().getPola()[i][j].isMob1Location()) {
+                if (v.getGs().getMapa().getPola()[i][j].isMobZombie()) {
+
+                    Mob mob;
+                    mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.ZombieAnimation, DostepneMoby.Zombie);
+                    v.getGs().getMapa().getPola()[i][j].setMob(mob);
+                    mob.setPozX(i);
+                    mob.setPozY(j);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
+
+                } else if (v.getGs().getMapa().getPola()[i][j].isMobSpider()) {
+
+                    Mob mob;
+                    mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.SpiderAnimation, DostepneMoby.Pajak);
+                    v.getGs().getMapa().getPola()[i][j].setMob(mob);
+                    mob.setPozX(i);
+                    mob.setPozY(j);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
+
+                } else if (v.getGs().getMapa().getPola()[i][j].isMobSkeletion()) {
+
+                    Mob mob;
+                    mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.SkeletonAnimation, DostepneMoby.Szkielet);
+                    v.getGs().getMapa().getPola()[i][j].setMob(mob);
+                    mob.setPozX(i);
+                    mob.setPozY(j);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
+
+                } else if (v.getGs().getMapa().getPola()[i][j].isMobWolf()) {
+
+                    Mob mob;
+                    mob = new Mob(v, i * 100, j * 100, 1, AnimsTypes.WolfAnimation, DostepneMoby.Wilk);
+                    v.getGs().getMapa().getPola()[i][j].setMob(mob);
+                    mob.setPozX(i);
+                    mob.setPozY(j);
+                    stage01.addActor(v.getGs().getMapa().getPola()[i][j].getMob());
+
+                } else if (v.getGs().getMapa().getPola()[i][j].isMob1Location()) {
 
                     //Mob mob = new Mob(v, i * 100, j * 100, 1, Mob.losujMoba(1));
 
