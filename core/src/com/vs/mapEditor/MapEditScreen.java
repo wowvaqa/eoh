@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -34,9 +37,11 @@ public class MapEditScreen implements Screen {
 
     private InputMultiplexer inputMultiPlexer = new InputMultiplexer();
 
+    private MyGestureListener myGL = null;
+    private MyGestureDetector myGD = null;
+
     private V v;
 
-    private OrthographicCamera c;
     private FitViewport viewPort;
 
     private float w;
@@ -47,6 +52,7 @@ public class MapEditScreen implements Screen {
     private MapEdit mapEdit;
 
     private Stage interfaceStage;
+    private Stage backgroundStage;
     private Stage mapStage;
 
     /**
@@ -59,11 +65,18 @@ public class MapEditScreen implements Screen {
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
 
-        c = new OrthographicCamera(w, h);
+        OrthographicCamera c = new OrthographicCamera(w, h);
         viewPort = new FitViewport(w, h, c);
 
-        interfaceStage = new Stage(viewPort);
+        backgroundStage = new Stage();
+        interfaceStage = new Stage();
+
+        createBackgroundStage();
+
         interfaceManager = new Interface();
+
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
 
         mapEdit = new MapEdit();
 
@@ -72,6 +85,26 @@ public class MapEditScreen implements Screen {
         interfaceStage.addActor(interfaceManager.imageButtonSave);
         interfaceStage.addActor(interfaceManager.imageButtonExit);
         interfaceStage.addActor(interfaceManager.imageButtonBrush);
+        interfaceStage.addActor(interfaceManager.imageButtonZoomIn);
+        interfaceStage.addActor(interfaceManager.imageButtonZoomOut);
+        interfaceStage.addActor(interfaceManager.imageButtonCancelDraw);
+    }
+
+    /**
+     * Creates backgroundstage
+     */
+    private void createBackgroundStage() {
+
+        Texture texture = new Texture("interface/mapEditor/background/starTile.png");
+
+        for (int j = -800; j < h + 400; j += 400) {
+            for (int i = -800; i < w + 400; i += 400) {
+                Image backgroundImage = new Image(texture);
+                backgroundImage.setPosition(i, j);
+                backgroundStage.addActor(backgroundImage);
+            }
+        }
+
     }
 
     @Override
@@ -89,14 +122,39 @@ public class MapEditScreen implements Screen {
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        backgroundStage.act();
+        backgroundStage.draw();
+
+        if (interfaceStage != null) {
+            inputMultiPlexer.addProcessor(interfaceStage);
+        }
+
         if (mapStage != null) {
             inputMultiPlexer.addProcessor(mapStage);
             mapStage.act();
             mapStage.draw();
         }
 
-        interfaceStage.act();
-        interfaceStage.draw();
+        if (mapStage != null) {
+            if (interfaceManager.imageButtonZoomIn.isPressed()) {
+                if (mapStage.getCamera().viewportWidth > w) {
+                    mapStage.getCamera().viewportHeight -= v.getGs().getPredkoscZoomKamery();
+                    mapStage.getCamera().viewportWidth -= v.getGs().getPredkoscZoomKamery();
+                }
+            } else if (interfaceManager.imageButtonZoomOut.isPressed()) {
+                if (mapStage.getCamera().viewportWidth < 2 * w) {
+                    mapStage.getCamera().viewportHeight += v.getGs().getPredkoscZoomKamery();
+                    mapStage.getCamera().viewportWidth += v.getGs().getPredkoscZoomKamery();
+                }
+            }
+        }
+
+        if (interfaceStage != null) {
+            interfaceStage.act();
+        }
+        if (interfaceStage != null) {
+            interfaceStage.draw();
+        }
 
         Gdx.input.setInputProcessor(inputMultiPlexer);
 
@@ -105,6 +163,10 @@ public class MapEditScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         interfaceStage.getViewport().update(width, height, true);
+        if (mapStage != null) {
+            mapStage.getViewport().update(width, height, true);
+        }
+        backgroundStage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -133,7 +195,12 @@ public class MapEditScreen implements Screen {
         public ImageButton imageButtonLoad;
         public ImageButton imageButtonSave;
         public ImageButton imageButtonExit;
+        public ImageButton imageButtonCancelDraw;
         public ImageButton imageButtonBrush;
+        public ImageButton imageButtonZoomIn;
+        public ImageButton imageButtonZoomOut;
+
+        public ImageButton.ImageButtonStyle imageButtonStyleBrush;
 
         public ImageButton imageButtonTerrainBrush;
         public ImageButton imageButtonPlayerBrush;
@@ -151,7 +218,7 @@ public class MapEditScreen implements Screen {
          */
         public Window getLoadMapWindow() {
             final Window window = new Window("Wczytaj mape", v.getA().skin);
-            final List listOfMap = new List(v.getA().skin);
+            final List<FileHandle> listOfMap = new List<FileHandle>(v.getA().skin);
             ScrollPane scrollPane = new ScrollPane(listOfMap, v.getA().skin);
             scrollPane.setSize(300, 200);
 
@@ -159,11 +226,8 @@ public class MapEditScreen implements Screen {
             window.setSize(600, 400);
 
             FileHandle[] files = Gdx.files.local("").list();
-            for (FileHandle file : files) {
-                if (file.extension().equals("map")) {
-                    listOfMap.getItems().add(file);
-                }
-            }
+            for (FileHandle file : files)
+                if (file.extension().equals("map")) listOfMap.getItems().add(file);
 
             TextButton tbOk = new TextButton("OK", v.getA().skin);
             TextButton tbCancel = new TextButton("Cancel", v.getA().skin);
@@ -919,6 +983,7 @@ public class MapEditScreen implements Screen {
          */
         public Window getNewMapWindow() {
 
+
             final Window window = new Window("Nowa mapa", v.getA().skin);
             window.setSize(600, 400);
             Label lblAmountOfXfields = new Label("ilosc pol X: ", v.getA().skin);
@@ -930,14 +995,28 @@ public class MapEditScreen implements Screen {
             tBmakeMap.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+
+                    boolean isMapCreated = true;
+
                     if (mapStage != null) {
                         mapStage.clear();
+                        isMapCreated = false;
                     }
+
                     mapStage = mapEdit.createStage(
                             Integer.parseInt(tfAmountOfXflilds.getText()),
                             Integer.parseInt(tfAmountOfYflilds.getText()),
                             viewPort
                     );
+                    createFreameAroudMap();
+
+                    if (isMapCreated) {
+                        myGL = new MyGestureListener();
+                        myGD = new MyGestureDetector(myGL);
+
+                        inputMultiPlexer.addProcessor(myGD);
+                    }
+
                     window.remove();
                 }
             });
@@ -957,43 +1036,19 @@ public class MapEditScreen implements Screen {
             return window;
         }
 
-//        /**
-//         * Saving map to file.
-//         */
-//        private void saveMap(){
-//
-//            StringWriter writer = new StringWriter();
-//            XmlWriter xml = new XmlWriter(writer);
-//
-//            try {
-//                xml.element("meow")
-//                        .attribute("moo", "cow")
-//                        .element("child")
-//                        .attribute("moo", "cow")
-//                        .element("child")
-//                        .attribute("moo", "cow")
-//                        .text("XML is like violence. If it doesn't solve your problem, you're not using enough of it.")
-//                        .pop()
-//                        .pop()
-//                        .pop();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println(writer);
-//
-//        }
-
         /**
          * Make main buttons.
          */
         private void makeButtons() {
 
+            imageButtonStyleBrush = new ImageButton.ImageButtonStyle();
             ImageButton.ImageButtonStyle imageButtonStyleNew = new ImageButton.ImageButtonStyle();
             ImageButton.ImageButtonStyle imageButtonStyleLoad = new ImageButton.ImageButtonStyle();
             ImageButton.ImageButtonStyle imageButtonStyleSave = new ImageButton.ImageButtonStyle();
             ImageButton.ImageButtonStyle imageButtonStyleExit = new ImageButton.ImageButtonStyle();
-            ImageButton.ImageButtonStyle imageButtonStyleBrush = new ImageButton.ImageButtonStyle();
+            ImageButton.ImageButtonStyle imageButtonStyleZoomIn = new ImageButton.ImageButtonStyle();
+            ImageButton.ImageButtonStyle imageButtonStyleZoomOut = new ImageButton.ImageButtonStyle();
+            ImageButton.ImageButtonStyle imageButtonStyleCancelDraw = new ImageButton.ImageButtonStyle();
 
             Texture newUp = new Texture("interface/mapEditor/newButtonUp.png");
             Texture newDown = new Texture("interface/mapEditor/newButtonDown.png");
@@ -1005,6 +1060,13 @@ public class MapEditScreen implements Screen {
             Texture exitDown = new Texture("interface/mapEditor/exitButtonDown.png");
             Texture brushUp = new Texture("interface/mapEditor/brushButtonUp.png");
             Texture brushDown = new Texture("interface/mapEditor/brushButtonDown.png");
+            Texture zoomInUp = new Texture("interface/mapEditor/zoomButtonInUp.png");
+            Texture zoomInDown = new Texture("interface/mapEditor/zoomButtonInDown.png");
+            Texture zoomOutUp = new Texture("interface/mapEditor/zoomButtonOutUp.png");
+            Texture zoomOutDown = new Texture("interface/mapEditor/zoomButtonOutDown.png");
+            Texture cancelDrawUp = new Texture("interface/mapEditor/CancelBrushUp.png");
+            Texture cancelDrawDown = new Texture("interface/mapEditor/CancelBrushDown.png");
+
 
             newUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
             newDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -1016,6 +1078,12 @@ public class MapEditScreen implements Screen {
             exitDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
             brushUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
             brushDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            zoomInUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            zoomInDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            zoomOutUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            zoomOutDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            cancelDrawUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            cancelDrawDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
             imageButtonStyleNew.imageUp = new TextureRegionDrawable(new TextureRegion(newUp));
             imageButtonStyleNew.imageDown = new TextureRegionDrawable(new TextureRegion(newDown));
@@ -1027,12 +1095,21 @@ public class MapEditScreen implements Screen {
             imageButtonStyleExit.imageDown = new TextureRegionDrawable(new TextureRegion(exitDown));
             imageButtonStyleBrush.imageUp = new TextureRegionDrawable(new TextureRegion(brushUp));
             imageButtonStyleBrush.imageDown = new TextureRegionDrawable(new TextureRegion(brushDown));
+            imageButtonStyleZoomIn.imageUp = new TextureRegionDrawable(new TextureRegion(zoomInUp));
+            imageButtonStyleZoomIn.imageDown = new TextureRegionDrawable(new TextureRegion(zoomInDown));
+            imageButtonStyleZoomOut.imageUp = new TextureRegionDrawable(new TextureRegion(zoomOutUp));
+            imageButtonStyleZoomOut.imageDown = new TextureRegionDrawable(new TextureRegion(zoomOutDown));
+            imageButtonStyleCancelDraw.imageUp = new TextureRegionDrawable(new TextureRegion(cancelDrawUp));
+            imageButtonStyleCancelDraw.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDrawDown));
 
             imageButtonNew = new ImageButton(imageButtonStyleNew);
             imageButtonLoad = new ImageButton(imageButtonStyleLoad);
             imageButtonSave = new ImageButton(imageButtonStyleSave);
             imageButtonExit = new ImageButton(imageButtonStyleExit);
             imageButtonBrush = new ImageButton(imageButtonStyleBrush);
+            imageButtonZoomIn = new ImageButton(imageButtonStyleZoomIn);
+            imageButtonZoomOut = new ImageButton(imageButtonStyleZoomOut);
+            imageButtonCancelDraw = new ImageButton(imageButtonStyleCancelDraw);
 
             imageButtonNew.setPosition(10, Gdx.graphics.getHeight() - 85);
             imageButtonNew.setSize(75, 75);
@@ -1044,6 +1121,15 @@ public class MapEditScreen implements Screen {
             imageButtonSave.setSize(75, 75);
             imageButtonBrush.setPosition(10, Gdx.graphics.getHeight() - 340);
             imageButtonBrush.setSize(160, 160);
+            imageButtonCancelDraw.setPosition(10, Gdx.graphics.getHeight() - 505);
+            imageButtonCancelDraw.setSize(160, 160);
+
+            imageButtonZoomIn.setPosition(Gdx.graphics.getWidth() - 85,
+                    Gdx.graphics.getHeight() - 85);
+            imageButtonZoomIn.setSize(75, 75);
+            imageButtonZoomOut.setPosition(Gdx.graphics.getWidth() - 85,
+                    Gdx.graphics.getHeight() - 170);
+            imageButtonZoomOut.setSize(75, 75);
 
             addListeners();
         }
@@ -1114,6 +1200,151 @@ public class MapEditScreen implements Screen {
                     interfaceStage.addActor(window);
                 }
             });
+
+            imageButtonCancelDraw.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(interfaceManager.imageButtonStyleBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.none;
+                }
+            });
+        }
+
+        /**
+         * Creates frame around map.
+         */
+        private void createFreameAroudMap() {
+            Texture leftFrameTexture = new Texture("interface/mapEditor/background/frameLeft.png");
+            Texture upFrameTexture = new Texture("interface/mapEditor/background/frameUp.png");
+            Texture rightFrameTexture = new Texture("interface/mapEditor/background/frameRight.png");
+            Texture downFrameTexture = new Texture("interface/mapEditor/background/frameDown.png");
+
+            for (int i = 0; i < mapEdit.mapRows * 100; i += 10) {
+                Image frame = new Image(leftFrameTexture);
+                frame.setPosition(-10, i);
+                mapStage.addActor(frame);
+            }
+
+            for (int i = 0; i < mapEdit.mapRows * 100; i += 10) {
+                Image frame = new Image(rightFrameTexture);
+                frame.setPosition(mapEdit.mapColumns * 100, i);
+                mapStage.addActor(frame);
+            }
+
+            for (int i = 0; i < mapEdit.mapColumns * 100; i += 10) {
+                Image frame = new Image(upFrameTexture);
+                frame.setPosition(i, mapEdit.mapRows * 100);
+                mapStage.addActor(frame);
+            }
+
+            for (int i = 0; i < mapEdit.mapColumns * 100; i += 10) {
+                Image frame = new Image(downFrameTexture);
+                frame.setPosition(i, -10);
+                mapStage.addActor(frame);
+            }
+
+            Image frame = new Image(new Texture("interface/mapEditor/background/frameRightDown.png"));
+            frame.setPosition(mapEdit.mapColumns * 100, -10);
+            mapStage.addActor(frame);
+
+            frame = new Image(new Texture("interface/mapEditor/background/frameLeftDown.png"));
+            frame.setPosition(-10, -10);
+            mapStage.addActor(frame);
+
+            frame = new Image(new Texture("interface/mapEditor/background/frameLeftUp.png"));
+            frame.setPosition(-10, mapEdit.mapRows * 100);
+            mapStage.addActor(frame);
+
+            frame = new Image(new Texture("interface/mapEditor/background/frameRightUp.png"));
+            frame.setPosition(mapEdit.mapColumns * 100, mapEdit.mapRows * 100);
+            mapStage.addActor(frame);
+        }
+    }
+
+    private class MyGestureDetector extends GestureDetector {
+
+        public MyGestureDetector(GestureListener listner) {
+            super(listner);
+        }
+
+        @Override
+        public boolean isPanning() {
+            return super.isPanning();
+        }
+    }
+
+    private class MyGestureListener implements GestureDetector.GestureListener {
+
+        public MyGestureListener() {
+        }
+
+        @Override
+        public boolean touchDown(float x, float y, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean tap(float x, float y, int count, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean longPress(float x, float y) {
+            return false;
+        }
+
+        @Override
+        public boolean fling(float velocityX, float velocityY, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean pan(float x, float y, float deltaX, float deltaY) {
+
+            if (mapStage.getCamera().position.x < 350) {
+                mapStage.getCamera().position.x = 350;
+            }
+
+            if (mapStage.getCamera().position.x > mapEdit.mapColumns * 100) {
+                mapStage.getCamera().position.x = mapEdit.mapColumns * 100;
+            }
+
+            if (mapStage.getCamera().position.y > mapEdit.mapRows * 100) {
+                mapStage.getCamera().position.y = mapEdit.mapRows * 100;
+            }
+
+            if (mapStage.getCamera().position.y < 50) {
+                mapStage.getCamera().position.y = 50;
+            }
+
+            mapStage.getCamera().translate(-deltaX, deltaY, 0);
+            mapStage.getCamera().update();
+
+            if (mapStage.getCamera().position.x > 350
+                    && mapStage.getCamera().position.x < mapEdit.mapColumns * 100
+                    && mapStage.getCamera().position.y > 50
+                    && mapStage.getCamera().position.y < mapEdit.mapRows * 100) {
+
+                backgroundStage.getCamera().translate(-deltaX / 10, deltaY / 10, 0);
+                backgroundStage.getCamera().update();
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean panStop(float x, float y, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean zoom(float initialDistance, float distance) {
+            return false;
+        }
+
+        @Override
+        public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+            return false;
         }
     }
 }

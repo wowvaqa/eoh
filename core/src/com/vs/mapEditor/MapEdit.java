@@ -42,16 +42,16 @@ public class MapEdit implements Serializable {
      * @param sizeColumns How many cells will have a stage.
      * @return Stage
      */
-    public Stage createStage(int sizeRow, int sizeColumns, Viewport viewport) {
+    public Stage createStage(int sizeColumns, int sizeRow, Viewport viewport) {
         Stage stage = new Stage(viewport);
 
         mapColumns = sizeColumns;
         mapRows = sizeRow;
 
-        fields = new FieldOfEditor[sizeRow][sizeColumns];
+        fields = new FieldOfEditor[sizeColumns][sizeRow];
 
-        for (int i = 0; i < sizeRow; i++) {
-            for (int j = 0; j < sizeColumns; j++) {
+        for (int i = 0; i < sizeColumns; i++) {
+            for (int j = 0; j < sizeRow; j++) {
                 fields[i][j] = new FieldOfEditor();
                 fields[i][j].typyTerenu = TypyTerenu.Trawa;
                 fields[i][j].terrainGrass = true;
@@ -61,10 +61,9 @@ public class MapEdit implements Serializable {
             }
         }
 
-        for (int i = 0; i < sizeRow; i++) {
-            for (int j = 0; j < sizeColumns; j++) {
+        for (int i = 0; i < sizeColumns; i++) {
+            for (int j = 0; j < sizeRow; j++) {
                 stage.addActor(fields[i][j]);
-
             }
         }
         return stage;
@@ -284,6 +283,7 @@ public class MapEdit implements Serializable {
                         field.typyTerenu = TypyTerenu.Rzeka;
                         fillField(field);
                     } else if (drawingType.equals(DrawingType.rubberDraw)) {
+                        field.typyTerenu = TypyTerenu.Trawa;
                         field.terrainForest = false;
                         field.terrainMountain = false;
                         field.terrainRiver = false;
