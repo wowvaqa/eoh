@@ -107,6 +107,12 @@ public class MapEdit implements Serializable {
             field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfWisdom.png"));
         } else if (field.towerDefence) {
             field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfDefence.png"));
+        } else if (field.towerSpeed) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfSpeed.png"));
+        } else if (field.towerAttack) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfAttack.png"));
+        } else if (field.towerHp) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfHp.png"));
         }
 
         if (field.mobSkeletonLocation) {
@@ -212,7 +218,9 @@ public class MapEdit implements Serializable {
         towerMagicDraw,
         towerWisdomDraw,
         towerDefenceDraw,
-
+        towerSpeedDraw,
+        towerAttackDraw,
+        towerHpDraw,
         none;
     }
 
@@ -256,6 +264,9 @@ public class MapEdit implements Serializable {
         public boolean towerMagic = false;
         public boolean towerWisdom = false;
         public boolean towerDefence = false;
+        public boolean towerSpeed = false;
+        public boolean towerAttack = false;
+        public boolean towerHp = false;
         public TypyTerenu typyTerenu;
         public int posX;
         public int posY;
@@ -270,96 +281,121 @@ public class MapEdit implements Serializable {
             this.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (drawingType.equals(DrawingType.forestDraw)) {
-                        field.terrainForest = true;
-                        field.typyTerenu = TypyTerenu.Drzewo;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mountainDraw)) {
-                        field.terrainMountain = true;
-                        field.typyTerenu = TypyTerenu.Gory;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.riverDraw)) {
-                        field.terrainRiver = true;
-                        field.typyTerenu = TypyTerenu.Rzeka;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.rubberDraw)) {
-                        field.typyTerenu = TypyTerenu.Trawa;
-                        field.terrainForest = false;
-                        field.terrainMountain = false;
-                        field.terrainRiver = false;
-                        field.terrainGrass = true;
-                        field.player1StartLocation = false;
-                        field.player2StartLocation = false;
-                        field.mobRandomLevel1 = false;
-                        field.mobSkeletonLocation = false;
-                        field.mobWolfLocation = false;
-                        field.mobSpiderLocation = false;
-                        field.mobZombieLocation = false;
-                        field.mobRandomLevel2 = false;
-                        field.tresureBoxLvl1 = false;
-                        field.tresureBoxLvl2 = false;
-                        field.typyTerenu = TypyTerenu.Trawa;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.player1Draw)) {
-                        for (int i = 0; i < mapColumns; i++) {
-                            for (int j = 0; j < mapRows; j++) {
-                                if (fields[i][j].player1StartLocation) {
-                                    fields[i][j].player1StartLocation = false;
-                                    fillField(fields[i][j]);
+                    if (drawingType != null) {
+                        if (drawingType.equals(DrawingType.forestDraw)) {
+                            field.terrainForest = true;
+                            field.typyTerenu = TypyTerenu.Drzewo;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mountainDraw)) {
+                            field.terrainMountain = true;
+                            field.typyTerenu = TypyTerenu.Gory;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.riverDraw)) {
+                            field.terrainRiver = true;
+                            field.typyTerenu = TypyTerenu.Rzeka;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.rubberDraw)) {
+                            clearField(field);
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.player1Draw)) {
+                            for (int i = 0; i < mapColumns; i++) {
+                                for (int j = 0; j < mapRows; j++) {
+                                    if (fields[i][j].player1StartLocation) {
+                                        fields[i][j].player1StartLocation = false;
+                                        fillField(fields[i][j]);
+                                    }
                                 }
                             }
-                        }
-                        field.player1StartLocation = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.player2Draw)) {
-                        for (int i = 0; i < mapColumns; i++) {
-                            for (int j = 0; j < mapRows; j++) {
-                                if (fields[i][j].player2StartLocation) {
-                                    fields[i][j].player2StartLocation = false;
-                                    fillField(fields[i][j]);
+                            field.player1StartLocation = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.player2Draw)) {
+                            for (int i = 0; i < mapColumns; i++) {
+                                for (int j = 0; j < mapRows; j++) {
+                                    if (fields[i][j].player2StartLocation) {
+                                        fields[i][j].player2StartLocation = false;
+                                        fillField(fields[i][j]);
+                                    }
                                 }
                             }
+                            field.player2StartLocation = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mobSkeletonDraw)) {
+                            field.mobSkeletonLocation = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mobWolfDraw)) {
+                            field.mobWolfLocation = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mobRandomLvl1Draw)) {
+                            field.mobRandomLevel1 = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mobSpiederDraw)) {
+                            field.mobSpiderLocation = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mobZombieDraw)) {
+                            field.mobZombieLocation = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.mobRandomLvl2Draw)) {
+                            field.mobRandomLevel2 = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.tresureBox1Draw)) {
+                            field.tresureBoxLvl1 = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.tresureBox2Draw)) {
+                            field.tresureBoxLvl2 = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerMagicDraw)) {
+                            field.towerMagic = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerWisdomDraw)) {
+                            field.towerWisdom = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerDefenceDraw)) {
+                            field.towerDefence = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerSpeedDraw)) {
+                            field.towerSpeed = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerAttackDraw)) {
+                            field.towerAttack = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerHpDraw)) {
+                            field.towerHp = true;
+                            fillField(field);
                         }
-                        field.player2StartLocation = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mobSkeletonDraw)) {
-                        field.mobSkeletonLocation = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mobWolfDraw)) {
-                        field.mobWolfLocation = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mobRandomLvl1Draw)) {
-                        field.mobRandomLevel1 = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mobSpiederDraw)) {
-                        field.mobSpiderLocation = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mobZombieDraw)) {
-                        field.mobZombieLocation = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.mobRandomLvl2Draw)) {
-                        field.mobRandomLevel2 = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.tresureBox1Draw)) {
-                        field.tresureBoxLvl1 = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.tresureBox2Draw)) {
-                        field.tresureBoxLvl2 = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.towerMagicDraw)) {
-                        field.towerMagic = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.towerWisdomDraw)) {
-                        field.towerWisdom = true;
-                        fillField(field);
-                    } else if (drawingType.equals(DrawingType.towerDefenceDraw)) {
-                        field.towerDefence = true;
-                        fillField(field);
                     }
 
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
+        }
+
+        /**
+         * Clears field
+         *
+         * @param field Object of FieldOfEditor
+         */
+        private void clearField(FieldOfEditor field) {
+            field.typyTerenu = TypyTerenu.Trawa;
+            field.terrainForest = false;
+            field.terrainMountain = false;
+            field.terrainRiver = false;
+            field.terrainGrass = true;
+            field.player1StartLocation = false;
+            field.player2StartLocation = false;
+            field.mobRandomLevel1 = false;
+            field.mobSkeletonLocation = false;
+            field.mobWolfLocation = false;
+            field.mobSpiderLocation = false;
+            field.mobZombieLocation = false;
+            field.mobRandomLevel2 = false;
+            field.tresureBoxLvl1 = false;
+            field.tresureBoxLvl2 = false;
+            field.towerMagic = false;
+            field.towerWisdom = false;
+            field.towerSpeed = false;
+            field.towerDefence = false;
+            field.towerAttack = false;
+            field.towerHp = false;
         }
     }
 }

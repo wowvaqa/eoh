@@ -17,5 +17,6 @@ public enum AnimsTypes {
     TowerOfMagicPower,
     SpeedTower,
     TreningCamp,
-    DefenceTower;
+    DefenceTower,
+    HpTower
 }

@@ -28,6 +28,18 @@ public class AnimationCreator {
 
         switch (animations) {
 
+            case HpTower:
+                animationSpeed = 0.1f;
+                texture = new Texture(Gdx.files.internal("animation/hpTower.png"));
+                tmp = TextureRegion.split(texture, texture.getWidth() / 6, texture.getHeight() / 4);
+                walkFrames = new TextureRegion[6 * 4];
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 6; j++) {
+                        walkFrames[index++] = tmp[i][j];
+                    }
+                }
+                break;
+
             case DefenceTower:
                 animationSpeed = 0.1f;
                 texture = new Texture(Gdx.files.internal("animation/defenceTower.png"));

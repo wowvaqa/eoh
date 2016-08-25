@@ -155,7 +155,7 @@ public class BuldingCreator {
      */
     private Bulding createHpTower() {
 
-        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
+        Bulding bulding = new Bulding(v, AnimsTypes.HpTower);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texHpCamp.png"))));

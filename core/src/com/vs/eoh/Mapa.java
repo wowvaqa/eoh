@@ -454,6 +454,12 @@ public final class Mapa implements Serializable {
                     map.getPola()[i][j].setWisdomCamp(true);
                 } else if (loadedMap.fields[i][j].towerDefence) {
                     map.getPola()[i][j].setDefenceCamp(true);
+                } else if (loadedMap.fields[i][j].towerSpeed) {
+                    map.getPola()[i][j].setSpeedCamp(true);
+                } else if (loadedMap.fields[i][j].towerAttack) {
+                    map.getPola()[i][j].setAttackCamp(true);
+                } else if (loadedMap.fields[i][j].towerHp) {
+                    map.getPola()[i][j].setHpCamp(true);
                 }
 
                 if (loadedMap.fields[i][j].mobRandomLevel1) {
