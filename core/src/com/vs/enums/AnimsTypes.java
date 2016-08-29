@@ -18,5 +18,7 @@ public enum AnimsTypes {
     SpeedTower,
     TreningCamp,
     DefenceTower,
-    HpTower
+    HpTower,
+    Well,
+    Hospital
 }

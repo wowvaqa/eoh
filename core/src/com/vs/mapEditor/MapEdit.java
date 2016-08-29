@@ -113,6 +113,12 @@ public class MapEdit implements Serializable {
             field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfAttack.png"));
         } else if (field.towerHp) {
             field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/towerOfHp.png"));
+        } else if (field.towerWell) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/well.png"));
+        } else if (field.towerWell) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/well.png"));
+        } else if (field.towerHospital) {
+            field.setDrawable(mergeDrawable("grass100x100.png", "interface/mapEditor/buldings/hospital.png"));
         }
 
         if (field.mobSkeletonLocation) {
@@ -221,6 +227,8 @@ public class MapEdit implements Serializable {
         towerSpeedDraw,
         towerAttackDraw,
         towerHpDraw,
+        towerWellDraw,
+        towerHospitalDraw,
         none;
     }
 
@@ -267,6 +275,8 @@ public class MapEdit implements Serializable {
         public boolean towerSpeed = false;
         public boolean towerAttack = false;
         public boolean towerHp = false;
+        public boolean towerWell = false;
+        public boolean towerHospital = false;
         public TypyTerenu typyTerenu;
         public int posX;
         public int posY;
@@ -361,6 +371,12 @@ public class MapEdit implements Serializable {
                         } else if (drawingType.equals(DrawingType.towerHpDraw)) {
                             field.towerHp = true;
                             fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerWellDraw)) {
+                            field.towerWell = true;
+                            fillField(field);
+                        } else if (drawingType.equals(DrawingType.towerHospitalDraw)) {
+                            field.towerHospital = true;
+                            fillField(field);
                         }
                     }
 
@@ -396,6 +412,8 @@ public class MapEdit implements Serializable {
             field.towerDefence = false;
             field.towerAttack = false;
             field.towerHp = false;
+            field.towerWell = false;
+            field.towerHospital = false;
         }
     }
 }

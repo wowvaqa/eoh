@@ -847,6 +847,8 @@ public class MapEditScreen implements Screen {
             final ImageButton.ImageButtonStyle imageButtonStyleSpeedTowerBrush = new ImageButton.ImageButtonStyle();
             final ImageButton.ImageButtonStyle imageButtonStyleAttackTowerBrush = new ImageButton.ImageButtonStyle();
             final ImageButton.ImageButtonStyle imageButtonStyleHpTowerBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleWellTowerBrush = new ImageButton.ImageButtonStyle();
+            final ImageButton.ImageButtonStyle imageButtonStyleHospitalTowerBrush = new ImageButton.ImageButtonStyle();
             final ImageButton.ImageButtonStyle imageButtonStyleCancel = new ImageButton.ImageButtonStyle();
 
             Texture magicTowerBrushUp = new Texture("interface/mapEditor/buldings/magicTowerBrushUp.png");
@@ -861,6 +863,10 @@ public class MapEditScreen implements Screen {
             Texture attackTowerBrushDown = new Texture("interface/mapEditor/buldings/attackTowerBrushDown.png");
             Texture hpTowerBrushUp = new Texture("interface/mapEditor/buldings/HpTowerBrushUp.png");
             Texture hpTowerbrushDown = new Texture("interface/mapEditor/buldings/HpTowerBrushDown.png");
+            Texture wellTowerBrushUp = new Texture("interface/mapEditor/buldings/wellBrushUp.png");
+            Texture wellTowerbrushDown = new Texture("interface/mapEditor/buldings/wellBrushDown.png");
+            Texture hospitalTowerBrushUp = new Texture("interface/mapEditor/buldings/hospitalTowerBrushUp.png");
+            Texture hospitalTowerbrushDown = new Texture("interface/mapEditor/buldings/hospitalTowerBrushDown.png");
             Texture cancelUp = new Texture("interface/mapEditor/CancelBrushUp.png");
             Texture cancelDown = new Texture("interface/mapEditor/CancelBrushDown.png");
 
@@ -876,6 +882,10 @@ public class MapEditScreen implements Screen {
             imageButtonStyleAttackTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(attackTowerBrushDown));
             imageButtonStyleHpTowerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(hpTowerBrushUp));
             imageButtonStyleHpTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(hpTowerbrushDown));
+            imageButtonStyleWellTowerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(wellTowerBrushUp));
+            imageButtonStyleWellTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(wellTowerbrushDown));
+            imageButtonStyleHospitalTowerBrush.imageUp = new TextureRegionDrawable(new TextureRegion(hospitalTowerBrushUp));
+            imageButtonStyleHospitalTowerBrush.imageDown = new TextureRegionDrawable(new TextureRegion(hospitalTowerbrushDown));
             imageButtonStyleCancel.imageUp = new TextureRegionDrawable(new TextureRegion(cancelUp));
             imageButtonStyleCancel.imageDown = new TextureRegionDrawable(new TextureRegion(cancelDown));
 
@@ -885,6 +895,8 @@ public class MapEditScreen implements Screen {
             ImageButton imageButtonSpeedTowerBrush = new ImageButton(imageButtonStyleSpeedTowerBrush);
             ImageButton imageButtonAttackTowerBrush = new ImageButton(imageButtonStyleAttackTowerBrush);
             ImageButton imageButtonHpTowerBrush = new ImageButton(imageButtonStyleHpTowerBrush);
+            ImageButton imageButtonWellTowerBrush = new ImageButton(imageButtonStyleWellTowerBrush);
+            ImageButton imageButtonHospitalTowerBrush = new ImageButton(imageButtonStyleHospitalTowerBrush);
             ImageButton imageButtonCancel = new ImageButton(imageButtonStyleCancel);
 
             imageButtonMagicTowerBrush.addListener(new ClickListener() {
@@ -941,6 +953,24 @@ public class MapEditScreen implements Screen {
                 }
             });
 
+            imageButtonWellTowerBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleWellTowerBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.towerWellDraw;
+                    window.remove();
+                }
+            });
+
+            imageButtonHospitalTowerBrush.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBrush.setStyle(imageButtonStyleHospitalTowerBrush);
+                    mapEdit.drawingType = MapEdit.DrawingType.towerHospitalDraw;
+                    window.remove();
+                }
+            });
+
             imageButtonCancel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -957,7 +987,9 @@ public class MapEditScreen implements Screen {
             window.add(imageButtonAttackTowerBrush);
             window.add(imageButtonHpTowerBrush);
             window.row();
-            window.add(imageButtonCancel).colspan(3);
+            window.add(imageButtonWellTowerBrush);
+            window.add(imageButtonHospitalTowerBrush);
+            window.add(imageButtonCancel);
 
 
             return window;

@@ -174,7 +174,7 @@ public class BuldingCreator {
      */
     private Bulding createWell() {
 
-        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
+        Bulding bulding = new Bulding(v, AnimsTypes.Well);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texWell.png"))));
@@ -194,13 +194,13 @@ public class BuldingCreator {
      */
     private Bulding createTemple() {
 
-        Bulding bulding = new Bulding(v, AnimsTypes.ObeliskOfWisdomAnimation);
+        Bulding bulding = new Bulding(v, AnimsTypes.Hospital);
 
         bulding.setPosition(pozX * 100, pozY * 100);
         bulding.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("buldings/texTemple.png"))));
         bulding.setSize(100, 100);
 
-        bulding.setName("Magiczna swiatynia");
+        bulding.setName("Szpital");
         bulding.setBuldingDescription("Odnawia wszystkie punkty Hp");
         bulding.setShortBuldingDescription("Hp MAX");
         bulding.setMaxHp(true);
